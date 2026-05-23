@@ -9,7 +9,7 @@ import UIKit
 
 public extension UIColor {
     
-    static let primaryColor = UIColor(named: "Primary Color")!
+    static let primaryColor = UIColor(resource: .primary)
     
     static let toastPrimaryColor = primaryColor
 }
@@ -17,7 +17,7 @@ public extension UIColor {
 // Common core colors
 public extension UIColor {
     
-    static let tabBarItemUnselected = UIColor(resource: .secondary50)
+    static let tabBarItemUnselected = UIColor(resource: .onSurfaceVariant).withAlphaComponent(0.5)
     
     static let warning = UIColor(resource: .warning)
     

@@ -59,7 +59,7 @@ extension HomeView {
                     .customForeground(.primary)
             }
             
-            Text("")
+            Text("Wird")
                 .customStyle(.heading3, .primary)
             
             Spacer()

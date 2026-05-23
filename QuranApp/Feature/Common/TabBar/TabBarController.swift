@@ -70,14 +70,14 @@ extension TabBarController {
         )
         TabBarItem.hadith = hadith
         
-        let settings = TabBarItem(
-            title: AppLocalizedKeys.settings.value,
-            image: UIImage(systemName: "gearshape.fill")!.withRenderingMode(.alwaysTemplate),
-            viewControllerProvider: getSettingsViewController
+        let lessons = TabBarItem(
+            title: AppLocalizedKeys.lessons.value,
+            image: UIImage(systemName: "play.rectangle.fill")!.withRenderingMode(.alwaysTemplate),
+            viewControllerProvider: getLessonsViewController
         )
-        TabBarItem.settings = settings
-        
-        tabBarItems = [home, quran, adhkar, hadith, settings]
+        TabBarItem.lessons = lessons
+
+        tabBarItems = [home, quran, adhkar, hadith, lessons]
     }
 }
 
@@ -125,8 +125,8 @@ extension TabBarController {
         return UIViewController()
     }
 
-    private func getSettingsViewController() -> UIViewController {
-        // TODO: Settings
+    private func getLessonsViewController() -> UIViewController {
+        // TODO: Lessons
         return UIViewController()
     }
 }
