@@ -18,5 +18,5 @@ extension TabBarItem {
     
     static var hadith: TabBarItem? = nil
     
-    static var settings: TabBarItem? = nil
+    static var lessons: TabBarItem? = nil
 }

@@ -47,15 +47,17 @@ public extension TabBarControllerProtocol {
     }
     
     func configure() {
-        
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .tabBarBackground
+        appearance.shadowColor = .clear
+        tabBar.standardAppearance = appearance
+        tabBar.scrollEdgeAppearance = appearance
+
         tabBar.tintColor = .primaryColor
-        
         tabBar.unselectedItemTintColor = .tabBarItemUnselected
-        
-        tabBar.backgroundColor = .tabBarBackground
-        
+
         self.viewControllers = getTabBarControllers()
-        
         configureTitles()
     }
     
