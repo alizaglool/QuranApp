@@ -20,4 +20,5 @@ struct Dhikr: Codable, Identifiable, Hashable {
     let textAr: String
     let title: String?
     let count: Int
+    let audio: String?
 }

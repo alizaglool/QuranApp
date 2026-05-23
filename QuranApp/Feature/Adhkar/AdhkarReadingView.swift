@@ -70,9 +70,24 @@ extension AdhkarReadingView {
 
             Spacer()
 
-            Text("\(viewModel.currentIndex + 1) / \(viewModel.category.adhkar.count)")
-                .customStyle(.caption2, .onSurfaceVariant)
-                .monospacedDigit()
+            if viewModel.hasAudio {
+                Button(action: { viewModel.toggleAudio() }) {
+                    Image(systemName: viewModel.isPlaying ? "stop.fill" : "play.fill")
+                        .font(.system(size: 14, weight: .medium))
+                        .customForeground(viewModel.isPlaying ? .secondary : .onSurface)
+                        .frame(width: 36, height: 36)
+                        .background(
+                            viewModel.isPlaying
+                                ? ColorStyle.secondary.color.opacity(0.12)
+                                : Color.surfaceContainerLow
+                        )
+                        .cornerRadius(10)
+                }
+            } else {
+                Text("\(viewModel.currentIndex + 1) / \(viewModel.category.adhkar.count)")
+                    .customStyle(.caption2, .onSurfaceVariant)
+                    .monospacedDigit()
+            }
         }
         .padding(.horizontal, .big)
         .padding(.vertical, .sm)
