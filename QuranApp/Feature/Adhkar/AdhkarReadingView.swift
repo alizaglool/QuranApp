@@ -126,43 +126,43 @@ extension AdhkarReadingView {
     }
 
     private var counterButton: some View {
-        Button(action: { viewModel.onTap() }) {
-            VStack(spacing: 10) {
+        VStack(spacing: 12) {
+            Button(action: { viewModel.onTap() }) {
                 ZStack {
-                    // Background circle
                     Circle()
-                        .fill(ColorStyle.primary.color.opacity(0.06))
-                        .frame(width: 110, height: 110)
+                        .fill(ColorStyle.primary.color.opacity(0.08))
+                        .frame(width: 120, height: 120)
 
-                    // Progress ring
-                    if let dhikr = viewModel.currentDhikr {
-                        Circle()
-                            .trim(from: 0, to: viewModel.tapProgress)
-                            .stroke(
-                                ColorStyle.secondary.color,
-                                style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                            )
-                            .frame(width: 110, height: 110)
-                            .rotationEffect(.degrees(-90))
-                            .animation(.easeOut(duration: 0.15), value: viewModel.tapProgress)
+                    Circle()
+                        .trim(from: 0, to: viewModel.tapProgress)
+                        .stroke(
+                            ColorStyle.secondary.color,
+                            style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                        )
+                        .frame(width: 120, height: 120)
+                        .rotationEffect(.degrees(-90))
+                        .animation(.easeOut(duration: 0.15), value: viewModel.tapProgress)
 
-                        VStack(spacing: 2) {
-                            Text("\(viewModel.currentTapCount)")
-                                .font(.system(size: 30, weight: .bold, design: .rounded))
-                                .customForeground(.primary)
-
-                            Text("/ \(dhikr.count)")
-                                .font(.system(size: 13, weight: .medium))
-                                .customForeground(.onSurfaceVariant)
-                        }
+                    VStack(spacing: 2) {
+                        Text(AppLocalizedKeys.tapToCount.value.uppercased())
+                            .font(.system(size: 10, weight: .medium))
+                            .customForeground(.onSurfaceVariant)
+                        Text("\(viewModel.currentTapCount)")
+                            .font(.system(size: 34, weight: .bold, design: .rounded))
+                            .customForeground(.primary)
                     }
                 }
+            }
+            .buttonStyle(CounterButtonStyle())
 
-                Text(AppLocalizedKeys.tapToCount.value)
-                    .customStyle(.caption2, .onSurfaceVariant)
+            if let dhikr = viewModel.currentDhikr {
+                let remaining = dhikr.count - viewModel.currentTapCount
+                Text("REMAINING: \(remaining)")
+                    .font(.system(size: 12, weight: .medium))
+                    .customForeground(.onSurfaceVariant)
+                    .opacity(remaining > 0 ? 1 : 0)
             }
         }
-        .buttonStyle(CounterButtonStyle())
     }
 }
 
