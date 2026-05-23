@@ -116,13 +116,29 @@ extension TabBarController {
     }
 
     private func getAdhkarViewController() -> UIViewController {
-        // TODO: Adhkar
-        return UIViewController()
+        let navigationController = UINavigationController()
+        let view = AdhkarCategoriesView()
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
+        )
+        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.isNavigationBarHidden = true
+        return navigationController
     }
 
     private func getHadithViewController() -> UIViewController {
-        // TODO: Hadith
-        return UIViewController()
+        let navigationController = UINavigationController()
+        let view = HadithLibraryView()
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
+        )
+        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.isNavigationBarHidden = true
+        return navigationController
     }
 
     private func getLessonsViewController() -> UIViewController {
