@@ -13,6 +13,7 @@ struct AdhkarReadingView: View {
     @StateObject private var viewModel: AdhkarReadingViewModel
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var localizationManager: LocalizationManager
+    @State private var tapPulse: Bool = false
 
     init(category: DhikrCategory) {
         _viewModel = StateObject(wrappedValue: AdhkarReadingViewModel(category: category))
@@ -29,6 +30,16 @@ struct AdhkarReadingView: View {
                         completionView
                     } else {
                         dhikrContent
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) {
+                                    tapPulse = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                                    tapPulse = false
+                                }
+                                viewModel.onTap()
+                            }
                     }
                 }
             }
@@ -93,7 +104,7 @@ extension AdhkarReadingView {
 
             Spacer()
 
-            counterButton
+            counterDisplay
                 .padding(.bottom, 40)
         }
     }
@@ -125,35 +136,33 @@ extension AdhkarReadingView {
         }
     }
 
-    private var counterButton: some View {
+    private var counterDisplay: some View {
         VStack(spacing: 12) {
-            Button(action: { viewModel.onTap() }) {
-                ZStack {
-                    Circle()
-                        .fill(ColorStyle.primary.color.opacity(0.08))
-                        .frame(width: 120, height: 120)
+            ZStack {
+                Circle()
+                    .fill(ColorStyle.primary.color.opacity(0.08))
+                    .frame(width: 120, height: 120)
 
-                    Circle()
-                        .trim(from: 0, to: viewModel.tapProgress)
-                        .stroke(
-                            ColorStyle.secondary.color,
-                            style: StrokeStyle(lineWidth: 3, lineCap: .round)
-                        )
-                        .frame(width: 120, height: 120)
-                        .rotationEffect(.degrees(-90))
-                        .animation(.easeOut(duration: 0.15), value: viewModel.tapProgress)
+                Circle()
+                    .trim(from: 0, to: viewModel.tapProgress)
+                    .stroke(
+                        ColorStyle.secondary.color,
+                        style: StrokeStyle(lineWidth: 3, lineCap: .round)
+                    )
+                    .frame(width: 120, height: 120)
+                    .rotationEffect(.degrees(-90))
+                    .animation(.easeOut(duration: 0.15), value: viewModel.tapProgress)
 
-                    VStack(spacing: 2) {
-                        Text(AppLocalizedKeys.tapToCount.value.uppercased())
-                            .font(.system(size: 10, weight: .medium))
-                            .customForeground(.onSurfaceVariant)
-                        Text("\(viewModel.currentTapCount)")
-                            .font(.system(size: 34, weight: .bold, design: .rounded))
-                            .customForeground(.primary)
-                    }
+                VStack(spacing: 2) {
+                    Text(AppLocalizedKeys.tapToCount.value.uppercased())
+                        .font(.system(size: 10, weight: .medium))
+                        .customForeground(.onSurfaceVariant)
+                    Text("\(viewModel.currentTapCount)")
+                        .font(.system(size: 34, weight: .bold, design: .rounded))
+                        .customForeground(.primary)
                 }
             }
-            .buttonStyle(CounterButtonStyle())
+            .scaleEffect(tapPulse ? 0.93 : 1.0)
 
             if let dhikr = viewModel.currentDhikr {
                 let remaining = dhikr.count - viewModel.currentTapCount
@@ -236,12 +245,3 @@ extension AdhkarReadingView {
     }
 }
 
-// MARK: - Counter Button Style
-
-struct CounterButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.94 : 1.0)
-            .animation(.spring(response: 0.2, dampingFraction: 0.6), value: configuration.isPressed)
-    }
-}
