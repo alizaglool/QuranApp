@@ -18,6 +18,7 @@ struct DhikrCategory: Codable, Identifiable, Hashable {
 struct Dhikr: Codable, Identifiable, Hashable {
     let id: String
     let textAr: String
+    let description: String?
     let title: String?
     let count: Int
     let audio: String?

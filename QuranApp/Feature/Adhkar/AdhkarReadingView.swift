@@ -125,29 +125,50 @@ extension AdhkarReadingView {
     }
 
     private func dhikrCard(dhikr: Dhikr) -> some View {
-        VStack(spacing: 28) {
-            // Gold accent
+        VStack(spacing: 0) {
+            // Gold accent bar
             Rectangle()
                 .fill(ColorStyle.secondary.color)
                 .frame(width: 40, height: 3)
                 .cornerRadius(2)
+                .padding(.bottom, 20)
 
-            // Optional title (section header)
+            // Optional section title (small, gold)
             if let title = dhikr.title, !title.isEmpty {
                 Text(title)
                     .customStyle(.caption1, .secondary)
                     .multilineTextAlignment(.center)
-                    .tracking(0.5)
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .padding(.horizontal, .big)
+                    .padding(.bottom, 16)
             }
 
-            // Arabic text
+            // Main dhikr — large
             Text(dhikr.textAr)
-                .font(.custom("HafsSmart_08_fixed", size: 22))
+                .font(.custom("HafsSmart_08_fixed", size: 26))
                 .foregroundColor(ColorStyle.onSurface.color)
                 .multilineTextAlignment(.center)
                 .lineSpacing(14)
                 .environment(\.layoutDirection, .rightToLeft)
                 .padding(.horizontal, .big)
+
+            // Description / explanation — smaller, muted
+            if let description = dhikr.description, !description.isEmpty {
+                Rectangle()
+                    .fill(ColorStyle.outlineVariant.color.opacity(0.4))
+                    .frame(height: 1)
+                    .padding(.horizontal, .big)
+                    .padding(.top, 20)
+                    .padding(.bottom, 14)
+
+                Text(description)
+                    .font(.custom("HafsSmart_08_fixed", size: 15))
+                    .foregroundColor(ColorStyle.onSurfaceVariant.color)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(8)
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .padding(.horizontal, .big)
+            }
         }
     }
 
