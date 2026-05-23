@@ -12,6 +12,7 @@ struct HadithReadingView: View {
 
     @StateObject private var vm: HadithReadingViewModel
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var localizationManager: LocalizationManager
 
     init(collection: HadithCollection) {
         _vm = StateObject(wrappedValue: HadithReadingViewModel(collection: collection))
@@ -49,7 +50,7 @@ extension HadithReadingView {
 
             Spacer()
 
-            Text(vm.collection.nameAr)
+            Text(localizationManager.currentLanguage == .Arabic ? vm.collection.nameAr : vm.collection.nameEn)
                 .customStyle(.heading3, .onSurface)
 
             Spacer()

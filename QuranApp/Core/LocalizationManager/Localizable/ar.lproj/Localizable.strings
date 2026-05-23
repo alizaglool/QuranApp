@@ -32,6 +32,14 @@
 "hadith" = "الحديث";
 "lessons" = "الدروس";
 "settings" = "الإعدادات";
+
+"adhkarCount" = "%d أذكار";
+"tapToCount" = "اضغط للتسبيح";
+"adhkarCompleted" = "أتممت الأذكار";
+"adhkarCompletedMessage" = "جعل الله ذلك في ميزان حسناتك";
+"repeatAction" = "إعادة";
+"back" = "رجوع";
+"hadithCount" = "%d أحاديث";
 "fajr" = "الفجر";
 "dhuhr" = "الظهر";
 "asr" = "العصر";

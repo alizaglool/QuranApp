@@ -12,6 +12,7 @@ struct AdhkarReadingView: View {
 
     @StateObject private var vm: AdhkarReadingViewModel
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var localizationManager: LocalizationManager
 
     init(category: DhikrCategory) {
         _vm = StateObject(wrappedValue: AdhkarReadingViewModel(category: category))
@@ -53,7 +54,7 @@ extension AdhkarReadingView {
 
             Spacer()
 
-            Text(vm.category.titleAr)
+            Text(localizationManager.currentLanguage == .Arabic ? vm.category.titleAr : vm.category.titleEn)
                 .customStyle(.heading3, .onSurface)
 
             Spacer()
@@ -157,7 +158,7 @@ extension AdhkarReadingView {
                     }
                 }
 
-                Text("اضغط للتسبيح")
+                Text(AppLocalizedKeys.tapToCount.value)
                     .customStyle(.caption2, .onSurfaceVariant)
             }
         }
@@ -200,10 +201,10 @@ extension AdhkarReadingView {
                 .foregroundColor(ColorStyle.secondary.color)
 
             VStack(spacing: 8) {
-                Text("أتممت الأذكار")
+                Text(AppLocalizedKeys.adhkarCompleted.value)
                     .customStyle(.heading2, .onSurface)
 
-                Text("جعل الله ذلك في ميزان حسناتك")
+                Text(AppLocalizedKeys.adhkarCompletedMessage.value)
                     .customStyle(.body, .onSurfaceVariant)
                     .multilineTextAlignment(.center)
             }
@@ -212,7 +213,7 @@ extension AdhkarReadingView {
 
             VStack(spacing: 12) {
                 Button(action: { vm.reset() }) {
-                    Text("إعادة")
+                    Text(AppLocalizedKeys.repeatAction.value)
                         .customStyle(.headline, .onPrimary)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
@@ -221,7 +222,7 @@ extension AdhkarReadingView {
                 }
 
                 Button(action: { dismiss() }) {
-                    Text("رجوع")
+                    Text(AppLocalizedKeys.back.value)
                         .customStyle(.headline, .onSurface)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)

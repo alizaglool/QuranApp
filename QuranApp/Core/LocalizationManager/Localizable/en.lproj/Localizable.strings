@@ -32,6 +32,14 @@
 "hadith" = "Hadith";
 "lessons" = "Lessons";
 "settings" = "Settings";
+
+"adhkarCount" = "%d Adhkar";
+"tapToCount" = "Tap to count";
+"adhkarCompleted" = "Adhkar Complete";
+"adhkarCompletedMessage" = "May Allah accept it from you";
+"repeatAction" = "Restart";
+"back" = "Back";
+"hadithCount" = "%d Hadith";
 "fajr" = "FAJR";
 "dhuhr" = "DHUHR";
 "asr" = "ASR";

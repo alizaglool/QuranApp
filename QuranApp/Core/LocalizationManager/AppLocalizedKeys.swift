@@ -37,6 +37,17 @@ enum AppLocalizedKeys: String {
     case hadith
     case lessons
     case settings
+
+    // MARK: - Adhkar
+    case adhkarCount
+    case tapToCount
+    case adhkarCompleted
+    case adhkarCompletedMessage
+    case repeatAction
+    case back
+
+    // MARK: - Hadith
+    case hadithCount
     case fajr
     case dhuhr
     case asr

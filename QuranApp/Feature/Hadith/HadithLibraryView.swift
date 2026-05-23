@@ -82,6 +82,11 @@ extension HadithLibraryView {
 struct HadithCollectionCard: View {
     let collection: HadithCollection
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject private var localizationManager: LocalizationManager
+
+    private var displayName: String {
+        localizationManager.currentLanguage == .Arabic ? collection.nameAr : collection.nameEn
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -97,12 +102,12 @@ struct HadithCollectionCard: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(collection.nameAr)
+                Text(displayName)
                     .customStyle(.headline, .onSurface)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
-                Text("\(collection.count) أحاديث")
+                Text(String(format: AppLocalizedKeys.hadithCount.value, collection.count))
                     .customStyle(.caption2, .onSurfaceVariant)
             }
         }

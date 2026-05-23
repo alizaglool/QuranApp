@@ -82,6 +82,11 @@ extension AdhkarCategoriesView {
 struct AdhkarCategoryCard: View {
     let category: DhikrCategory
     @Environment(\.colorScheme) var colorScheme
+    @EnvironmentObject private var localizationManager: LocalizationManager
+
+    private var displayTitle: String {
+        localizationManager.currentLanguage == .Arabic ? category.titleAr : category.titleEn
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -97,12 +102,12 @@ struct AdhkarCategoryCard: View {
             Spacer()
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(category.titleAr)
+                Text(displayTitle)
                     .customStyle(.headline, .onSurface)
                     .lineLimit(2)
                     .multilineTextAlignment(.leading)
 
-                Text("\(category.adhkar.count) أذكار")
+                Text(String(format: AppLocalizedKeys.adhkarCount.value, category.adhkar.count))
                     .customStyle(.caption2, .onSurfaceVariant)
             }
         }
