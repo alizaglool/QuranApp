@@ -1,0 +1,59 @@
+/*
+ Localizable.strings
+ Medrar
+ 
+ Created by Ali M. Zaghloul on 07/06/2024.
+ 
+ */
+
+"appName" = "القرآن الكريم";
+"appNameEnglish" = "QuranApp";
+"downloadingQuran" = "جاري تحميل القرآن...";
+"allSurahs" = "كل السور";
+"searchSurahOrAyah" = "ابحث عن سورة أو آية...";
+"lastRead" = "آخر قراءة";
+"progress" = "التقدم";
+"meccan" = "مكية";
+"medinan" = "مدنية";
+"verses" = "آيات";
+"juz" = "الجزء";
+"page" = "الصفحة";
+"sort" = "ترتيب";
+
+"home" = "الرئيسية";
+"assalamuAlaikum" = "السلام عليكم";
+"welcomeToSanctuary" = "مرحباً بك في محرابك";
+"continueReading" = "متابعة القراءة";
+"resume" = "استمرار";
+"ayahOfTheDay" = "آية اليوم";
+"featuredLessons" = "دروس مميزة";
+"quran" = "القرآن";
+"adhkar" = "الأذكار";
+"hadith" = "الحديث";
+"lessons" = "الدروس";
+"settings" = "الإعدادات";
+"fajr" = "الفجر";
+"dhuhr" = "الظهر";
+"asr" = "العصر";
+"maghrib" = "المغرب";
+"isha" = "العشاء";
+"seeAll" = "seeAll";
+
+"edit" = "تعديل";
+"bookmarks" = "الفواصل";
+"allBookmarks" = "الكل";
+"redBookmark" = "الأحمر";
+"yellowBookmark" = "الأصفر";
+"greenBookmark" = "الأخضر";
+"blueBookmark" = "الأزرق";
+"recitation" = "التلاوة";
+"playTo" = "تشغيل إلى";
+"play" = "تشغيل";
+"tafsir" = "التفسير";
+"tafsirSummary" = "المختصر";
+"tafsirComingSoon" = "سيتم إضافة التفسير قريباً";
+"library" = "المكتبة";
+"sharing" = "المشاركة";
+"share" = "مشاركة";
+"highlight" = "التمييز";
+"clearHighlight" = "مسح";

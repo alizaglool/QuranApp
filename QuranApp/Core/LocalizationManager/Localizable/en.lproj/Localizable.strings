@@ -1,0 +1,59 @@
+/* 
+  Localizable.strings
+  Medrar
+
+  Created by Ali M. Zaghloul on 07/06/2024.
+  
+*/
+
+"appName" = "القرآن الكريم";
+"appNameEnglish" = "QuranApp";
+"downloadingQuran" = "Downloading Quran...";
+"allSurahs" = "All Surahs";
+"searchSurahOrAyah" = "Search Surah or Ayah...";
+"lastRead" = "LAST READ";
+"progress" = "PROGRESS";
+"meccan" = "MECCAN";
+"medinan" = "MEDINAN";
+"verses" = "VERSES";
+"juz" = "Juz";
+"page" = "Page";
+"sort" = "SORT";
+
+"home" = "Home";
+"assalamuAlaikum" = "ASSALAMU ALAIKUM";
+"welcomeToSanctuary" = "Welcome to your sanctuary";
+"continueReading" = "CONTINUE READING";
+"resume" = "Resume";
+"ayahOfTheDay" = "Ayah of the Day";
+"featuredLessons" = "Featured Lessons";
+"quran" = "Quran";
+"adhkar" = "Adhkar";
+"hadith" = "Hadith";
+"lessons" = "Lessons";
+"settings" = "Settings";
+"fajr" = "FAJR";
+"dhuhr" = "DHUHR";
+"asr" = "ASR";
+"maghrib" = "MAGHRIB";
+"isha" = "ISHA";
+"seeAll" = "See All";
+
+"edit" = "Edit";
+"bookmarks" = "Bookmarks";
+"allBookmarks" = "All";
+"redBookmark" = "Red";
+"yellowBookmark" = "Yellow";
+"greenBookmark" = "Green";
+"blueBookmark" = "Blue";
+"recitation" = "Recitation";
+"playTo" = "Play to";
+"play" = "Play";
+"tafsir" = "Tafsir";
+"tafsirSummary" = "Brief Tafsir";
+"tafsirComingSoon" = "Tafsir will be added soon";
+"library" = "Library";
+"sharing" = "Sharing";
+"share" = "Share";
+"highlight" = "Highlight";
+"clearHighlight" = "Clear";

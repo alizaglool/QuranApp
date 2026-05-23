@@ -1,0 +1,57 @@
+//
+//  HomeViewModel.swift
+//  QuranApp
+//
+//  Created by Ali Zaghloul on 2026-03-23.
+//
+
+import Foundation
+import UIKit
+import Core
+import SwiftUI
+
+protocol HomeCoordinating: AnyObject {
+    func coordinateToSurahDetail(surah: SurahEntity)
+    func coordinateToSearch()
+    func coordinateToQuran()
+}
+
+class HomeCoordinator: MainCoordinator, HomeCoordinating {
+    
+    var navigationController: UINavigationController
+    var tabBarController: TabBarController
+    
+    init(navigationController: UINavigationController, tabBarController: TabBarController) {
+        self.navigationController = navigationController
+        self.tabBarController = tabBarController
+    }
+    
+    func start() {
+        let homeView = HomeView(coordinator: self)
+        coordinateToView(homeView)
+    }
+    
+    func coordinateToSurahDetail(surah: SurahEntity) {
+        // TODO
+    }
+    
+    func coordinateToSearch() {
+        // TODO
+    }
+    
+    func coordinateToQuran() {
+        // Capture nav weakly so the closure doesn't keep the controller alive
+        // beyond its natural lifecycle.
+        let nav = navigationController
+        let view = QuranPagerView(onBack: { [weak nav] in
+            nav?.popViewController(animated: true)
+        })
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, .rightToLeft)
+        )
+        viewController.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(viewController, animated: true)
+    }
+}

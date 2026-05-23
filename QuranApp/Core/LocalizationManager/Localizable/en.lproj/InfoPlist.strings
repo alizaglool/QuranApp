@@ -1,0 +1,16 @@
+/* 
+  InfoPlist.strings
+  TON
+
+  Created by Ali Zaghloul on 07/06/2024.
+  
+*/
+
+/* Photo Library Access */
+"NSPhotoLibraryUsageDescription" = "We need access to your photos to let you choose a profile picture and upload images.";
+"NSCameraUsageDescription" = "We need access to your camera to let you take photos for your profile picture and scan QR codes.";
+"NSPhotoLibraryAddUsageDescription" = "We need access to save images to your photo library when you download or save content.";
+
+/* Location Access */
+"NSLocationWhenInUseUsageDescription" = "We need access to your location to set your current location during registration for better service.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "We need access to your location at all times to provide location-based services even when the app is in the background.";

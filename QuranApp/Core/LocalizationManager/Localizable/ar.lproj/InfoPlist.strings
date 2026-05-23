@@ -1,0 +1,16 @@
+/* 
+  InfoPlist.strings
+  TON
+
+  Created by Ali Zaghloul on 07/06/2024.
+  
+*/
+
+/* Photo Library Access */
+"NSPhotoLibraryUsageDescription" = "نحتاج إلى الوصول إلى صورك لتمكينك من اختيار صورة الملف الشخصي وتحميل الصور.";
+"NSCameraUsageDescription" = "نحتاج إلى الوصول إلى الكاميرا لتمكينك من التقاط صور لملفك الشخصي ومسح رموز الاستجابة السريعة.";
+"NSPhotoLibraryAddUsageDescription" = "نحتاج إلى إذن لحفظ الصور في مكتبة الصور عند تنزيل المحتوى أو حفظه.";
+
+/* Location Access */
+"NSLocationWhenInUseUsageDescription" = "نحتاج إلى الوصول إلى موقعك الحالي أثناء التسجيل لتحديد موقعك لتقديم خدمة أفضل.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "نحتاج إلى الوصول إلى موقعك في جميع الأوقات لتقديم خدمات تعتمد على الموقع حتى عندما يكون التطبيق في الخلفية.";

@@ -1,0 +1,74 @@
+//
+//  UIApplication+TabBarAppearance.swift
+//
+//
+//  Created by Ali M. Zaghloul on 7/6/24.
+//
+
+import UIKit
+
+extension UIApplication {
+    
+    var tabBarHeight: CGFloat  {
+        getTabBarViewController()?.height ?? 0
+    }
+    
+    var isTabBarHidden: Bool {
+        getTabBarViewController()?.isHidden ?? false
+    }
+    
+    func hideTabBar() {
+        getTabBarViewController()?.hide()
+    }
+    
+    func showTabBar() {
+        getTabBarViewController()?.show()
+    }
+    
+    func configureTabBarTitles() {
+        getTabBarViewController()?.configureTitles()
+    }
+    
+    func configureTabBarSemanticContentAttribute(semanticContentAttribute: UISemanticContentAttribute) {
+        getTabBarViewController()?.configureSemanticContentAttribute(semanticContentAttribute: semanticContentAttribute)
+    }
+    
+    func getTabBarViewController() -> TabBarControllerProtocol? {
+        var topViewController: UIViewController? = nil
+        for scene in connectedScenes {
+            if let windowScene = scene as? UIWindowScene {
+                for window in windowScene.windows {
+                    if window.isKeyWindow {
+                        topViewController = window.rootViewController
+                    }
+                }
+            }
+        }
+        
+        while true {
+            if let tabBarController = topViewController as? TabBarControllerProtocol {
+                return tabBarController
+            }
+            if let presented = topViewController?.presentedViewController {
+                topViewController = presented
+            } else if let navController = topViewController as? UINavigationController {
+                topViewController = navController.topViewController
+            } else if let tabBarController = topViewController as? UITabBarController {
+                topViewController = tabBarController.selectedViewController
+            } else {
+                // Handle any other third party container in `else if` if required
+                break
+            }
+        }
+        return nil
+    }
+}
+
+public func hideTabBar() {
+    UIApplication.shared.hideTabBar()
+}
+
+public func showTabBar() {
+    UIApplication.shared.showTabBar()
+}
+

@@ -1,0 +1,990 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B8F58AE72E6C5A9B002673AB /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = B8F58AE62E6C5A9B002673AB /* Core */; };
+		C85002D52DBC36CA00FB4CE6 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C85002D42DBC36CA00FB4CE6 /* Alamofire */; };
+		C88166C02DB662BA00EDECB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */; };
+		C88166C22DB662BA00EDECB8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */; };
+		C88166C92DB662BC00EDECB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C88166C82DB662BC00EDECB8 /* Assets.xcassets */; };
+		C88DD6802DB92B6600731D19 /* OptionalAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */; };
+		E91210AF2E1E6230007EE3E0 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = E91210AE2E1E6230007EE3E0 /* Core */; };
+		F800B3112DB67DDA0035501A /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30C2DB67DDA0035501A /* EmptyViewController.swift */; };
+		F800B3122DB67DDA0035501A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30B2DB67DDA0035501A /* TabBarController.swift */; };
+		F800B3152DB67DDA0035501A /* TabBarItem+Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30D2DB67DDA0035501A /* TabBarItem+Tabs.swift */; };
+		F800B3172DB67DDA0035501A /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F800B30A2DB67DDA0035501A /* TabBarController.xib */; };
+		F800B3192DB67FB40035501A /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B3182DB67FB40035501A /* AppCoordinator.swift */; };
+		F800B3652DB681920035501A /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B33E2DB681920035501A /* SplashCoordinator.swift */; };
+		F800B3922DB681920035501A /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B33D2DB681920035501A /* TabBarCoordinator.swift */; };
+		F800B6E52DB6824B0035501A /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B6232DB6824B0035501A /* SplashView.swift */; };
+		F800B8232DB6824B0035501A /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B6222DB6824B0035501A /* SplashViewModel.swift */; };
+		F800B83C2DB682FE0035501A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8342DB682FE0035501A /* ViewController.swift */; };
+		F800B83D2DB682FE0035501A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F800B83A2DB682FE0035501A /* LaunchScreen.storyboard */; };
+		F800B83E2DB682FE0035501A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F800B8372DB682FE0035501A /* Main.storyboard */; };
+		F800B84B2DB6833C0035501A /* UserDefaultsManager+Extenions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8482DB6833C0035501A /* UserDefaultsManager+Extenions.swift */; };
+		F800B84C2DB6833C0035501A /* Image+Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8472DB6833C0035501A /* Image+Images.swift */; };
+		F800B86F2DBA5FD00035501A /* EndPoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8672DBA5FD00035501A /* EndPoints.swift */; };
+		F800B8702DBA5FD00035501A /* Encodable+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B86C2DBA5FD00035501A /* Encodable+extension.swift */; };
+		F800B8712DBA5FD00035501A /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8692DBA5FD00035501A /* Header.swift */; };
+		F800B8732DBA5FD00035501A /* TargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B86A2DBA5FD00035501A /* TargetType.swift */; };
+		F800B8742DBA5FD00035501A /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8682DBA5FD00035501A /* ErrorMessage.swift */; };
+		F800B87E2DBA6E7A0035501A /* StatueCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B87D2DBA6E6E0035501A /* StatueCode.swift */; };
+		F800B8802DBA6E8D0035501A /* APIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B87F2DBA6E8D0035501A /* APIResponse.swift */; };
+		F800B8822DBA6EA60035501A /* DomainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8812DBA6EA60035501A /* DomainWrapper.swift */; };
+		F800B8842DBA6EF50035501A /* ImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8832DBA6EF50035501A /* ImageRequest.swift */; };
+		F800B8862DBA6F1B0035501A /* BaseAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8852DBA6F1B0035501A /* BaseAPI.swift */; };
+		F800B8A02DBD716C0035501A /* String+Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B89F2DBD716C0035501A /* String+Validation.swift */; };
+		F800B8A82DBF6C980035501A /* DeviceTokenManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B8A72DBF6C980035501A /* DeviceTokenManager.swift */; };
+		F843B1A62DF06337005F6CCC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F843B1A12DF06337005F6CCC /* Localizable.strings */; };
+		F843B1A72DF06337005F6CCC /* AppLocalizedKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */; };
+		F88D4B8E2F75FE730025939D /* HafsSmart_08.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */; };
+		F88D4B902F760FB70025939D /* HafsSmart_08_fixed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */; };
+		F88D4B932F7E8F570025939D /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B922F7E8F570025939D /* StorageManager.swift */; };
+		F88D4B962F7E8F760025939D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B952F7E8F760025939D /* AppSettings.swift */; };
+		F88D4B982F7E8F7C0025939D /* ReadingProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B972F7E8F7C0025939D /* ReadingProgress.swift */; };
+		F88D4B9A2F7E8F830025939D /* QuranBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B992F7E8F830025939D /* QuranBookmark.swift */; };
+		F88D4B9C2F7E8F880025939D /* AdhkarProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B9B2F7E8F880025939D /* AdhkarProgress.swift */; };
+		F88DD9052F753DAB0025939D /* QuranTitles.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9042F753DAB0025939D /* QuranTitles.ttf */; };
+		F88DD9062F753DAB0025939D /* QuranNumbers.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9032F753DAB0025939D /* QuranNumbers.ttf */; };
+		F88DD9092F753DC10025939D /* Kitab-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9082F753DC10025939D /* Kitab-Regular.ttf */; };
+		F88DD90A2F753DC10025939D /* Kitab-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9072F753DC10025939D /* Kitab-Bold.ttf */; };
+		F88DD90C2F753DDF0025939D /* quran_positioning.db in Resources */ = {isa = PBXBuildFile; fileRef = F88DD90B2F753DDF0025939D /* quran_positioning.db */; };
+		F88DD90E2F75401B0025939D /* SurahInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD90D2F75401B0025939D /* SurahInfo.swift */; };
+		F88DD9112F7540510025939D /* QuranPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD9102F7540510025939D /* QuranPageView.swift */; };
+		F88DD9132F75405A0025939D /* QuranViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD9122F75405A0025939D /* QuranViewModel.swift */; };
+		F88DD9152F7540610025939D /* QuranPagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD9142F7540610025939D /* QuranPagerView.swift */; };
+		F88DD9172F75407E0025939D /* QuranCoordinating.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD9162F75407E0025939D /* QuranCoordinating.swift */; };
+		F8A1CECD2DF9E53B0012E23B /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8A1CECC2DF9E53B0012E23B /* UIView+Extension.swift */; };
+		F8B651EF2F85145C00C4C7EC /* VerseActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */; };
+		F8B651F12F853B3E00C4C7EC /* LongPressLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */; };
+		F8BDD0382F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BDD0372F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift */; };
+		F8BEB9B32F71744C009F1094 /* SurahEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9B22F71744C009F1094 /* SurahEntity.swift */; };
+		F8BEB9B52F71745A009F1094 /* AyahEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9B42F71745A009F1094 /* AyahEntity.swift */; };
+		F8BEB9B72F717468009F1094 /* LastReadEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9B62F717468009F1094 /* LastReadEntity.swift */; };
+		F8BEB9BA2F717485009F1094 /* QuranTextResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9B92F717485009F1094 /* QuranTextResponse.swift */; };
+		F8BEB9BD2F7174A0009F1094 /* QuranServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9BC2F7174A0009F1094 /* QuranServiceError.swift */; };
+		F8BEB9C02F7174B5009F1094 /* QuranRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9BF2F7174B5009F1094 /* QuranRepository.swift */; };
+		F8BEB9C42F717879009F1094 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */; };
+		F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C52F717897009F1094 /* HomeViewModel.swift */; };
+		F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C72F71789E009F1094 /* HomeView.swift */; };
+		F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C92F717912009F1094 /* SurahRow.swift */; };
+		F8F2DC132DC8F11D00001F76 /* CustomPickerItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */; };
+		F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */; };
+		F8FB7F582E10A6C10051D1EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F8FB7F572E10A6C10051D1EA /* InfoPlist.strings */; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		C88166BC2DB662BA00EDECB8 /* QuranApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuranApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		C88166C82DB662BC00EDECB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C88166CD2DB662BC00EDECB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C88166E62DB6659200EDECB8 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
+		C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalAnimation.swift; sourceTree = "<group>"; };
+		F800B30A2DB67DDA0035501A /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
+		F800B30B2DB67DDA0035501A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		F800B30C2DB67DDA0035501A /* EmptyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyViewController.swift; sourceTree = "<group>"; };
+		F800B30D2DB67DDA0035501A /* TabBarItem+Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabBarItem+Tabs.swift"; sourceTree = "<group>"; };
+		F800B3182DB67FB40035501A /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		F800B33D2DB681920035501A /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
+		F800B33E2DB681920035501A /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		F800B6222DB6824B0035501A /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
+		F800B6232DB6824B0035501A /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		F800B8342DB682FE0035501A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F800B8352DB682FE0035501A /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F800B8362DB682FE0035501A /* Main.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Main.strings; path = ar.lproj/Main.strings; sourceTree = "<group>"; };
+		F800B8382DB682FE0035501A /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F800B8392DB682FE0035501A /* LaunchScreen.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = LaunchScreen.strings; path = ar.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		F800B8472DB6833C0035501A /* Image+Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+Images.swift"; sourceTree = "<group>"; };
+		F800B8482DB6833C0035501A /* UserDefaultsManager+Extenions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaultsManager+Extenions.swift"; sourceTree = "<group>"; };
+		F800B8672DBA5FD00035501A /* EndPoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndPoints.swift; sourceTree = "<group>"; };
+		F800B8682DBA5FD00035501A /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
+		F800B8692DBA5FD00035501A /* Header.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		F800B86A2DBA5FD00035501A /* TargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TargetType.swift; sourceTree = "<group>"; };
+		F800B86C2DBA5FD00035501A /* Encodable+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+extension.swift"; sourceTree = "<group>"; };
+		F800B87D2DBA6E6E0035501A /* StatueCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatueCode.swift; sourceTree = "<group>"; };
+		F800B87F2DBA6E8D0035501A /* APIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIResponse.swift; sourceTree = "<group>"; };
+		F800B8812DBA6EA60035501A /* DomainWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DomainWrapper.swift; sourceTree = "<group>"; };
+		F800B8832DBA6EF50035501A /* ImageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRequest.swift; sourceTree = "<group>"; };
+		F800B8852DBA6F1B0035501A /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
+		F800B89F2DBD716C0035501A /* String+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Validation.swift"; sourceTree = "<group>"; };
+		F800B8A72DBF6C980035501A /* DeviceTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTokenManager.swift; sourceTree = "<group>"; };
+		F843B19F2DF06337005F6CCC /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F843B1A02DF06337005F6CCC /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalizedKeys.swift; sourceTree = "<group>"; };
+		F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = HafsSmart_08.ttf; sourceTree = "<group>"; };
+		F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = HafsSmart_08_fixed.ttf; sourceTree = "<group>"; };
+		F88D4B922F7E8F570025939D /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
+		F88D4B952F7E8F760025939D /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		F88D4B972F7E8F7C0025939D /* ReadingProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingProgress.swift; sourceTree = "<group>"; };
+		F88D4B992F7E8F830025939D /* QuranBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranBookmark.swift; sourceTree = "<group>"; };
+		F88D4B9B2F7E8F880025939D /* AdhkarProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarProgress.swift; sourceTree = "<group>"; };
+		F88DD9032F753DAB0025939D /* QuranNumbers.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuranNumbers.ttf; sourceTree = "<group>"; };
+		F88DD9042F753DAB0025939D /* QuranTitles.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuranTitles.ttf; sourceTree = "<group>"; };
+		F88DD9072F753DC10025939D /* Kitab-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kitab-Bold.ttf"; sourceTree = "<group>"; };
+		F88DD9082F753DC10025939D /* Kitab-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kitab-Regular.ttf"; sourceTree = "<group>"; };
+		F88DD90B2F753DDF0025939D /* quran_positioning.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran_positioning.db; sourceTree = "<group>"; };
+		F88DD90D2F75401B0025939D /* SurahInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahInfo.swift; sourceTree = "<group>"; };
+		F88DD9102F7540510025939D /* QuranPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageView.swift; sourceTree = "<group>"; };
+		F88DD9122F75405A0025939D /* QuranViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranViewModel.swift; sourceTree = "<group>"; };
+		F88DD9142F7540610025939D /* QuranPagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPagerView.swift; sourceTree = "<group>"; };
+		F88DD9162F75407E0025939D /* QuranCoordinating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranCoordinating.swift; sourceTree = "<group>"; };
+		F8A1CECC2DF9E53B0012E23B /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseActionSheet.swift; sourceTree = "<group>"; };
+		F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressLocationView.swift; sourceTree = "<group>"; };
+		F8BDD0372F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesAPIResponse.swift; sourceTree = "<group>"; };
+		F8BEB9B22F71744C009F1094 /* SurahEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahEntity.swift; sourceTree = "<group>"; };
+		F8BEB9B42F71745A009F1094 /* AyahEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AyahEntity.swift; sourceTree = "<group>"; };
+		F8BEB9B62F717468009F1094 /* LastReadEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastReadEntity.swift; sourceTree = "<group>"; };
+		F8BEB9B92F717485009F1094 /* QuranTextResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextResponse.swift; sourceTree = "<group>"; };
+		F8BEB9BC2F7174A0009F1094 /* QuranServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranServiceError.swift; sourceTree = "<group>"; };
+		F8BEB9BF2F7174B5009F1094 /* QuranRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranRepository.swift; sourceTree = "<group>"; };
+		F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		F8BEB9C52F717897009F1094 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		F8BEB9C72F71789E009F1094 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		F8BEB9C92F717912009F1094 /* SurahRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahRow.swift; sourceTree = "<group>"; };
+		F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerItems.swift; sourceTree = "<group>"; };
+		F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		F8FB7F552E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F8FB7F562E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F88D4B8C2F7548A90025939D /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				1,
+			);
+			target = C88166BB2DB662BA00EDECB8 /* QuranApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		F88D4B8B2F75487F0025939D /* quran-images */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F88D4B8C2F7548A90025939D /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, ); path = "quran-images"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C88166B92DB662BA00EDECB8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C85002D52DBC36CA00FB4CE6 /* Alamofire in Frameworks */,
+				E91210AF2E1E6230007EE3E0 /* Core in Frameworks */,
+				B8F58AE72E6C5A9B002673AB /* Core in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C88166B32DB662BA00EDECB8 = {
+			isa = PBXGroup;
+			children = (
+				C88166E62DB6659200EDECB8 /* Core */,
+				C88166BE2DB662BA00EDECB8 /* QuranApp */,
+				C88166BD2DB662BA00EDECB8 /* Products */,
+				C88166E72DB6669F00EDECB8 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		C88166BD2DB662BA00EDECB8 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C88166BC2DB662BA00EDECB8 /* QuranApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C88166BE2DB662BA00EDECB8 /* QuranApp */ = {
+			isa = PBXGroup;
+			children = (
+				F800B6342DB6824B0035501A /* Feature */,
+				F800B8332DB682DD0035501A /* Core */,
+				F800B8532DB7DC760035501A /* Delegation */,
+				F8F71DE12DEEF2E900FA529D /* Resources */,
+				C88166CD2DB662BC00EDECB8 /* Info.plist */,
+			);
+			path = QuranApp;
+			sourceTree = "<group>";
+		};
+		C88166E72DB6669F00EDECB8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F800B30E2DB67DDA0035501A /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				F800B30A2DB67DDA0035501A /* TabBarController.xib */,
+				F800B30B2DB67DDA0035501A /* TabBarController.swift */,
+				F800B30C2DB67DDA0035501A /* EmptyViewController.swift */,
+				F800B30D2DB67DDA0035501A /* TabBarItem+Tabs.swift */,
+			);
+			path = TabBar;
+			sourceTree = "<group>";
+		};
+		F800B33F2DB681920035501A /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F800B33D2DB681920035501A /* TabBarCoordinator.swift */,
+				F800B33E2DB681920035501A /* SplashCoordinator.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		F800B3412DB681920035501A /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				F88DD9162F75407E0025939D /* QuranCoordinating.swift */,
+				F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */,
+				F800B33F2DB681920035501A /* Common */,
+				F800B3182DB67FB40035501A /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		F800B3622DB681920035501A /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				F800B3412DB681920035501A /* Coordinator */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		F800B6252DB6824B0035501A /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				F800B6232DB6824B0035501A /* SplashView.swift */,
+				F800B6222DB6824B0035501A /* SplashViewModel.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		F800B6332DB6824B0035501A /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F800B30E2DB67DDA0035501A /* TabBar */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		F800B6342DB6824B0035501A /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				F8BEB9AF2F717434009F1094 /* Quran */,
+				F8BEB9C22F717763009F1094 /* Home */,
+				F800B6252DB6824B0035501A /* Splash */,
+				F800B6332DB6824B0035501A /* Common */,
+			);
+			path = Feature;
+			sourceTree = "<group>";
+		};
+		F800B8332DB682DD0035501A /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				F843B1A52DF06337005F6CCC /* LocalizationManager */,
+				F800B8A92DBF758E0035501A /* Storage */,
+				F800B86E2DBA5FD00035501A /* Networking */,
+				F800B83B2DB682FE0035501A /* Common */,
+				F800B8492DB6833C0035501A /* Extensions */,
+				F800B3622DB681920035501A /* Presentation */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		F800B83B2DB682FE0035501A /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				F800B8342DB682FE0035501A /* ViewController.swift */,
+				F800B8372DB682FE0035501A /* Main.storyboard */,
+				F800B83A2DB682FE0035501A /* LaunchScreen.storyboard */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		F800B8492DB6833C0035501A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				F8A1CECC2DF9E53B0012E23B /* UIView+Extension.swift */,
+				F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */,
+				F800B8A72DBF6C980035501A /* DeviceTokenManager.swift */,
+				F800B89F2DBD716C0035501A /* String+Validation.swift */,
+				C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */,
+				F800B8472DB6833C0035501A /* Image+Images.swift */,
+				F800B8482DB6833C0035501A /* UserDefaultsManager+Extenions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		F800B8532DB7DC760035501A /* Delegation */ = {
+			isa = PBXGroup;
+			children = (
+				C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */,
+				C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */,
+			);
+			path = Delegation;
+			sourceTree = "<group>";
+		};
+		F800B86B2DBA5FD00035501A /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				F800B8852DBA6F1B0035501A /* BaseAPI.swift */,
+				F800B8832DBA6EF50035501A /* ImageRequest.swift */,
+				F800B8812DBA6EA60035501A /* DomainWrapper.swift */,
+				F800B87F2DBA6E8D0035501A /* APIResponse.swift */,
+				F800B87D2DBA6E6E0035501A /* StatueCode.swift */,
+				F800B8672DBA5FD00035501A /* EndPoints.swift */,
+				F800B8682DBA5FD00035501A /* ErrorMessage.swift */,
+				F800B8692DBA5FD00035501A /* Header.swift */,
+				F800B86A2DBA5FD00035501A /* TargetType.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
+		F800B86D2DBA5FD00035501A /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				F800B86C2DBA5FD00035501A /* Encodable+extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		F800B86E2DBA5FD00035501A /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				F800B86B2DBA5FD00035501A /* Base */,
+				F800B86D2DBA5FD00035501A /* Extension */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		F800B8A92DBF758E0035501A /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				F88D4B942F7E8F700025939D /* Models */,
+				F88D4B922F7E8F570025939D /* StorageManager.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		F843B1A22DF06337005F6CCC /* Localizable */ = {
+			isa = PBXGroup;
+			children = (
+				F8FB7F572E10A6C10051D1EA /* InfoPlist.strings */,
+				F843B1A12DF06337005F6CCC /* Localizable.strings */,
+			);
+			path = Localizable;
+			sourceTree = "<group>";
+		};
+		F843B1A52DF06337005F6CCC /* LocalizationManager */ = {
+			isa = PBXGroup;
+			children = (
+				F843B1A22DF06337005F6CCC /* Localizable */,
+				F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */,
+			);
+			path = LocalizationManager;
+			sourceTree = "<group>";
+		};
+		F88D4B942F7E8F700025939D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F88D4B9B2F7E8F880025939D /* AdhkarProgress.swift */,
+				F88D4B992F7E8F830025939D /* QuranBookmark.swift */,
+				F88D4B972F7E8F7C0025939D /* ReadingProgress.swift */,
+				F88D4B952F7E8F760025939D /* AppSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F88DD90F2F7540440025939D /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A7B8C9D0E1F6 /* AllBookmarks */,
+				F8B651EA2F85140E00C4C7EC /* QuranPager */,
+				F8B651ED2F85144A00C4C7EC /* VerseActionSheet */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		F8B651EA2F85140E00C4C7EC /* QuranPager */ = {
+			isa = PBXGroup;
+			children = (
+				F8B651EB2F85142900C4C7EC /* View */,
+				F8B651EC2F85143300C4C7EC /* ViewModel */,
+			);
+			path = QuranPager;
+			sourceTree = "<group>";
+		};
+		F8B651EB2F85142900C4C7EC /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F88DD9142F7540610025939D /* QuranPagerView.swift */,
+				F88DD9102F7540510025939D /* QuranPageView.swift */,
+				F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8B651EC2F85143300C4C7EC /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F88DD9122F75405A0025939D /* QuranViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8B651ED2F85144A00C4C7EC /* VerseActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */,
+			);
+			path = VerseActionSheet;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F6A7B8C9D0E1F6 /* AllBookmarks */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */,
+				A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */,
+			);
+			path = AllBookmarks;
+			sourceTree = "<group>";
+		};
+		F8BEB9AF2F717434009F1094 /* Quran */ = {
+			isa = PBXGroup;
+			children = (
+				F8BEB9B02F71743E009F1094 /* Data */,
+			);
+			path = Quran;
+			sourceTree = "<group>";
+		};
+		F8BEB9B02F71743E009F1094 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F88DD90F2F7540440025939D /* Presentation */,
+				F8BEB9BE2F7174B0009F1094 /* Repository */,
+				F8BEB9BB2F71749B009F1094 /* Service */,
+				F8BEB9B82F717480009F1094 /* Remote */,
+				F8BEB9B12F717446009F1094 /* Models */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		F8BEB9B12F717446009F1094 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F8BEB9B62F717468009F1094 /* LastReadEntity.swift */,
+				F8BEB9B42F71745A009F1094 /* AyahEntity.swift */,
+				F8BEB9B22F71744C009F1094 /* SurahEntity.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F8BEB9B82F717480009F1094 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				F8BDD0372F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift */,
+				F8BEB9B92F717485009F1094 /* QuranTextResponse.swift */,
+			);
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		F8BEB9BB2F71749B009F1094 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F88DD90D2F75401B0025939D /* SurahInfo.swift */,
+				F8BEB9BC2F7174A0009F1094 /* QuranServiceError.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		F8BEB9BE2F7174B0009F1094 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				F8BEB9BF2F7174B5009F1094 /* QuranRepository.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		F8BEB9C22F717763009F1094 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				F8BEB9C72F71789E009F1094 /* HomeView.swift */,
+				F8BEB9C52F717897009F1094 /* HomeViewModel.swift */,
+				F8BEB9C92F717912009F1094 /* SurahRow.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		F8F71DE12DEEF2E900FA529D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F88D4B8B2F75487F0025939D /* quran-images */,
+				F88DD90B2F753DDF0025939D /* quran_positioning.db */,
+				F88DD9072F753DC10025939D /* Kitab-Bold.ttf */,
+				F88DD9082F753DC10025939D /* Kitab-Regular.ttf */,
+				F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */,
+				F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */,
+				F88DD9032F753DAB0025939D /* QuranNumbers.ttf */,
+				F88DD9042F753DAB0025939D /* QuranTitles.ttf */,
+				C88166C82DB662BC00EDECB8 /* Assets.xcassets */,
+				F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C88166BB2DB662BA00EDECB8 /* QuranApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C88166D02DB662BC00EDECB8 /* Build configuration list for PBXNativeTarget "QuranApp" */;
+			buildPhases = (
+				C88166B82DB662BA00EDECB8 /* Sources */,
+				C88166B92DB662BA00EDECB8 /* Frameworks */,
+				C88166BA2DB662BA00EDECB8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				F88D4B8B2F75487F0025939D /* quran-images */,
+			);
+			name = QuranApp;
+			packageProductDependencies = (
+				C85002D42DBC36CA00FB4CE6 /* Alamofire */,
+				E91210AE2E1E6230007EE3E0 /* Core */,
+				B8F58AE62E6C5A9B002673AB /* Core */,
+			);
+			productName = QuranApp;
+			productReference = C88166BC2DB662BA00EDECB8 /* QuranApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C88166B42DB662BA00EDECB8 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1540;
+				LastUpgradeCheck = 1620;
+				TargetAttributes = {
+					C88166BB2DB662BA00EDECB8 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = C88166B72DB662BA00EDECB8 /* Build configuration list for PBXProject "QuranApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				ar,
+			);
+			mainGroup = C88166B32DB662BA00EDECB8;
+			packageReferences = (
+				C85002D32DBC36CA00FB4CE6 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				B8F58AE52E6C5A9B002673AB /* XCRemoteSwiftPackageReference "SVGKit" */,
+			);
+			productRefGroup = C88166BD2DB662BA00EDECB8 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C88166BB2DB662BA00EDECB8 /* QuranApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C88166BA2DB662BA00EDECB8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F88D4B902F760FB70025939D /* HafsSmart_08_fixed.ttf in Resources */,
+				F88D4B8E2F75FE730025939D /* HafsSmart_08.ttf in Resources */,
+				F88DD9052F753DAB0025939D /* QuranTitles.ttf in Resources */,
+				F88DD9062F753DAB0025939D /* QuranNumbers.ttf in Resources */,
+				F88DD9092F753DC10025939D /* Kitab-Regular.ttf in Resources */,
+				F88DD90A2F753DC10025939D /* Kitab-Bold.ttf in Resources */,
+				F88DD90C2F753DDF0025939D /* quran_positioning.db in Resources */,
+				F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */,
+				F8FB7F582E10A6C10051D1EA /* InfoPlist.strings in Resources */,
+				F843B1A62DF06337005F6CCC /* Localizable.strings in Resources */,
+				F800B83D2DB682FE0035501A /* LaunchScreen.storyboard in Resources */,
+				F800B83E2DB682FE0035501A /* Main.storyboard in Resources */,
+				C88166C92DB662BC00EDECB8 /* Assets.xcassets in Resources */,
+				F800B3172DB67DDA0035501A /* TabBarController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C88166B82DB662BA00EDECB8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F88D4B9A2F7E8F830025939D /* QuranBookmark.swift in Sources */,
+				F800B3112DB67DDA0035501A /* EmptyViewController.swift in Sources */,
+				F800B3122DB67DDA0035501A /* TabBarController.swift in Sources */,
+				F800B3152DB67DDA0035501A /* TabBarItem+Tabs.swift in Sources */,
+				F800B86F2DBA5FD00035501A /* EndPoints.swift in Sources */,
+				F800B8702DBA5FD00035501A /* Encodable+extension.swift in Sources */,
+				F800B8712DBA5FD00035501A /* Header.swift in Sources */,
+				F8B651F12F853B3E00C4C7EC /* LongPressLocationView.swift in Sources */,
+				F800B8732DBA5FD00035501A /* TargetType.swift in Sources */,
+				F800B8742DBA5FD00035501A /* ErrorMessage.swift in Sources */,
+				F800B8A02DBD716C0035501A /* String+Validation.swift in Sources */,
+				F8BDD0382F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift in Sources */,
+				F800B8822DBA6EA60035501A /* DomainWrapper.swift in Sources */,
+				F800B3192DB67FB40035501A /* AppCoordinator.swift in Sources */,
+				F8BEB9B32F71744C009F1094 /* SurahEntity.swift in Sources */,
+				F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */,
+				F843B1A72DF06337005F6CCC /* AppLocalizedKeys.swift in Sources */,
+				F800B3652DB681920035501A /* SplashCoordinator.swift in Sources */,
+				F88DD9112F7540510025939D /* QuranPageView.swift in Sources */,
+				F8BEB9BA2F717485009F1094 /* QuranTextResponse.swift in Sources */,
+				F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */,
+				F8BEB9BD2F7174A0009F1094 /* QuranServiceError.swift in Sources */,
+				F800B87E2DBA6E7A0035501A /* StatueCode.swift in Sources */,
+				F8A1CECD2DF9E53B0012E23B /* UIView+Extension.swift in Sources */,
+				F8BEB9C42F717879009F1094 /* HomeCoordinator.swift in Sources */,
+				C88DD6802DB92B6600731D19 /* OptionalAnimation.swift in Sources */,
+				F800B8A82DBF6C980035501A /* DeviceTokenManager.swift in Sources */,
+				F800B6E52DB6824B0035501A /* SplashView.swift in Sources */,
+				F800B8232DB6824B0035501A /* SplashViewModel.swift in Sources */,
+				F8BEB9C02F7174B5009F1094 /* QuranRepository.swift in Sources */,
+				F88DD90E2F75401B0025939D /* SurahInfo.swift in Sources */,
+				F800B3922DB681920035501A /* TabBarCoordinator.swift in Sources */,
+				F800B83C2DB682FE0035501A /* ViewController.swift in Sources */,
+				F800B84B2DB6833C0035501A /* UserDefaultsManager+Extenions.swift in Sources */,
+				F800B84C2DB6833C0035501A /* Image+Images.swift in Sources */,
+				F8F2DC132DC8F11D00001F76 /* CustomPickerItems.swift in Sources */,
+				F8BEB9B72F717468009F1094 /* LastReadEntity.swift in Sources */,
+				F8BEB9B52F71745A009F1094 /* AyahEntity.swift in Sources */,
+				F88D4B9C2F7E8F880025939D /* AdhkarProgress.swift in Sources */,
+				F800B8802DBA6E8D0035501A /* APIResponse.swift in Sources */,
+				F88DD9172F75407E0025939D /* QuranCoordinating.swift in Sources */,
+				F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */,
+				F8B651EF2F85145C00C4C7EC /* VerseActionSheet.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */,
+				F800B8842DBA6EF50035501A /* ImageRequest.swift in Sources */,
+				F800B8862DBA6F1B0035501A /* BaseAPI.swift in Sources */,
+				F88DD9152F7540610025939D /* QuranPagerView.swift in Sources */,
+				C88166C02DB662BA00EDECB8 /* AppDelegate.swift in Sources */,
+				F88D4B962F7E8F760025939D /* AppSettings.swift in Sources */,
+				C88166C22DB662BA00EDECB8 /* SceneDelegate.swift in Sources */,
+				F88DD9132F75405A0025939D /* QuranViewModel.swift in Sources */,
+				F88D4B932F7E8F570025939D /* StorageManager.swift in Sources */,
+				F88D4B982F7E8F7C0025939D /* ReadingProgress.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F800B8372DB682FE0035501A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F800B8352DB682FE0035501A /* Main.storyboard */,
+				F800B8362DB682FE0035501A /* Main.strings */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F800B83A2DB682FE0035501A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F800B8382DB682FE0035501A /* LaunchScreen.storyboard */,
+				F800B8392DB682FE0035501A /* LaunchScreen.strings */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		F843B1A12DF06337005F6CCC /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F843B19F2DF06337005F6CCC /* Localizable.strings */,
+				F843B1A02DF06337005F6CCC /* Localizable.strings */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+		F8FB7F572E10A6C10051D1EA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F8FB7F552E10A6C10051D1EA /* InfoPlist.strings */,
+				F8FB7F562E10A6C10051D1EA /* InfoPlist.strings */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C88166CE2DB662BC00EDECB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C88166CF2DB662BC00EDECB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C88166D12DB662BC00EDECB8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = G63QA4PMY8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuranApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to let you take photos for your profile picture.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your location at all times to provide location-based services even when the app is in the background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set your current location during registration for better service.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access to save images to your photo library when you download or save content.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photos to let you choose a profile picture and upload images.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ayah;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C88166D22DB662BC00EDECB8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = G63QA4PMY8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = QuranApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to let you take photos for your profile picture.";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your location at all times to provide location-based services even when the app is in the background.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set your current location during registration for better service.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access to save images to your photo library when you download or save content.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photos to let you choose a profile picture and upload images.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ayah;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C88166B72DB662BA00EDECB8 /* Build configuration list for PBXProject "QuranApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C88166CE2DB662BC00EDECB8 /* Debug */,
+				C88166CF2DB662BC00EDECB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C88166D02DB662BC00EDECB8 /* Build configuration list for PBXNativeTarget "QuranApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C88166D12DB662BC00EDECB8 /* Debug */,
+				C88166D22DB662BC00EDECB8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B8F58AE52E6C5A9B002673AB /* XCRemoteSwiftPackageReference "SVGKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SVGKit/SVGKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		C85002D32DBC36CA00FB4CE6 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B8F58AE62E6C5A9B002673AB /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B8F58AE52E6C5A9B002673AB /* XCRemoteSwiftPackageReference "SVGKit" */;
+			productName = Core;
+		};
+		C85002D42DBC36CA00FB4CE6 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C85002D32DBC36CA00FB4CE6 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		E91210AE2E1E6230007EE3E0 /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C88166B42DB662BA00EDECB8 /* Project object */;
+}
