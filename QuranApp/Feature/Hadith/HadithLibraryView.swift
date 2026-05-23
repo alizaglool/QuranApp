@@ -10,10 +10,10 @@ import Core
 
 struct HadithLibraryView: View {
 
-    @StateObject private var vm = HadithLibraryViewModel()
+    @StateObject private var viewModel = HadithLibraryViewModel()
 
     var body: some View {
-        MainView(viewModel: vm) {
+        MainView(viewModel: viewModel) {
             NavigationStack {
                 mainContent
                     .navigationDestination(for: HadithCollection.self) { collection in
@@ -66,7 +66,7 @@ extension HadithLibraryView {
             columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)],
             spacing: 12
         ) {
-            ForEach(vm.collections) { collection in
+            ForEach(viewModel.collections) { collection in
                 NavigationLink(value: collection) {
                     HadithCollectionCard(collection: collection)
                 }

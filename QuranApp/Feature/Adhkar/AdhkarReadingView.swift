@@ -10,22 +10,22 @@ import Core
 
 struct AdhkarReadingView: View {
 
-    @StateObject private var vm: AdhkarReadingViewModel
+    @StateObject private var viewModel: AdhkarReadingViewModel
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var localizationManager: LocalizationManager
 
     init(category: DhikrCategory) {
-        _vm = StateObject(wrappedValue: AdhkarReadingViewModel(category: category))
+        _viewModel = StateObject(wrappedValue: AdhkarReadingViewModel(category: category))
     }
 
     var body: some View {
-        MainView(viewModel: vm) {
+        MainView(viewModel: viewModel) {
             ZStack {
                 Color.background.ignoresSafeArea()
                 ambientGlow
                 VStack(spacing: 0) {
                     navBar
-                    if vm.isComplete {
+                    if viewModel.isComplete {
                         completionView
                     } else {
                         dhikrContent
@@ -54,12 +54,12 @@ extension AdhkarReadingView {
 
             Spacer()
 
-            Text(localizationManager.currentLanguage == .Arabic ? vm.category.titleAr : vm.category.titleEn)
+            Text(localizationManager.currentLanguage == .Arabic ? viewModel.category.titleAr : viewModel.category.titleEn)
                 .customStyle(.heading3, .onSurface)
 
             Spacer()
 
-            Text("\(vm.currentIndex + 1) / \(vm.category.adhkar.count)")
+            Text("\(viewModel.currentIndex + 1) / \(viewModel.category.adhkar.count)")
                 .customStyle(.caption2, .onSurfaceVariant)
                 .monospacedDigit()
         }
@@ -79,15 +79,15 @@ extension AdhkarReadingView {
                 ZStack(alignment: .leading) {
                     Color.surfaceContainerLow.frame(height: 2)
                     ColorStyle.secondary.color
-                        .frame(width: geo.size.width * vm.overallProgress, height: 2)
-                        .animation(.easeInOut(duration: 0.3), value: vm.overallProgress)
+                        .frame(width: geo.size.width * viewModel.overallProgress, height: 2)
+                        .animation(.easeInOut(duration: 0.3), value: viewModel.overallProgress)
                 }
             }
             .frame(height: 2)
 
             Spacer()
 
-            if let dhikr = vm.currentDhikr {
+            if let dhikr = viewModel.currentDhikr {
                 dhikrCard(dhikr: dhikr)
             }
 
@@ -126,7 +126,7 @@ extension AdhkarReadingView {
     }
 
     private var counterButton: some View {
-        Button(action: { vm.onTap() }) {
+        Button(action: { viewModel.onTap() }) {
             VStack(spacing: 10) {
                 ZStack {
                     // Background circle
@@ -135,19 +135,19 @@ extension AdhkarReadingView {
                         .frame(width: 110, height: 110)
 
                     // Progress ring
-                    if let dhikr = vm.currentDhikr {
+                    if let dhikr = viewModel.currentDhikr {
                         Circle()
-                            .trim(from: 0, to: vm.tapProgress)
+                            .trim(from: 0, to: viewModel.tapProgress)
                             .stroke(
                                 ColorStyle.secondary.color,
                                 style: StrokeStyle(lineWidth: 3, lineCap: .round)
                             )
                             .frame(width: 110, height: 110)
                             .rotationEffect(.degrees(-90))
-                            .animation(.easeOut(duration: 0.15), value: vm.tapProgress)
+                            .animation(.easeOut(duration: 0.15), value: viewModel.tapProgress)
 
                         VStack(spacing: 2) {
-                            Text("\(vm.currentTapCount)")
+                            Text("\(viewModel.currentTapCount)")
                                 .font(.system(size: 30, weight: .bold, design: .rounded))
                                 .customForeground(.primary)
 
@@ -205,14 +205,14 @@ extension AdhkarReadingView {
                     .customStyle(.heading2, .onSurface)
 
                 Text(AppLocalizedKeys.adhkarCompletedMessage.value)
-                    .customStyle(.body, .onSurfaceVariant)
+                    .customStyle(.bodyMedium, .onSurfaceVariant)
                     .multilineTextAlignment(.center)
             }
 
             Spacer()
 
             VStack(spacing: 12) {
-                Button(action: { vm.reset() }) {
+                Button(action: { viewModel.reset() }) {
                     Text(AppLocalizedKeys.repeatAction.value)
                         .customStyle(.headline, .onPrimary)
                         .frame(maxWidth: .infinity)

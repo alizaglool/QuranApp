@@ -10,10 +10,10 @@ import Core
 
 struct AdhkarCategoriesView: View {
 
-    @StateObject private var vm = AdhkarCategoriesViewModel()
+    @StateObject private var viewModel = AdhkarCategoriesViewModel()
 
     var body: some View {
-        MainView(viewModel: vm) {
+        MainView(viewModel: viewModel) {
             NavigationStack {
                 mainContent
                     .navigationDestination(for: DhikrCategory.self) { category in
@@ -66,7 +66,7 @@ extension AdhkarCategoriesView {
             columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)],
             spacing: 12
         ) {
-            ForEach(vm.categories) { category in
+            ForEach(viewModel.categories) { category in
                 NavigationLink(value: category) {
                     AdhkarCategoryCard(category: category)
                 }

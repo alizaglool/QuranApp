@@ -10,16 +10,16 @@ import Core
 
 struct HadithReadingView: View {
 
-    @StateObject private var vm: HadithReadingViewModel
+    @StateObject private var viewModel: HadithReadingViewModel
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var localizationManager: LocalizationManager
 
     init(collection: HadithCollection) {
-        _vm = StateObject(wrappedValue: HadithReadingViewModel(collection: collection))
+        _viewModel = StateObject(wrappedValue: HadithReadingViewModel(collection: collection))
     }
 
     var body: some View {
-        MainView(viewModel: vm) {
+        MainView(viewModel: viewModel) {
             ZStack {
                 Color.background.ignoresSafeArea()
                 ambientGlow
@@ -50,12 +50,12 @@ extension HadithReadingView {
 
             Spacer()
 
-            Text(localizationManager.currentLanguage == .Arabic ? vm.collection.nameAr : vm.collection.nameEn)
+            Text(localizationManager.currentLanguage == .Arabic ? viewModel.collection.nameAr : viewModel.collection.nameEn)
                 .customStyle(.heading3, .onSurface)
 
             Spacer()
 
-            Text("\(vm.currentIndex + 1) / \(vm.collection.hadiths.count)")
+            Text("\(viewModel.currentIndex + 1) / \(viewModel.collection.hadiths.count)")
                 .customStyle(.caption2, .onSurfaceVariant)
                 .monospacedDigit()
         }
@@ -74,7 +74,7 @@ extension HadithReadingView {
 
             Spacer()
 
-            if let hadith = vm.currentHadith {
+            if let hadith = viewModel.currentHadith {
                 hadithCard(hadith: hadith)
             }
 
@@ -90,8 +90,8 @@ extension HadithReadingView {
             ZStack(alignment: .leading) {
                 Color.surfaceContainerLow.frame(height: 2)
                 ColorStyle.secondary.color
-                    .frame(width: geo.size.width * vm.progress, height: 2)
-                    .animation(.easeInOut(duration: 0.3), value: vm.progress)
+                    .frame(width: geo.size.width * viewModel.progress, height: 2)
+                    .animation(.easeInOut(duration: 0.3), value: viewModel.progress)
             }
         }
         .frame(height: 2)
@@ -122,42 +122,42 @@ extension HadithReadingView {
 
     private var navigationControls: some View {
         HStack(spacing: 20) {
-            Button(action: { vm.previous() }) {
+            Button(action: { viewModel.previous() }) {
                 Image(systemName: "arrow.right")
                     .font(.system(size: 18, weight: .medium))
-                    .customForeground(vm.canGoPrevious ? .primary : .onSurfaceVariant)
+                    .customForeground(viewModel.canGoPrevious ? .primary : .onSurfaceVariant)
                     .frame(width: 52, height: 52)
                     .background(
-                        vm.canGoPrevious
+                        viewModel.canGoPrevious
                         ? ColorStyle.primary.color.opacity(0.08)
                         : Color.surfaceContainerLow
                     )
                     .cornerRadius(14)
             }
-            .disabled(!vm.canGoPrevious)
+            .disabled(!viewModel.canGoPrevious)
 
             VStack(spacing: 4) {
-                Text("\(vm.currentIndex + 1)")
+                Text("\(viewModel.currentIndex + 1)")
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .customForeground(.primary)
-                Text("/ \(vm.collection.hadiths.count)")
+                Text("/ \(viewModel.collection.hadiths.count)")
                     .customStyle(.caption2, .onSurfaceVariant)
             }
             .frame(width: 60)
 
-            Button(action: { vm.next() }) {
+            Button(action: { viewModel.next() }) {
                 Image(systemName: "arrow.left")
                     .font(.system(size: 18, weight: .medium))
-                    .customForeground(vm.canGoNext ? .primary : .onSurfaceVariant)
+                    .customForeground(viewModel.canGoNext ? .primary : .onSurfaceVariant)
                     .frame(width: 52, height: 52)
                     .background(
-                        vm.canGoNext
+                        viewModel.canGoNext
                         ? ColorStyle.primary.color.opacity(0.08)
                         : Color.surfaceContainerLow
                     )
                     .cornerRadius(14)
             }
-            .disabled(!vm.canGoNext)
+            .disabled(!viewModel.canGoNext)
         }
     }
 }
