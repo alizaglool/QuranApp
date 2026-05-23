@@ -13,32 +13,33 @@ struct AdhkarReadingView: View {
     @StateObject private var viewModel: AdhkarReadingViewModel
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var localizationManager: LocalizationManager
+
     @State private var tapPulse: Bool = false
+    @State private var slideEdge: Edge = .trailing
 
     init(category: DhikrCategory) {
         _viewModel = StateObject(wrappedValue: AdhkarReadingViewModel(category: category))
+    }
+
+    private var isRightToLeft: Bool {
+        localizationManager.currentLanguage == .Arabic
     }
 
     var body: some View {
         MainView(viewModel: viewModel) {
             ZStack {
                 Color.background.ignoresSafeArea()
-                ambientGlow
+                ambientGlowBackground
                 VStack(spacing: 0) {
-                    navBar
+                    readingNavigationBar
                     if viewModel.isComplete {
                         completionView
                     } else {
-                        dhikrContent
+                        dhikrReadingContent
                             .contentShape(Rectangle())
+                            .gesture(swipeNavigationGesture)
                             .onTapGesture {
-                                withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) {
-                                    tapPulse = true
-                                }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                                    tapPulse = false
-                                }
-                                viewModel.onTap()
+                                handleScreenTap()
                             }
                     }
                 }
@@ -46,13 +47,54 @@ struct AdhkarReadingView: View {
         }
         .navigationBarHidden(true)
     }
+
+    private func handleScreenTap() {
+        withAnimation(.spring(response: 0.2, dampingFraction: 0.5)) {
+            tapPulse = true
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+            tapPulse = false
+        }
+        if viewModel.willAdvanceOnNextTap {
+            slideEdge = .trailing
+        }
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+            viewModel.onTap()
+        }
+    }
+
+    private var swipeNavigationGesture: some Gesture {
+        DragGesture(minimumDistance: 50, coordinateSpace: .local)
+            .onEnded { dragValue in
+                let threshold: CGFloat = 60
+                let swipedRight = dragValue.translation.width > threshold
+                let swipedLeft = dragValue.translation.width < -threshold
+
+                // In RTL (Arabic): swiping right goes forward, swiping left goes back
+                // In LTR (English): swiping left goes forward, swiping right goes back
+                let isForwardSwipe = isRightToLeft ? swipedRight : swipedLeft
+                let isBackwardSwipe = isRightToLeft ? swipedLeft : swipedRight
+
+                if isForwardSwipe && viewModel.canGoNext {
+                    slideEdge = .trailing
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                        viewModel.navigateToNext()
+                    }
+                } else if isBackwardSwipe && viewModel.canGoPrevious {
+                    slideEdge = .leading
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                        viewModel.navigateToPrevious()
+                    }
+                }
+            }
+    }
 }
 
-// MARK: - Nav Bar
+// MARK: - Reading Navigation Bar
 
 extension AdhkarReadingView {
 
-    private var navBar: some View {
+    private var readingNavigationBar: some View {
         HStack {
             Button(action: { dismiss() }) {
                 Image(systemName: "arrow.left")
@@ -65,7 +107,7 @@ extension AdhkarReadingView {
 
             Spacer()
 
-            Text(localizationManager.currentLanguage == .Arabic ? viewModel.category.titleAr : viewModel.category.titleEn)
+            Text(isRightToLeft ? viewModel.category.titleAr : viewModel.category.titleEn)
                 .customStyle(.heading3, .onSurface)
 
             Spacer()
@@ -94,48 +136,56 @@ extension AdhkarReadingView {
     }
 }
 
-// MARK: - Dhikr Content
+// MARK: - Dhikr Reading Content
 
 extension AdhkarReadingView {
 
-    private var dhikrContent: some View {
+    private var dhikrReadingContent: some View {
         VStack(spacing: 0) {
-            // Progress bar across top
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Color.surfaceContainerLow.frame(height: 2)
-                    ColorStyle.secondary.color
-                        .frame(width: geo.size.width * viewModel.overallProgress, height: 2)
-                        .animation(.easeInOut(duration: 0.3), value: viewModel.overallProgress)
-                }
-            }
-            .frame(height: 2)
+            progressBar
 
             Spacer()
 
             if let dhikr = viewModel.currentDhikr {
                 dhikrCard(dhikr: dhikr)
+                    .id(viewModel.currentIndex)
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: slideEdge).combined(with: .opacity),
+                            removal: .move(edge: slideEdge == .trailing ? .leading : .trailing).combined(with: .opacity)
+                        )
+                    )
             }
 
             Spacer()
 
-            counterDisplay
+            tapCounterView
                 .padding(.bottom, 40)
         }
     }
 
+    private var progressBar: some View {
+        GeometryReader { geometry in
+            ZStack(alignment: .leading) {
+                Color.surfaceContainerLow.frame(height: 2)
+                ColorStyle.secondary.color
+                    .frame(width: geometry.size.width * viewModel.overallProgress, height: 2)
+                    .animation(.easeInOut(duration: 0.3), value: viewModel.overallProgress)
+            }
+        }
+        .frame(height: 2)
+    }
+
     private func dhikrCard(dhikr: Dhikr) -> some View {
         VStack(spacing: 0) {
-            // Gold accent bar
             Rectangle()
                 .fill(ColorStyle.secondary.color)
                 .frame(width: 40, height: 3)
                 .cornerRadius(2)
                 .padding(.bottom, 20)
 
-            // Optional section title (small, gold)
-            if let title = dhikr.title, !title.isEmpty {
-                Text(title)
+            if let sectionTitle = dhikr.title, !sectionTitle.isEmpty {
+                Text(sectionTitle)
                     .customStyle(.caption1, .secondary)
                     .multilineTextAlignment(.center)
                     .environment(\.layoutDirection, .rightToLeft)
@@ -143,7 +193,6 @@ extension AdhkarReadingView {
                     .padding(.bottom, 16)
             }
 
-            // Main dhikr — large
             Text(dhikr.textAr)
                 .font(.custom("HafsSmart_08_fixed", size: 26))
                 .foregroundColor(ColorStyle.onSurface.color)
@@ -152,8 +201,7 @@ extension AdhkarReadingView {
                 .environment(\.layoutDirection, .rightToLeft)
                 .padding(.horizontal, .big)
 
-            // Description / explanation — smaller, muted
-            if let description = dhikr.description, !description.isEmpty {
+            if let explanationText = dhikr.description, !explanationText.isEmpty {
                 Rectangle()
                     .fill(ColorStyle.outlineVariant.color.opacity(0.4))
                     .frame(height: 1)
@@ -161,7 +209,7 @@ extension AdhkarReadingView {
                     .padding(.top, 20)
                     .padding(.bottom, 14)
 
-                Text(description)
+                Text(explanationText)
                     .font(.custom("HafsSmart_08_fixed", size: 15))
                     .foregroundColor(ColorStyle.onSurfaceVariant.color)
                     .multilineTextAlignment(.center)
@@ -172,7 +220,7 @@ extension AdhkarReadingView {
         }
     }
 
-    private var counterDisplay: some View {
+    private var tapCounterView: some View {
         VStack(spacing: 12) {
             ZStack {
                 Circle()
@@ -200,22 +248,22 @@ extension AdhkarReadingView {
             }
             .scaleEffect(tapPulse ? 0.93 : 1.0)
 
-            if let dhikr = viewModel.currentDhikr {
-                let remaining = dhikr.count - viewModel.currentTapCount
-                Text("REMAINING: \(remaining)")
+            if let currentDhikr = viewModel.currentDhikr {
+                let remainingCount = currentDhikr.count - viewModel.currentTapCount
+                Text("REMAINING: \(remainingCount)")
                     .font(.system(size: 12, weight: .medium))
                     .customForeground(.onSurfaceVariant)
-                    .opacity(remaining > 0 ? 1 : 0)
+                    .opacity(remainingCount > 0 ? 1 : 0)
             }
         }
     }
 }
 
-// MARK: - Ambient Glow
+// MARK: - Ambient Glow Background
 
 extension AdhkarReadingView {
 
-    private var ambientGlow: some View {
+    private var ambientGlowBackground: some View {
         ZStack {
             Circle()
                 .fill(ColorStyle.primary.color.opacity(0.04))
@@ -233,7 +281,7 @@ extension AdhkarReadingView {
     }
 }
 
-// MARK: - Completion
+// MARK: - Completion View
 
 extension AdhkarReadingView {
 
@@ -280,4 +328,3 @@ extension AdhkarReadingView {
         }
     }
 }
-

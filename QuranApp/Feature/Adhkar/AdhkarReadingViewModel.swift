@@ -27,10 +27,14 @@ final class AdhkarReadingViewModel: MainViewModel {
         return category.adhkar[currentIndex]
     }
 
+    var canGoNext: Bool { currentIndex < category.adhkar.count - 1 }
+    var canGoPrevious: Bool { currentIndex > 0 }
+    var hasAudio: Bool { currentDhikr?.audio != nil }
+
     var overallProgress: Double {
-        let total = category.adhkar.count
-        guard total > 0 else { return 0 }
-        return Double(currentIndex) / Double(total)
+        let totalCount = category.adhkar.count
+        guard totalCount > 0 else { return 0 }
+        return Double(currentIndex) / Double(totalCount)
     }
 
     var tapProgress: Double {
@@ -38,7 +42,11 @@ final class AdhkarReadingViewModel: MainViewModel {
         return Double(currentTapCount) / Double(dhikr.count)
     }
 
-    var hasAudio: Bool { currentDhikr?.audio != nil }
+    // True when the next tap will complete the current dhikr and trigger an advance
+    var willAdvanceOnNextTap: Bool {
+        guard let dhikr = currentDhikr else { return false }
+        return (currentTapCount + 1 >= dhikr.count) && canGoNext
+    }
 
     init(category: DhikrCategory) {
         self.category = category
@@ -50,8 +58,22 @@ final class AdhkarReadingViewModel: MainViewModel {
         guard let dhikr = currentDhikr else { return }
         currentTapCount += 1
         if currentTapCount >= dhikr.count {
-            advanceToNext()
+            advanceToNextDhikr()
         }
+    }
+
+    func navigateToNext() {
+        guard canGoNext else { return }
+        stopAudio()
+        currentTapCount = 0
+        currentIndex += 1
+    }
+
+    func navigateToPrevious() {
+        guard canGoPrevious else { return }
+        stopAudio()
+        currentTapCount = 0
+        currentIndex -= 1
     }
 
     func toggleAudio() {
@@ -73,10 +95,10 @@ final class AdhkarReadingViewModel: MainViewModel {
         stopAudio()
     }
 
-    private func advanceToNext() {
+    private func advanceToNextDhikr() {
         stopAudio()
         currentTapCount = 0
-        if currentIndex < category.adhkar.count - 1 {
+        if canGoNext {
             currentIndex += 1
         } else {
             isComplete = true
@@ -91,7 +113,7 @@ final class AdhkarReadingViewModel: MainViewModel {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
             audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.delegate = AudioDelegate(onFinish: { [weak self] in
+            audioPlayer?.delegate = AudioPlayerDelegate(onFinish: { [weak self] in
                 Task { @MainActor in self?.isPlaying = false }
             })
             audioPlayer?.play()
@@ -108,8 +130,7 @@ final class AdhkarReadingViewModel: MainViewModel {
     }
 }
 
-// Thin delegate to get playback-finished callback without retaining the VM
-private final class AudioDelegate: NSObject, AVAudioPlayerDelegate {
+private final class AudioPlayerDelegate: NSObject, AVAudioPlayerDelegate {
     private let onFinish: () -> Void
     init(onFinish: @escaping () -> Void) { self.onFinish = onFinish }
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
