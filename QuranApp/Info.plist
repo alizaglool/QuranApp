@@ -11,6 +11,8 @@
 		<key>NSExceptionDomains</key>
 		<dict/>
 	</dict>
+	<key>CFBundleDisplayName</key>
+	<string>Wird</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>HafsSmart_08_fixed.ttf</string>
