@@ -13,6 +13,8 @@ final class AdhkarCategoriesViewModel: MainViewModel {
 
     @Published var categories: [DhikrCategory] = []
 
+    var isTabBarVisible: Bool { true }
+    
     func onAppear() {
         guard categories.isEmpty else { return }
         loadCategories()
