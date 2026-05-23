@@ -64,9 +64,9 @@ struct AdhkarReadingView: View {
     }
 
     private var swipeNavigationGesture: some Gesture {
-        DragGesture(minimumDistance: 50, coordinateSpace: .local)
+        DragGesture(minimumDistance: 15, coordinateSpace: .local)
             .onEnded { dragValue in
-                let threshold: CGFloat = 60
+                let threshold: CGFloat = 30
                 let swipedRight = dragValue.translation.width > threshold
                 let swipedLeft = dragValue.translation.width < -threshold
 
