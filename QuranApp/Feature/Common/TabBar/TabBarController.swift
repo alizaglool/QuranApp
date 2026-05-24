@@ -29,6 +29,11 @@ class TabBarController: UITabBarController, TabBarControllerProtocol {
         setupTabBarItems()
         configure()
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        configureTitles()
+    }
     
     func selectTab(at index: Int) {
         guard index < tabBarItems.count else { return }
@@ -116,13 +121,37 @@ extension TabBarController {
     }
 
     private func getAdhkarViewController() -> UIViewController {
-        // TODO: Adhkar
-        return UIViewController()
+        let navigationController = UINavigationController()
+        let coordinator = AdhkarCoordinator(
+            navigationController: navigationController,
+            tabBarController: self
+        )
+        let view = AdhkarCategoriesView(coordinator: coordinator)
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
+        )
+        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.isNavigationBarHidden = true
+        return navigationController
     }
 
     private func getHadithViewController() -> UIViewController {
-        // TODO: Hadith
-        return UIViewController()
+        let navigationController = UINavigationController()
+        let coordinator = HadithCoordinator(
+            navigationController: navigationController,
+            tabBarController: self
+        )
+        let view = HadithLibraryView(coordinator: coordinator)
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
+        )
+        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.isNavigationBarHidden = true
+        return navigationController
     }
 
     private func getLessonsViewController() -> UIViewController {

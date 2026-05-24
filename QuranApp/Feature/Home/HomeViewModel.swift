@@ -169,8 +169,12 @@ extension HomeViewModel {
         switch item.type {
         case .quran:
             coordinator.coordinateToQuran()
-        case .adhkar, .hadith, .lessons:
-            break // TODO
+        case .adhkar:
+            coordinator.coordinateToAdhkar()
+        case .hadith:
+            coordinator.coordinateToHadith()
+        case .lessons:
+            break
         }
     }
     

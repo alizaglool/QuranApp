@@ -14,6 +14,8 @@ protocol HomeCoordinating: AnyObject {
     func coordinateToSurahDetail(surah: SurahEntity)
     func coordinateToSearch()
     func coordinateToQuran()
+    func coordinateToAdhkar()
+    func coordinateToHadith()
 }
 
 class HomeCoordinator: MainCoordinator, HomeCoordinating {
@@ -39,6 +41,14 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
         // TODO
     }
     
+    func coordinateToAdhkar() {
+        tabBarController.selectedTabItem = TabBarItem.adhkar
+    }
+
+    func coordinateToHadith() {
+        tabBarController.selectedTabItem = TabBarItem.hadith
+    }
+
     func coordinateToQuran() {
         // Capture nav weakly so the closure doesn't keep the controller alive
         // beyond its natural lifecycle.

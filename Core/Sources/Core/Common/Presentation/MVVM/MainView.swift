@@ -34,7 +34,10 @@ public struct MainView<ViewModel: MainViewModel, Content: View>: View {
             viewModel.isTabBarVisible ? showTabBar() : hideTabBar()
             viewModel.onAppear()
         }
-        .onDisappear { viewModel.onDisappear() }
+        .onDisappear {
+            if !viewModel.isTabBarVisible { showTabBar() }
+            viewModel.onDisappear()
+        }
     }
     
     private var iOS15Body: some View {
