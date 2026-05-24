@@ -17,6 +17,8 @@ final class HadithReadingViewModel: MainViewModel {
     let collection: HadithCollection
     var isTabBarVisible: Bool { false }
 
+    weak var coordinator: HadithCoordinating?
+
     var currentHadith: Hadith? {
         guard currentIndex < collection.hadiths.count else { return nil }
         return collection.hadiths[currentIndex]
@@ -31,8 +33,13 @@ final class HadithReadingViewModel: MainViewModel {
     var canGoNext: Bool { currentIndex < collection.hadiths.count - 1 }
     var canGoPrevious: Bool { currentIndex > 0 }
 
-    init(collection: HadithCollection) {
+    init(coordinator: HadithCoordinating, collection: HadithCollection) {
+        self.coordinator = coordinator
         self.collection = collection
+    }
+
+    func goBack() {
+        coordinator?.coordinateBack()
     }
 
     func onAppear() {}

@@ -33,8 +33,15 @@
 "lessons" = "Lessons";
 "settings" = "Settings";
 
+"allahNamesTitle" = "99 Names of Allah";
+"allahNamesSubtitle" = "99 Names";
+"myAdhkarTitle" = "My Adhkar";
+"myAdhkarSubtitle" = "Your Personal Adhkar";
+"dailyAdhkar" = "Daily Adhkar";
 "adhkarCount" = "%d Adhkar";
-"tapToCount" = "Tap to count";
+"tapToCount" = "Tap";
+"remaining" = "Remaining";
+"reciter" = "Reciter";
 "adhkarCompleted" = "Adhkar Complete";
 "adhkarCompletedMessage" = "May Allah accept it from you";
 "repeatAction" = "Restart";

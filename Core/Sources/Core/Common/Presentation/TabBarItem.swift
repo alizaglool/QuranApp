@@ -17,11 +17,12 @@ public class TabBarItem: Equatable, Identifiable {
     var viewControllerProvider: () -> UIViewController
     
     func getViewController() -> UIViewController {
-        
+
         let viewController = viewControllerProvider()
-        
+
+        viewController.tabBarItem.title = title
         viewController.tabBarItem.image = image
-        
+
         return viewController
     }
     

@@ -33,8 +33,15 @@
 "lessons" = "الدروس";
 "settings" = "الإعدادات";
 
+"allahNamesTitle" = "أسماء الله الحسنى";
+"allahNamesSubtitle" = "٩٩ اسماً";
+"myAdhkarTitle" = "أذكاري";
+"myAdhkarSubtitle" = "أذكارك الخاصة";
+"dailyAdhkar" = "الأذكار اليومية";
 "adhkarCount" = "%d أذكار";
-"tapToCount" = "اضغط للتسبيح";
+"tapToCount" = "اضغط";
+"remaining" = "المتبقي";
+"reciter" = "القارئ";
 "adhkarCompleted" = "أتممت الأذكار";
 "adhkarCompletedMessage" = "جعل الله ذلك في ميزان حسناتك";
 "repeatAction" = "إعادة";

@@ -10,16 +10,15 @@ import Core
 
 struct HadithLibraryView: View {
 
-    @StateObject private var viewModel = HadithLibraryViewModel()
+    @StateObject private var viewModel: HadithLibraryViewModel
+
+    init(coordinator: HadithCoordinating) {
+        _viewModel = StateObject(wrappedValue: HadithLibraryViewModel(coordinator: coordinator))
+    }
 
     var body: some View {
         MainView(viewModel: viewModel) {
-            NavigationStack {
-                mainContent
-                    .navigationDestination(for: HadithCollection.self) { collection in
-                        HadithReadingView(collection: collection)
-                    }
-            }
+            mainContent
         }
     }
 }
@@ -67,7 +66,9 @@ extension HadithLibraryView {
             spacing: 12
         ) {
             ForEach(viewModel.collections) { collection in
-                NavigationLink(value: collection) {
+                Button {
+                    viewModel.selectCollection(collection)
+                } label: {
                     HadithCollectionCard(collection: collection)
                 }
                 .buttonStyle(.plain)

@@ -47,6 +47,13 @@
 		F82FA2D42FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */; };
 		F82FA2D52FC1DF9800E60E39 /* AdhkarReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */; };
 		F82FA2D62FC1DF9800E60E39 /* AdhkarModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2CB2FC1DF9800E60E39 /* AdhkarModels.swift */; };
+		F9AA00012F71800000AA0001 /* AllahNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00002F71800000AA0001 /* AllahNamesView.swift */; };
+		F9AA00032F71800000AA0003 /* MyAdhkarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00022F71800000AA0002 /* MyAdhkarView.swift */; };
+		F9AA00102F71800000AA0010 /* AllahNameReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */; };
+		F9AA00052F71800000AA0005 /* allahNames.json in Resources */ = {isa = PBXBuildFile; fileRef = F9AA00042F71800000AA0004 /* allahNames.json */; };
+		F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F9AA000B2F71800000AA000B /* takbeerat.m4a */; };
+		F9AA00062F71800000AA0006 /* TasbihCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00072F71800000AA0007 /* TasbihCounterView.swift */; };
+		F9AA00082F71800000AA0008 /* LovedOnesDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */; };
 		F82FA2DE2FC1DFA200E60E39 /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2DC2FC1DFA200E60E39 /* HadithReadingViewModel.swift */; };
 		F82FA2DF2FC1DFA200E60E39 /* HadithLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D92FC1DFA200E60E39 /* HadithLibraryView.swift */; };
 		F82FA2E02FC1DFA200E60E39 /* HadithModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D72FC1DFA200E60E39 /* HadithModels.swift */; };
@@ -85,6 +92,8 @@
 		F8BEB9BD2F7174A0009F1094 /* QuranServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9BC2F7174A0009F1094 /* QuranServiceError.swift */; };
 		F8BEB9C02F7174B5009F1094 /* QuranRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9BF2F7174B5009F1094 /* QuranRepository.swift */; };
 		F8BEB9C42F717879009F1094 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */; };
+		F8AB00022F71787900AB0002 /* AdhkarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AB00012F71787900AB0001 /* AdhkarCoordinator.swift */; };
+		F8AB00042F71787900AB0004 /* HadithCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AB00032F71787900AB0003 /* HadithCoordinator.swift */; };
 		F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C52F717897009F1094 /* HomeViewModel.swift */; };
 		F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C72F71789E009F1094 /* HomeView.swift */; };
 		F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C92F717912009F1094 /* SurahRow.swift */; };
@@ -132,6 +141,13 @@
 		F800B89F2DBD716C0035501A /* String+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Validation.swift"; sourceTree = "<group>"; };
 		F800B8A72DBF6C980035501A /* DeviceTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTokenManager.swift; sourceTree = "<group>"; };
 		F82FA2CB2FC1DF9800E60E39 /* AdhkarModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarModels.swift; sourceTree = "<group>"; };
+		F9AA00002F71800000AA0001 /* AllahNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNamesView.swift; sourceTree = "<group>"; };
+		F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNameReadingView.swift; sourceTree = "<group>"; };
+		F9AA00022F71800000AA0002 /* MyAdhkarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarView.swift; sourceTree = "<group>"; };
+		F9AA00042F71800000AA0004 /* allahNames.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allahNames.json; sourceTree = "<group>"; };
+		F9AA000B2F71800000AA000B /* takbeerat.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = takbeerat.m4a; sourceTree = "<group>"; };
+		F9AA00072F71800000AA0007 /* TasbihCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihCounterView.swift; sourceTree = "<group>"; };
+		F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LovedOnesDhikrView.swift; sourceTree = "<group>"; };
 		F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoriesView.swift; sourceTree = "<group>"; };
 		F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoriesViewModel.swift; sourceTree = "<group>"; };
 		F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarReadingView.swift; sourceTree = "<group>"; };
@@ -175,6 +191,8 @@
 		F8BEB9BC2F7174A0009F1094 /* QuranServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranServiceError.swift; sourceTree = "<group>"; };
 		F8BEB9BF2F7174B5009F1094 /* QuranRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranRepository.swift; sourceTree = "<group>"; };
 		F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		F8AB00012F71787900AB0001 /* AdhkarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCoordinator.swift; sourceTree = "<group>"; };
+		F8AB00032F71787900AB0003 /* HadithCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithCoordinator.swift; sourceTree = "<group>"; };
 		F8BEB9C52F717897009F1094 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F8BEB9C72F71789E009F1094 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F8BEB9C92F717912009F1094 /* SurahRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahRow.swift; sourceTree = "<group>"; };
@@ -283,6 +301,8 @@
 			children = (
 				F88DD9162F75407E0025939D /* QuranCoordinating.swift */,
 				F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */,
+				F8AB00012F71787900AB0001 /* AdhkarCoordinator.swift */,
+				F8AB00032F71787900AB0003 /* HadithCoordinator.swift */,
 				F800B33F2DB681920035501A /* Common */,
 				F800B3182DB67FB40035501A /* AppCoordinator.swift */,
 			);
@@ -427,12 +447,65 @@
 			isa = PBXGroup;
 			children = (
 				F82FA2CC2FC1DF9800E60E39 /* Model */,
+				F9BB00012F71800000BB0001 /* Categories */,
+				F9BB00022F71800000BB0002 /* Reading */,
+				F9BB00032F71800000BB0003 /* AllahNames */,
+				F9BB00042F71800000BB0004 /* MyAdhkar */,
+				F9BB00052F71800000BB0005 /* Tasbih */,
+				F9BB00062F71800000BB0006 /* LovedOnes */,
+			);
+			path = Adhkar;
+			sourceTree = "<group>";
+		};
+		F9BB00012F71800000BB0001 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
 				F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */,
 				F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		F9BB00022F71800000BB0002 /* Reading */ = {
+			isa = PBXGroup;
+			children = (
 				F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */,
 				F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */,
 			);
-			path = Adhkar;
+			path = Reading;
+			sourceTree = "<group>";
+		};
+		F9BB00032F71800000BB0003 /* AllahNames */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00002F71800000AA0001 /* AllahNamesView.swift */,
+				F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */,
+			);
+			path = AllahNames;
+			sourceTree = "<group>";
+		};
+		F9BB00042F71800000BB0004 /* MyAdhkar */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00022F71800000AA0002 /* MyAdhkarView.swift */,
+			);
+			path = MyAdhkar;
+			sourceTree = "<group>";
+		};
+		F9BB00052F71800000BB0005 /* Tasbih */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00072F71800000AA0007 /* TasbihCounterView.swift */,
+			);
+			path = Tasbih;
+			sourceTree = "<group>";
+		};
+		F9BB00062F71800000BB0006 /* LovedOnes */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */,
+			);
+			path = LovedOnes;
 			sourceTree = "<group>";
 		};
 		F82FA2D82FC1DFA200E60E39 /* Model */ = {
@@ -609,6 +682,8 @@
 				C88166C82DB662BC00EDECB8 /* Assets.xcassets */,
 				F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */,
 				F45ABB2CFB4B4500B164A904 /* adhkar.json */,
+				F9AA00042F71800000AA0004 /* allahNames.json */,
+				F9AA000B2F71800000AA000B /* takbeerat.m4a */,
 				F6C0111F594645008250E1DF /* hadith.json */,
 				A1B2C3D4E5F678901234ABCD /* Audio */,
 			);
@@ -701,6 +776,8 @@
 				C88166C92DB662BC00EDECB8 /* Assets.xcassets in Resources */,
 				F800B3172DB67DDA0035501A /* TabBarController.xib in Resources */,
 				2E4D8D4C22244CF0A9C3FD11 /* adhkar.json in Resources */,
+				F9AA00052F71800000AA0005 /* allahNames.json in Resources */,
+				F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */,
 				1AD46AF157D34118A8936685 /* hadith.json in Resources */,
 				A1B2C3D4E5F678901234BCDE /* Audio in Resources */,
 			);
@@ -723,6 +800,11 @@
 				F82FA2D42FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift in Sources */,
 				F82FA2D52FC1DF9800E60E39 /* AdhkarReadingViewModel.swift in Sources */,
 				F82FA2D62FC1DF9800E60E39 /* AdhkarModels.swift in Sources */,
+				F9AA00012F71800000AA0001 /* AllahNamesView.swift in Sources */,
+				F9AA00102F71800000AA0010 /* AllahNameReadingView.swift in Sources */,
+				F9AA00032F71800000AA0003 /* MyAdhkarView.swift in Sources */,
+				F9AA00062F71800000AA0006 /* TasbihCounterView.swift in Sources */,
+				F9AA00082F71800000AA0008 /* LovedOnesDhikrView.swift in Sources */,
 				F800B8702DBA5FD00035501A /* Encodable+extension.swift in Sources */,
 				F800B8712DBA5FD00035501A /* Header.swift in Sources */,
 				F8B651F12F853B3E00C4C7EC /* LongPressLocationView.swift in Sources */,
@@ -743,6 +825,8 @@
 				F800B87E2DBA6E7A0035501A /* StatueCode.swift in Sources */,
 				F8A1CECD2DF9E53B0012E23B /* UIView+Extension.swift in Sources */,
 				F8BEB9C42F717879009F1094 /* HomeCoordinator.swift in Sources */,
+				F8AB00022F71787900AB0002 /* AdhkarCoordinator.swift in Sources */,
+				F8AB00042F71787900AB0004 /* HadithCoordinator.swift in Sources */,
 				C88DD6802DB92B6600731D19 /* OptionalAnimation.swift in Sources */,
 				F800B8A82DBF6C980035501A /* DeviceTokenManager.swift in Sources */,
 				F800B6E52DB6824B0035501A /* SplashView.swift in Sources */,

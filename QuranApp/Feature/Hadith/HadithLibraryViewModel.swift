@@ -13,6 +13,18 @@ final class HadithLibraryViewModel: MainViewModel {
 
     @Published var collections: [HadithCollection] = []
 
+    var isTabBarVisible: Bool { true }
+
+    weak var coordinator: HadithCoordinating?
+
+    init(coordinator: HadithCoordinating) {
+        self.coordinator = coordinator
+    }
+
+    func selectCollection(_ collection: HadithCollection) {
+        coordinator?.coordinateToHadithReading(collection: collection)
+    }
+
     func onAppear() {
         guard collections.isEmpty else { return }
         loadCollections()
@@ -21,9 +33,7 @@ final class HadithLibraryViewModel: MainViewModel {
     private func loadCollections() {
         guard let url = Bundle.main.url(forResource: "hadith", withExtension: "json"),
               let data = try? Data(contentsOf: url),
-              let decoded = try? JSONDecoder().decode([HadithCollection].self, from: data) else {
-            return
-        }
+              let decoded = try? JSONDecoder().decode([HadithCollection].self, from: data) else { return }
         collections = decoded
     }
 }

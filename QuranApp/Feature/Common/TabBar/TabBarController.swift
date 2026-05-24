@@ -29,6 +29,11 @@ class TabBarController: UITabBarController, TabBarControllerProtocol {
         setupTabBarItems()
         configure()
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        configureTitles()
+    }
     
     func selectTab(at index: Int) {
         guard index < tabBarItems.count else { return }
@@ -117,7 +122,11 @@ extension TabBarController {
 
     private func getAdhkarViewController() -> UIViewController {
         let navigationController = UINavigationController()
-        let view = AdhkarCategoriesView()
+        let coordinator = AdhkarCoordinator(
+            navigationController: navigationController,
+            tabBarController: self
+        )
+        let view = AdhkarCategoriesView(coordinator: coordinator)
         let viewController = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)
@@ -130,7 +139,11 @@ extension TabBarController {
 
     private func getHadithViewController() -> UIViewController {
         let navigationController = UINavigationController()
-        let view = HadithLibraryView()
+        let coordinator = HadithCoordinator(
+            navigationController: navigationController,
+            tabBarController: self
+        )
+        let view = HadithLibraryView(coordinator: coordinator)
         let viewController = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)

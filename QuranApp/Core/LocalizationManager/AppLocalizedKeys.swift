@@ -39,8 +39,15 @@ enum AppLocalizedKeys: String {
     case settings
 
     // MARK: - Adhkar
+    case allahNamesTitle
+    case allahNamesSubtitle
+    case myAdhkarTitle
+    case myAdhkarSubtitle
+    case dailyAdhkar
     case adhkarCount
     case tapToCount
+    case remaining
+    case reciter
     case adhkarCompleted
     case adhkarCompletedMessage
     case repeatAction

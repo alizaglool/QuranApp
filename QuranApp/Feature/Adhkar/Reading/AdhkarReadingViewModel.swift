@@ -20,19 +20,30 @@ final class AdhkarReadingViewModel: MainViewModel {
     let category: DhikrCategory
     var isTabBarVisible: Bool { false }
 
+    weak var coordinator: AdhkarCoordinating?
+
     private var audioPlayer: AVAudioPlayer?
 
-    var currentDhikr: Dhikr? {
-        guard currentIndex < category.adhkar.count else { return nil }
-        return category.adhkar[currentIndex]
+    private var sortedAdhkar: [Dhikr] {
+        var remaining = category.adhkar
+        let ayatKursi = remaining.filter { $0.title?.contains("آية الكرسي") == true }
+        remaining.removeAll { $0.title?.contains("آية الكرسي") == true }
+        let salatNabi = remaining.filter { $0.title?.contains("الصلاة على النبي") == true }
+        remaining.removeAll { $0.title?.contains("الصلاة على النبي") == true }
+        return ayatKursi + remaining + salatNabi
     }
 
-    var canGoNext: Bool { currentIndex < category.adhkar.count - 1 }
+    var currentDhikr: Dhikr? {
+        guard currentIndex < sortedAdhkar.count else { return nil }
+        return sortedAdhkar[currentIndex]
+    }
+
+    var canGoNext: Bool { currentIndex < sortedAdhkar.count - 1 }
     var canGoPrevious: Bool { currentIndex > 0 }
     var hasAudio: Bool { currentDhikr?.audio != nil }
 
     var overallProgress: Double {
-        let totalCount = category.adhkar.count
+        let totalCount = sortedAdhkar.count
         guard totalCount > 0 else { return 0 }
         return Double(currentIndex) / Double(totalCount)
     }
@@ -42,17 +53,29 @@ final class AdhkarReadingViewModel: MainViewModel {
         return Double(currentTapCount) / Double(dhikr.count)
     }
 
-    // True when the next tap will complete the current dhikr and trigger an advance
     var willAdvanceOnNextTap: Bool {
         guard let dhikr = currentDhikr else { return false }
         return (currentTapCount + 1 >= dhikr.count) && canGoNext
     }
 
-    init(category: DhikrCategory) {
+    init(coordinator: AdhkarCoordinating, category: DhikrCategory) {
+        self.coordinator = coordinator
         self.category = category
     }
 
-    func onAppear() {}
+    func goBack() {
+        coordinator?.coordinateBack()
+    }
+
+    func onAppear() {
+        stopAudio()
+        currentIndex = 0
+        currentTapCount = 0
+        isComplete = false
+        if hasAudio {
+            playCurrentDhikrAudio()
+        }
+    }
 
     func onTap() {
         guard let dhikr = currentDhikr else { return }
@@ -67,6 +90,7 @@ final class AdhkarReadingViewModel: MainViewModel {
         stopAudio()
         currentTapCount = 0
         currentIndex += 1
+        if hasAudio { playCurrentDhikrAudio() }
     }
 
     func navigateToPrevious() {
@@ -74,6 +98,7 @@ final class AdhkarReadingViewModel: MainViewModel {
         stopAudio()
         currentTapCount = 0
         currentIndex -= 1
+        if hasAudio { playCurrentDhikrAudio() }
     }
 
     func toggleAudio() {
@@ -82,6 +107,10 @@ final class AdhkarReadingViewModel: MainViewModel {
         } else {
             playCurrentDhikrAudio()
         }
+    }
+
+    func resetCurrentCount() {
+        currentTapCount = 0
     }
 
     func reset() {
@@ -98,8 +127,9 @@ final class AdhkarReadingViewModel: MainViewModel {
     private func advanceToNextDhikr() {
         stopAudio()
         currentTapCount = 0
-        if canGoNext {
+        if currentIndex < sortedAdhkar.count - 1 {
             currentIndex += 1
+            if hasAudio { playCurrentDhikrAudio() }
         } else {
             isComplete = true
         }
@@ -107,8 +137,7 @@ final class AdhkarReadingViewModel: MainViewModel {
 
     private func playCurrentDhikrAudio() {
         guard let audioFile = currentDhikr?.audio,
-              let url = Bundle.main.url(forResource: audioFile, withExtension: nil,
-                                        subdirectory: "Audio") else { return }
+              let url = findAudioURL(for: audioFile) else { return }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -121,6 +150,19 @@ final class AdhkarReadingViewModel: MainViewModel {
         } catch {
             isPlaying = false
         }
+    }
+
+    private func findAudioURL(for filename: String) -> URL? {
+        let extensions = ["m4a", "mp3", "aac", "caf"]
+        for ext in extensions {
+            if let url = Bundle.main.url(forResource: filename, withExtension: ext) {
+                return url
+            }
+            if let url = Bundle.main.url(forResource: filename, withExtension: ext, subdirectory: "Audio") {
+                return url
+            }
+        }
+        return Bundle.main.url(forResource: filename, withExtension: nil)
     }
 
     private func stopAudio() {

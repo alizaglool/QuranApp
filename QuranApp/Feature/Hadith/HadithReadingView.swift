@@ -11,11 +11,14 @@ import Core
 struct HadithReadingView: View {
 
     @StateObject private var viewModel: HadithReadingViewModel
-    @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var localizationManager: LocalizationManager
 
-    init(collection: HadithCollection) {
-        _viewModel = StateObject(wrappedValue: HadithReadingViewModel(collection: collection))
+    init(coordinator: HadithCoordinating, collection: HadithCollection) {
+        _viewModel = StateObject(wrappedValue: HadithReadingViewModel(coordinator: coordinator, collection: collection))
+    }
+
+    private func en(_ n: Int) -> String {
+        String(format: "%d", n)
     }
 
     var body: some View {
@@ -39,7 +42,7 @@ extension HadithReadingView {
 
     private var navBar: some View {
         HStack {
-            Button(action: { dismiss() }) {
+            Button(action: { viewModel.goBack() }) {
                 Image(systemName: "arrow.left")
                     .font(.system(size: 16, weight: .medium))
                     .customForeground(.onSurface)
@@ -55,7 +58,7 @@ extension HadithReadingView {
 
             Spacer()
 
-            Text("\(viewModel.currentIndex + 1) / \(viewModel.collection.hadiths.count)")
+            Text("\(en(viewModel.currentIndex + 1)) / \(en(viewModel.collection.hadiths.count))")
                 .customStyle(.caption2, .onSurfaceVariant)
                 .monospacedDigit()
         }
@@ -137,10 +140,10 @@ extension HadithReadingView {
             .disabled(!viewModel.canGoPrevious)
 
             VStack(spacing: 4) {
-                Text("\(viewModel.currentIndex + 1)")
+                Text(en(viewModel.currentIndex + 1))
                     .font(.system(size: 22, weight: .bold, design: .rounded))
                     .customForeground(.primary)
-                Text("/ \(viewModel.collection.hadiths.count)")
+                Text("/ \(en(viewModel.collection.hadiths.count))")
                     .customStyle(.caption2, .onSurfaceVariant)
             }
             .frame(width: 60)
