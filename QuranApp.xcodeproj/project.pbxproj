@@ -54,11 +54,15 @@
 		F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F9AA000B2F71800000AA000B /* takbeerat.m4a */; };
 		F9AA00062F71800000AA0006 /* TasbihCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00072F71800000AA0007 /* TasbihCounterView.swift */; };
 		F9AA00082F71800000AA0008 /* LovedOnesDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */; };
-		F82FA2DE2FC1DFA200E60E39 /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2DC2FC1DFA200E60E39 /* HadithReadingViewModel.swift */; };
-		F82FA2DF2FC1DFA200E60E39 /* HadithLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D92FC1DFA200E60E39 /* HadithLibraryView.swift */; };
 		F82FA2E02FC1DFA200E60E39 /* HadithModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D72FC1DFA200E60E39 /* HadithModels.swift */; };
-		F82FA2E12FC1DFA200E60E39 /* HadithReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2DB2FC1DFA200E60E39 /* HadithReadingView.swift */; };
-		F82FA2E22FC1DFA200E60E39 /* HadithLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2DA2FC1DFA200E60E39 /* HadithLibraryViewModel.swift */; };
+		F9CC00092F71900000CC0009 /* HadithDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */; };
+		F9CC000A2F71900000CC000A /* HadithLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00022F71900000CC0002 /* HadithLibraryView.swift */; };
+		F9CC000B2F71900000CC000B /* HadithLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */; };
+		F9CC000C2F71900000CC000C /* HadithChaptersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00042F71900000CC0004 /* HadithChaptersView.swift */; };
+		F9CC000D2F71900000CC000D /* HadithChaptersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */; };
+		F9CC000E2F71900000CC000E /* HadithReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00062F71900000CC0006 /* HadithReadingView.swift */; };
+		F9CC000F2F71900000CC000F /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */; };
+		F9CC00102F71900000CC0010 /* hadith.db in Resources */ = {isa = PBXBuildFile; fileRef = F9CC00082F71900000CC0008 /* hadith.db */; };
 		F843B1A62DF06337005F6CCC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F843B1A12DF06337005F6CCC /* Localizable.strings */; };
 		F843B1A72DF06337005F6CCC /* AppLocalizedKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */; };
 		F88D4B8E2F75FE730025939D /* HafsSmart_08.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */; };
@@ -74,7 +78,6 @@
 		F88DD90A2F753DC10025939D /* Kitab-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9072F753DC10025939D /* Kitab-Bold.ttf */; };
 		F88DD90C2F753DDF0025939D /* quran_positioning.db in Resources */ = {isa = PBXBuildFile; fileRef = F88DD90B2F753DDF0025939D /* quran_positioning.db */; };
 		2E4D8D4C22244CF0A9C3FD11 /* adhkar.json in Resources */ = {isa = PBXBuildFile; fileRef = F45ABB2CFB4B4500B164A904 /* adhkar.json */; };
-		1AD46AF157D34118A8936685 /* hadith.json in Resources */ = {isa = PBXBuildFile; fileRef = F6C0111F594645008250E1DF /* hadith.json */; };
 		A1B2C3D4E5F678901234BCDE /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F678901234ABCD /* Audio */; };
 		F88DD90E2F75401B0025939D /* SurahInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD90D2F75401B0025939D /* SurahInfo.swift */; };
 		F88DD9112F7540510025939D /* QuranPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD9102F7540510025939D /* QuranPageView.swift */; };
@@ -153,10 +156,13 @@
 		F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarReadingView.swift; sourceTree = "<group>"; };
 		F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarReadingViewModel.swift; sourceTree = "<group>"; };
 		F82FA2D72FC1DFA200E60E39 /* HadithModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithModels.swift; sourceTree = "<group>"; };
-		F82FA2D92FC1DFA200E60E39 /* HadithLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryView.swift; sourceTree = "<group>"; };
-		F82FA2DA2FC1DFA200E60E39 /* HadithLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryViewModel.swift; sourceTree = "<group>"; };
-		F82FA2DB2FC1DFA200E60E39 /* HadithReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingView.swift; sourceTree = "<group>"; };
-		F82FA2DC2FC1DFA200E60E39 /* HadithReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingViewModel.swift; sourceTree = "<group>"; };
+		F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithDatabaseService.swift; sourceTree = "<group>"; };
+		F9CC00022F71900000CC0002 /* HadithLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryView.swift; sourceTree = "<group>"; };
+		F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryViewModel.swift; sourceTree = "<group>"; };
+		F9CC00042F71900000CC0004 /* HadithChaptersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersView.swift; sourceTree = "<group>"; };
+		F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersViewModel.swift; sourceTree = "<group>"; };
+		F9CC00062F71900000CC0006 /* HadithReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingView.swift; sourceTree = "<group>"; };
+		F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingViewModel.swift; sourceTree = "<group>"; };
 		F843B19F2DF06337005F6CCC /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F843B1A02DF06337005F6CCC /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Localizable.strings; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLocalizedKeys.swift; sourceTree = "<group>"; };
@@ -173,7 +179,7 @@
 		F88DD9082F753DC10025939D /* Kitab-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kitab-Regular.ttf"; sourceTree = "<group>"; };
 		F88DD90B2F753DDF0025939D /* quran_positioning.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran_positioning.db; sourceTree = "<group>"; };
 		F45ABB2CFB4B4500B164A904 /* adhkar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = adhkar.json; sourceTree = "<group>"; };
-		F6C0111F594645008250E1DF /* hadith.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = hadith.json; sourceTree = "<group>"; };
+		F9CC00082F71900000CC0008 /* hadith.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = hadith.db; sourceTree = "<group>"; };
 		A1B2C3D4E5F678901234ABCD /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
 		F88DD90D2F75401B0025939D /* SurahInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahInfo.swift; sourceTree = "<group>"; };
 		F88DD9102F7540510025939D /* QuranPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageView.swift; sourceTree = "<group>"; };
@@ -520,12 +526,47 @@
 			isa = PBXGroup;
 			children = (
 				F82FA2D82FC1DFA200E60E39 /* Model */,
-				F82FA2D92FC1DFA200E60E39 /* HadithLibraryView.swift */,
-				F82FA2DA2FC1DFA200E60E39 /* HadithLibraryViewModel.swift */,
-				F82FA2DB2FC1DFA200E60E39 /* HadithReadingView.swift */,
-				F82FA2DC2FC1DFA200E60E39 /* HadithReadingViewModel.swift */,
+				F9CC00112F71900000CC0011 /* Service */,
+				F9CC00122F71900000CC0012 /* Library */,
+				F9CC00132F71900000CC0013 /* Chapters */,
+				F9CC00142F71900000CC0014 /* Reading */,
 			);
 			path = Hadith;
+			sourceTree = "<group>";
+		};
+		F9CC00112F71900000CC0011 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		F9CC00122F71900000CC0012 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC00022F71900000CC0002 /* HadithLibraryView.swift */,
+				F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		F9CC00132F71900000CC0013 /* Chapters */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC00042F71900000CC0004 /* HadithChaptersView.swift */,
+				F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */,
+			);
+			path = Chapters;
+			sourceTree = "<group>";
+		};
+		F9CC00142F71900000CC0014 /* Reading */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC00062F71900000CC0006 /* HadithReadingView.swift */,
+				F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */,
+			);
+			path = Reading;
 			sourceTree = "<group>";
 		};
 		F843B1A22DF06337005F6CCC /* Localizable */ = {
@@ -684,7 +725,7 @@
 				F45ABB2CFB4B4500B164A904 /* adhkar.json */,
 				F9AA00042F71800000AA0004 /* allahNames.json */,
 				F9AA000B2F71800000AA000B /* takbeerat.m4a */,
-				F6C0111F594645008250E1DF /* hadith.json */,
+				F9CC00082F71900000CC0008 /* hadith.db */,
 				A1B2C3D4E5F678901234ABCD /* Audio */,
 			);
 			path = Resources;
@@ -778,7 +819,7 @@
 				2E4D8D4C22244CF0A9C3FD11 /* adhkar.json in Resources */,
 				F9AA00052F71800000AA0005 /* allahNames.json in Resources */,
 				F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */,
-				1AD46AF157D34118A8936685 /* hadith.json in Resources */,
+				F9CC00102F71900000CC0010 /* hadith.db in Resources */,
 				A1B2C3D4E5F678901234BCDE /* Audio in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -846,11 +887,14 @@
 				F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */,
 				F8B651EF2F85145C00C4C7EC /* VerseActionSheet.swift in Sources */,
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */,
-				F82FA2DE2FC1DFA200E60E39 /* HadithReadingViewModel.swift in Sources */,
-				F82FA2DF2FC1DFA200E60E39 /* HadithLibraryView.swift in Sources */,
 				F82FA2E02FC1DFA200E60E39 /* HadithModels.swift in Sources */,
-				F82FA2E12FC1DFA200E60E39 /* HadithReadingView.swift in Sources */,
-				F82FA2E22FC1DFA200E60E39 /* HadithLibraryViewModel.swift in Sources */,
+				F9CC00092F71900000CC0009 /* HadithDatabaseService.swift in Sources */,
+				F9CC000A2F71900000CC000A /* HadithLibraryView.swift in Sources */,
+				F9CC000B2F71900000CC000B /* HadithLibraryViewModel.swift in Sources */,
+				F9CC000C2F71900000CC000C /* HadithChaptersView.swift in Sources */,
+				F9CC000D2F71900000CC000D /* HadithChaptersViewModel.swift in Sources */,
+				F9CC000E2F71900000CC000E /* HadithReadingView.swift in Sources */,
+				F9CC000F2F71900000CC000F /* HadithReadingViewModel.swift in Sources */,
 				A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */,
 				F800B8842DBA6EF50035501A /* ImageRequest.swift in Sources */,
 				F800B8862DBA6F1B0035501A /* BaseAPI.swift in Sources */,

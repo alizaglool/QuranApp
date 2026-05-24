@@ -47,6 +47,8 @@
 "repeatAction" = "Restart";
 "back" = "Back";
 "hadithCount" = "%d Hadith";
+"noResults" = "No results found";
+"bookmark" = "Bookmark";
 "fajr" = "FAJR";
 "dhuhr" = "DHUHR";
 "asr" = "ASR";

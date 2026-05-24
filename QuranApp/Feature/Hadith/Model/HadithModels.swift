@@ -7,22 +7,37 @@
 
 import Foundation
 
-struct HadithCollection: Codable, Identifiable, Hashable {
-    let id: String
-    let nameAr: String
-    let nameEn: String
-    let author: String
-    let icon: String
-    let hadiths: [Hadith]
-
-    var count: Int { hadiths.count }
+struct HadithBook: Identifiable, Hashable {
+    let id: Int
+    let titleAr: String
+    let titleEn: String
+    let authorAr: String
+    let authorEn: String
+    let hadithCount: Int
+    let colorHex: String
 }
 
-struct Hadith: Codable, Identifiable, Hashable {
-    let id: String
+struct HadithChapter: Identifiable, Hashable {
+    let id: Int
+    let bookId: Int
     let number: Int
-    let textAr: String
+    let titleAr: String
+    let titleEn: String
+}
+
+struct HadithEntry: Identifiable, Hashable {
+    let id: Int
+    let bookId: Int
+    let chapterId: Int
+    let number: Int
+    let arabicText: String
     let translation: String
     let narrator: String
-    let reference: String
+    let grade: String
+}
+
+struct HadithSearchResult: Identifiable {
+    let id: Int
+    let hadith: HadithEntry
+    let book: HadithBook
 }

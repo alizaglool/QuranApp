@@ -47,6 +47,8 @@
 "repeatAction" = "إعادة";
 "back" = "رجوع";
 "hadithCount" = "%d أحاديث";
+"noResults" = "لا توجد نتائج";
+"bookmark" = "حفظ";
 "fajr" = "الفجر";
 "dhuhr" = "الظهر";
 "asr" = "العصر";
