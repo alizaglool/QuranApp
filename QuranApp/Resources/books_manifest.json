@@ -10,7 +10,7 @@
       "hadithCount": 7277,
       "chapterCount": 97,
       "colorHex": "1ABC9C",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/sahih_al_bukhari.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/sahih_al_bukhari.db",
       "fileSizeBytes": 21057536
     },
     {
@@ -22,7 +22,7 @@
       "hadithCount": 7459,
       "chapterCount": 57,
       "colorHex": "E74C3C",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/sahih_muslim.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/sahih_muslim.db",
       "fileSizeBytes": 18509824
     },
     {
@@ -34,7 +34,7 @@
       "hadithCount": 5768,
       "chapterCount": 52,
       "colorHex": "F39C12",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/sunan_al_nasai.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/sunan_al_nasai.db",
       "fileSizeBytes": 12619776
     },
     {
@@ -46,7 +46,7 @@
       "hadithCount": 5276,
       "chapterCount": 43,
       "colorHex": "3498DB",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/sunan_abi_dawud.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/sunan_abi_dawud.db",
       "fileSizeBytes": 12812288
     },
     {
@@ -58,7 +58,7 @@
       "hadithCount": 4053,
       "chapterCount": 49,
       "colorHex": "9B59B6",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/jami_al_tirmidhi.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/jami_al_tirmidhi.db",
       "fileSizeBytes": 12599296
     },
     {
@@ -70,7 +70,7 @@
       "hadithCount": 4345,
       "chapterCount": 38,
       "colorHex": "27AE60",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/sunan_ibn_majah.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/sunan_ibn_majah.db",
       "fileSizeBytes": 9146368
     },
     {
@@ -82,7 +82,7 @@
       "hadithCount": 1985,
       "chapterCount": 61,
       "colorHex": "16A085",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/muwatta_malik.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/muwatta_malik.db",
       "fileSizeBytes": 5251072
     },
     {
@@ -94,7 +94,7 @@
       "hadithCount": 1374,
       "chapterCount": 8,
       "colorHex": "D35400",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/musnad_ahmad.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/musnad_ahmad.db",
       "fileSizeBytes": 3907584
     },
     {
@@ -106,7 +106,7 @@
       "hadithCount": 3406,
       "chapterCount": 24,
       "colorHex": "8E44AD",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/sunan_al_darimi.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/sunan_al_darimi.db",
       "fileSizeBytes": 4243456
     },
     {
@@ -118,7 +118,7 @@
       "hadithCount": 42,
       "chapterCount": 1,
       "colorHex": "2ECC71",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/forty_hadith_nawawi.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/forty_hadith_nawawi.db",
       "fileSizeBytes": 172032
     },
     {
@@ -130,7 +130,7 @@
       "hadithCount": 40,
       "chapterCount": 1,
       "colorHex": "F1C40F",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/forty_hadith_qudsi.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/forty_hadith_qudsi.db",
       "fileSizeBytes": 192512
     },
     {
@@ -142,7 +142,7 @@
       "hadithCount": 40,
       "chapterCount": 1,
       "colorHex": "00BCD4",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/forty_hadith_shah_waliullah.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/forty_hadith_shah_waliullah.db",
       "fileSizeBytes": 57344
     },
     {
@@ -154,7 +154,7 @@
       "hadithCount": 1896,
       "chapterCount": 20,
       "colorHex": "FF6B35",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/riyad_al_salihin.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/riyad_al_salihin.db",
       "fileSizeBytes": 3989504
     },
     {
@@ -166,7 +166,7 @@
       "hadithCount": 4428,
       "chapterCount": 25,
       "colorHex": "795548",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/mishkat_al_masabih.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/mishkat_al_masabih.db",
       "fileSizeBytes": 8585216
     },
     {
@@ -178,7 +178,7 @@
       "hadithCount": 1326,
       "chapterCount": 57,
       "colorHex": "607D8B",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/al_adab_al_mufrad.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/al_adab_al_mufrad.db",
       "fileSizeBytes": 2850816
     },
     {
@@ -190,7 +190,7 @@
       "hadithCount": 402,
       "chapterCount": 57,
       "colorHex": "E91E63",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/shamail_muhammadiyah.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/shamail_muhammadiyah.db",
       "fileSizeBytes": 884736
     },
     {
@@ -202,7 +202,7 @@
       "hadithCount": 1767,
       "chapterCount": 16,
       "colorHex": "009688",
-      "downloadURL": "https://github.com/alizaglool/hadith-books/raw/main/bulugh_al_maram.db",
+      "downloadURL": "https://raw.githubusercontent.com/alizaglool/hadith-books/main/bulugh_al_maram.db",
       "fileSizeBytes": 3411968
     }
   ]
