@@ -55,6 +55,29 @@ enum AppLocalizedKeys: String {
 
     // MARK: - Hadith
     case hadithCount
+    case noResults
+    case bookmark
+    case hadithGrade
+    case narratorChain
+    case takhrij
+    case commentary
+    case marfu
+    case hadithNumber
+    case hadithLibrary
+    case theAuthenticTraditions
+    case exploringLegacy
+    case searchNarrations
+    case propheticNarration
+    case authenticCollection
+    case resumeReading
+    case hadithLibraryQuote
+    case originalText
+    case scholarlyDetails
+    case jumpToHadith
+    case go
+    case hadithIndexTitle
+    case goToHadith
+    case tableOfContents
     case fajr
     case dhuhr
     case asr
