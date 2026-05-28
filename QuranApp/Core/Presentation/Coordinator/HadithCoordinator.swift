@@ -11,7 +11,7 @@ import SwiftUI
 
 protocol HadithCoordinating: AnyObject {
     func coordinateToChapters(book: HadithBook)
-    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook)
+    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter])
     func coordinateBack()
 }
 
@@ -40,11 +40,18 @@ class HadithCoordinator: MainCoordinator, HadithCoordinating {
         navigationController.pushViewController(vc, animated: true)
     }
 
-    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook) {
+    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter]) {
         let manager = LocalizationManager.shared
-        let view = HadithReadingView(coordinator: self, hadiths: hadiths, startIndex: startIndex, book: book)
-            .environmentObject(manager)
-            .environment(\.layoutDirection, manager.currentLanguage.direction)
+        let view = HadithReadingView(
+            coordinator: self,
+            hadiths: hadiths,
+            startIndex: startIndex,
+            book: book,
+            chapter: chapter,
+            chapters: chapters
+        )
+        .environmentObject(manager)
+        .environment(\.layoutDirection, manager.currentLanguage.direction)
         let vc = UIHostingController(rootView: view)
         vc.hidesBottomBarWhenPushed = true
         navigationController.pushViewController(vc, animated: true)

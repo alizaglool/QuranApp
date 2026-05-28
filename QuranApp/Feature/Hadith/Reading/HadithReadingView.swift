@@ -8,282 +8,481 @@
 import SwiftUI
 import Core
 
+// MARK: - Scholarly Row Model
+
+struct HadithScholarlyItem {
+    let icon: String
+    let labelEn: String
+    let labelAr: String
+    let content: String
+    let isRTL: Bool
+    var hasData: Bool { !content.isEmpty }
+}
+
+// MARK: - HadithReadingView
+
 struct HadithReadingView: View {
 
     @StateObject private var viewModel: HadithReadingViewModel
-    @EnvironmentObject private var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) var colorScheme
-    @State private var showShareSheet: Bool = false
+    @State private var showShareSheet = false
 
-    private var accentColor: Color {
-        let hex = viewModel.book.colorHex
-            .trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        return Color(
-            red: Double((int >> 16) & 0xFF) / 255,
-            green: Double((int >> 8)  & 0xFF) / 255,
-            blue: Double(int         & 0xFF) / 255
-        )
-    }
-
-    private var isArabic: Bool { localizationManager.currentLanguage == .Arabic }
-
-    init(coordinator: HadithCoordinating, hadiths: [HadithEntry], startIndex: Int, book: HadithBook) {
-        _viewModel = StateObject(
-            wrappedValue: HadithReadingViewModel(
-                coordinator: coordinator,
-                hadiths: hadiths,
-                startIndex: startIndex,
-                book: book
-            )
-        )
+    init(coordinator: HadithCoordinating, hadiths: [HadithEntry], startIndex: Int,
+         book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter]) {
+        _viewModel = StateObject(wrappedValue: HadithReadingViewModel(
+            coordinator: coordinator, hadiths: hadiths, startIndex: startIndex,
+            book: book, chapter: chapter, chapters: chapters))
     }
 
     var body: some View {
         MainView(viewModel: viewModel) {
             ZStack {
-                Color.background.ignoresSafeArea()
-                ambientGlow
+                Color.hadithBg.ignoresSafeArea()
                 VStack(spacing: 0) {
-                    navBar
-                    progressBar
+                    navigationBar
+                    Divider().opacity(0.12)
+                    navigationBreadcrumb
                     hadithPager
                     Spacer(minLength: 0)
-                    actionBar
-                        .padding(.bottom, 32)
+                    Divider().opacity(0.12)
+                    readingControlBar.padding(.bottom, .xxBig)
                 }
+                if viewModel.showJumpInput { jumpToHadithOverlay }
             }
         }
         .navigationBarHidden(true)
+        .customSheet(isPresented: $viewModel.showTOC, fraction: 0.75, detents: [.medium, .large]) {
+            HadithTOCSheet(
+                chapters: viewModel.chapters,
+                currentChapterId: viewModel.currentHadith?.chapterId
+            ) { chapter in
+                viewModel.jumpToChapter(chapter)
+                viewModel.showTOC = false
+            }
+        }
         .sheet(isPresented: $showShareSheet) {
-            if let hadith = viewModel.currentHadith {
-                ShareSheet(items: ["\(hadith.arabicText)\n\n\(hadith.translation)\n\n— \(hadith.narrator)"])
+            if let h = viewModel.currentHadith {
+                let grade = h.grade.isEmpty ? "" : "\n\n[\(h.grade)]"
+                ShareSheet(items: ["\(h.arabicText)\n\n\(h.translation)\n\n— \(h.narrator)\(grade)"])
             }
         }
     }
-}
 
-// MARK: - Nav Bar
+    // MARK: Navigation Bar
 
-extension HadithReadingView {
-
-    private var navBar: some View {
+    private var navigationBar: some View {
         HStack {
-            Button(action: { viewModel.goBack() }) {
-                Image(systemName: "arrow.left")
-                    .font(.system(size: 16, weight: .medium))
-                    .customForeground(.onSurface)
-                    .frame(width: 36, height: 36)
-                    .background(Color.surfaceContainerLow)
-                    .cornerRadius(10)
-            }
-
+            HadithNavButton(icon: "arrow.backward") { viewModel.goBack() }
             Spacer()
-
-            Text(isArabic ? viewModel.book.titleAr : viewModel.book.titleEn)
-                .customStyle(.heading3, .onSurface)
+            Text(viewModel.book.title)
+                .customFont(.buttonText)
+                .customForeground(.hadithNav)
                 .lineLimit(1)
-
             Spacer()
-
-            Text("\(String(format: "%d", viewModel.currentIndex + 1)) / \(String(format: "%d", viewModel.hadiths.count))")
-                .customStyle(.caption2, .onSurfaceVariant)
-                .monospacedDigit()
+            HadithNavButton(icon: "magnifyingglass") { viewModel.showJumpInput = true }
         }
         .padding(.horizontal, .big)
-        .padding(.vertical, .sm)
+        .padding(.vertical, .xSm + 2)
     }
 
-    private var progressBar: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                Color.surfaceContainerLow.frame(height: 2)
-                accentColor
-                    .frame(width: geo.size.width * viewModel.progress, height: 2)
-                    .animation(.easeInOut(duration: 0.3), value: viewModel.progress)
+    // MARK: Navigation Breadcrumb
+
+    private var navigationBreadcrumb: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: .xSm) {
+                breadcrumbChip(viewModel.book.title, active: true)
+                if let ch = viewModel.currentChapter {
+                    breadcrumbDot
+                    breadcrumbChip(ch.title, active: false)
+                }
+                if let h = viewModel.currentHadith {
+                    breadcrumbDot
+                    breadcrumbChip(
+                        "\(AppLocalizedKeys.hadithNumber.value.uppercased()) \(h.number)",
+                        active: false
+                    )
+                }
+            }
+            .padding(.horizontal, .big)
+            .padding(.vertical, .xSm + 2)
+        }
+    }
+
+    private func breadcrumbChip(_ text: String, active: Bool) -> some View {
+        VStack(alignment: .leading, spacing: .xxSm - 1) {
+            Text(text.uppercased())
+                .customFont(.caption2)
+                .tracking(1.0)
+                .foregroundColor(active ? Color.hadithNav : Color.hadithSecondary)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+            if active {
+                Rectangle().fill(Color.hadithGold).frame(height: 1.5)
             }
         }
-        .frame(height: 2)
+        .frame(maxWidth: 130, alignment: .leading)
     }
-}
 
-// MARK: - Hadith Pager
+    private var breadcrumbDot: some View {
+        Text("•")
+            .font(.system(size: 8))
+            .foregroundColor(Color.hadithMuted)
+    }
 
-extension HadithReadingView {
+    // MARK: Hadith Pager
 
     private var hadithPager: some View {
         TabView(selection: Binding(
             get: { viewModel.currentIndex },
             set: { viewModel.currentIndex = $0 }
         )) {
-            ForEach(viewModel.hadiths.indices, id: \.self) { index in
-                HadithPageView(
-                    hadith: viewModel.hadiths[index],
-                    accentColor: accentColor,
-                    colorScheme: colorScheme
-                )
-                .tag(index)
+            ForEach(viewModel.hadiths.indices, id: \.self) { idx in
+                HadithPageContent(hadith: viewModel.hadiths[idx])
+                    .tag(idx)
             }
         }
         .tabViewStyle(.page(indexDisplayMode: .never))
-        .animation(.easeInOut, value: viewModel.currentIndex)
     }
-}
 
-// MARK: - Action Bar
+    // MARK: Reading Control Bar
 
-extension HadithReadingView {
-
-    private var actionBar: some View {
+    private var readingControlBar: some View {
         HStack(spacing: 0) {
-            navButton(
-                icon: "arrow.right",
-                enabled: viewModel.canGoPrevious,
-                action: { viewModel.previous() }
-            )
-
+            navigationArrow(icon: "arrow.right", enabled: viewModel.canGoPrevious) { viewModel.previous() }
             Spacer()
+            HStack(spacing: .xxBig - 6) {
+                HadithBottomBarButton(
+                    icon: "list.bullet",
+                    label: AppLocalizedKeys.hadithIndexTitle.value
+                ) { viewModel.showTOC = true }
 
-            HStack(spacing: 20) {
-                actionButton(icon: "play.circle", label: AppLocalizedKeys.play.value, enabled: false) {}
+                HadithBottomBarButton(
+                    icon: "number",
+                    label: AppLocalizedKeys.goToHadith.value
+                ) { viewModel.showJumpInput = true }
 
-                actionButton(
+                HadithBottomBarButton(
                     icon: viewModel.isFavorite ? "bookmark.fill" : "bookmark",
                     label: AppLocalizedKeys.bookmark.value,
-                    enabled: true,
-                    tint: viewModel.isFavorite ? accentColor : nil
+                    tint: viewModel.isFavorite ? Color.hadithGold : nil
                 ) { viewModel.toggleFavorite() }
 
-                actionButton(icon: "square.and.arrow.up", label: AppLocalizedKeys.share.value, enabled: true) {
-                    showShareSheet = true
-                }
+                HadithBottomBarButton(
+                    icon: "square.and.arrow.up",
+                    label: AppLocalizedKeys.share.value
+                ) { showShareSheet = true }
             }
-
             Spacer()
-
-            navButton(
-                icon: "arrow.left",
-                enabled: viewModel.canGoNext,
-                action: { viewModel.next() }
-            )
+            navigationArrow(icon: "arrow.left", enabled: viewModel.canGoNext) { viewModel.next() }
         }
         .padding(.horizontal, .big)
+        .padding(.top, .sm)
     }
 
-    private func navButton(icon: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+    private func navigationArrow(icon: String, enabled: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Image(systemName: icon)
-                .font(.system(size: 18, weight: .medium))
-                .customForeground(enabled ? .primary : .onSurfaceVariant)
-                .frame(width: 48, height: 48)
-                .background(
-                    enabled ? ColorStyle.primary.color.opacity(0.08) : Color.surfaceContainerLow
-                )
-                .cornerRadius(14)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(enabled ? Color.hadithNav : Color.hadithMuted)
+                .frame(width: 44, height: 44)
+                .background(Color.hadithCard.opacity(enabled ? 1 : 0.5))
+                .cornerRadius(.cornerMd)
         }
         .disabled(!enabled)
     }
 
-    private func actionButton(icon: String, label: String, enabled: Bool, tint: Color? = nil, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack(spacing: 4) {
-                Image(systemName: icon)
-                    .font(.system(size: 20))
-                    .foregroundColor(tint ?? (enabled ? ColorStyle.onSurface.color : ColorStyle.onSurfaceVariant.color))
-                Text(label)
-                    .customStyle(.caption2, enabled ? .onSurface : .onSurfaceVariant)
-            }
-        }
-        .disabled(!enabled)
-        .opacity(enabled ? 1 : 0.4)
-    }
-}
+    // MARK: Jump-to-Hadith Overlay
 
-// MARK: - Ambient Glow
-
-extension HadithReadingView {
-
-    private var ambientGlow: some View {
+    private var jumpToHadithOverlay: some View {
         ZStack {
-            Circle()
-                .fill(accentColor.opacity(0.04))
-                .frame(width: 280, height: 280)
-                .blur(radius: 80)
-                .offset(x: 60, y: -120)
-            Circle()
-                .fill(ColorStyle.primary.color.opacity(0.03))
-                .frame(width: 200, height: 200)
-                .blur(radius: 60)
-                .offset(x: -80, y: 200)
+            Color.black.opacity(0.55)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    viewModel.showJumpInput = false
+                    viewModel.jumpInput = ""
+                }
+            VStack(spacing: .md + 2) {
+                Text(AppLocalizedKeys.jumpToHadith.value)
+                    .customFont(.buttonText)
+                    .foregroundColor(.white)
+                HStack(spacing: .sm) {
+                    TextField("", text: $viewModel.jumpInput)
+                        .keyboardType(.numberPad)
+                        .multilineTextAlignment(.center)
+                        .customFont(.bodyMedium)
+                        .foregroundColor(.white)
+                        .frame(width: 110, height: 50)
+                        .background(Color.hadithCard)
+                        .cornerRadius(.cornerMd)
+                    Button {
+                        if let n = Int(viewModel.jumpInput) { viewModel.jumpToHadith(number: n) }
+                        viewModel.showJumpInput = false
+                        viewModel.jumpInput = ""
+                    } label: {
+                        Text(AppLocalizedKeys.go.value)
+                            .customFont(.buttonText)
+                            .foregroundColor(Color.hadithCard)
+                            .frame(width: 80, height: 50)
+                            .background(Color.hadithGold)
+                            .cornerRadius(.cornerMd)
+                    }
+                }
+            }
+            .padding(.xxBig)
+            .background(Color.hadithBg.opacity(0.97))
+            .cornerRadius(.cornerXxl)
+            .shadow(color: .black.opacity(0.5), radius: 24)
         }
-        .allowsHitTesting(false)
     }
 }
 
-// MARK: - Hadith Page
+// MARK: - Hadith Page Content
 
-struct HadithPageView: View {
+struct HadithPageContent: View {
+
     let hadith: HadithEntry
-    let accentColor: Color
-    let colorScheme: ColorScheme
+    @State private var expanded: [String: Bool] = [:]
 
     var body: some View {
         NoIndicatorsScrollView {
-            VStack(spacing: 28) {
-                accentLine
-
-                Text(hadith.arabicText)
-                    .font(.custom("HafsSmart_08_fixed", size: 20))
-                    .foregroundColor(ColorStyle.onSurface.color)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(14)
-                    .environment(\.layoutDirection, .rightToLeft)
-                    .padding(.horizontal, .big)
-
-                Divider()
-                    .padding(.horizontal, .big)
-
-                Text(hadith.translation)
-                    .customStyle(.bodySmall, .onSurfaceVariant)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(6)
-                    .padding(.horizontal, .big)
-
-                HStack(spacing: 8) {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 11))
-                        .customForeground(.onSurfaceVariant)
+            VStack(alignment: .leading, spacing: 0) {
+                if !hadith.narrator.isEmpty {
                     Text(hadith.narrator)
-                        .customStyle(.caption1, .onSurfaceVariant)
-                        .multilineTextAlignment(.center)
+                        .font(.custom("Kitab-Regular", size: 15))
+                        .italic()
+                        .customForeground(.hadithSecondary)
+                        .lineSpacing(5)
+                        .padding(.horizontal, .big)
+                        .padding(.top, .xSm)
+                        .padding(.bottom, .big)
                 }
-
-                if !hadith.grade.isEmpty {
-                    Text(hadith.grade)
-                        .font(.system(size: 11, weight: .semibold))
-                        .foregroundColor(accentColor)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(accentColor.opacity(0.10))
-                        .cornerRadius(6)
-                }
-
-                Spacer(minLength: 60)
+                arabicTextCard
+                    .padding(.horizontal, .big)
+                    .padding(.bottom, .xBig)
+                scholarlyDetails
+                    .padding(.horizontal, .big)
+                    .padding(.bottom, 90)
             }
-            .padding(.top, 28)
+            .padding(.top, .xxSm)
         }
     }
 
-    private var accentLine: some View {
-        Rectangle()
-            .fill(accentColor)
-            .frame(width: 48, height: 3)
-            .cornerRadius(2)
+    // MARK: Arabic Text Card
+
+    private var arabicTextCard: some View {
+        ZStack(alignment: .topTrailing) {
+            RoundedRectangle(cornerRadius: .cornerCard)
+                .fill(Color.hadithCard)
+            VStack(spacing: 0) {
+                HStack {
+                    Spacer()
+                    Text(AppLocalizedKeys.originalText.value)
+                        .customFont(.caption2)
+                        .tracking(1.2)
+                        .customForeground(.hadithMuted)
+                        .padding(.horizontal, .xSm + 2)
+                        .padding(.vertical, .xxSm - 1)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: .cornerXxSm)
+                                .strokeBorder(Color.hadithSeparator, lineWidth: 1)
+                        )
+                }
+                .padding(.top, .md)
+                .padding(.trailing, .md)
+
+                Text(hadith.arabicText)
+                    .font(.custom("HafsSmart_08_fixed", size: 22))
+                    .customForeground(.hadithArabicText)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(14)
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, .big)
+                    .padding(.top, .md)
+                    .padding(.bottom, .xxBig - 2)
+            }
+        }
+    }
+
+    // MARK: Scholarly Details
+
+    @ViewBuilder
+    private var scholarlyDetails: some View {
+        let rows = buildScholarlyRows().filter { $0.hasData }
+        if !rows.isEmpty {
+            VStack(alignment: .leading, spacing: .sm) {
+                Text(AppLocalizedKeys.scholarlyDetails.value)
+                    .customFont(.caption2)
+                    .tracking(1.5)
+                    .customForeground(.hadithMuted)
+
+                VStack(spacing: 0) {
+                    ForEach(rows.indices, id: \.self) { i in
+                        let row = rows[i]
+                        HadithScholarlyRow(
+                            item: row,
+                            isExpanded: Binding(
+                                get: { expanded[row.labelEn] ?? false },
+                                set: { expanded[row.labelEn] = $0 }
+                            )
+                        )
+                        if i < rows.count - 1 {
+                            Color.hadithSeparator
+                                .frame(height: 1)
+                                .padding(.leading, 56)
+                        }
+                    }
+                }
+                .background(Color.hadithCard)
+                .cornerRadius(.cornerLg)
+                .overlay(
+                    RoundedRectangle(cornerRadius: .cornerLg)
+                        .strokeBorder(Color.hadithSeparator, lineWidth: 1)
+                )
+            }
+        }
+    }
+
+    private func buildScholarlyRows() -> [HadithScholarlyItem] {[
+        HadithScholarlyItem(icon: "person.fill",           labelEn: "NARRATOR",       labelAr: "رواة",         content: hadith.narrator,      isRTL: true),
+        HadithScholarlyItem(icon: "seal.fill",             labelEn: "GRADE ARABIC",   labelAr: "حكم",          content: hadith.grade,         isRTL: true),
+        HadithScholarlyItem(icon: "globe",                 labelEn: "GRADE ENGLISH",  labelAr: "Authenticity", content: hadith.gradeEn,       isRTL: false),
+        HadithScholarlyItem(icon: "text.book.closed.fill", labelEn: "COMMENTARY",     labelAr: "شرح",          content: hadith.commentary,    isRTL: true),
+        HadithScholarlyItem(icon: "person.3.fill",         labelEn: "NARRATOR CHAIN", labelAr: "سلسلة الرواة", content: hadith.narratorChain, isRTL: true),
+        HadithScholarlyItem(icon: "books.vertical.fill",   labelEn: "TAKHRIJ",        labelAr: "تخريج",        content: hadith.takhrij,       isRTL: true),
+    ]}
+}
+
+// MARK: - Scholarly Row
+
+struct HadithScholarlyRow: View {
+
+    let item: HadithScholarlyItem
+    @Binding var isExpanded: Bool
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.22)) { isExpanded.toggle() }
+            } label: {
+                HStack(spacing: .sm) {
+                    HadithIconBadge(icon: item.icon)
+                    VStack(alignment: .leading, spacing: .xxSm - 2) {
+                        Text(item.labelEn)
+                            .customFont(.caption2)
+                            .tracking(0.8)
+                            .customForeground(.hadithMuted)
+                        Text(item.labelAr)
+                            .customFont(.subheadline)
+                            .customForeground(.hadithPrimary)
+                    }
+                    Spacer()
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .font(.system(size: 11, weight: .medium))
+                        .customForeground(.hadithMuted)
+                        .frame(width: 18)
+                }
+                .padding(.horizontal, .md)
+                .padding(.vertical, .md)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            if isExpanded {
+                Color.hadithSeparator.frame(height: 1).padding(.leading, 56)
+                scholarlyContentView
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var scholarlyContentView: some View {
+        if item.isRTL {
+            Text(item.content)
+                .font(.custom("Kitab-Regular", size: 15))
+                .foregroundColor(gradeAwareColor)
+                .lineSpacing(7)
+                .multilineTextAlignment(.trailing)
+                .environment(\.layoutDirection, .rightToLeft)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.md)
+        } else {
+            Text(item.content)
+                .customFont(.bodySmall)
+                .foregroundColor(gradeAwareColor)
+                .lineSpacing(6)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.md)
+        }
+    }
+
+    private var gradeAwareColor: Color {
+        guard item.labelEn == "GRADE ARABIC" || item.labelEn == "GRADE ENGLISH" else {
+            return Color.hadithSecondary
+        }
+        let t = item.content
+        if t.contains("صحيح") || t.lowercased().contains("sahih") || t.lowercased().contains("authentic") {
+            return Color.hadithGreen
+        }
+        if t.contains("حسن") || t.lowercased().contains("hasan") || t.lowercased().contains("good") {
+            return Color.hadithOrange
+        }
+        if t.contains("ضعيف") || t.lowercased().contains("da") {
+            return Color.hadithRed
+        }
+        return Color.hadithSecondary
     }
 }
 
-// MARK: - ShareSheet
+// MARK: - Table of Contents Sheet
+
+struct HadithTOCSheet: View {
+
+    let chapters: [HadithChapter]
+    let currentChapterId: Int?
+    let onSelect: (HadithChapter) -> Void
+
+    var body: some View {
+        NavigationStack {
+            List(chapters) { chapter in
+                Button { onSelect(chapter) } label: {
+                    HStack(spacing: .md) {
+                        Text("\(chapter.number)")
+                            .customFont(.caption1)
+                            .foregroundColor(Color.primaryColor)
+                            .frame(width: 32, height: 32)
+                            .background(Color.primaryColor.opacity(0.10))
+                            .cornerRadius(.cornerXSm)
+
+                        Text(chapter.title)
+                            .customFont(
+                                chapter.id == currentChapterId ? .subheadline : .bodySmall
+                            )
+                            .foregroundColor(
+                                chapter.id == currentChapterId ? Color.primaryColor : Color.onSurface
+                            )
+                            .multilineTextAlignment(.leading)
+
+                        Spacer()
+
+                        if chapter.id == currentChapterId {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(Color.primaryColor)
+                        }
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .listRowBackground(Color.clear)
+            }
+            .listStyle(.plain)
+            .navigationTitle(AppLocalizedKeys.tableOfContents.value)
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+// MARK: - Share Sheet
 
 struct ShareSheet: UIViewControllerRepresentable {
     let items: [Any]

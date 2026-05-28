@@ -26,4 +26,14 @@ public extension CGFloat {
     static var xxBig: CGFloat = 28
     
     static var xxxBig: CGFloat = 32
+
+    // MARK: - Corner Radius
+    static var cornerXxSm: CGFloat = 6
+    static var cornerXSm: CGFloat  = 8
+    static var cornerSm: CGFloat   = 9
+    static var cornerMd: CGFloat   = 12
+    static var cornerLg: CGFloat   = 14
+    static var cornerXl: CGFloat   = 16
+    static var cornerCard: CGFloat = 18
+    static var cornerXxl: CGFloat  = 20
 }

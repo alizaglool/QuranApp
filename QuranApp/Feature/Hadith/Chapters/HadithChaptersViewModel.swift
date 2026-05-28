@@ -14,7 +14,7 @@ final class HadithChaptersViewModel: MainViewModel {
     @Published var chapters: [HadithChapter] = []
 
     let book: HadithBook
-    var isTabBarVisible: Bool { false }
+    var isTabBarVisible: Bool { true }
 
     weak var coordinator: HadithCoordinating?
     private let service = HadithDatabaseService.shared
@@ -30,9 +30,9 @@ final class HadithChaptersViewModel: MainViewModel {
     }
 
     func selectChapter(_ chapter: HadithChapter) {
-        let hadiths = service.fetchHadiths(chapterId: chapter.id)
+        let hadiths = service.fetchHadiths(bookId: book.id, chapterId: chapter.id)
         guard !hadiths.isEmpty else { return }
-        coordinator?.coordinateToReading(hadiths: hadiths, startIndex: 0, book: book)
+        coordinator?.coordinateToReading(hadiths: hadiths, startIndex: 0, book: book, chapter: chapter, chapters: chapters)
     }
 
     func goBack() {

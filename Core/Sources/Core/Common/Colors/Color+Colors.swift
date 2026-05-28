@@ -64,7 +64,7 @@ public extension Color {
 
 // Quran
 public extension Color {
-    
+
     static let mushafPage = Color(.mushafPage)
     static let quranText = Color(.quranText)
     static let verseNumber = Color(.verseNumber)
@@ -72,4 +72,25 @@ public extension Color {
     static let verseMarkerGold = Color(.verseMarkerGold)
     static let verseMarkerCream = Color(.verseMarkerCream)
     static let verseMarkerDigits = Color(.verseMarkerDigits)
+}
+
+// Hadith Reading
+public extension Color {
+
+    static let hadithBg         = Color(lightHex: "F6F2E8", darkHex: "133C26")
+    static let hadithCard       = Color(lightHex: "FFFFFF", darkHex: "0B2D1A")
+    static let hadithNav        = Color(lightHex: "133C26", darkHex: "FFFFFF")
+    static let hadithPrimary    = Color(lightHex: "1C1C1C", darkHex: "FFFFFF")
+    static var hadithSecondary: Color { hadithPrimary.opacity(0.65) }
+    static var hadithMuted: Color     { hadithPrimary.opacity(0.38) }
+    static let hadithSeparator  = Color(UIColor { tc in
+        tc.userInterfaceStyle == .dark
+            ? UIColor.white.withAlphaComponent(0.14)
+            : UIColor.black.withAlphaComponent(0.08)
+    })
+    static let hadithArabicText = Color(lightHex: "133C26", darkHex: "CCAB4C")
+    static let hadithGold       = Color(hex: "CCAB4C")
+    static let hadithGreen      = Color(hex: "29AD61")
+    static let hadithRed        = Color(hex: "E84D3D")
+    static let hadithOrange     = Color(hex: "E67D21")
 }

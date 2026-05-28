@@ -64,6 +64,20 @@ public enum ColorStyle {
     case quranText
     case verseNumber
     case surahDivider
+
+    // Hadith
+    case hadithBg
+    case hadithCard
+    case hadithNav
+    case hadithPrimary
+    case hadithSecondary
+    case hadithMuted
+    case hadithSeparator
+    case hadithArabicText
+    case hadithGold
+    case hadithGreen
+    case hadithRed
+    case hadithOrange
     
     public var color: Color {
         switch self {
@@ -166,6 +180,20 @@ public enum ColorStyle {
             return .verseNumber
         case .surahDivider:
             return .surahDivider
+
+        // Hadith
+        case .hadithBg:         return .hadithBg
+        case .hadithCard:       return .hadithCard
+        case .hadithNav:        return .hadithNav
+        case .hadithPrimary:    return .hadithPrimary
+        case .hadithSecondary:  return .hadithSecondary
+        case .hadithMuted:      return .hadithMuted
+        case .hadithSeparator:  return .hadithSeparator
+        case .hadithArabicText: return .hadithArabicText
+        case .hadithGold:       return .hadithGold
+        case .hadithGreen:      return .hadithGreen
+        case .hadithRed:        return .hadithRed
+        case .hadithOrange:     return .hadithOrange
         }
     }
     
