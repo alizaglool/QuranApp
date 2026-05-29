@@ -138,6 +138,7 @@ struct QuranPageView: View {
     /// Observed so the page redraws bookmark badges whenever any bookmark
     /// is added, removed, or recolored from anywhere in the app.
     @ObservedObject private var storage = StorageManager.shared
+    @ObservedObject private var audio = AudioEngine.shared
 
     private let quranDB = QuranDatabase.shared
 
@@ -150,6 +151,17 @@ struct QuranPageView: View {
         let verseID: Int
         let color: Color
         let highlights: [VerseHighlightRect]
+    }
+
+    /// Highlight rects for the currently playing verse on this page.
+    private var playingHighlightRects: [VerseHighlightRect] {
+        guard audio.isPlaying || audio.isLoadingVerse else { return [] }
+        let allHighlights = quranDB.getAllHighlightsForPage(pageNumber)
+        let verses = quranDB.getVersesForPage(pageNumber)
+        guard let playingVerse = verses.first(where: {
+            $0.chapterNumber == audio.currentSurahNumber && $0.number == audio.currentVerseNumber
+        }) else { return [] }
+        return allHighlights.filter { $0.verseID == playingVerse.verseID }
     }
 
     /// All bookmarks on this page joined with their verse positions and
@@ -188,70 +200,123 @@ struct QuranPageView: View {
         }
     }
 
+    // MARK: - Page Info helpers
+
+    private var pageSurahName: String {
+        quranDB.getSurahsForPage(pageNumber).first?.arabicTitle ?? ""
+    }
+
+    private var pageJuz: Int {
+        quranDB.getJuz(forPage: pageNumber)
+    }
+
+    private var isRightPage: Bool {
+        pageNumber % 2 != 0
+    }
+
     var body: some View {
-        GeometryReader { geo in
-            let lineHeight = geo.size.height / 15.0
-            let pageWidth = geo.size.width
-            let pageHeight = geo.size.height
+        VStack(spacing: 0) {
+            pageTopBar
+                .padding(.top, 8)
+                .padding(.bottom, 4)
 
-            ZStack {
-                surahHeaders(pageWidth: pageWidth, lineHeight: lineHeight)
+            GeometryReader { geo in
+                let lineHeight = geo.size.height / 15.0
+                let pageWidth = geo.size.width
+                let pageHeight = geo.size.height
 
-                // Tinted background rectangles for bookmarked verses — drawn
-                // BEFORE the line images so the text stays sharp on top.
-                bookmarkHighlights(pageWidth: pageWidth, lineHeight: lineHeight)
+                ZStack {
+                    surahHeaders(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                lineImages(pageWidth: pageWidth, lineHeight: lineHeight)
+                    bookmarkHighlights(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                if viewModel.selectedPage == pageNumber {
-                    ForEach(viewModel.highlightRects, id: \.line) { rect in
-                        highlightRect(
-                            rect: rect,
-                            pageWidth: pageWidth,
-                            lineHeight: lineHeight
-                        )
-                    }
-                }
+                    playingVerseHighlight(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                verseMarkers(pageWidth: pageWidth, pageHeight: pageHeight)
-            }
-            .contentShape(Rectangle())
+                    lineImages(pageWidth: pageWidth, lineHeight: lineHeight)
 
-            // Both tap and long press are handled inside the same UIView
-            // overlay below. SwiftUI's .onTapGesture would have been
-            // swallowed by the UIView, which is why earlier single taps
-            // didn't toggle the top/bottom bars.
-            .overlay {
-                LongPressLocationView(
-                    minimumPressDuration: 0.4,
-                    onLongPress: { location in
-                        let line = Int(location.y / lineHeight)
-                        let normalizedX = location.x / pageWidth
-
-                        viewModel.selectVerse(
-                            atLine: line,
-                            normalizedX: normalizedX,
-                            pageNumber: pageNumber
-                        )
-                    },
-                    onTap: {
-                        // If a verse highlight is currently visible on this
-                        // page, the first tap clears it. Otherwise toggle
-                        // the top/bottom overlay bars.
-                        let hasVisibleHighlight = !viewModel.highlightRects.isEmpty
-                                               && viewModel.selectedPage == pageNumber
-                        if hasVisibleHighlight {
-                            viewModel.clearSelection()
-                        } else {
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                viewModel.toggleOverlay()
-                            }
+                    if viewModel.selectedPage == pageNumber {
+                        ForEach(viewModel.highlightRects, id: \.line) { rect in
+                            highlightRect(
+                                rect: rect,
+                                pageWidth: pageWidth,
+                                lineHeight: lineHeight
+                            )
                         }
                     }
-                )
+
+                    verseMarkers(pageWidth: pageWidth, pageHeight: pageHeight)
+                }
+                .contentShape(Rectangle())
+                .overlay {
+                    LongPressLocationView(
+                        minimumPressDuration: 0.4,
+                        onLongPress: { location in
+                            let line = Int(location.y / lineHeight)
+                            let normalizedX = location.x / pageWidth
+
+                            viewModel.selectVerse(
+                                atLine: line,
+                                normalizedX: normalizedX,
+                                pageNumber: pageNumber
+                            )
+                        },
+                        onTap: {
+                            let hasVisibleHighlight = !viewModel.highlightRects.isEmpty
+                                                   && viewModel.selectedPage == pageNumber
+                            if hasVisibleHighlight {
+                                viewModel.clearSelection()
+                            } else {
+                                withAnimation(.easeInOut(duration: 0.25)) {
+                                    viewModel.toggleOverlay()
+                                }
+                            }
+                        }
+                    )
+                }
             }
+
+            pageBottomBar
+                .padding(.bottom, 8)
         }
         .ignoresSafeArea(edges: .horizontal)
+    }
+
+    // MARK: - Page Top Bar (surah name + juz, always visible)
+
+    private var pageTopBar: some View {
+        HStack {
+            Text("الجزء \(pageJuz.arabicNumerals)")
+                .font(.custom("Kitab-Regular", size: 17))
+                .foregroundColor(textColor.opacity(0.55))
+            Spacer()
+            Text(pageSurahName)
+                .font(.custom("Kitab-Regular", size: 17))
+                .foregroundColor(textColor.opacity(0.55))
+        }
+        .padding(.horizontal, 16)
+        .allowsHitTesting(false)
+        .environment(\.layoutDirection, .rightToLeft)
+    }
+
+    // MARK: - Page Bottom Bar (page number badge, always visible)
+
+    private var pageBottomBar: some View {
+        HStack {
+            if isRightPage {
+                Spacer()
+                pageNumberBadge
+                    .padding(.leading, 12)
+            } else {
+                pageNumberBadge
+                    .padding(.trailing, 12)
+                Spacer()
+            }
+        }
+        .allowsHitTesting(false)
+    }
+
+    private var pageNumberBadge: some View {
+        OrnamentalPageBadge(text: pageNumber.arabicNumerals, isDarkMode: isDarkMode)
     }
 
     // MARK: - Surah Headers
@@ -328,6 +393,24 @@ struct QuranPageView: View {
         }
     }
 
+    // MARK: - Playing Verse Highlight
+
+    @ViewBuilder
+    private func playingVerseHighlight(pageWidth: CGFloat, lineHeight: CGFloat) -> some View {
+        ForEach(playingHighlightRects, id: \.line) { rect in
+            let flippedLeft  = 1.0 - CGFloat(rect.rightVal)
+            let flippedRight = 1.0 - CGFloat(rect.leftVal)
+            let x = flippedLeft * pageWidth
+            let width = (flippedRight - flippedLeft) * pageWidth
+            let y = CGFloat(rect.line) * lineHeight
+            RoundedRectangle(cornerRadius: 4, style: .continuous)
+                .fill(ColorStyle.primary.color.opacity(0.25))
+                .frame(width: width, height: lineHeight)
+                .position(x: x + width / 2, y: y + lineHeight / 2)
+                .allowsHitTesting(false)
+        }
+    }
+
     // MARK: - Highlight
 
     @ViewBuilder
@@ -358,5 +441,43 @@ struct QuranPageView: View {
             return UIImage(contentsOfFile: path)
         }
         return nil
+    }
+}
+
+// MARK: - Ornamental Page Number Badge
+
+private struct OrnamentalPageBadge: View {
+    let text: String
+    let isDarkMode: Bool
+
+    private var labelColor: Color {
+        isDarkMode
+            ? Color.white.opacity(0.70)
+            : Color(red: 0.18, green: 0.13, blue: 0.08)
+    }
+
+    var body: some View {
+        ZStack {
+            if isDarkMode {
+                Image("newTintedPageMarker")
+                    .renderingMode(.template)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 26)
+                    .foregroundColor(Color.white.opacity(0.22))
+            } else {
+                Image("newTintedPageMarker")
+                    .renderingMode(.original)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 26)
+            }
+
+            Text(text)
+                .font(.custom("Kitab-Regular", size: 15))
+                .foregroundColor(labelColor)
+        }
+        .frame(width: 44, height: 26)
+        .padding(.horizontal, 12)
     }
 }

@@ -96,6 +96,7 @@ enum AppLocalizedKeys: String {
     case recitation
     case playTo
     case play
+    case pause
     case tafsir
     case tafsirSummary
     case tafsirComingSoon
@@ -104,7 +105,21 @@ enum AppLocalizedKeys: String {
     case share
     case highlight
     case clearHighlight
-    
+    case done
+    case reciterSelection
+    case recitations
+    case tafsirAudio
+    case downloadJuz
+    case repeatSettings
+    case rangeSection
+    case fromLabel
+    case toLabel
+    case repeatSection
+    case rangeRepeat
+    case verseRepeat
+    case repetitions
+    case chooseVerse
+
     var value: String {
         return self.rawValue.localized
     }

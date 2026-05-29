@@ -20,6 +20,7 @@ struct VerseActionSheet: View {
 
     @ObservedObject private var localization = LocalizationManager.shared
     @ObservedObject private var storage = StorageManager.shared
+    @ObservedObject private var audio = AudioEngine.shared
     @State private var showAllBookmarks = false
 
     // MARK: - Inline bookmark "default" derivation
@@ -217,14 +218,28 @@ struct VerseActionSheet: View {
 
     // MARK: - Recitation Buttons
 
+    private var isCurrentVerse: Bool {
+        audio.currentSurahNumber == surahNumber && audio.currentVerseNumber == verseNumber
+    }
+
     private var recitationButtons: some View {
         HStack(spacing: 12) {
             actionCard(icon: "play.fill", title: AppLocalizedKeys.playTo.value, hasChevron: true) {
-                print("📋 Play to... tapped")
+                audio.setRepeatMode(.surah)
+                audio.play(surahNumber: surahNumber, verseNumber: verseNumber)
+                dismiss()
             }
 
-            actionCard(icon: "play.fill", title: AppLocalizedKeys.play.value) {
-                print("📋 Play tapped")
+            actionCard(
+                icon: audio.isPlaying && isCurrentVerse ? "pause.fill" : "play.fill",
+                title: audio.isPlaying && isCurrentVerse ? AppLocalizedKeys.pause.value : AppLocalizedKeys.play.value
+            ) {
+                if audio.isPlaying && isCurrentVerse {
+                    audio.pause()
+                } else {
+                    audio.play(surahNumber: surahNumber, verseNumber: verseNumber)
+                }
+                dismiss()
             }
         }
     }

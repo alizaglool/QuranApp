@@ -283,8 +283,24 @@ final class QuranDatabase {
         return 1
     }
     
-    // MARK: - Page for Surah
-    
+    // MARK: - Page for Surah / Verse
+
+    func getPage(forSurah surahNumber: Int, verse: Int) -> Int {
+        guard let db = db else { return 1 }
+        let query = "SELECT page1441 FROM verse WHERE chapterNumber = ? AND number = ? LIMIT 1"
+        var stmt: OpaquePointer?
+        var page = getStartPage(forSurah: surahNumber)
+        if sqlite3_prepare_v2(db, query, -1, &stmt, nil) == SQLITE_OK {
+            sqlite3_bind_int(stmt, 1, Int32(surahNumber))
+            sqlite3_bind_int(stmt, 2, Int32(verse))
+            if sqlite3_step(stmt) == SQLITE_ROW {
+                page = Int(sqlite3_column_int(stmt, 0))
+            }
+        }
+        sqlite3_finalize(stmt)
+        return page
+    }
+
     func getStartPage(forSurah surahNumber: Int) -> Int {
         guard let db = db else { return 1 }
         
@@ -352,7 +368,25 @@ final class QuranDatabase {
         return number
     }
     
+    // MARK: - Verse Info (by surah + verse number)
+
+    func getVerseInfo(surahNumber: Int, verseNumber: Int) -> (verseID: Int, page: Int)? {
+        guard let db = db else { return nil }
+        let query = "SELECT verseID, page1441 FROM verse WHERE chapterNumber = ? AND number = ? LIMIT 1"
+        var stmt: OpaquePointer?
+        var result: (verseID: Int, page: Int)? = nil
+        if sqlite3_prepare_v2(db, query, -1, &stmt, nil) == SQLITE_OK {
+            sqlite3_bind_int(stmt, 1, Int32(surahNumber))
+            sqlite3_bind_int(stmt, 2, Int32(verseNumber))
+            if sqlite3_step(stmt) == SQLITE_ROW {
+                result = (Int(sqlite3_column_int(stmt, 0)), Int(sqlite3_column_int(stmt, 1)))
+            }
+        }
+        sqlite3_finalize(stmt)
+        return result
+    }
+
     // MARK: - Total Pages
-    
+
     var totalPages: Int { 604 }
 }

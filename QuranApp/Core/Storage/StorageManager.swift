@@ -17,27 +17,49 @@ final class StorageManager: ObservableObject {
     let container: ModelContainer
     let context: ModelContext
 
-    /// Bumped every time a bookmark is added, removed, or its color changes.
-    /// Views that render per-page bookmark indicators observe this so they
-    /// re-render automatically after a save.
     @Published private(set) var bookmarksRevision: Int = 0
     
     private init() {
-        do {
-            let schema = Schema([
-                AppSettings.self,
-                QuranBookmark.self,
-                ReadingProgress.self,
-                AdhkarProgress.self
-            ])
+        let schema = Schema([
+            AppSettings.self,
+            QuranBookmark.self,
+            ReadingProgress.self,
+            AdhkarProgress.self,
+            AudioProgress.self,
+            DownloadedReciter.self
+        ])
+
+        func makeContainer() throws -> ModelContainer {
             let config = ModelConfiguration(isStoredInMemoryOnly: false)
-            container = try ModelContainer(for: schema, configurations: [config])
+            return try ModelContainer(for: schema, configurations: [config])
+        }
+
+        do {
+            container = try makeContainer()
             context = container.mainContext
-            
             initializeDefaults()
             print("✅ StorageManager initialized")
         } catch {
-            fatalError("❌ Failed to create ModelContainer: \(error)")
+            // Schema changed (new columns added) — wipe store and recreate.
+            // TODO: replace with a SchemaMigrationPlan before App Store submission.
+            print("⚠️ SwiftData schema mismatch — resetting store: \(error)")
+            Self.clearSwiftDataStore()
+            do {
+                container = try makeContainer()
+                context = container.mainContext
+                initializeDefaults()
+                print("✅ StorageManager reinitialized after store reset")
+            } catch {
+                fatalError("❌ Failed to create ModelContainer after reset: \(error)")
+            }
+        }
+    }
+
+    private static func clearSwiftDataStore() {
+        let fm = FileManager.default
+        guard let appSupport = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return }
+        for suffix in ["default.store", "default.store-shm", "default.store-wal"] {
+            try? fm.removeItem(at: appSupport.appendingPathComponent(suffix))
         }
     }
     
@@ -242,5 +264,67 @@ final class StorageManager: ObservableObject {
             context.insert(progress)
         }
         try? context.save()
+    }
+
+    // MARK: - Audio Progress
+
+    func getAudioProgress() -> AudioProgress? {
+        let descriptor = FetchDescriptor<AudioProgress>()
+        return try? context.fetch(descriptor).first
+    }
+
+    func updateAudioProgress(_ update: (AudioProgress) -> Void) {
+        if let progress = getAudioProgress() {
+            update(progress)
+            progress.updatedAt = Date()
+        } else {
+            let progress = AudioProgress()
+            update(progress)
+            context.insert(progress)
+        }
+        try? context.save()
+    }
+
+    // MARK: - Downloaded Reciters
+
+    func getDownloadedReciter(slug: String) -> DownloadedReciter? {
+        let descriptor = FetchDescriptor<DownloadedReciter>(
+            predicate: #Predicate { $0.slug == slug }
+        )
+        return try? context.fetch(descriptor).first
+    }
+
+    func getAllDownloadedReciters() -> [DownloadedReciter] {
+        let descriptor = FetchDescriptor<DownloadedReciter>()
+        return (try? context.fetch(descriptor)) ?? []
+    }
+
+    func upsertDownloadedReciter(slug: String, name: String, arabicName: String) {
+        if getDownloadedReciter(slug: slug) == nil {
+            let reciter = DownloadedReciter(slug: slug, name: name, arabicName: arabicName)
+            context.insert(reciter)
+            try? context.save()
+        }
+    }
+
+    func addDownloadedSurah(reciterSlug: String, surahNumber: Int, sizeBytes: Int64) {
+        guard let reciter = getDownloadedReciter(slug: reciterSlug) else { return }
+        if !reciter.downloadedSurahNumbers.contains(surahNumber) {
+            reciter.downloadedSurahNumbers.append(surahNumber)
+            reciter.totalSizeBytes += sizeBytes
+            reciter.updatedAt = Date()
+            try? context.save()
+        }
+    }
+
+    func deleteDownloadedReciter(slug: String) {
+        guard let reciter = getDownloadedReciter(slug: slug) else { return }
+        context.delete(reciter)
+        try? context.save()
+    }
+
+    func isReciterFullyDownloaded(slug: String) -> Bool {
+        guard let reciter = getDownloadedReciter(slug: slug) else { return false }
+        return reciter.downloadedSurahNumbers.count == 114
     }
 }

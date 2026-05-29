@@ -25,7 +25,7 @@ final class QuranViewModel: MainViewModel {
     @Published var selectedVerseSurahName: String = ""
     @Published var selectedVerseSurahNumber: Int = 0
     @Published var selectedVerseNumber: Int = 0
-    
+
     var isTabBarVisible: Bool { false }
     
     private let quranDB = QuranDatabase.shared
@@ -77,11 +77,11 @@ final class QuranViewModel: MainViewModel {
             let previousPage = currentPage
             lastVisitedPage = previousPage
             currentPage = page
-            
+
             storage.updateReadingProgress { progress in
                 progress.lastVisitedPage = previousPage
             }
-            
+
             updatePageInfo(page: page)
         }
     }
@@ -90,20 +90,29 @@ final class QuranViewModel: MainViewModel {
         let page = quranDB.getStartPage(forSurah: surahNumber)
         goToPage(page)
     }
+
+    func goToVerse(surah: Int, verse: Int) {
+        let page = quranDB.getPage(forSurah: surah, verse: verse)
+        goToPage(page)
+    }
     
     func swapLastVisitedPage() {
         let temp = currentPage
         let target = lastVisitedPage
         lastVisitedPage = temp
         currentPage = target
-        
+
         storage.updateReadingProgress { progress in
             progress.lastVisitedPage = temp
         }
-        
+
         updatePageInfo(page: target)
     }
     
+    var currentFirstVerseNumber: Int {
+        quranDB.getVersesForPage(currentPage).first?.number ?? 1
+    }
+
     var progressRatio: CGFloat {
         CGFloat(currentPage - 1) / CGFloat(totalPages - 1)
     }
