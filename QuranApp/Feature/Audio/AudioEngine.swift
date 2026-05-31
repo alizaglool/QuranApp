@@ -50,6 +50,7 @@ final class AudioEngine: NSObject, ObservableObject {
     @Published var verseElapsed: TimeInterval = 0
     @Published var repeatRangeEnabled: Bool = false
     @Published var repeatVerseEnabled: Bool = false
+    @Published var playSurahMode: Bool = false
     @Published var repeatFromSurah: Int = 1
     @Published var repeatFromVerse: Int = 1
     @Published var repeatToSurah: Int = 1
@@ -66,6 +67,7 @@ final class AudioEngine: NSObject, ObservableObject {
 
     private var currentVerseIteration: Int = 0
     private var currentRangeIteration: Int = 0
+    private var pendingVerseAfterBismillah: Int? = nil
 
     private var audioPlayer: AVAudioPlayer?
     private var progressTimer: Timer?
@@ -86,10 +88,31 @@ final class AudioEngine: NSObject, ObservableObject {
     func play(surahNumber: Int, verseNumber: Int) {
         currentVerseIteration = 0
         currentRangeIteration = 0
-        currentSurahNumber = surahNumber
-        currentVerseNumber = verseNumber
         errorMessage = nil
-        loadAndPlay()
+        beginPlayback(surah: surahNumber, verse: verseNumber)
+    }
+
+    /// Play from a specific position without any range/verse-repeat constraints.
+    /// Clears repeat and surah-mode so playback continues naturally through the Quran.
+    func playFrom(surahNumber: Int, verseNumber: Int) {
+        repeatRangeEnabled = false
+        repeatVerseEnabled = false
+        repeatMode = .off
+        playSurahMode = false
+        currentRangeIteration = 0
+        currentVerseIteration = 0
+        play(surahNumber: surahNumber, verseNumber: verseNumber)
+    }
+
+    /// Play the entire surah from verse 1 and stop automatically at the last verse.
+    func playWholeSurah(surahNumber: Int) {
+        playSurahMode = true
+        repeatRangeEnabled = false
+        repeatVerseEnabled = false
+        repeatMode = .off
+        currentRangeIteration = 0
+        currentVerseIteration = 0
+        play(surahNumber: surahNumber, verseNumber: 1)
     }
 
     func pause() {
@@ -116,6 +139,7 @@ final class AudioEngine: NSObject, ObservableObject {
     }
 
     func stop() {
+        pendingVerseAfterBismillah = nil
         audioPlayer?.stop()
         audioPlayer = nil
         isPlaying = false
@@ -129,6 +153,7 @@ final class AudioEngine: NSObject, ObservableObject {
     }
 
     func nextVerse() {
+        pendingVerseAfterBismillah = nil
         let total = ReciterLibrary.verseCounts[currentSurahNumber] ?? 1
         if currentVerseNumber < total {
             play(surahNumber: currentSurahNumber, verseNumber: currentVerseNumber + 1)
@@ -140,6 +165,7 @@ final class AudioEngine: NSObject, ObservableObject {
     }
 
     func previousVerse() {
+        pendingVerseAfterBismillah = nil
         if currentVerseNumber > 1 {
             play(surahNumber: currentSurahNumber, verseNumber: currentVerseNumber - 1)
         } else if currentSurahNumber > 1 {
@@ -247,14 +273,27 @@ final class AudioEngine: NSObject, ObservableObject {
 
     // MARK: - Internal load
 
-    private func loadAndPlay() {
+    private func beginPlayback(surah: Int, verse: Int) {
+        currentSurahNumber = surah
+        currentVerseNumber = verse
+        // Play Bismillah (verse 0) before verse 1 for surahs 2-114 except At-Tawbah (9)
+        if verse == 1 && surah != 1 && surah != 9 {
+            pendingVerseAfterBismillah = 1
+            loadAndPlay(verseOverride: 0)
+        } else {
+            pendingVerseAfterBismillah = nil
+            loadAndPlay()
+        }
+    }
+
+    private func loadAndPlay(verseOverride: Int? = nil) {
         downloadTask?.cancel()
         stopProgressTimer()
         audioPlayer?.stop()
         audioPlayer = nil
 
         let surah = currentSurahNumber
-        let verse = currentVerseNumber
+        let verse = verseOverride ?? currentVerseNumber
 
         // Try local file first (only if it was actually downloaded)
         if DownloadManager.shared.isAvailable(reciterSlug: currentReciter.id, surahNumber: surah, verseNumber: verse),
@@ -275,7 +314,13 @@ final class AudioEngine: NSObject, ObservableObject {
                 if let error = error as? URLError, error.code == .cancelled { return }
 
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 404 {
-                    self.errorMessage = "الآية غير متوفرة لهذا القارئ"
+                    // If Bismillah file missing for this reciter, skip directly to verse 1
+                    if verseOverride == 0 {
+                        self.pendingVerseAfterBismillah = nil
+                        self.loadAndPlay()
+                    } else {
+                        self.errorMessage = "الآية غير متوفرة لهذا القارئ"
+                    }
                     return
                 }
 
@@ -527,6 +572,14 @@ extension AudioEngine: AVAudioPlayerDelegate {
     }
 
     private func autoAdvance() {
+        // Bismillah finished — load the actual verse 1
+        if let pending = pendingVerseAfterBismillah {
+            pendingVerseAfterBismillah = nil
+            currentVerseNumber = pending
+            loadAndPlay()
+            return
+        }
+
         if repeatVerseEnabled {
             if verseRepeatCount == 0 || currentVerseIteration + 1 < verseRepeatCount {
                 currentVerseIteration += 1
@@ -542,9 +595,7 @@ extension AudioEngine: AVAudioPlayerDelegate {
                 advanceToNextVerse()
             } else if rangeRepeatCount == 0 || currentRangeIteration + 1 < rangeRepeatCount {
                 currentRangeIteration += 1
-                currentSurahNumber = repeatFromSurah
-                currentVerseNumber = repeatFromVerse
-                loadAndPlay()
+                beginPlayback(surah: repeatFromSurah, verse: repeatFromVerse)
             } else {
                 currentRangeIteration = 0
                 stop()
@@ -559,10 +610,11 @@ extension AudioEngine: AVAudioPlayerDelegate {
         if currentVerseNumber < total {
             currentVerseNumber += 1
             loadAndPlay()
+        } else if playSurahMode {
+            // Surah finished — stop and leave mode active for next play
+            stop()
         } else if currentSurahNumber < 114 {
-            currentSurahNumber += 1
-            currentVerseNumber = 1
-            loadAndPlay()
+            beginPlayback(surah: currentSurahNumber + 1, verse: 1)
         } else {
             stop()
         }

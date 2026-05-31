@@ -6,14 +6,6 @@
 import SwiftUI
 import Core
 
-// MARK: - DailyVerse
-
-struct DailyVerse {
-    let surah: Int
-    let verse: Int
-    let ref: String
-}
-
 // MARK: - TodayView
 
 struct TodayView: View {
@@ -42,41 +34,8 @@ struct TodayView: View {
         return fmt.string(from: now)
     }
 
-    private var verseOfDayIndex: Int { max(0, hijriDay - 1) % Self.verses.count }
-    private var verseOfDay: DailyVerse { Self.verses[verseOfDayIndex] }
-
-    static let verses: [DailyVerse] = [
-        DailyVerse(surah: 94,  verse: 6,   ref: "الشرح: ٦"),
-        DailyVerse(surah: 2,   verse: 153, ref: "البقرة: ١٥٣"),
-        DailyVerse(surah: 65,  verse: 3,   ref: "الطلاق: ٣"),
-        DailyVerse(surah: 3,   verse: 173, ref: "آل عمران: ١٧٣"),
-        DailyVerse(surah: 13,  verse: 28,  ref: "الرعد: ٢٨"),
-        DailyVerse(surah: 20,  verse: 114, ref: "طه: ١١٤"),
-        DailyVerse(surah: 12,  verse: 87,  ref: "يوسف: ٨٧"),
-        DailyVerse(surah: 24,  verse: 35,  ref: "النور: ٣٥"),
-        DailyVerse(surah: 2,   verse: 216, ref: "البقرة: ٢١٦"),
-        DailyVerse(surah: 2,   verse: 155, ref: "البقرة: ١٥٥"),
-        DailyVerse(surah: 9,   verse: 120, ref: "التوبة: ١٢٠"),
-        DailyVerse(surah: 11,  verse: 88,  ref: "هود: ٨٨"),
-        DailyVerse(surah: 20,  verse: 25,  ref: "طه: ٢٥-٢٦"),
-        DailyVerse(surah: 16,  verse: 128, ref: "النحل: ١٢٨"),
-        DailyVerse(surah: 94,  verse: 5,   ref: "الشرح: ٥"),
-        DailyVerse(surah: 2,   verse: 282, ref: "البقرة: ٢٨٢"),
-        DailyVerse(surah: 2,   verse: 201, ref: "البقرة: ٢٠١"),
-        DailyVerse(surah: 29,  verse: 45,  ref: "العنكبوت: ٤٥"),
-        DailyVerse(surah: 42,  verse: 19,  ref: "الشورى: ١٩"),
-        DailyVerse(surah: 4,   verse: 81,  ref: "النساء: ٨١"),
-        DailyVerse(surah: 12,  verse: 76,  ref: "يوسف: ٧٦"),
-        DailyVerse(surah: 11,  verse: 56,  ref: "هود: ٥٦"),
-        DailyVerse(surah: 112, verse: 1,   ref: "الإخلاص: ١"),
-        DailyVerse(surah: 67,  verse: 1,   ref: "الملك: ١"),
-        DailyVerse(surah: 3,   verse: 8,   ref: "آل عمران: ٨"),
-        DailyVerse(surah: 2,   verse: 286, ref: "البقرة: ٢٨٦"),
-        DailyVerse(surah: 62,  verse: 1,   ref: "الجمعة: ١"),
-        DailyVerse(surah: 4,   verse: 103, ref: "النساء: ١٠٣"),
-        DailyVerse(surah: 7,   verse: 205, ref: "الأعراف: ٢٠٥"),
-        DailyVerse(surah: 2,   verse: 127, ref: "البقرة: ١٢٧"),
-    ]
+    // Computed once per body evaluation — same verse for the whole day.
+    private var verseOfDay: DailyVerse { DailyVerseService.verseForToday() }
 
     var body: some View {
         NavigationStack {
@@ -92,7 +51,7 @@ struct TodayView: View {
                         }
                         Spacer()
                         Text("اليوم")
-                            .font(.system(size: 17, weight: .semibold))
+                            .customStyle(.kitab(size: 17, bold: true))
                             .customForeground(.onSurface)
                         Spacer()
                         Color.clear.frame(width: 30)
@@ -108,14 +67,21 @@ struct TodayView: View {
 
                     VStack(spacing: 12) {
                         Text("آية اليوم")
-                            .font(.system(size: 17, weight: .bold))
+                            .customStyle(.kitab(size: 17, bold: true))
                             .customForeground(.onSurface)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal, 20)
 
-                        NavigationLink(value: verseOfDayIndex) {
+                        NavigationLink {
+                            TafsirView(
+                                surahNumber: verseOfDay.surah,
+                                verseNumber: verseOfDay.verse,
+                                ref: verseOfDay.ref,
+                                onDismissSheet: { dismiss() }
+                            )
+                        } label: {
                             VStack(spacing: 0) {
-                                VerseSnippetView(surahNumber: verseOfDay.surah, verseNumber: verseOfDay.verse)
+                                verseCard(verseOfDay)
                                     .padding(.horizontal, 16)
                                     .padding(.top, 16)
                                     .padding(.bottom, 12)
@@ -128,7 +94,7 @@ struct TodayView: View {
                                         .foregroundColor(.secondary)
                                     Spacer()
                                     Text("التفسير")
-                                        .font(.system(size: 15, weight: .medium))
+                                        .customStyle(.kitab(size: 15))
                                         .foregroundColor(Color.playerControls)
                                 }
                                 .padding(.horizontal, 20)
@@ -146,16 +112,36 @@ struct TodayView: View {
             .background(Color.surfaceContainerLow.ignoresSafeArea())
             .environment(\.layoutDirection, .rightToLeft)
             .navigationBarHidden(true)
-            .navigationDestination(for: Int.self) { idx in
-                TafsirView(verses: Self.verses, startIndex: idx, onDismissSheet: { dismiss() })
-            }
         }
     }
+
+    // MARK: - Verse Card
+
+    private func verseCard(_ verse: DailyVerse) -> some View {
+        let text  = QuranTextService.shared.text(surah: verse.surah, verse: verse.verse) ?? ""
+        let glyph = QuranTextService.verseEndGlyph(for: verse.verse).map { " \($0)" } ?? ""
+        return VStack(alignment: .trailing, spacing: 10) {
+            Text(text + glyph)
+                .font(.custom("KFGQPCHafsSmart-Regular", size: 22))
+                .lineSpacing(10)
+                .multilineTextAlignment(.trailing)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .customForeground(.onSurface)
+
+            Text(verse.ref)
+                .customStyle(.kitab(size: 14))
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+        .environment(\.layoutDirection, .rightToLeft)
+    }
+
+    // MARK: - Date Card
 
     private func dateCard(label: String, day: Int) -> some View {
         VStack(spacing: 0) {
             Text(label)
-                .font(.custom("Kitab-Regular", size: 13))
+                .customStyle(.kitab(size: 13))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 7)
@@ -166,7 +152,7 @@ struct TodayView: View {
                     .font(.system(size: 52, weight: .ultraLight))
                     .foregroundColor(Color.playerControls.opacity(0.07))
                 Text(day.arabicNumerals)
-                    .font(.system(size: 36, weight: .bold))
+                    .customStyle(.kitab(size: 36, bold: true))
                     .customForeground(.onSurface)
             }
             .frame(maxWidth: .infinity)

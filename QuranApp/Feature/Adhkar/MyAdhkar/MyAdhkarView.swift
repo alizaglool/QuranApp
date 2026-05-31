@@ -201,8 +201,7 @@ extension MyAdhkarView {
 
             // Dhikr text
             Text(dhikr.textAr)
-                .font(.custom("HafsSmart_08_fixed", size: 26))
-                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.quranPageFixed(size: 26))                .foregroundColor(ColorStyle.onSurface.color)
                 .multilineTextAlignment(.center)
                 .lineSpacing(10)
                 .fixedSize(horizontal: false, vertical: true)
@@ -215,8 +214,7 @@ extension MyAdhkarView {
             // Counter display
             VStack(spacing: 8) {
                 Text("\(tapCount)")
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .customForeground(.primary)
+                    .customStyle(.kitab(size: 52, bold: true))                    .customForeground(.primary)
                     .contentTransition(.numericText())
                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: tapCount)
 
@@ -322,8 +320,7 @@ extension MyAdhkarView {
                     .padding(.top, 8)
 
                 TextEditor(text: $newDhikrText)
-                    .font(.custom("HafsSmart_08_fixed", size: 20))
-                    .multilineTextAlignment(.center)
+                    .customStyle(.quranPageFixed(size: 20))                    .multilineTextAlignment(.center)
                     .frame(minHeight: 120)
                     .padding(12)
                     .background(Color.surfaceContainerLow)
@@ -398,14 +395,12 @@ struct MyAdhkarCard: View {
                         .fill(ColorStyle.primary.color.opacity(colorScheme == .dark ? 0.15 : 0.08))
                         .frame(width: 36, height: 36)
                     Text("\(index)")
-                        .font(.system(size: 13, weight: .semibold))
-                        .customForeground(.primary)
+                        .customStyle(.kitab(size: 13, bold: true))                        .customForeground(.primary)
                 }
 
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(dhikr.textAr)
-                        .font(.custom("HafsSmart_08_fixed", size: 17))
-                        .foregroundColor(ColorStyle.onSurface.color)
+                        .customStyle(.quranPageFixed(size: 17))                        .foregroundColor(ColorStyle.onSurface.color)
                         .multilineTextAlignment(.trailing)
                         .lineLimit(2)
                         .frame(maxWidth: .infinity, alignment: .trailing)

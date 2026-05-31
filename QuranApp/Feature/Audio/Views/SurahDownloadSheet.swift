@@ -66,8 +66,7 @@ struct SurahDownloadSheet: View {
             Spacer()
 
             Text(reciter.arabicName)
-                .font(.system(size: 17, weight: .semibold))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
 
             Spacer()
 
@@ -75,8 +74,7 @@ struct SurahDownloadSheet: View {
                 Button(action: onBack) {
                     HStack(spacing: 4) {
                         Text(AppLocalizedKeys.reciterSelection.value)
-                            .font(.system(size: 14))
-                            .foregroundColor(ColorStyle.primary.color)
+                            .customStyle(.kitab(size: 14))                            .foregroundColor(ColorStyle.primary.color)
                         Image(systemName: "chevron.forward")
                             .font(.system(size: 12))
                             .foregroundColor(ColorStyle.primary.color)
@@ -128,8 +126,7 @@ struct SurahDownloadSheet: View {
                 Spacer()
 
                 Text(group.name)
-                    .font(.system(size: 17, weight: .bold))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 17, bold: true))                    .customForeground(.onSurface)
             }
 
             VStack(spacing: 0) {
@@ -164,11 +161,10 @@ struct SurahDownloadSheet: View {
                         .foregroundColor(ColorStyle.primary.color)
                 }
             }
-            .font(.system(size: 22))
-            .frame(width: 32, height: 32)
+            .customStyle(.kitab(size: 22))            .frame(width: 32, height: 32)
 
             Text("\(arabicIndic(surah.id)). \(surah.arabicName)")
-                .font(.custom("Kitab-Regular", size: 16))
+                .customStyle(.kitab(size: 16))
                 .customForeground(.onSurface)
                 .id(refreshID)
 
@@ -196,8 +192,7 @@ struct SurahDownloadSheet: View {
                         }
                     }) {
                         Text(arabicIndic(juz))
-                            .font(.system(size: 9, weight: .medium))
-                            .foregroundColor(juzGroups.contains { $0.juz == juz }
+                            .customStyle(.kitab(size: 9))                            .foregroundColor(juzGroups.contains { $0.juz == juz }
                                              ? ColorStyle.primary.color : .secondary)
                             .frame(width: 20, height: 16)
                     }

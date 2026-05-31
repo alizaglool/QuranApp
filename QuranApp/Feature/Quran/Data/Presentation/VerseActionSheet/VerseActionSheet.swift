@@ -22,6 +22,7 @@ struct VerseActionSheet: View {
     @ObservedObject private var storage = StorageManager.shared
     @ObservedObject private var audio = AudioEngine.shared
     @State private var showAllBookmarks = false
+    @State private var showTafsir = false
 
     // MARK: - Inline bookmark "default" derivation
 
@@ -111,6 +112,16 @@ struct VerseActionSheet: View {
             .presentationDetents([.fraction(0.45), .medium])
             .presentationDragIndicator(.visible)
         }
+        .sheet(isPresented: $showTafsir) {
+            TafsirView(
+                surahNumber: surahNumber,
+                verseNumber: verseNumber,
+                ref: "\(surahName): \(verseNumber)",
+                onDismissSheet: { showTafsir = false }
+            )
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: - Header
@@ -121,15 +132,13 @@ struct VerseActionSheet: View {
         HStack {
             Button(action: { print("📋 Edit tapped") }) {
                 Text(AppLocalizedKeys.edit.value)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(ColorStyle.primary.color)
+                    .customStyle(.kitab(size: 15))                    .foregroundColor(ColorStyle.primary.color)
             }
 
             Spacer()
 
             Text("\(surahName): \(verseNumber)")
-                .font(.system(size: 17, weight: .semibold))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
 
             Spacer()
 
@@ -147,8 +156,7 @@ struct VerseActionSheet: View {
 
     private func sectionTitle(_ title: String) -> some View {
         Text(title)
-            .font(.system(size: 15, weight: .bold))
-            .customForeground(.onSurface)
+            .customStyle(.kitab(size: 15, bold: true))            .customForeground(.onSurface)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -190,12 +198,11 @@ struct VerseActionSheet: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(inlineLabel)
-                        .font(.system(size: 14, weight: .medium))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 14))                        .customForeground(.onSurface)
 
                     if let subtitle = inlineSubtitle {
                         Text(subtitle)
-                            .font(.custom("Kitab-Regular", size: 11))
+                            .customStyle(.kitab(size: 11))
                             .foregroundColor(.secondary)
                             .lineLimit(1)
                     }
@@ -237,7 +244,7 @@ struct VerseActionSheet: View {
                 if audio.isPlaying && isCurrentVerse {
                     audio.pause()
                 } else {
-                    audio.play(surahNumber: surahNumber, verseNumber: verseNumber)
+                    audio.playFrom(surahNumber: surahNumber, verseNumber: verseNumber)
                 }
                 dismiss()
             }
@@ -245,35 +252,36 @@ struct VerseActionSheet: View {
     }
 
     // MARK: - Tafsir Section
-    // Two separate cards: tafsir text card + library card below
 
     private var tafsirSection: some View {
-        VStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(AppLocalizedKeys.tafsirComingSoon.value)
-                    .font(.custom("Kitab-Regular", size: 16))
-                    .customForeground(.onSurface)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .multilineTextAlignment(.leading)
+        Button {
+            showTafsir = true
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: "text.book.closed.fill")
+                    .font(.system(size: 22))
+                    .foregroundColor(ColorStyle.primary.color)
+                    .frame(width: 44, height: 44)
+                    .background(ColorStyle.primary.color.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
 
-                Button(action: { print("📋 Tafsir summary tapped") }) {
-                    Text(AppLocalizedKeys.tafsirSummary.value)
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(ColorStyle.primary.color)
+                VStack(alignment: .trailing, spacing: 3) {
+                    Text(AppLocalizedKeys.tafsir.value)
+                        .customStyle(.kitab(size: 16, bold: true))
+                        .customForeground(.onSurface)
+                    Text("٦ تفاسير • ترجمات")
+                        .customStyle(.kitab(size: 13))
+                        .customForeground(.subtitle)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.surfaceContainerLow)
-            )
+                .frame(maxWidth: .infinity, alignment: .trailing)
 
-            // Card 2 — library navigation card
-            actionCard(icon: "books.vertical.fill", title: AppLocalizedKeys.library.value, hasChevron: true) {
-                print("📋 Library tapped")
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(Color.outlineVariant)
             }
+            .padding(14)
+            .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 14))
         }
+        .buttonStyle(.plain)
     }
 
     // MARK: - Sharing Buttons
@@ -354,8 +362,7 @@ struct VerseActionSheet: View {
                     .foregroundColor(iconColor ?? ColorStyle.primary.color)
 
                 Text(title)
-                    .font(.system(size: 14, weight: .medium))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 14))                    .customForeground(.onSurface)
 
                 if hasChevron {
                     Spacer()

@@ -75,14 +75,12 @@ struct ReciterSelectionSheet: View {
             Spacer()
 
             Text(AppLocalizedKeys.reciterSelection.value)
-                .font(.system(size: 17, weight: .semibold))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
 
             Spacer()
 
             Button(AppLocalizedKeys.edit.value) {}
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(ColorStyle.primary.color)
+                .customStyle(.kitab(size: 16))                .foregroundColor(ColorStyle.primary.color)
                 .frame(minWidth: 30)
         }
         .padding(.horizontal, 16)
@@ -99,8 +97,7 @@ struct ReciterSelectionSheet: View {
                 .foregroundColor(.secondary)
 
             TextField(AppLocalizedKeys.search.value, text: $searchText)
-                .font(.system(size: 15))
-                .environment(\.layoutDirection, .rightToLeft)
+                .customStyle(.kitab(size: 15))                .environment(\.layoutDirection, .rightToLeft)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
@@ -146,11 +143,10 @@ struct ReciterSelectionSheet: View {
             // Name + subtitle — right-aligned
             VStack(alignment: .trailing, spacing: 2) {
                 Text("المختصر الصوتي")
-                    .font(.custom("Kitab-Regular", size: 16))
+                    .customStyle(.kitab(size: 16))
                     .customForeground(.onSurface)
                 Text("عبدالله الأسمري وصابر عبدالحكم")
-                    .font(.system(size: 12))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
             }
         }
         .padding(.horizontal, 12)
@@ -165,8 +161,7 @@ struct ReciterSelectionSheet: View {
 
             if filteredReciters.isEmpty {
                 Text(AppLocalizedKeys.noResults.value)
-                    .font(.system(size: 15))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 15))                    .customForeground(.subtitle)
                     .frame(maxWidth: .infinity, alignment: .center)
                     .padding(.vertical, 24)
             } else {
@@ -221,7 +216,7 @@ struct ReciterSelectionSheet: View {
             // Reciter name — right-aligned
             VStack(alignment: .trailing, spacing: 2) {
                 Text(reciter.arabicName)
-                    .font(.custom("Kitab-Regular", size: 16))
+                    .customStyle(.kitab(size: 16))
                     .customForeground(isSelected ? .primary : .onSurface)
                     .fontWeight(isSelected ? .semibold : .regular)
             }
@@ -241,8 +236,7 @@ struct ReciterSelectionSheet: View {
         HStack {
             Spacer()
             Text(title)
-                .font(.system(size: 17, weight: .bold))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
         }
     }
 }

@@ -286,11 +286,11 @@ struct QuranPageView: View {
     private var pageTopBar: some View {
         HStack {
             Text("الجزء \(pageJuz.arabicNumerals)")
-                .font(.custom("Kitab-Regular", size: 17))
+                .customStyle(.kitab(size: 17))
                 .foregroundColor(textColor.opacity(0.55))
             Spacer()
             Text(pageSurahName)
-                .font(.custom("Kitab-Regular", size: 17))
+                .customStyle(.kitab(size: 17))
                 .foregroundColor(textColor.opacity(0.55))
         }
         .padding(.horizontal, 16)
@@ -474,7 +474,7 @@ private struct OrnamentalPageBadge: View {
             }
 
             Text(text)
-                .font(.custom("Kitab-Regular", size: 15))
+                .customStyle(.kitab(size: 15))
                 .foregroundColor(labelColor)
         }
         .frame(width: 44, height: 26)

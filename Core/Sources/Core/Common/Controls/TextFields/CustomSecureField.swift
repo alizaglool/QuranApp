@@ -199,8 +199,7 @@ struct TitledSecureFieldTest: View {
         ScrollView {
             VStack(spacing: 20) {
                 Text("CustomSecureField Border States")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .customStyle(.heading2)                    .fontWeight(.bold)
                     .padding(.top)
                 
                 // Empty field (default border)

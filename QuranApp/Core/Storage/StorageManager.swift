@@ -18,6 +18,7 @@ final class StorageManager: ObservableObject {
     let context: ModelContext
 
     @Published private(set) var bookmarksRevision: Int = 0
+    @Published private(set) var settingsRevision: Int = 0
     
     private init() {
         let schema = Schema([
@@ -88,6 +89,7 @@ final class StorageManager: ObservableObject {
         guard let settings = getSettings() else { return }
         update(settings)
         try? context.save()
+        settingsRevision &+= 1
     }
     
     // MARK: - Reading Progress

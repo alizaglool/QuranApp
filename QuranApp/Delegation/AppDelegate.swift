@@ -12,7 +12,7 @@ import Core
 class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        FontsManager.registerFonts()
         return true
     }
 

@@ -25,7 +25,7 @@ public struct CustomMenuPicker<Item: CustomMenuPickerItem>: View {
                 ForEach(items) { item in
                     
                     Text(item.displayName)
-                        .customFont(.buttonText)
+                        .customStyle(.buttonText)
                         .tag(item)
                 }
             }

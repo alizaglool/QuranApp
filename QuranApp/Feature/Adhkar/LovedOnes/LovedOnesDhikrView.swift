@@ -85,8 +85,7 @@ extension LovedOnesDhikrView {
                 }
 
                 TextField("اكتب الاسم هنا…", text: $personName)
-                    .font(.custom("HafsSmart_08_fixed", size: 18))
-                    .multilineTextAlignment(.trailing)
+                    .customStyle(.quranPageFixed(size: 18))                    .multilineTextAlignment(.trailing)
                     .environment(\.layoutDirection, .rightToLeft)
                     .focused($isNameFocused)
 
@@ -147,8 +146,7 @@ extension LovedOnesDhikrView {
     private func dhikrCard(_ dhikr: Dhikr) -> some View {
         VStack(spacing: 14) {
             Text(substitute(dhikr.textAr))
-                .font(.custom("HafsSmart_08_fixed", size: 24))
-                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.quranPageFixed(size: 24))                .foregroundColor(ColorStyle.onSurface.color)
                 .multilineTextAlignment(.center)
                 .lineSpacing(10)
                 .environment(\.layoutDirection, .rightToLeft)

@@ -76,9 +76,9 @@ let package = Package(
                 shimmerDependency
             ],
             resources: [
-                .process("Resources/Colors.xcassets"),
-                .process("Resources/DINNextLTArabic.xcassets"),
-                .process("Resources/Icons.xcassets"),
+                .process("Resources/Fonts"),
+                .process("Resources/CoreColors.xcassets"),
+                .process("Resources/CoreAssets.xcassets"),
                 .process("Resources/Countries.json"),
                 .process("Resources/Flags.xcassets")
             ],

@@ -10,4 +10,5 @@ import Foundation
 public enum SupportedFonts: String {
     case notoSerif = "NotoSerif"
     case manrope = "Manrope"
+    case kitab = "Kitab"
 }

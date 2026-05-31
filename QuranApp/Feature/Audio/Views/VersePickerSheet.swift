@@ -28,8 +28,7 @@ struct VersePickerSheet: View {
     private var header: some View {
         ZStack {
             Text(AppLocalizedKeys.chooseVerse.value)
-                .font(.system(size: 17, weight: .semibold))
-                .foregroundColor(.primary)
+                .customStyle(.kitab(size: 17, bold: true))                .foregroundColor(.primary)
                 .frame(maxWidth: .infinity, alignment: .center)
 
             // In RTL body env: Spacer first=right, Button last=LEFT ✓
@@ -39,8 +38,7 @@ struct VersePickerSheet: View {
                     HStack(spacing: 2) {
                         Text(parentTitle)
                         Image(systemName: "chevron.forward")
-                            .font(.system(size: 12, weight: .semibold))
-                    }
+                            .customStyle(.kitab(size: 12, bold: true))                    }
                     .font(.system(size: 15, weight: .medium))
                     .foregroundColor(ColorStyle.primary.color)
                 }
@@ -88,8 +86,7 @@ struct VersePickerSheet: View {
 
     private func sectionHeader(_ name: String) -> some View {
         Text(name)
-            .font(.system(size: 12, weight: .medium))
-            .foregroundColor(.secondary)
+            .customStyle(.kitab(size: 12))            .foregroundColor(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, 16)
             .padding(.vertical, 6)
@@ -127,13 +124,12 @@ struct VersePickerSheet: View {
                 // ── Reference + text (right side in RTL) ─────────────────
                 VStack(alignment: .trailing, spacing: 4) {
                     Text("\(surahName(surahNum)): \(arabicIndic(verseNum))")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(isSelected ? ColorStyle.primary.color : .primary)
+                        .customStyle(.kitab(size: 15, bold: true))                        .foregroundColor(isSelected ? ColorStyle.primary.color : .primary)
                         .frame(maxWidth: .infinity, alignment: .trailing)
 
                     if let text = verseText {
                         Text(text)
-                            .font(.custom("Kitab-Regular", size: 14))
+                            .customStyle(.kitab(size: 14))
                             .foregroundColor(Color(.systemGray))
                             .lineLimit(2)
                             .multilineTextAlignment(.trailing)

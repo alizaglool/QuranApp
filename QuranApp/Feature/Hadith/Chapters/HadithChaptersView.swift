@@ -78,7 +78,7 @@ extension HadithChaptersView {
             Spacer()
 
             Text(formatNumber(viewModel.book.hadithCount))
-                .customFont(.caption1)
+                .customStyle(.caption1)
                 .foregroundColor(accentColor)
                 .padding(.horizontal, .xSm)
                 .padding(.vertical, .xxSm)
@@ -125,7 +125,7 @@ struct HadithChapterRow: View {
         Button(action: action) {
             HStack(spacing: .md) {
                 Text(formatNumber(chapter.number))
-                    .customFont(.caption1)
+                    .customStyle(.caption1)
                     .foregroundColor(accentColor)
                     .frame(width: 32, height: 32)
                     .background(accentColor.opacity(0.10))

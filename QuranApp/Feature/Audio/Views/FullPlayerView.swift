@@ -51,7 +51,7 @@ struct FullPlayerView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("تلاوة")
-                        .font(.custom("Kitab-Bold", size: 16))
+                        .customStyle(.kitab(size: 16, bold: true))
                         .customForeground(.onSurface)
                 }
                 ToolbarItem(placement: .topBarLeading) {
@@ -87,13 +87,12 @@ struct FullPlayerView: View {
 
             VStack(spacing: 4) {
                 Text(audio.currentSurahArabicName)
-                    .font(.custom("Kitab-Bold", size: 22))
+                    .customStyle(.kitab(size: 22, bold: true))
                     .customForeground(.onSurface)
                     .multilineTextAlignment(.center)
 
                 Text("\(audio.currentSurahNumber)")
-                    .font(.system(size: 14))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 14))                    .customForeground(.subtitle)
             }
         }
         .shadow(color: Color.primaryColor.opacity(0.2), radius: 16, x: 0, y: 8)
@@ -104,16 +103,15 @@ struct FullPlayerView: View {
     private var surahInfoSection: some View {
         VStack(spacing: 6) {
             Text(audio.currentSurahArabicName)
-                .font(.custom("Kitab-Bold", size: 26))
+                .customStyle(.kitab(size: 26, bold: true))
                 .customForeground(.onSurface)
 
             Text("سورة \(audio.currentSurahNumber) • آية \(audio.currentVerseNumber)")
-                .font(.custom("Kitab-Regular", size: 15))
+                .customStyle(.kitab(size: 15))
                 .customForeground(.subtitle)
 
             Text(audio.currentReciter.arabicName)
-                .font(.system(size: 13))
-                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 13))                .customForeground(.subtitle)
         }
         .multilineTextAlignment(.center)
         .environment(\.layoutDirection, .rightToLeft)
@@ -129,14 +127,12 @@ struct FullPlayerView: View {
 
             HStack {
                 Text(formatTime(audio.verseElapsed))
-                    .font(.system(size: 11, design: .monospaced))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 11))                    .customForeground(.subtitle)
 
                 Spacer()
 
                 Text(formatTime(audio.verseDuration))
-                    .font(.system(size: 11, design: .monospaced))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 11))                    .customForeground(.subtitle)
             }
         }
     }
@@ -202,8 +198,7 @@ struct FullPlayerView: View {
                 }
             } label: {
                 Text(audio.currentSpeedLabel)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(showSpeedPicker ? Color.primaryColor : Color.subtitleText)
+                    .customStyle(.kitab(size: 13, bold: true))                    .foregroundStyle(showSpeedPicker ? Color.primaryColor : Color.subtitleText)
                     .frame(width: 38, height: 28)
                     .background(
                         RoundedRectangle(cornerRadius: 6)
@@ -227,8 +222,7 @@ struct FullPlayerView: View {
                 } label: {
                     let isSelected = audio.playbackSpeed == speed
                     Text(formatSpeed(speed))
-                        .font(.system(size: 13, weight: isSelected ? .bold : .regular))
-                        .foregroundStyle(isSelected ? Color.white : Color.onSurface)
+                        .customStyle(.kitab(size: 13))                        .foregroundStyle(isSelected ? Color.white : Color.onSurface)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
                         .background(
@@ -247,10 +241,9 @@ struct FullPlayerView: View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
                 Text("القارئ")
-                    .font(.system(size: 12))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
                 Text(audio.currentReciter.arabicName)
-                    .font(.custom("Kitab-Bold", size: 15))
+                    .customStyle(.kitab(size: 15, bold: true))
                     .customForeground(.onSurface)
             }
             Spacer()
@@ -258,8 +251,7 @@ struct FullPlayerView: View {
                 showReciterPicker = true
             } label: {
                 Text("تغيير")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(Color.primaryColor)
+                    .customStyle(.kitab(size: 14))                    .foregroundStyle(Color.primaryColor)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 8)
                     .background(

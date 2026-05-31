@@ -18,14 +18,20 @@ final class AppSettings {
     var themeMode: String
     var isOnboardingCompleted: Bool
     var createdAt: Date
-    
+    /// "mushaf" | "text" | tafsir-book-id (e.g. "ar-saadi")
+    var mushafType: String
+    /// "horizontal" | "vertical"
+    var scrollDirection: String
+
     init(
         selectedLanguage: String = "ar",
         selectedReciterId: String = "afasy",
         selectedReciterName: String = "مشاري العفاسي",
         fontSize: Double = 1.0,
         themeMode: String = "system",
-        isOnboardingCompleted: Bool = false
+        isOnboardingCompleted: Bool = false,
+        mushafType: String = "mushaf",
+        scrollDirection: String = "horizontal"
     ) {
         self.selectedLanguage = selectedLanguage
         self.selectedReciterId = selectedReciterId
@@ -34,5 +40,7 @@ final class AppSettings {
         self.themeMode = themeMode
         self.isOnboardingCompleted = isOnboardingCompleted
         self.createdAt = Date()
+        self.mushafType = mushafType
+        self.scrollDirection = scrollDirection
     }
 }

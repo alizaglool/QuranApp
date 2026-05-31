@@ -61,16 +61,14 @@ struct AllBookmarksView: View {
                         .foregroundColor(ColorStyle.primary.color)
 
                     Text("\(viewModel.surahName): \(viewModel.verseNumber)")
-                        .font(.system(size: 15, weight: .medium))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customStyle(.kitab(size: 15))                        .foregroundColor(ColorStyle.primary.color)
                 }
             }
 
             Spacer()
 
             Text(AppLocalizedKeys.bookmarks.value)
-                .font(.system(size: 17, weight: .semibold))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
 
             Spacer()
 
@@ -143,8 +141,7 @@ struct AllBookmarksView: View {
                     .frame(width: 24, height: 24)
 
                 Text(bookmark.titleKey.value)
-                    .font(.system(size: 16, weight: active ? .semibold : .medium))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 16))                    .customForeground(.onSurface)
 
                 Spacer(minLength: 0)
 

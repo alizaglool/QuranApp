@@ -95,12 +95,11 @@ private struct ReciterRow: View {
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(reciter.arabicName)
-                        .font(.custom("Kitab-Bold", size: 16))
+                        .customStyle(.kitab(size: 16, bold: true))
                         .customForeground(.onSurface)
 
                     Text(reciter.englishName)
-                        .font(.system(size: 12))
-                        .customForeground(.subtitle)
+                        .customStyle(.kitab(size: 12))                        .customForeground(.subtitle)
                 }
 
                 Spacer()
@@ -135,13 +134,11 @@ private struct ReciterRow: View {
                         .font(.system(size: 16))
                         .foregroundStyle(Color.primaryColor)
                     Text("مختار")
-                        .font(.system(size: 12))
-                        .customForeground(.subtitle)
+                        .customStyle(.kitab(size: 12))                        .customForeground(.subtitle)
                 }
             } else {
                 Text("محمّل")
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color.primaryColor)
+                    .customStyle(.kitab(size: 12))                    .foregroundStyle(Color.primaryColor)
                     .padding(.horizontal, 10)
                     .padding(.vertical, 4)
                     .background(
@@ -151,8 +148,7 @@ private struct ReciterRow: View {
         } else if isDownloading, let progress = downloadProgress {
             VStack(alignment: .trailing, spacing: 2) {
                 Text("\(Int(progress.fractionCompleted * 100))%")
-                    .font(.system(size: 12, weight: .medium))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
 
                 Button {
                     downloads.cancelDownload(for: reciter.id)
@@ -172,8 +168,7 @@ private struct ReciterRow: View {
                     Image(systemName: "icloud.and.arrow.down")
                         .font(.system(size: 14))
                     Text("~\(reciter.estimatedSizeMB) MB")
-                        .font(.system(size: 12))
-                }
+                        .customStyle(.kitab(size: 12))                }
                 .foregroundStyle(Color.primaryColor)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)

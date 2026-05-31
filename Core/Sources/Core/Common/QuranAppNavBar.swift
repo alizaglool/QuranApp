@@ -60,8 +60,7 @@ public struct QuranAppNavBar: View {
             
             if count > 0 {
                 Text("\(count)")
-                    .font(.caption2)
-                    .foregroundColor(.white)
+                    .customStyle(.caption2)                    .foregroundColor(.white)
                     .padding(4)
                     .background(Circle().fill(Color.red))
                     .offset(x: 8, y: -8)

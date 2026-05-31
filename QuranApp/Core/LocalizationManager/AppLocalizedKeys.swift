@@ -120,6 +120,54 @@ enum AppLocalizedKeys: String {
     case repetitions
     case chooseVerse
 
+    // MARK: - Quran Page Settings Sheet
+    case pageSettings
+    case mushafOption
+    case mushafMadinahSubtitle
+    case textMushaf
+    case textMushafSubtitle
+    case chooseBook
+    case chooseBookTitle
+    case scrollDirection
+    case horizontal
+    case vertical
+    case theme
+    case classicTheme
+    case coloredTheme
+    case systemAppearance
+    case lightAppearance
+    case darkAppearance
+    case mushafSettings
+    case appearance
+    case arabicTafsirSection
+    case translationsSection
+
+    // MARK: - Surah List Sheet
+    case surahIndex
+    case surahs
+    case quarters
+    case pagePrefix
+    case versesCount
+    case juz1, juz2, juz3, juz4, juz5
+    case juz6, juz7, juz8, juz9, juz10
+    case juz11, juz12, juz13, juz14, juz15
+    case juz16, juz17, juz18, juz19, juz20
+    case juz21, juz22, juz23, juz24, juz25
+    case juz26, juz27, juz28, juz29, juz30
+
+    static func juzKey(_ number: Int) -> AppLocalizedKeys {
+        let keys: [AppLocalizedKeys] = [
+            .juz1, .juz2, .juz3, .juz4, .juz5,
+            .juz6, .juz7, .juz8, .juz9, .juz10,
+            .juz11, .juz12, .juz13, .juz14, .juz15,
+            .juz16, .juz17, .juz18, .juz19, .juz20,
+            .juz21, .juz22, .juz23, .juz24, .juz25,
+            .juz26, .juz27, .juz28, .juz29, .juz30
+        ]
+        guard number >= 1, number <= 30 else { return .juz1 }
+        return keys[number - 1]
+    }
+
     var value: String {
         return self.rawValue.localized
     }

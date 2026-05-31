@@ -192,8 +192,7 @@ struct CustomTextFieldTest: View {
         ScrollView {
             VStack(spacing: 20) {
                 Text("CustomTextField with Right Icon")
-                    .font(.title2)
-                    .fontWeight(.bold)
+                    .customStyle(.heading2)                    .fontWeight(.bold)
                     .padding(.top)
                 
                 // Default field without icons

@@ -74,7 +74,7 @@ struct HadithReadingView: View {
             HadithNavButton(icon: "arrow.backward") { viewModel.goBack() }
             Spacer()
             Text(viewModel.book.title)
-                .customFont(.buttonText)
+                .customStyle(.buttonText)
                 .customForeground(.hadithNav)
                 .lineLimit(1)
             Spacer()
@@ -110,7 +110,7 @@ struct HadithReadingView: View {
     private func breadcrumbChip(_ text: String, active: Bool) -> some View {
         VStack(alignment: .leading, spacing: .xxSm - 1) {
             Text(text.uppercased())
-                .customFont(.caption2)
+                .customStyle(.caption2)
                 .tracking(1.0)
                 .foregroundColor(active ? Color.hadithNav : Color.hadithSecondary)
                 .lineLimit(2)
@@ -124,8 +124,7 @@ struct HadithReadingView: View {
 
     private var breadcrumbDot: some View {
         Text("•")
-            .font(.system(size: 8))
-            .foregroundColor(Color.hadithMuted)
+            .customStyle(.kitab(size: 8))            .foregroundColor(Color.hadithMuted)
     }
 
     // MARK: Hadith Pager
@@ -202,13 +201,13 @@ struct HadithReadingView: View {
                 }
             VStack(spacing: .md + 2) {
                 Text(AppLocalizedKeys.jumpToHadith.value)
-                    .customFont(.buttonText)
+                    .customStyle(.buttonText)
                     .foregroundColor(.white)
                 HStack(spacing: .sm) {
                     TextField("", text: $viewModel.jumpInput)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.center)
-                        .customFont(.bodyMedium)
+                        .customStyle(.bodyMedium)
                         .foregroundColor(.white)
                         .frame(width: 110, height: 50)
                         .background(Color.hadithCard)
@@ -219,7 +218,7 @@ struct HadithReadingView: View {
                         viewModel.jumpInput = ""
                     } label: {
                         Text(AppLocalizedKeys.go.value)
-                            .customFont(.buttonText)
+                            .customStyle(.buttonText)
                             .foregroundColor(Color.hadithCard)
                             .frame(width: 80, height: 50)
                             .background(Color.hadithGold)
@@ -247,7 +246,7 @@ struct HadithPageContent: View {
             VStack(alignment: .leading, spacing: 0) {
                 if !hadith.narrator.isEmpty {
                     Text(hadith.narrator)
-                        .font(.custom("Kitab-Regular", size: 15))
+                        .customStyle(.kitab(size: 15))
                         .italic()
                         .customForeground(.hadithSecondary)
                         .lineSpacing(5)
@@ -276,7 +275,7 @@ struct HadithPageContent: View {
                 HStack {
                     Spacer()
                     Text(AppLocalizedKeys.originalText.value)
-                        .customFont(.caption2)
+                        .customStyle(.caption2)
                         .tracking(1.2)
                         .customForeground(.hadithMuted)
                         .padding(.horizontal, .xSm + 2)
@@ -290,8 +289,7 @@ struct HadithPageContent: View {
                 .padding(.trailing, .md)
 
                 Text(hadith.arabicText)
-                    .font(.custom("HafsSmart_08_fixed", size: 22))
-                    .customForeground(.hadithArabicText)
+                    .customStyle(.quranPageFixed(size: 22))                    .customForeground(.hadithArabicText)
                     .multilineTextAlignment(.center)
                     .lineSpacing(14)
                     .environment(\.layoutDirection, .rightToLeft)
@@ -311,7 +309,7 @@ struct HadithPageContent: View {
         if !rows.isEmpty {
             VStack(alignment: .leading, spacing: .sm) {
                 Text(AppLocalizedKeys.scholarlyDetails.value)
-                    .customFont(.caption2)
+                    .customStyle(.caption2)
                     .tracking(1.5)
                     .customForeground(.hadithMuted)
 
@@ -368,11 +366,11 @@ struct HadithScholarlyRow: View {
                     HadithIconBadge(icon: item.icon)
                     VStack(alignment: .leading, spacing: .xxSm - 2) {
                         Text(item.labelEn)
-                            .customFont(.caption2)
+                            .customStyle(.caption2)
                             .tracking(0.8)
                             .customForeground(.hadithMuted)
                         Text(item.labelAr)
-                            .customFont(.subheadline)
+                            .customStyle(.subheadline)
                             .customForeground(.hadithPrimary)
                     }
                     Spacer()
@@ -398,7 +396,7 @@ struct HadithScholarlyRow: View {
     private var scholarlyContentView: some View {
         if item.isRTL {
             Text(item.content)
-                .font(.custom("Kitab-Regular", size: 15))
+                .customStyle(.kitab(size: 15))
                 .foregroundColor(gradeAwareColor)
                 .lineSpacing(7)
                 .multilineTextAlignment(.trailing)
@@ -407,7 +405,7 @@ struct HadithScholarlyRow: View {
                 .padding(.md)
         } else {
             Text(item.content)
-                .customFont(.bodySmall)
+                .customStyle(.bodySmall)
                 .foregroundColor(gradeAwareColor)
                 .lineSpacing(6)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -447,14 +445,14 @@ struct HadithTOCSheet: View {
                 Button { onSelect(chapter) } label: {
                     HStack(spacing: .md) {
                         Text("\(chapter.number)")
-                            .customFont(.caption1)
+                            .customStyle(.caption1)
                             .foregroundColor(Color.primaryColor)
                             .frame(width: 32, height: 32)
                             .background(Color.primaryColor.opacity(0.10))
                             .cornerRadius(.cornerXSm)
 
                         Text(chapter.title)
-                            .customFont(
+                            .customStyle(
                                 chapter.id == currentChapterId ? .subheadline : .bodySmall
                             )
                             .foregroundColor(

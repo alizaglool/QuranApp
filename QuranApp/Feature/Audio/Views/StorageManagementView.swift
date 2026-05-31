@@ -29,7 +29,7 @@ struct StorageManagementView: View {
                     }
                 } header: {
                     Text("التلاوات المحمّلة")
-                        .font(.custom("Kitab-Bold", size: 14))
+                        .customStyle(.kitab(size: 14, bold: true))
                         .customForeground(.subtitle)
                         .textCase(nil)
                 } footer: {
@@ -39,8 +39,7 @@ struct StorageManagementView: View {
                         Text(String(format: "%.0f MB", downloads.totalStorageUsedMB()))
                             .fontWeight(.semibold)
                     }
-                    .font(.system(size: 13))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 13))                    .customForeground(.subtitle)
                     .padding(.top, 8)
                 }
             }
@@ -66,27 +65,24 @@ struct StorageManagementView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(reciter.arabicName)
-                    .font(.custom("Kitab-Bold", size: 15))
+                    .customStyle(.kitab(size: 15, bold: true))
                     .customForeground(.onSurface)
 
                 Text("\(reciter.downloadedSurahNumbers.count) سورة محمّلة")
-                    .font(.system(size: 12))
-                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
             }
 
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
                 Text(String(format: "%.0f MB", Double(reciter.totalSizeBytes) / 1_048_576))
-                    .font(.system(size: 13, weight: .medium))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 13))                    .customForeground(.onSurface)
 
                 Button(role: .destructive) {
                     showDeleteAlert = reciter.slug
                 } label: {
                     Text("حذف")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(Color.error)
+                        .customStyle(.kitab(size: 12))                        .foregroundStyle(Color.error)
                 }
                 .accessibilityLabel("حذف تلاوة \(reciter.arabicName)")
             }
@@ -103,12 +99,11 @@ struct StorageManagementView: View {
                 .padding(.top, 40)
 
             Text("لم تحمّل أي تلاوة بعد")
-                .font(.custom("Kitab-Bold", size: 18))
+                .customStyle(.kitab(size: 18, bold: true))
                 .customForeground(.onSurface)
 
             Text("اذهب إلى قسم التلاوة وحمّل قارئًا للاستماع بدون إنترنت")
-                .font(.system(size: 14))
-                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 14))                .customForeground(.subtitle)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
         }

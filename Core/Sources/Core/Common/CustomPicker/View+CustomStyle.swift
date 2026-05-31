@@ -14,7 +14,7 @@ struct CustomStyleModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .customFont(fontStyle)
+            .modifier(CustomFontModifier(fontStyle: fontStyle))
             .customForeground(colorStyle)
     }
 }

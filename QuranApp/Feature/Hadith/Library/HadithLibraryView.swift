@@ -108,12 +108,12 @@ extension HadithLibraryView {
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: .xSm) {
             Text(AppLocalizedKeys.theAuthenticTraditions.value.uppercased())
-                .customFont(.caption2)
+                .customStyle(.caption2)
                 .tracking(1.8)
                 .customForeground(.primary)
 
             Text(AppLocalizedKeys.exploringLegacy.value)
-                .font(.custom("Kitab-Bold", size: 28))
+                .customStyle(.kitab(size: 28, bold: true))
                 .customForeground(.onSurface)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -172,12 +172,12 @@ extension HadithLibraryView {
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundColor(Color.secondaryColor)
                     Text(AppLocalizedKeys.continueReading.value.uppercased())
-                        .customFont(.caption2)
+                        .customStyle(.caption2)
                         .tracking(1.4)
                         .foregroundColor(Color.secondaryColor)
                     Spacer()
                     Text("\(formatNumber(position.hadithIndex + 1)) OF \(formatNumber(position.bookHadithCount)) HADITH")
-                        .customFont(.caption2)
+                        .customStyle(.caption2)
                         .tracking(0.4)
                         .foregroundColor(Color.white.opacity(0.50))
                 }
@@ -186,11 +186,11 @@ extension HadithLibraryView {
                 HStack(alignment: .center, spacing: .sm) {
                     VStack(alignment: .leading, spacing: .xxSm) {
                         Text(position.bookTitle)
-                            .customFont(.headline)
+                            .customStyle(.headline)
                             .foregroundColor(.white)
                             .lineLimit(1)
                         Text(position.chapterTitle)
-                            .customFont(.caption1)
+                            .customStyle(.caption1)
                             .foregroundColor(Color.white.opacity(0.60))
                             .lineLimit(1)
                     }
@@ -199,7 +199,7 @@ extension HadithLibraryView {
                         Image(systemName: "play.fill")
                             .font(.system(size: 9, weight: .bold))
                         Text(AppLocalizedKeys.resume.value.uppercased())
-                            .customFont(.caption2)
+                            .customStyle(.caption2)
                             .tracking(0.6)
                     }
                     .foregroundColor(Color.primaryColor)
@@ -284,19 +284,19 @@ extension HadithLibraryView {
             VStack(alignment: .leading, spacing: .xSm) {
                 Spacer()
                 Text(book.title)
-                    .font(.custom("Kitab-Bold", size: 24))
+                    .customStyle(.kitab(size: 24, bold: true))
                     .foregroundColor(.white)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                 if !book.author.isEmpty {
                     Text(book.author)
-                        .customFont(.caption1)
+                        .customStyle(.caption1)
                         .foregroundColor(Color.white.opacity(0.55))
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Text(stats)
-                    .customFont(.caption2)
+                    .customStyle(.caption2)
                     .tracking(0.5)
                     .foregroundColor(Color.secondaryColor)
             }
@@ -336,20 +336,20 @@ extension HadithLibraryView {
             .padding(.bottom, .sm)
 
             Text(book.title)
-                .font(.custom("Kitab-Bold", size: 18))
+                .customStyle(.kitab(size: 18, bold: true))
                 .foregroundColor(titleColor)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.bottom, .xxSm + 1)
 
             Text("\(formatNumber(book.hadithCount)) HADITH")
-                .customFont(.caption2)
+                .customStyle(.caption2)
                 .tracking(0.5)
                 .foregroundColor(Color.secondaryColor)
 
             if !book.author.isEmpty {
                 Text(book.author.uppercased())
-                    .customFont(.caption2)
+                    .customStyle(.caption2)
                     .tracking(1.0)
                     .foregroundColor(metaColor)
                     .lineLimit(1)
@@ -436,13 +436,12 @@ extension HadithLibraryView {
     private var propheticQuoteSection: some View {
         VStack(spacing: 0) {
             Text("\u{201C}")
-                .font(.system(size: 28, weight: .semibold, design: .serif))
-                .foregroundColor(Color.secondaryColor.opacity(0.75))
+                .customStyle(.kitab(size: 28, bold: true))                .foregroundColor(Color.secondaryColor.opacity(0.75))
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, .xSm)
 
             Text(AppLocalizedKeys.hadithLibraryQuote.value)
-                .font(.custom("Kitab-Bold", size: 17))
+                .customStyle(.kitab(size: 17, bold: true))
                 .customForeground(.onSurface)
                 .multilineTextAlignment(.center)
                 .italic()
@@ -456,7 +455,7 @@ extension HadithLibraryView {
                 .padding(.bottom, .sm)
 
             Text(AppLocalizedKeys.propheticNarration.value.uppercased())
-                .customFont(.caption2)
+                .customStyle(.caption2)
                 .tracking(1.8)
                 .customForeground(.primary)
         }
@@ -529,7 +528,7 @@ struct HadithSearchRow: View {
                 VStack(alignment: .leading, spacing: .xSm) {
                     HStack {
                         Text(result.book.title)
-                            .customFont(.caption2)
+                            .customStyle(.caption2)
                             .foregroundColor(accentColor)
                             .lineLimit(1)
                         Spacer()
@@ -537,7 +536,7 @@ struct HadithSearchRow: View {
                             .customStyle(.caption2, .onSurfaceVariant)
                     }
                     Text(result.hadith.arabicText)
-                        .font(.custom("Kitab-Bold", size: 14))
+                        .customStyle(.kitab(size: 14, bold: true))
                         .customForeground(.onSurface)
                         .lineLimit(2)
                         .multilineTextAlignment(.trailing)

@@ -1,35 +1,54 @@
 //
 //  FontsManager.swift
-//
-//
-//  Created by Ali M. Zaghloul on 7/9/24.
+//  Core
 //
 
 import Foundation
 import CoreGraphics
 import CoreText
 
-struct FontsManager {
-    
+public struct FontsManager {
+
+    // UI fonts stored in Core/Resources/Fonts
+    private static let uiFontFileNames: [String] = [
+        "NotoSerif-Regular", "NotoSerif-Medium", "NotoSerif-SemiBold", "NotoSerif-Bold",
+        "Manrope-Regular",   "Manrope-Medium",   "Manrope-SemiBold",   "Manrope-Bold",
+        "ElMessiri-Regular", "ElMessiri-Medium", "ElMessiri-SemiBold", "ElMessiri-Bold",
+        "Kitab-Regular",     "Kitab-Bold"
+    ]
+
+    // Quran fonts stored in Core/Resources/Fonts
+    // UthmanTN1 Ver20, UthmanTN1B Ver20, UthmanicHafs1 Ver17 must be placed
+    // in Core/Sources/Core/Resources/Fonts/ before they register successfully.
+    private static let quranFontFileNames: [String] = [
+        "HafsSmart_08",
+        "HafsSmart_08_fixed",
+        "QuranNumbers",
+        "QuranTitles",
+        "UthmanTN1 Ver20",
+        "UthmanTN1B Ver20",
+        "UthmanicHafs1 Ver17"
+    ]
+
+    /// Call once from AppDelegate.didFinishLaunchingWithOptions.
     public static func registerFonts() {
-        
-        FontStyle.allCases.forEach {
-            registerFont(bundle: .module, fontName: $0.customFont.fontFullName, fontExtension: "otf")
+        (uiFontFileNames + quranFontFileNames).forEach {
+            register(bundle: .module, fileName: $0)
         }
     }
-    
-    fileprivate static func registerFont(bundle: Bundle,
-                                         fontName: String,
-                                         fontExtension: String) {
-        
-        guard let fontURL = bundle.url(forResource: fontName, withExtension: fontExtension),
-              let fontDataProvider = CGDataProvider(url: fontURL as CFURL),
-              let font = CGFont(fontDataProvider) else {
-            fatalError("Couldn't create font from filename: \(fontName) with extension \(fontExtension)")
+
+    private static func register(bundle: Bundle, fileName: String) {
+        guard let url = bundle.url(forResource: fileName, withExtension: "ttf") else {
+            // File not yet in bundle — skip silently (no crash).
+            return
         }
-        
+        guard
+            let provider = CGDataProvider(url: url as CFURL),
+            let cgFont  = CGFont(provider)
+        else { return }
+
         var error: Unmanaged<CFError>?
-        
-        CTFontManagerRegisterGraphicsFont(font, &error)
+        CTFontManagerRegisterGraphicsFont(cgFont, &error)
+        // Ignore CFError — duplicate registration is harmless.
     }
 }

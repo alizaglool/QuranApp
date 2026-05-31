@@ -11,13 +11,23 @@ import Core
 struct QuranPagerView: View {
     @StateObject private var viewModel: QuranViewModel
     @ObservedObject private var audio = AudioEngine.shared
+    @ObservedObject private var storage = StorageManager.shared
     @Environment(\.colorScheme) var colorScheme
 
     let onBack: (() -> Void)?
     @State private var showTodaySheet = false
+    @State private var showSurahList = false
+    @State private var showPageSettings = false
+    @State private var overlayHideTask: Task<Void, Never>? = nil
+
+    private static let overlayAutoHideDelay: TimeInterval = 4
 
     private var hijriDay: Int {
         Calendar(identifier: .islamicUmmAlQura).component(.day, from: Date())
+    }
+
+    private var scrollDirection: String {
+        storage.getSettings()?.scrollDirection ?? "horizontal"
     }
 
     init(startPage: Int? = nil, onBack: (() -> Void)? = nil) {
@@ -28,19 +38,12 @@ struct QuranPagerView: View {
 
     var body: some View {
         ZStack {
-            backgroundColor
-                .ignoresSafeArea()
+            backgroundColor.ignoresSafeArea()
 
-            TabView(selection: $viewModel.currentPage) {
-                ForEach(1...viewModel.totalPages, id: \.self) { page in
-                    QuranPageView(pageNumber: page, viewModel: viewModel)
-                        .tag(page)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .ignoresSafeArea(edges: .horizontal)
-            .onChange(of: viewModel.currentPage) { _, newPage in
-                viewModel.updatePageInfo(page: newPage)
+            if scrollDirection == "vertical" {
+                verticalPager
+            } else {
+                horizontalPager
             }
 
             if viewModel.showOverlay {
@@ -76,8 +79,32 @@ struct QuranPagerView: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
+        .sheet(isPresented: $showSurahList) {
+            SurahListSheet(
+                currentSurahNumber: viewModel.currentSurahNumber,
+                currentPage: viewModel.currentPage,
+                onSelectSurah: { surahID in
+                    withAnimation { viewModel.goToSurah(surahID) }
+                },
+                onSelectPage: { page in
+                    withAnimation { viewModel.goToPage(page) }
+                }
+            )
+            .presentationDetents([.large])
+            .presentationDragIndicator(.hidden)
+        }
+        .sheet(isPresented: $showPageSettings) {
+            QuranPageSettingsSheet()
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        }
         .onChange(of: viewModel.showOverlay) { _, showing in
             audio.quranOverlayActive = showing
+            if showing {
+                scheduleOverlayHide()
+            } else {
+                cancelOverlayHide()
+            }
         }
         .onChange(of: audio.isPlaying) { _, playing in
             if playing, viewModel.showOverlay {
@@ -99,6 +126,82 @@ struct QuranPagerView: View {
     }
 
     private var backgroundColor: Color { Color.mushafPage }
+
+    private func scheduleOverlayHide() {
+        overlayHideTask?.cancel()
+        overlayHideTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(Self.overlayAutoHideDelay))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.25)) {
+                viewModel.showOverlay = false
+            }
+        }
+    }
+
+    private func cancelOverlayHide() {
+        overlayHideTask?.cancel()
+        overlayHideTask = nil
+    }
+}
+
+// MARK: - Pagers
+
+extension QuranPagerView {
+
+    private var horizontalPager: some View {
+        TabView(selection: $viewModel.currentPage) {
+            ForEach(1...viewModel.totalPages, id: \.self) { page in
+                QuranPageView(pageNumber: page, viewModel: viewModel)
+                    .tag(page)
+            }
+        }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+        .ignoresSafeArea(edges: .horizontal)
+        .onChange(of: viewModel.currentPage) { _, newPage in
+            viewModel.updatePageInfo(page: newPage)
+        }
+    }
+
+    private var verticalPager: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(spacing: 0) {
+                    ForEach(1...viewModel.totalPages, id: \.self) { page in
+                        QuranPageView(pageNumber: page, viewModel: viewModel)
+                            .frame(height: UIScreen.main.bounds.height)
+                            .id(page)
+                            .background(pageVisibilityBackground(page: page))
+                    }
+                }
+            }
+            .ignoresSafeArea(edges: .horizontal)
+            .onPreferenceChange(VisiblePageKey.self) { page in
+                guard let page, viewModel.currentPage != page else { return }
+                viewModel.updatePageInfo(page: page)
+            }
+            .onChange(of: viewModel.currentPage) { _, newPage in
+                proxy.scrollTo(newPage, anchor: .top)
+            }
+        }
+    }
+
+    private func pageVisibilityBackground(page: Int) -> some View {
+        GeometryReader { geo in
+            let frame = geo.frame(in: .global)
+            let screenH = UIScreen.main.bounds.height
+            Color.clear.preference(
+                key: VisiblePageKey.self,
+                value: (frame.midY >= 0 && frame.midY <= screenH) ? page : nil
+            )
+        }
+    }
+}
+
+private struct VisiblePageKey: PreferenceKey {
+    static var defaultValue: Int? = nil
+    static func reduce(value: inout Int?, nextValue: () -> Int?) {
+        value = value ?? nextValue()
+    }
 }
 
 // MARK: - Overlay
@@ -110,10 +213,14 @@ extension QuranPagerView {
             topBar
             Spacer()
             MiniPlayerView(onPlayTapped: {
-                audio.play(
-                    surahNumber: viewModel.currentSurahNumber,
-                    verseNumber: viewModel.currentFirstVerseNumber
-                )
+                if audio.playSurahMode {
+                    audio.playWholeSurah(surahNumber: viewModel.currentSurahNumber)
+                } else {
+                    audio.playFrom(
+                        surahNumber: viewModel.currentSurahNumber,
+                        verseNumber: viewModel.currentFirstVerseNumber
+                    )
+                }
             })
             .environmentObject(audio)
             .padding(.horizontal, 16)
@@ -121,22 +228,24 @@ extension QuranPagerView {
             bottomBar
         }
         .transition(.opacity)
+        .simultaneousGesture(TapGesture().onEnded { scheduleOverlayHide() })
     }
 
     // MARK: - Top Bar
 
     private var topBar: some View {
         HStack(spacing: 16) {
-            // LEFT: calendar badge (always)
             Button(action: { showTodaySheet = true }) {
                 ZStack {
-                    Image(systemName: "calendar")
-                        .font(.system(size: 22, weight: .ultraLight))
+                    Image("todayButton")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
                         .foregroundColor(Color.playerControls)
-                        .frame(width: 32, height: 32)
-                    
+                        .frame(width: 28, height: 28)
+
                     Text(hijriDay.arabicNumerals)
-                        .font(.system(size: 16, weight: .bold))
+                        .customStyle(.kitab(size: 14, bold: true))
                         .foregroundColor(Color.playerControls)
                         .offset(y: 3)
                 }
@@ -144,21 +253,21 @@ extension QuranPagerView {
 
             Spacer()
 
-            // RIGHT: search
             Button(action: { /* TODO: search */ }) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(Color.playerControls)
             }
 
-            // RIGHT: surah list
-            Button(action: { /* TODO: surah list */ }) {
-                Image(systemName: "line.3.horizontal")
-                    .font(.system(size: 20, weight: .medium))
+            Button(action: { showSurahList = true }) {
+                Image("booksVerticalFill")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
                     .foregroundColor(Color.playerControls)
+                    .frame(width: 24, height: 24)
             }
 
-            // FAR RIGHT: back or settings
             if let onBack {
                 Button(action: { onBack() }) {
                     Image(systemName: "chevron.backward")
@@ -166,7 +275,7 @@ extension QuranPagerView {
                         .foregroundColor(Color.playerControls)
                 }
             } else {
-                Button(action: { /* TODO: settings */ }) {
+                Button(action: { showPageSettings = true }) {
                     Image(systemName: "gearshape")
                         .font(.system(size: 20))
                         .foregroundColor(Color.playerControls)
@@ -183,19 +292,19 @@ extension QuranPagerView {
 
     private var bottomBar: some View {
         HStack(spacing: 0) {
-            // Right: Swap to last visited page
             Button(action: {
-                withAnimation {
-                    viewModel.swapLastVisitedPage()
-                }
+                withAnimation { viewModel.swapLastVisitedPage() }
             }) {
                 HStack(spacing: 2) {
-                    Image(systemName: "arrow.2.squarepath")
-                        .font(.system(size: 16))
-                        .customForeground(.primary)
-                    
+                    Image("arrowUTurnBackward")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(Color.playerControls)
+
                     Text("\(viewModel.lastVisitedPage)")
-                        .font(.system(size: 11, weight: .bold))
+                        .customStyle(.kitab(size: 11, bold: true))
                         .customForeground(.primary)
                 }
             }
@@ -221,9 +330,9 @@ extension QuranPagerView {
                     }
 
                     Text("\(viewModel.currentPage)")
-                        .font(.system(size: 15, weight: .bold))
+                        .customStyle(.kitab(size: 15, bold: true))
                         .foregroundColor(.white)
-                        .frame(minWidth: 40)
+                        .frame(minWidth: 30)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 5)
                         .background(Capsule().fill(Color.playerControls))
@@ -242,12 +351,11 @@ extension QuranPagerView {
             }
             .frame(height: 30)
             .padding(.horizontal, 8)
-            
-            // Left: Surah list
-            Button(action: { /* TODO: open surah list sheet */ }) {
+
+            Button(action: { showPageSettings = true }) {
                 Image(systemName: "text.book.closed")
                     .font(.system(size: 20))
-                    .customForeground(.primary)
+                    .foregroundColor(Color.playerControls)
             }
             .frame(width: 54)
         }

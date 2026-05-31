@@ -24,13 +24,10 @@ class TabBarController: UITabBarController, TabBarControllerProtocol {
         }
     }
     
-    private var miniPlayerHost: UIHostingController<AnyView>?
-
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBarItems()
         configure()
-        setupMiniPlayer()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -45,47 +42,6 @@ class TabBarController: UITabBarController, TabBarControllerProtocol {
     }
 }
 
-// MARK: - Mini Player
-
-extension TabBarController {
-
-    private func setupMiniPlayer() {
-        let host = UIHostingController(rootView: AnyView(GlobalMiniPlayerView()))
-        host.view.backgroundColor = .clear
-        addChild(host)
-        view.addSubview(host.view)
-        host.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            host.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            host.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            host.view.bottomAnchor.constraint(equalTo: tabBar.topAnchor)
-        ])
-        host.didMove(toParent: self)
-        miniPlayerHost = host
-    }
-}
-
-/// Shown globally above the tab bar on every tab.
-/// Renders nothing (zero height) when no audio is active so it
-/// never pushes content upward unnecessarily.
-private struct GlobalMiniPlayerView: View {
-    @ObservedObject private var audio = AudioEngine.shared
-
-    private var shouldShow: Bool {
-        // Hide whenever the user is anywhere inside QuranPagerView —
-        // that screen owns its own MiniPlayer instance.
-        audio.hasActiveVerse && !audio.isQuranScreenActive
-    }
-
-    var body: some View {
-        if shouldShow {
-            MiniPlayerView()
-                .environmentObject(audio)
-                .transition(.move(edge: .bottom).combined(with: .opacity))
-                .animation(.spring(response: 0.35, dampingFraction: 0.82), value: shouldShow)
-        }
-    }
-}
 
 // MARK: - Tab Bar Setup
 

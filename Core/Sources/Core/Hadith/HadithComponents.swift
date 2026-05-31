@@ -78,8 +78,7 @@ public struct HadithBottomBarButton: View {
                     .font(.system(size: 19))
                     .foregroundColor(tint ?? Color.hadithNav)
                 Text(label)
-                    .font(.system(size: 9, weight: .medium))
-                    .foregroundColor(tint ?? Color.hadithSecondary)
+                    .customStyle(.kitab(size: 9))                    .foregroundColor(tint ?? Color.hadithSecondary)
             }
         }
         .buttonStyle(.plain)

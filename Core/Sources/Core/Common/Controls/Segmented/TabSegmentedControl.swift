@@ -57,7 +57,7 @@ public struct TabSegmentedControl: View {
                 }, label: {
                     
                     Text(options[index])
-                        .customFont(isSelected ? .subheadline : .bodySmall)
+                        .customStyle(isSelected ? .subheadline : .bodySmall)
                         .customForeground(isSelected ? selectedTextColor : notSelectedTextColor)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 16)

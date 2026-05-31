@@ -79,7 +79,7 @@ struct MiniPlayerView: View {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 11, weight: .medium))
                     Text(audio.currentReciter.arabicName)
-                        .font(.custom("Kitab-Bold", size: 15))
+                        .customStyle(.kitab(size: 15, bold: true))
                 }
                 .foregroundColor(Color.playerControls)
             }
@@ -154,13 +154,13 @@ struct MiniPlayerView: View {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 11, weight: .medium))
                         Text(audio.currentReciter.arabicName)
-                            .font(.custom("Kitab-Bold", size: 15))
+                            .customStyle(.kitab(size: 15, bold: true))
                     }
                     .foregroundColor(Color.playerControls)
                 }
 
                 Text("\(audio.currentSurahArabicName): \(audio.currentVerseNumber)")
-                    .font(.custom("Kitab-Regular", size: 12))
+                    .customStyle(.kitab(size: 12))
                     .foregroundColor(.secondary)
             }
             .environment(\.layoutDirection, .rightToLeft)
@@ -170,6 +170,7 @@ struct MiniPlayerView: View {
             // AirPlay
             AirPlayButton()
                 .frame(width: 30, height: 30)
+                .foregroundColor(Color.playerControls)
         }
     }
 
@@ -178,8 +179,7 @@ struct MiniPlayerView: View {
     private var progressRow: some View {
         HStack(spacing: 8) {
             Text(formatTime(audio.verseElapsed))
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
-                .foregroundColor(.secondary)
+                .customStyle(.kitab(size: 11))                .foregroundColor(.secondary)
                 .frame(width: 34, alignment: .leading)
 
             GeometryReader { geo in
@@ -212,8 +212,7 @@ struct MiniPlayerView: View {
             .frame(height: 20)
 
             Text("-" + formatTime(max(0, audio.verseDuration - audio.verseElapsed)))
-                .font(.system(size: 11, weight: .medium, design: .monospaced))
-                .foregroundColor(.secondary)
+                .customStyle(.kitab(size: 11))                .foregroundColor(.secondary)
                 .frame(width: 40, alignment: .trailing)
         }
     }
@@ -223,9 +222,20 @@ struct MiniPlayerView: View {
     private var controlsRow: some View {
         HStack(spacing: 0) {
             Button { showRepeatSheet = true } label: {
-                Image(systemName: audio.repeatMode == .verse ? "repeat.1" : "repeat")
-                    .font(.system(size: 17))
-                    .foregroundColor(audio.repeatMode != .off ? Color.playerControls : .secondary)
+                ZStack {
+                    Image("repeat")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+                        .foregroundColor(audio.repeatMode != .off ? Color.playerControls : .secondary)
+
+                    if audio.repeatMode == .verse {
+                        Text("١")
+                            .customStyle(.kitab(size: 9, bold: true))                            .foregroundColor(audio.repeatMode != .off ? Color.playerControls : .secondary)
+                            .offset(x: 5, y: -5)
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
             .accessibilityLabel("إعدادات التكرار")
@@ -233,7 +243,7 @@ struct MiniPlayerView: View {
             Button { audio.previousVerse() } label: {
                 Image(systemName: "backward.fill")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundColor(.primary)
+                    .foregroundColor(Color.playerControls)
             }
             .frame(maxWidth: .infinity)
             .accessibilityLabel("الآية السابقة")
@@ -259,15 +269,14 @@ struct MiniPlayerView: View {
             Button { audio.nextVerse() } label: {
                 Image(systemName: "forward.fill")
                     .font(.system(size: 22, weight: .medium))
-                    .foregroundColor(.primary)
+                    .foregroundColor(Color.playerControls)
             }
             .frame(maxWidth: .infinity)
             .accessibilityLabel("الآية التالية")
 
             Button { audio.cycleSpeed() } label: {
                 Text(audio.currentSpeedLabel)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(.secondary)
+                    .customStyle(.kitab(size: 13, bold: true))                    .foregroundColor(.secondary)
                     .frame(minWidth: 32)
             }
             .frame(maxWidth: .infinity)

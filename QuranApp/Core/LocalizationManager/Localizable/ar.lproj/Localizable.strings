@@ -111,3 +111,64 @@
 "hadithIndexTitle" = "فهرس";
 "goToHadith" = "انتقل";
 "tableOfContents" = "فهرس الكتاب";
+
+// MARK: - Quran Page Settings Sheet
+"pageSettings" = "إعدادات الصفحة";
+"mushafOption" = "المصحف";
+"mushafMadinahSubtitle" = "مصحف المدينة النبوية";
+"textMushaf" = "المصحف النصي";
+"textMushafSubtitle" = "نص يمكن تغيير حجمه";
+"chooseBook" = "اختيار كتاب...";
+"chooseBookTitle" = "اختر الكتاب";
+"scrollDirection" = "اتجاه التمرير";
+"horizontal" = "أفقي";
+"vertical" = "رأسي";
+"theme" = "السمة";
+"classicTheme" = "كلاسيكي";
+"coloredTheme" = "ملوّن";
+"systemAppearance" = "تلقائي";
+"lightAppearance" = "فاتح";
+"darkAppearance" = "داكن";
+"mushafSettings" = "إعدادات المصحف...";
+"appearance" = "المظهر";
+"arabicTafsirSection" = "التفسير العربي";
+"translationsSection" = "الترجمات";
+
+// MARK: - Surah List Sheet
+"surahIndex" = "الفهرس";
+"surahs" = "السور";
+"quarters" = "الأرباع";
+"pagePrefix" = "الصفحة";
+"versesCount" = "%@ آيات";
+
+// Juz names
+"juz1"  = "الجزء الأول";
+"juz2"  = "الجزء الثاني";
+"juz3"  = "الجزء الثالث";
+"juz4"  = "الجزء الرابع";
+"juz5"  = "الجزء الخامس";
+"juz6"  = "الجزء السادس";
+"juz7"  = "الجزء السابع";
+"juz8"  = "الجزء الثامن";
+"juz9"  = "الجزء التاسع";
+"juz10" = "الجزء العاشر";
+"juz11" = "الجزء الحادي عشر";
+"juz12" = "الجزء الثاني عشر";
+"juz13" = "الجزء الثالث عشر";
+"juz14" = "الجزء الرابع عشر";
+"juz15" = "الجزء الخامس عشر";
+"juz16" = "الجزء السادس عشر";
+"juz17" = "الجزء السابع عشر";
+"juz18" = "الجزء الثامن عشر";
+"juz19" = "الجزء التاسع عشر";
+"juz20" = "الجزء العشرون";
+"juz21" = "الجزء الحادي والعشرون";
+"juz22" = "الجزء الثاني والعشرون";
+"juz23" = "الجزء الثالث والعشرون";
+"juz24" = "الجزء الرابع والعشرون";
+"juz25" = "الجزء الخامس والعشرون";
+"juz26" = "الجزء السادس والعشرون";
+"juz27" = "الجزء السابع والعشرون";
+"juz28" = "الجزء الثامن والعشرون";
+"juz29" = "الجزء التاسع والعشرون";
+"juz30" = "الجزء الثلاثون";
