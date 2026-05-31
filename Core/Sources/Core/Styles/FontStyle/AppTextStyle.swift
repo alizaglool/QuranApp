@@ -111,4 +111,9 @@ public extension View {
     func customStyle(_ style: AppTextStyle) -> some View {
         modifier(AppTextStyleModifier(style: style))
     }
+
+    func customStyle(_ style: AppTextStyle, _ color: ColorStyle) -> some View {
+        modifier(AppTextStyleModifier(style: style))
+            .customForeground(color)
+    }
 }

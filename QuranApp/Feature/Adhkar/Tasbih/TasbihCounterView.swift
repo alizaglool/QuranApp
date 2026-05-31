@@ -172,7 +172,7 @@ extension TasbihCounterView {
     private func dhikrTextSection(_ dhikr: Dhikr) -> some View {
         VStack(spacing: 10) {
             Text(dhikr.textAr)
-                .customStyle(.quranPageFixed(size: 26))                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.quranPageFixed(size: 26), .onSurface)
                 .multilineTextAlignment(.center)
                 .lineSpacing(12)
                 .environment(\.layoutDirection, .rightToLeft)
@@ -232,14 +232,14 @@ extension TasbihCounterView {
 
             VStack(spacing: 2) {
                 Text("\(viewModel.currentCount)")
-                    .customStyle(.kitab(size: 48, bold: true))                    .monospacedDigit()
-                    .customForeground(viewModel.justCompleted ? .secondary : .onSurface)
+                    .customStyle(.kitab(size: 48, bold: true), viewModel.justCompleted ? .secondary : .onSurface)
+                    .monospacedDigit()
                     .animation(.easeOut(duration: 0.2), value: viewModel.justCompleted)
 
                 if viewModel.targetCount > 0 {
                     Text("/ \(viewModel.targetCount)")
-                        .customStyle(.kitab(size: 14))                        .monospacedDigit()
-                        .customForeground(.onSurfaceVariant)
+                        .customStyle(.kitab(size: 14), .onSurfaceVariant)
+                        .monospacedDigit()
                 }
             }
         }
@@ -265,7 +265,7 @@ extension TasbihCounterView {
                     Text("التالي")
                         .customStyle(.headline, .onSurface)
                     Image(systemName: "chevron.left")
-                        .customStyle(.kitab(size: 13))                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 13), .onSurface)
                 }
                 .padding(.horizontal, 28)
                 .padding(.vertical, 13)

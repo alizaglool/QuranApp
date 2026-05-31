@@ -24,8 +24,7 @@ struct TafsirBookPickerView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("اختر التفسير")
-                        .customStyle(.kitab(size: 17, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 17, bold: true), .onSurface)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button { dismiss() } label: {
@@ -51,8 +50,7 @@ struct TafsirBookPickerView: View {
             }
         } header: {
             Text(title)
-                .customStyle(.kitab(size: 13, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 13, bold: true), .onSurface)
                 .textCase(nil)
         }
     }
@@ -66,14 +64,12 @@ struct TafsirBookPickerView: View {
             HStack(spacing: 12) {
                 VStack(alignment: .trailing, spacing: 3) {
                     Text(book.nameArabic)
-                        .customStyle(.kitab(size: 16, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 16, bold: true), .onSurface)
                         .multilineTextAlignment(.trailing)
 
                     if !book.author.isEmpty {
                         Text(book.author)
-                            .customStyle(.kitab(size: 12))
-                            .customForeground(.subtitle)
+                            .customStyle(.kitab(size: 12), .subtitle)
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -156,8 +152,7 @@ struct TafsirBookPickerView: View {
 
     private func languageBadge(_ language: TafsirBook.TafsirLanguage) -> some View {
         Text(language.displayName)
-            .customStyle(.caption1)
-            .customForeground(.subtitle)
+            .customStyle(.caption1, .subtitle)
             .padding(.horizontal, 7)
             .padding(.vertical, 3)
             .background(

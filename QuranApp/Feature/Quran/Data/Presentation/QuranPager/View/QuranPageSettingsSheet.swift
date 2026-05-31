@@ -17,7 +17,7 @@ struct QuranPageSettingsSheet: View {
     @State private var mushafType: String = "mushaf"
     @State private var scrollDirection: String = "horizontal"
     @State private var selectedAppearance: String = "system"
-    @State private var showBookPicker = false
+    @State private var isBookPickerPresenting = false
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -53,11 +53,10 @@ struct QuranPageSettingsSheet: View {
         .background(Color.surfaceContainerLow.ignoresSafeArea())
         .environment(\.layoutDirection, .rightToLeft)
         .onAppear { loadSettings() }
-        .sheet(isPresented: $showBookPicker) {
+        .customSheet(isPresented: $isBookPickerPresenting, fraction: 0.5, detents: [.medium, .large]) {
             MushafBookPickerSheet(mushafType: $mushafType) {
                 saveSettings()
             }
-            .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
         }
     }
@@ -108,8 +107,7 @@ struct QuranPageSettingsSheet: View {
             }
             Spacer()
             Text(AppLocalizedKeys.pageSettings.value)
-                .customStyle(.kitab(size: 17, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
             Spacer()
             Color.clear.frame(width: 30)
         }
@@ -118,8 +116,7 @@ struct QuranPageSettingsSheet: View {
 
     private func sectionLabel(_ title: String) -> some View {
         Text(title)
-            .customStyle(.kitab(size: 15, bold: true))
-            .customForeground(.onSurface)
+            .customStyle(.kitab(size: 15, bold: true), .onSurface)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -170,13 +167,11 @@ struct QuranPageSettingsSheet: View {
             HStack(spacing: 12) {
                 VStack(alignment: .trailing, spacing: 2) {
                     Text(title)
-                        .customStyle(.kitab(size: 15))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 15), .onSurface)
                         .multilineTextAlignment(.trailing)
                     if let subtitle, !subtitle.isEmpty {
                         Text(subtitle)
-                            .customStyle(.kitab(size: 12))
-                            .customForeground(.subtitle)
+                            .customStyle(.kitab(size: 12), .subtitle)
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -184,8 +179,7 @@ struct QuranPageSettingsSheet: View {
 
                 if let badge {
                     Text(badge)
-                        .customStyle(.kitab(size: 11))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customStyle(.kitab(size: 11), .primary)
                         .padding(.horizontal, 7)
                         .padding(.vertical, 3)
                         .background(
@@ -207,11 +201,10 @@ struct QuranPageSettingsSheet: View {
     }
 
     private var bookPickerRow: some View {
-        Button { showBookPicker = true } label: {
+        Button { isBookPickerPresenting = true } label: {
             HStack(spacing: 12) {
                 Text(AppLocalizedKeys.chooseBook.value)
-                    .customStyle(.kitab(size: 15))
-                    .foregroundColor(ColorStyle.primary.color)
+                    .customStyle(.kitab(size: 15), .primary)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
                 Image(systemName: "chevron.forward")
@@ -292,8 +285,7 @@ struct QuranPageSettingsSheet: View {
     private var themeSectionLabel: some View {
         HStack(spacing: 6) {
             Text(AppLocalizedKeys.theme.value)
-                .customStyle(.kitab(size: 15, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 15, bold: true), .onSurface)
             Image(systemName: "lock.fill")
                 .font(.system(size: 11))
                 .foregroundColor(.secondary)
@@ -393,8 +385,7 @@ struct QuranPageSettingsSheet: View {
         } label: {
             HStack(spacing: 8) {
                 Text(AppLocalizedKeys.mushafSettings.value)
-                    .customStyle(.kitab(size: 15))
-                    .foregroundColor(ColorStyle.primary.color)
+                    .customStyle(.kitab(size: 15), .primary)
                     .frame(maxWidth: .infinity, alignment: .trailing)
 
                 Image(systemName: "chevron.forward")
@@ -427,8 +418,7 @@ private struct MushafBookPickerSheet: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(AppLocalizedKeys.chooseBookTitle.value)
-                        .customStyle(.kitab(size: 17, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 17, bold: true), .onSurface)
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button { dismiss() } label: {
@@ -452,8 +442,7 @@ private struct MushafBookPickerSheet: View {
             }
         } header: {
             Text(title)
-                .customStyle(.kitab(size: 13, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 13, bold: true), .onSurface)
                 .textCase(nil)
         }
     }
@@ -467,13 +456,11 @@ private struct MushafBookPickerSheet: View {
             HStack(spacing: 12) {
                 VStack(alignment: .trailing, spacing: 3) {
                     Text(book.nameArabic)
-                        .customStyle(.kitab(size: 15, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 15, bold: true), .onSurface)
                         .multilineTextAlignment(.trailing)
                     if !book.author.isEmpty {
                         Text(book.author)
-                            .customStyle(.kitab(size: 12))
-                            .customForeground(.subtitle)
+                            .customStyle(.kitab(size: 12), .subtitle)
                             .multilineTextAlignment(.trailing)
                     }
                 }
@@ -493,8 +480,7 @@ private struct MushafBookPickerSheet: View {
                     }
                     if book.language != .arabic {
                         Text(book.language.displayName)
-                            .customStyle(.caption1)
-                            .customForeground(.subtitle)
+                            .customStyle(.kitab(size: 17, bold: true), .subtitle)
                             .padding(.horizontal, 7)
                             .padding(.vertical, 3)
                             .background(RoundedRectangle(cornerRadius: 6).fill(Color.surfaceContainerLow))

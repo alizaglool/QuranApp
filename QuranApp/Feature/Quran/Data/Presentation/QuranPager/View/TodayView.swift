@@ -51,8 +51,7 @@ struct TodayView: View {
                         }
                         Spacer()
                         Text("اليوم")
-                            .customStyle(.kitab(size: 17, bold: true))
-                            .customForeground(.onSurface)
+                            .customStyle(.kitab(size: 17, bold: true), .onSurface)
                         Spacer()
                         Color.clear.frame(width: 30)
                     }
@@ -67,8 +66,7 @@ struct TodayView: View {
 
                     VStack(spacing: 12) {
                         Text("آية اليوم")
-                            .customStyle(.kitab(size: 17, bold: true))
-                            .customForeground(.onSurface)
+                            .customStyle(.kitab(size: 17, bold: true), .onSurface)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal, 20)
 
@@ -101,7 +99,7 @@ struct TodayView: View {
                                 .padding(.vertical, 12)
                             }
                             .background(Color.mushafPage)
-                            .cornerRadius(14)
+                            .customCornerRadius(14)
                         }
                         .buttonStyle(.plain)
                         .padding(.horizontal, 20)
@@ -152,8 +150,7 @@ struct TodayView: View {
                     .font(.system(size: 52, weight: .ultraLight))
                     .foregroundColor(Color.playerControls.opacity(0.07))
                 Text(day.arabicNumerals)
-                    .customStyle(.kitab(size: 36, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 36, bold: true), .onSurface)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)

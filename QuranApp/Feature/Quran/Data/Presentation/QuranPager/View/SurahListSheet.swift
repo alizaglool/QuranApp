@@ -176,8 +176,7 @@ struct SurahListSheet: View {
 
     private var titleView: some View {
         Text(AppLocalizedKeys.surahIndex.value)
-            .customStyle(.kitab(size: 36, bold: true))
-            .customForeground(.onSurface)
+            .customStyle(.kitab(size: 36, bold: true), .onSurface)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.horizontal, 20)
             .padding(.top, 8)
@@ -204,7 +203,7 @@ struct SurahListSheet: View {
                     }
                 } label: {
                     Text(arabicIndic(juz))
-                        .customStyle(.kitab(size: 9, bold: true))                        .foregroundColor(ColorStyle.primary.color)
+                        .customStyle(.kitab(size: 9, bold: true), .primary)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .buttonStyle(.plain)
@@ -269,8 +268,7 @@ struct SurahListSheet: View {
             // Second child = physical LEFT of badge: name + subtitle, right-aligned text
             VStack(alignment: .leading, spacing: 3) {  // .leading in RTL = physical RIGHT
                 Text(surah.arabicTitle)
-                    .customStyle(.kitab(size: 19, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 19, bold: true), .onSurface)
 
                 Text("\(AppLocalizedKeys.pagePrefix.value) \(arabicIndic(surah.startPage)) - \(arabicIndic(surah.versesCount)) \(AppLocalizedKeys.verses.value) - \(surah.isMeccan ? AppLocalizedKeys.meccan.value : AppLocalizedKeys.medinan.value)")
                     .customStyle(.kitab(size: 12))                    .foregroundColor(.secondary)
@@ -337,8 +335,7 @@ struct SurahListSheet: View {
             // Second child = physical LEFT: surah name + verse info
             VStack(alignment: .leading, spacing: 3) {  // .leading in RTL = physical RIGHT
                 Text(entry.surahName)
-                    .customStyle(.kitab(size: 17, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
                 Text("\(entry.surahName): \(arabicIndic(entry.verseNumber)) - \(AppLocalizedKeys.pagePrefix.value) \(arabicIndic(entry.page))")
                     .customStyle(.kitab(size: 12))                    .foregroundColor(.secondary)

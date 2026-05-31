@@ -24,7 +24,7 @@ struct HadithScholarlyItem {
 struct HadithReadingView: View {
 
     @StateObject private var viewModel: HadithReadingViewModel
-    @State private var showShareSheet = false
+    @State private var isShareSheetPresenting = false
 
     init(coordinator: HadithCoordinating, hadiths: [HadithEntry], startIndex: Int,
          book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter]) {
@@ -59,7 +59,7 @@ struct HadithReadingView: View {
                 viewModel.showTOC = false
             }
         }
-        .sheet(isPresented: $showShareSheet) {
+        .customSheet(isPresented: $isShareSheetPresenting, fraction: 0.75, detents: [.medium, .large]) {
             if let h = viewModel.currentHadith {
                 let grade = h.grade.isEmpty ? "" : "\n\n[\(h.grade)]"
                 ShareSheet(items: ["\(h.arabicText)\n\n\(h.translation)\n\n— \(h.narrator)\(grade)"])
@@ -74,8 +74,7 @@ struct HadithReadingView: View {
             HadithNavButton(icon: "arrow.backward") { viewModel.goBack() }
             Spacer()
             Text(viewModel.book.title)
-                .customStyle(.buttonText)
-                .customForeground(.hadithNav)
+                .customStyle(.buttonText, .hadithNav)
                 .lineLimit(1)
             Spacer()
             HadithNavButton(icon: "magnifyingglass") { viewModel.showJumpInput = true }
@@ -168,7 +167,7 @@ struct HadithReadingView: View {
                 HadithBottomBarButton(
                     icon: "square.and.arrow.up",
                     label: AppLocalizedKeys.share.value
-                ) { showShareSheet = true }
+                ) { isShareSheetPresenting = true }
             }
             Spacer()
             navigationArrow(icon: "arrow.left", enabled: viewModel.canGoNext) { viewModel.next() }
@@ -289,7 +288,7 @@ struct HadithPageContent: View {
                 .padding(.trailing, .md)
 
                 Text(hadith.arabicText)
-                    .customStyle(.quranPageFixed(size: 22))                    .customForeground(.hadithArabicText)
+                    .customStyle(.quranPageFixed(size: 22), .hadithArabicText)
                     .multilineTextAlignment(.center)
                     .lineSpacing(14)
                     .environment(\.layoutDirection, .rightToLeft)
@@ -366,12 +365,10 @@ struct HadithScholarlyRow: View {
                     HadithIconBadge(icon: item.icon)
                     VStack(alignment: .leading, spacing: .xxSm - 2) {
                         Text(item.labelEn)
-                            .customStyle(.caption2)
+                            .customStyle(.caption2, .hadithMuted)
                             .tracking(0.8)
-                            .customForeground(.hadithMuted)
                         Text(item.labelAr)
-                            .customStyle(.subheadline)
-                            .customForeground(.hadithPrimary)
+                            .customStyle(.subheadline, .hadithPrimary)
                     }
                     Spacer()
                     Image(systemName: isExpanded ? "chevron.up" : "chevron.down")

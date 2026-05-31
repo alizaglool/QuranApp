@@ -15,9 +15,9 @@ struct QuranPagerView: View {
     @Environment(\.colorScheme) var colorScheme
 
     let onBack: (() -> Void)?
-    @State private var showTodaySheet = false
-    @State private var showSurahList = false
-    @State private var showPageSettings = false
+    @State private var isTodaySheetPresenting = false
+    @State private var isSurahListPresenting = false
+    @State private var isPageSettingsPresenting = false
     @State private var overlayHideTask: Task<Void, Never>? = nil
 
     private static let overlayAutoHideDelay: TimeInterval = 4
@@ -53,7 +53,7 @@ struct QuranPagerView: View {
         .navigationBarHidden(true)
         .statusBar(hidden: !viewModel.showOverlay)
         .ignoresSafeArea(edges: .horizontal)
-        .sheet(isPresented: $viewModel.showVerseActionSheet) {
+        .customSheet(isPresented: $viewModel.showVerseActionSheet, fraction: 1.0, detents: [.large]) {
             VerseActionSheet(
                 verseID: viewModel.selectedVerseID ?? 0,
                 page: viewModel.selectedPage ?? viewModel.currentPage,
@@ -61,7 +61,6 @@ struct QuranPagerView: View {
                 surahName: viewModel.selectedVerseSurahName,
                 verseNumber: viewModel.selectedVerseNumber
             )
-            .presentationDetents([.large])
             .presentationDragIndicator(.visible)
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) {
@@ -74,12 +73,11 @@ struct QuranPagerView: View {
         .onChange(of: viewModel.showVerseActionSheet) { _, isShowing in
             if !isShowing { viewModel.clearSelection() }
         }
-        .sheet(isPresented: $showTodaySheet) {
+        .customSheet(isPresented: $isTodaySheetPresenting, fraction: 1.0, detents: [.large]) {
             TodayView()
-                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $showSurahList) {
+        .customSheet(isPresented: $isSurahListPresenting, fraction: 1.0, detents: [.large]) {
             SurahListSheet(
                 currentSurahNumber: viewModel.currentSurahNumber,
                 currentPage: viewModel.currentPage,
@@ -90,12 +88,9 @@ struct QuranPagerView: View {
                     withAnimation { viewModel.goToPage(page) }
                 }
             )
-            .presentationDetents([.large])
-            .presentationDragIndicator(.hidden)
         }
-        .sheet(isPresented: $showPageSettings) {
+        .customSheet(isPresented: $isPageSettingsPresenting, fraction: 1.0, detents: [.large]) {
             QuranPageSettingsSheet()
-                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
         .onChange(of: viewModel.showOverlay) { _, showing in
@@ -235,7 +230,7 @@ extension QuranPagerView {
 
     private var topBar: some View {
         HStack(spacing: 16) {
-            Button(action: { showTodaySheet = true }) {
+            Button(action: { isTodaySheetPresenting = true }) {
                 ZStack {
                     Image("todayButton")
                         .renderingMode(.template)
@@ -259,7 +254,7 @@ extension QuranPagerView {
                     .foregroundColor(Color.playerControls)
             }
 
-            Button(action: { showSurahList = true }) {
+            Button(action: { isSurahListPresenting = true }) {
                 Image("booksVerticalFill")
                     .renderingMode(.template)
                     .resizable()
@@ -275,7 +270,7 @@ extension QuranPagerView {
                         .foregroundColor(Color.playerControls)
                 }
             } else {
-                Button(action: { showPageSettings = true }) {
+                Button(action: { isPageSettingsPresenting = true }) {
                     Image(systemName: "gearshape")
                         .font(.system(size: 20))
                         .foregroundColor(Color.playerControls)
@@ -304,8 +299,7 @@ extension QuranPagerView {
                         .foregroundColor(Color.playerControls)
 
                     Text("\(viewModel.lastVisitedPage)")
-                        .customStyle(.kitab(size: 11, bold: true))
-                        .customForeground(.primary)
+                        .customStyle(.kitab(size: 11, bold: true), .primary)
                 }
             }
             .frame(width: 54)
@@ -352,7 +346,7 @@ extension QuranPagerView {
             .frame(height: 30)
             .padding(.horizontal, 8)
 
-            Button(action: { showPageSettings = true }) {
+            Button(action: { isPageSettingsPresenting = true }) {
                 Image(systemName: "text.book.closed")
                     .font(.system(size: 20))
                     .foregroundColor(Color.playerControls)

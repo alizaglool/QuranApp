@@ -15,7 +15,7 @@ struct TafsirView: View {
     let onDismissSheet: () -> Void
 
     @StateObject private var vm = TafsirViewModel()
-    @State private var showBookPicker = false
+    @State private var isBookPickerPresenting = false
     @Environment(\.dismiss) private var dismiss
 
     // MARK: - Init
@@ -59,9 +59,8 @@ struct TafsirView: View {
         .background(Color.surfaceContainerLow.ignoresSafeArea())
         .environment(\.layoutDirection, .rightToLeft)
         .navigationBarHidden(true)
-        .sheet(isPresented: $showBookPicker) {
+        .customSheet(isPresented: $isBookPickerPresenting, fraction: 0.5, detents: [.medium, .large]) {
             TafsirBookPickerView(selectedBook: $vm.selectedBook)
-                .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
         .onAppear {
@@ -91,8 +90,7 @@ struct TafsirView: View {
 
                 // Title
                 Text("التفسير")
-                    .customStyle(.kitab(size: 17, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
                 Spacer()
 
@@ -119,14 +117,13 @@ struct TafsirView: View {
             .padding(.bottom, 10)
 
             // Book picker button
-            Button { showBookPicker = true } label: {
+            Button { isBookPickerPresenting = true } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "chevron.up.chevron.down")
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundColor(ColorStyle.primary.color)
                     Text(vm.selectedBook.nameArabic)
-                        .customStyle(.kitab(size: 14, bold: true))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customStyle(.kitab(size: 14, bold: true), .primary)
                 }
                 .padding(.horizontal, 14)
                 .padding(.vertical, 7)
@@ -161,7 +158,7 @@ struct TafsirView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .background(Color.mushafPage)
-        .cornerRadius(14)
+        .customCornerRadius(14)
     }
 
     // MARK: - Book Label
@@ -170,8 +167,7 @@ struct TafsirView: View {
         HStack(spacing: 6) {
             if let length = vm.selectedBook.length {
                 Text(length.label)
-                    .customStyle(.caption1)
-                    .foregroundColor(length == .brief ? ColorStyle.secondary.color : ColorStyle.primary.color)
+                    .customStyle(.caption1, length == .brief ? .secondary : .primary)
                     .padding(.horizontal, 8)
                     .padding(.vertical, 3)
                     .background(
@@ -181,8 +177,7 @@ struct TafsirView: View {
             }
             Spacer()
             Text(vm.selectedBook.nameArabic)
-                .customStyle(.kitab(size: 15, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 15, bold: true), .onSurface)
         }
     }
 
@@ -206,13 +201,12 @@ struct TafsirView: View {
             ProgressView()
                 .scaleEffect(1.2)
             Text("جارٍ تحميل التفسير…")
-                .customStyle(.kitab(size: 14))
-                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 14), .subtitle)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 40)
         .background(Color.background)
-        .cornerRadius(14)
+        .customCornerRadius(14)
     }
 
     private func errorView(message: String) -> some View {
@@ -222,14 +216,12 @@ struct TafsirView: View {
                 .foregroundColor(Color.outlineVariant)
             
             Text(message)
-                .customStyle(.kitab(size: 14))
-                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 14), .subtitle)
                 .multilineTextAlignment(.center)
             
             Button { vm.retry() } label: {
                 Text("إعادة المحاولة")
-                    .customStyle(.kitab(size: 14, bold: true))
-                    .foregroundColor(ColorStyle.primary.color)
+                    .customStyle(.kitab(size: 14, bold: true), .primary)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 9)
                     .background(ColorStyle.primary.color.opacity(0.1), in: Capsule())
@@ -239,7 +231,7 @@ struct TafsirView: View {
         .padding(.vertical, 36)
         .padding(.horizontal, 20)
         .background(Color.background)
-        .cornerRadius(14)
+        .customCornerRadius(14)
     }
 
     private var tafsirTextCard: some View {
@@ -248,14 +240,13 @@ struct TafsirView: View {
         let frameAlignment: Alignment = isRTL ? .leading : .trailing
 
         return Text(vm.text.isEmpty ? "لا يوجد تفسير لهذه الآية" : vm.text)
-            .customStyle(isRTL ? .kitab(size: 20) : .bodyMedium)
-            .customForeground(.onSurface)
+            .customStyle(isRTL ? .kitab(size: 20) : .bodyMedium, .onSurface)
             .multilineTextAlignment(alignment)
             .lineSpacing(8)
             .frame(maxWidth: .infinity, alignment: frameAlignment)
             .padding(16)
             .background(Color.background)
-            .cornerRadius(14)
+            .customCornerRadius(14)
             .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)
     }
 
@@ -268,15 +259,14 @@ struct TafsirView: View {
             }
 
             Text(current.ref)
-                .customStyle(.kitab(size: 15))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 15), .onSurface)
                 .frame(maxWidth: .infinity)
 
             navButton(icon: "chevron.left", enabled: currentIndex < verses.count - 1) {
                 withAnimation(.easeInOut(duration: 0.18)) { currentIndex += 1 }
             }
 
-            Button { showBookPicker = true } label: {
+            Button { isBookPickerPresenting = true } label: {
                 Image(systemName: "books.vertical.fill")
                     .font(.system(size: 18))
                     .foregroundColor(Color.playerControls)

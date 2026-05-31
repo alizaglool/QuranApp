@@ -17,7 +17,7 @@ struct MyAdhkarView: View {
     @EnvironmentObject private var localizationManager: LocalizationManager
     @Environment(\.colorScheme) private var colorScheme
 
-    @State private var showingAdd = false
+    @State private var isAddPresenting = false
     @State private var newDhikrText = ""
     @State private var newDhikrCount = 33
     @State private var readingIndex: Int? = nil
@@ -37,7 +37,7 @@ struct MyAdhkarView: View {
             }
         }
         .navigationBarHidden(true)
-        .sheet(isPresented: $showingAdd) {
+        .customSheet(isPresented: $isAddPresenting, fraction: 0.75, detents: [.medium, .large]) {
             addSheet
         }
     }
@@ -55,20 +55,20 @@ extension MyAdhkarView {
                     .customForeground(.onSurface)
                     .frame(width: 36, height: 36)
                     .background(Color.surfaceContainerLow)
-                    .cornerRadius(10)
+                    .customCornerRadius(10)
             }
             Spacer()
             Text("أذكاري")
                 .customStyle(.heading3, .onSurface)
             Spacer()
             if readingIndex == nil {
-                Button(action: { showingAdd = true }) {
+                Button(action: { isAddPresenting = true }) {
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .medium))
                         .customForeground(.primary)
                         .frame(width: 36, height: 36)
                         .background(ColorStyle.primary.color.opacity(0.08))
-                        .cornerRadius(10)
+                        .customCornerRadius(10)
                 }
             } else {
                 Color.clear.frame(width: 36, height: 36)
@@ -107,7 +107,7 @@ extension MyAdhkarView {
                     .multilineTextAlignment(.center)
             }
 
-            Button(action: { showingAdd = true }) {
+            Button(action: { isAddPresenting = true }) {
                 HStack(spacing: 8) {
                     Image(systemName: "plus")
                     Text("أضف ذكراً")
@@ -116,7 +116,7 @@ extension MyAdhkarView {
                 .padding(.horizontal, 24)
                 .padding(.vertical, 12)
                 .background(ColorStyle.primary.color)
-                .cornerRadius(12)
+                .customCornerRadius(12)
             }
             Spacer()
         }
@@ -201,7 +201,7 @@ extension MyAdhkarView {
 
             // Dhikr text
             Text(dhikr.textAr)
-                .customStyle(.quranPageFixed(size: 26))                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.quranPageFixed(size: 26), .onSurface)
                 .multilineTextAlignment(.center)
                 .lineSpacing(10)
                 .fixedSize(horizontal: false, vertical: true)
@@ -214,7 +214,7 @@ extension MyAdhkarView {
             // Counter display
             VStack(spacing: 8) {
                 Text("\(tapCount)")
-                    .customStyle(.kitab(size: 52, bold: true))                    .customForeground(.primary)
+                    .customStyle(.kitab(size: 52, bold: true), .primary)
                     .contentTransition(.numericText())
                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: tapCount)
 
@@ -357,7 +357,7 @@ extension MyAdhkarView {
                         viewModel.add(trimmed, count: newDhikrCount)
                         newDhikrText = ""
                         newDhikrCount = 33
-                        showingAdd = false
+                        isAddPresenting = false
                     }
                 }) {
                     Text("حفظ")
@@ -395,12 +395,12 @@ struct MyAdhkarCard: View {
                         .fill(ColorStyle.primary.color.opacity(colorScheme == .dark ? 0.15 : 0.08))
                         .frame(width: 36, height: 36)
                     Text("\(index)")
-                        .customStyle(.kitab(size: 13, bold: true))                        .customForeground(.primary)
+                        .customStyle(.kitab(size: 13, bold: true), .primary)
                 }
 
                 VStack(alignment: .trailing, spacing: 4) {
                     Text(dhikr.textAr)
-                        .customStyle(.quranPageFixed(size: 17))                        .foregroundColor(ColorStyle.onSurface.color)
+                        .customStyle(.quranPageFixed(size: 17), .onSurface)
                         .multilineTextAlignment(.trailing)
                         .lineLimit(2)
                         .frame(maxWidth: .infinity, alignment: .trailing)

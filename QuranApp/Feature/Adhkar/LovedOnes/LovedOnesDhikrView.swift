@@ -146,7 +146,7 @@ extension LovedOnesDhikrView {
     private func dhikrCard(_ dhikr: Dhikr) -> some View {
         VStack(spacing: 14) {
             Text(substitute(dhikr.textAr))
-                .customStyle(.quranPageFixed(size: 24))                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.quranPageFixed(size: 24), .onSurface)
                 .multilineTextAlignment(.center)
                 .lineSpacing(10)
                 .environment(\.layoutDirection, .rightToLeft)
