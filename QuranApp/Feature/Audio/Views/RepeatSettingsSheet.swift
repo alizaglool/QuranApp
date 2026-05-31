@@ -20,8 +20,8 @@ struct RepeatSettingsSheet: View {
     @State private var verseCount: Int
 
     @State private var surahMode: Bool
-    @State private var showFromPicker = false
-    @State private var showToPicker = false
+    @State private var isFromPickerPresenting = false
+    @State private var isToPickerPresenting = false
 
     init() {
         let a = AudioEngine.shared
@@ -58,14 +58,12 @@ struct RepeatSettingsSheet: View {
         .onChange(of: rangeEnabled) { _, on in if on { surahMode = false } }
         .onChange(of: verseEnabled) { _, on in if on { surahMode = false } }
         .onDisappear { commit() }
-        .sheet(isPresented: $showFromPicker) {
+        .customSheet(isPresented: $isFromPickerPresenting, fraction: 1.0, detents: [.large]) {
             VersePickerSheet(surah: $fromSurah, verse: $fromVerse)
-                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $showToPicker) {
+        .customSheet(isPresented: $isToPickerPresenting, fraction: 1.0, detents: [.large]) {
             VersePickerSheet(surah: $toSurah, verse: $toVerse)
-                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
     }
@@ -90,12 +88,12 @@ struct RepeatSettingsSheet: View {
                 }
                 dismiss()
             }
-            .customStyle(.kitab(size: 16))            .foregroundColor(ColorStyle.primary.color)
+            .customStyle(.kitab(size: 16), .primary)
 
             Spacer()
 
             Text(AppLocalizedKeys.repeatSettings.value)
-                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
             Spacer()
 
@@ -116,16 +114,16 @@ struct RepeatSettingsSheet: View {
             VStack(spacing: 0) {
                 versePickerRow(label: AppLocalizedKeys.fromLabel.value,
                                surahNumber: fromSurah, verseNumber: fromVerse) {
-                    showFromPicker = true
+                    isFromPickerPresenting = true
                 }
                 Divider().padding(.trailing, 16)
                 versePickerRow(label: AppLocalizedKeys.toLabel.value,
                                surahNumber: toSurah, verseNumber: toVerse) {
-                    showToPicker = true
+                    isToPickerPresenting = true
                 }
             }
             .background(Color.surfaceContainerLow)
-            .cornerRadius(12)
+            .customCornerRadius(12)
             .opacity(surahMode ? 0.4 : 1)
             .disabled(surahMode)
         }
@@ -141,18 +139,17 @@ struct RepeatSettingsSheet: View {
             HStack {
                 // Label on leading side (right in RTL)
                 Text(label)
-                    .customStyle(.kitab(size: 16))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 16), .onSurface)
 
                 Spacer()
 
                 // Surah:verse + chevron on trailing side (left in RTL)
                 HStack(spacing: 4) {
                     Text("\(surahName(surahNumber)): \(arabicIndic(verseNumber))")
-                        .customStyle(.kitab(size: 15))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customStyle(.kitab(size: 15), .primary)
                     Image(systemName: "chevron.forward")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customForeground(.primary)
                 }
             }
             .padding(.horizontal, 16)
@@ -179,8 +176,7 @@ struct RepeatSettingsSheet: View {
     private var surahModeCard: some View {
         HStack {
             Text("تشغيل السورة كاملة")
-                .customStyle(.kitab(size: 16))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 16), .onSurface)
             Spacer()
             Toggle("", isOn: $surahMode)
                 .labelsHidden()
@@ -189,7 +185,7 @@ struct RepeatSettingsSheet: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .background(Color.surfaceContainerLow)
-        .cornerRadius(12)
+        .customCornerRadius(12)
     }
 
     private var rangeRepeatCard: some View {
@@ -197,7 +193,7 @@ struct RepeatSettingsSheet: View {
             HStack {
                 // Label on leading side (right in RTL)
                 Text(AppLocalizedKeys.rangeRepeat.value)
-                    .customStyle(.kitab(size: 16))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 16), .onSurface)
                 Spacer()
                 Toggle("", isOn: $rangeEnabled)
                     .labelsHidden()
@@ -212,7 +208,7 @@ struct RepeatSettingsSheet: View {
             }
         }
         .background(Color.surfaceContainerLow)
-        .cornerRadius(12)
+        .customCornerRadius(12)
         .animation(.easeInOut(duration: 0.2), value: rangeEnabled)
     }
 
@@ -220,7 +216,7 @@ struct RepeatSettingsSheet: View {
         VStack(spacing: 0) {
             HStack {
                 Text(AppLocalizedKeys.verseRepeat.value)
-                    .customStyle(.kitab(size: 16))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 16), .onSurface)
                 Spacer()
                 Toggle("", isOn: $verseEnabled)
                     .labelsHidden()
@@ -235,7 +231,7 @@ struct RepeatSettingsSheet: View {
             }
         }
         .background(Color.surfaceContainerLow)
-        .cornerRadius(12)
+        .customCornerRadius(12)
         .animation(.easeInOut(duration: 0.2), value: verseEnabled)
     }
 
@@ -246,11 +242,11 @@ struct RepeatSettingsSheet: View {
         HStack(spacing: 12) {
             // Label — first = rightmost in RTL
             Text(AppLocalizedKeys.repetitions.value)
-                .customStyle(.kitab(size: 16))                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 16), .onSurface)
 
             // Count value — second
             Text(count.wrappedValue == 0 ? "∞" : arabicIndic(count.wrappedValue))
-                .customStyle(.kitab(size: 17, bold: true))                .foregroundColor(ColorStyle.primary.color)
+                .customStyle(.kitab(size: 17, bold: true), .primary)
                 .frame(minWidth: 36)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
@@ -285,7 +281,7 @@ struct RepeatSettingsSheet: View {
                 }
             }
             .background(Color.background)
-            .cornerRadius(10)
+            .customCornerRadius(10)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
@@ -295,7 +291,7 @@ struct RepeatSettingsSheet: View {
 
     private func sectionLabel(_ text: String) -> some View {
         Text(text)
-            .customStyle(.kitab(size: 17, bold: true))            .customForeground(.onSurface)
+            .customStyle(.kitab(size: 17, bold: true), .onSurface)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 

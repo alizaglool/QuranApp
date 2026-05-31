@@ -9,7 +9,7 @@ import Core
 struct FullPlayerView: View {
 
     @EnvironmentObject private var audio: AudioEngine
-    @State private var showReciterPicker = false
+    @State private var isReciterPickerPresenting = false
     @State private var showSpeedPicker = false
     @Environment(\.dismiss) private var dismiss
 
@@ -51,8 +51,7 @@ struct FullPlayerView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text("تلاوة")
-                        .customStyle(.kitab(size: 16, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 16, bold: true), .onSurface)
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button { dismiss() } label: {
@@ -64,10 +63,8 @@ struct FullPlayerView: View {
                 }
             }
         }
-        .sheet(isPresented: $showReciterPicker) {
+        .customSheet(isPresented: $isReciterPickerPresenting, fraction: 1.0, detents: [.large]) {
             ReciterSelectionSheet()
-                .presentationDetents([.large])
-                .presentationDragIndicator(.hidden)
         }
     }
 
@@ -87,12 +84,11 @@ struct FullPlayerView: View {
 
             VStack(spacing: 4) {
                 Text(audio.currentSurahArabicName)
-                    .customStyle(.kitab(size: 22, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 22, bold: true), .onSurface)
                     .multilineTextAlignment(.center)
 
                 Text("\(audio.currentSurahNumber)")
-                    .customStyle(.kitab(size: 14))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 14), .subtitle)
             }
         }
         .shadow(color: Color.primaryColor.opacity(0.2), radius: 16, x: 0, y: 8)
@@ -103,15 +99,13 @@ struct FullPlayerView: View {
     private var surahInfoSection: some View {
         VStack(spacing: 6) {
             Text(audio.currentSurahArabicName)
-                .customStyle(.kitab(size: 26, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 26, bold: true), .onSurface)
 
             Text("سورة \(audio.currentSurahNumber) • آية \(audio.currentVerseNumber)")
-                .customStyle(.kitab(size: 15))
-                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 15), .subtitle)
 
             Text(audio.currentReciter.arabicName)
-                .customStyle(.kitab(size: 13))                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 13), .subtitle)
         }
         .multilineTextAlignment(.center)
         .environment(\.layoutDirection, .rightToLeft)
@@ -127,12 +121,12 @@ struct FullPlayerView: View {
 
             HStack {
                 Text(formatTime(audio.verseElapsed))
-                    .customStyle(.kitab(size: 11))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 11), .subtitle)
 
                 Spacer()
 
                 Text(formatTime(audio.verseDuration))
-                    .customStyle(.kitab(size: 11))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 11), .subtitle)
             }
         }
     }
@@ -241,14 +235,13 @@ struct FullPlayerView: View {
         HStack {
             VStack(alignment: .leading, spacing: 3) {
                 Text("القارئ")
-                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12), .subtitle)
                 Text(audio.currentReciter.arabicName)
-                    .customStyle(.kitab(size: 15, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 15, bold: true), .onSurface)
             }
             Spacer()
             Button {
-                showReciterPicker = true
+                isReciterPickerPresenting = true
             } label: {
                 Text("تغيير")
                     .customStyle(.kitab(size: 14))                    .foregroundStyle(Color.primaryColor)

@@ -29,8 +29,7 @@ struct StorageManagementView: View {
                     }
                 } header: {
                     Text("التلاوات المحمّلة")
-                        .customStyle(.kitab(size: 14, bold: true))
-                        .customForeground(.subtitle)
+                        .customStyle(.kitab(size: 14, bold: true), .subtitle)
                         .textCase(nil)
                 } footer: {
                     HStack {
@@ -39,7 +38,7 @@ struct StorageManagementView: View {
                         Text(String(format: "%.0f MB", downloads.totalStorageUsedMB()))
                             .fontWeight(.semibold)
                     }
-                    .customStyle(.kitab(size: 13))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 13), .subtitle)
                     .padding(.top, 8)
                 }
             }
@@ -65,18 +64,17 @@ struct StorageManagementView: View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(reciter.arabicName)
-                    .customStyle(.kitab(size: 15, bold: true))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 15, bold: true), .onSurface)
 
                 Text("\(reciter.downloadedSurahNumbers.count) سورة محمّلة")
-                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12), .subtitle)
             }
 
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
                 Text(String(format: "%.0f MB", Double(reciter.totalSizeBytes) / 1_048_576))
-                    .customStyle(.kitab(size: 13))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 13), .onSurface)
 
                 Button(role: .destructive) {
                     showDeleteAlert = reciter.slug
@@ -99,11 +97,10 @@ struct StorageManagementView: View {
                 .padding(.top, 40)
 
             Text("لم تحمّل أي تلاوة بعد")
-                .customStyle(.kitab(size: 18, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 18, bold: true), .onSurface)
 
             Text("اذهب إلى قسم التلاوة وحمّل قارئًا للاستماع بدون إنترنت")
-                .customStyle(.kitab(size: 14))                .customForeground(.subtitle)
+                .customStyle(.kitab(size: 14), .subtitle)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
         }

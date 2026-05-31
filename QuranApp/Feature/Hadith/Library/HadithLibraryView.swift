@@ -108,13 +108,11 @@ extension HadithLibraryView {
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: .xSm) {
             Text(AppLocalizedKeys.theAuthenticTraditions.value.uppercased())
-                .customStyle(.caption2)
+                .customStyle(.caption2, .primary)
                 .tracking(1.8)
-                .customForeground(.primary)
 
             Text(AppLocalizedKeys.exploringLegacy.value)
-                .customStyle(.kitab(size: 28, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 28, bold: true), .onSurface)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -441,8 +439,7 @@ extension HadithLibraryView {
                 .padding(.bottom, .xSm)
 
             Text(AppLocalizedKeys.hadithLibraryQuote.value)
-                .customStyle(.kitab(size: 17, bold: true))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
                 .multilineTextAlignment(.center)
                 .italic()
                 .frame(maxWidth: .infinity)
@@ -455,9 +452,8 @@ extension HadithLibraryView {
                 .padding(.bottom, .sm)
 
             Text(AppLocalizedKeys.propheticNarration.value.uppercased())
-                .customStyle(.caption2)
+                .customStyle(.caption2, .primary)
                 .tracking(1.8)
-                .customForeground(.primary)
         }
         .padding(.horizontal, .big)
         .padding(.vertical, .xxBig)
@@ -536,8 +532,7 @@ struct HadithSearchRow: View {
                             .customStyle(.caption2, .onSurfaceVariant)
                     }
                     Text(result.hadith.arabicText)
-                        .customStyle(.kitab(size: 14, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 14, bold: true), .onSurface)
                         .lineLimit(2)
                         .multilineTextAlignment(.trailing)
                         .environment(\.layoutDirection, .rightToLeft)

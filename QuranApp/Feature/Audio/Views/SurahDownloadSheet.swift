@@ -66,7 +66,7 @@ struct SurahDownloadSheet: View {
             Spacer()
 
             Text(reciter.arabicName)
-                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
             Spacer()
 
@@ -74,10 +74,10 @@ struct SurahDownloadSheet: View {
                 Button(action: onBack) {
                     HStack(spacing: 4) {
                         Text(AppLocalizedKeys.reciterSelection.value)
-                            .customStyle(.kitab(size: 14))                            .foregroundColor(ColorStyle.primary.color)
+                            .customStyle(.kitab(size: 14), .primary)
                         Image(systemName: "chevron.forward")
                             .font(.system(size: 12))
-                            .foregroundColor(ColorStyle.primary.color)
+                            .customForeground(.primary)
                     }
                 }
             } else {
@@ -126,7 +126,7 @@ struct SurahDownloadSheet: View {
                 Spacer()
 
                 Text(group.name)
-                    .customStyle(.kitab(size: 17, bold: true))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 17, bold: true), .onSurface)
             }
 
             VStack(spacing: 0) {
@@ -138,7 +138,7 @@ struct SurahDownloadSheet: View {
                 }
             }
             .background(Color.surfaceContainerLow)
-            .cornerRadius(12)
+            .customCornerRadius(12)
         }
     }
 
@@ -152,20 +152,19 @@ struct SurahDownloadSheet: View {
             Group {
                 if isDownloaded {
                     Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customForeground(.primary)
                 } else if isDownloading {
                     ProgressView()
                         .tint(ColorStyle.primary.color)
                 } else {
                     Image(systemName: "icloud.and.arrow.down")
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customForeground(.primary)
                 }
             }
             .customStyle(.kitab(size: 22))            .frame(width: 32, height: 32)
 
             Text("\(arabicIndic(surah.id)). \(surah.arabicName)")
-                .customStyle(.kitab(size: 16))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 16), .onSurface)
                 .id(refreshID)
 
             Spacer()
@@ -192,7 +191,8 @@ struct SurahDownloadSheet: View {
                         }
                     }) {
                         Text(arabicIndic(juz))
-                            .customStyle(.kitab(size: 9))                            .foregroundColor(juzGroups.contains { $0.juz == juz }
+                            .customStyle(.kitab(size: 9))
+                            .foregroundColor(juzGroups.contains { $0.juz == juz }
                                              ? ColorStyle.primary.color : .secondary)
                             .frame(width: 20, height: 16)
                     }

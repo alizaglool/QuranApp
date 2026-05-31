@@ -11,8 +11,8 @@ struct MiniPlayerView: View {
 
     @EnvironmentObject private var audio: AudioEngine
     @State private var isExpanded: Bool = AudioEngine.shared.isPlaying
-    @State private var showReciterSheet = false
-    @State private var showRepeatSheet = false
+    @State private var isReciterSheetPresenting = false
+    @State private var isRepeatSheetPresenting = false
 
     var onPlayTapped: (() -> Void)? = nil
 
@@ -40,14 +40,12 @@ struct MiniPlayerView: View {
                 }
             }
         }
-        .sheet(isPresented: $showReciterSheet) {
+        .customSheet(isPresented: $isReciterSheetPresenting, fraction: 1.0, detents: [.large]) {
             ReciterSelectionSheet()
-                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $showRepeatSheet) {
+        .customSheet(isPresented: $isRepeatSheetPresenting, fraction: 1.0, detents: [.large]) {
             RepeatSettingsSheet()
-                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
     }
@@ -74,7 +72,7 @@ struct MiniPlayerView: View {
             Spacer()
 
             // Reciter name + chevron — right side (RTL)
-            Button { showReciterSheet = true } label: {
+            Button { isReciterSheetPresenting = true } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "chevron.down")
                         .font(.system(size: 11, weight: .medium))
@@ -149,7 +147,7 @@ struct MiniPlayerView: View {
 
             // Center: reciter name + surah:verse
             VStack(spacing: 3) {
-                Button { showReciterSheet = true } label: {
+                Button { isReciterSheetPresenting = true } label: {
                     HStack(spacing: 5) {
                         Image(systemName: "chevron.down")
                             .font(.system(size: 11, weight: .medium))
@@ -221,7 +219,7 @@ struct MiniPlayerView: View {
 
     private var controlsRow: some View {
         HStack(spacing: 0) {
-            Button { showRepeatSheet = true } label: {
+            Button { isRepeatSheetPresenting = true } label: {
                 ZStack {
                     Image("repeat")
                         .renderingMode(.template)

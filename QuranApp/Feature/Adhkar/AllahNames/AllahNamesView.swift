@@ -47,7 +47,7 @@ extension AllahNamesView {
                     .customForeground(.onSurface)
                     .frame(width: 36, height: 36)
                     .background(Color.surfaceContainerLow)
-                    .cornerRadius(10)
+                    .customCornerRadius(10)
             }
             Spacer()
             Text(AppLocalizedKeys.allahNamesTitle.value)
@@ -65,7 +65,7 @@ extension AllahNamesView {
         Rectangle()
             .fill(ColorStyle.secondary.color)
             .frame(width: 48, height: 3)
-            .cornerRadius(2)
+            .customCornerRadius(2)
             .padding(.horizontal, .big)
             .padding(.top, .sm)
     }
@@ -103,11 +103,10 @@ struct AllahNameCard: View {
     var body: some View {
         VStack(spacing: 6) {
             Text(String(format: "%d", name.id))
-                .customStyle(.kitab(size: 10))                .customForeground(.onSurfaceVariant)
+                .customStyle(.kitab(size: 10), .onSurfaceVariant)
 
             Text(name.nameAr.trimmingCharacters(in: .whitespaces))
-                .customStyle(.kitab(size: 17, bold: true))
-                .customForeground(.primary)
+                .customStyle(.kitab(size: 17, bold: true), .primary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .environment(\.layoutDirection, .rightToLeft)

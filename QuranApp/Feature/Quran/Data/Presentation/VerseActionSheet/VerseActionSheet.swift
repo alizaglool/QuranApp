@@ -21,8 +21,8 @@ struct VerseActionSheet: View {
     @ObservedObject private var localization = LocalizationManager.shared
     @ObservedObject private var storage = StorageManager.shared
     @ObservedObject private var audio = AudioEngine.shared
-    @State private var showAllBookmarks = false
-    @State private var showTafsir = false
+    @State private var isAllBookmarksPresenting = false
+    @State private var isTafsirPresenting = false
 
     // MARK: - Inline bookmark "default" derivation
 
@@ -91,35 +91,27 @@ struct VerseActionSheet: View {
         }
         .background(Color.background)
         .environment(\.layoutDirection, layoutDirection)
-        .sheet(isPresented: $showAllBookmarks) {
+        .customSheet(isPresented: $isAllBookmarksPresenting, fraction: 0.45, detents: [.medium]) {
             AllBookmarksView(
                 page: page,
                 surahNumber: surahNumber,
                 surahName: surahName,
                 verseNumber: verseNumber,
                 onSelected: {
-                    // AllBookmarksView already triggered its own dismiss via
-                    // @Environment. Wait briefly for that animation to finish,
-                    // then dismiss VerseActionSheet so the user lands back on
-                    // the Mushaf page with the new highlight visible.
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                         dismiss()
                     }
                 }
             )
-            // Content is short (header + 4 rows) — use a fitted detent
-            // so the sheet sizes to its content instead of stretching.
-            .presentationDetents([.fraction(0.45), .medium])
             .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $showTafsir) {
+        .customSheet(isPresented: $isTafsirPresenting, fraction: 1.0, detents: [.large]) {
             TafsirView(
                 surahNumber: surahNumber,
                 verseNumber: verseNumber,
                 ref: "\(surahName): \(verseNumber)",
-                onDismissSheet: { showTafsir = false }
+                onDismissSheet: { isTafsirPresenting = false }
             )
-            .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
     }
@@ -132,13 +124,13 @@ struct VerseActionSheet: View {
         HStack {
             Button(action: { print("📋 Edit tapped") }) {
                 Text(AppLocalizedKeys.edit.value)
-                    .customStyle(.kitab(size: 15))                    .foregroundColor(ColorStyle.primary.color)
+                    .customStyle(.kitab(size: 15), .primary)
             }
 
             Spacer()
 
             Text("\(surahName): \(verseNumber)")
-                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
             Spacer()
 
@@ -156,7 +148,7 @@ struct VerseActionSheet: View {
 
     private func sectionTitle(_ title: String) -> some View {
         Text(title)
-            .customStyle(.kitab(size: 15, bold: true))            .customForeground(.onSurface)
+            .customStyle(.kitab(size: 15, bold: true), .onSurface)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 
@@ -165,7 +157,7 @@ struct VerseActionSheet: View {
     private var bookmarkButtons: some View {
         HStack(spacing: 12) {
             actionCard(icon: "list.bullet", title: AppLocalizedKeys.allBookmarks.value, hasChevron: true) {
-                showAllBookmarks = true
+                isAllBookmarksPresenting = true
             }
 
             // Dynamic quick-save card — color and subtitle reflect the user's
@@ -198,7 +190,7 @@ struct VerseActionSheet: View {
 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(inlineLabel)
-                        .customStyle(.kitab(size: 14))                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 14), .onSurface)
 
                     if let subtitle = inlineSubtitle {
                         Text(subtitle)
@@ -255,22 +247,20 @@ struct VerseActionSheet: View {
 
     private var tafsirSection: some View {
         Button {
-            showTafsir = true
+            isTafsirPresenting = true
         } label: {
             HStack(spacing: 14) {
                 Image(systemName: "text.book.closed.fill")
                     .font(.system(size: 22))
-                    .foregroundColor(ColorStyle.primary.color)
+                    .customForeground(.primary)
                     .frame(width: 44, height: 44)
                     .background(ColorStyle.primary.color.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
 
                 VStack(alignment: .trailing, spacing: 3) {
                     Text(AppLocalizedKeys.tafsir.value)
-                        .customStyle(.kitab(size: 16, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 16, bold: true), .onSurface)
                     Text("٦ تفاسير • ترجمات")
-                        .customStyle(.kitab(size: 13))
-                        .customForeground(.subtitle)
+                        .customStyle(.kitab(size: 13), .subtitle)
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
 
@@ -327,7 +317,7 @@ struct VerseActionSheet: View {
                     .overlay(
                         Image(systemName: "nosign")
                             .font(.system(size: 22))
-                            .foregroundColor(ColorStyle.primary.color)
+                            .customForeground(.primary)
                     )
             }
         }
@@ -362,13 +352,13 @@ struct VerseActionSheet: View {
                     .foregroundColor(iconColor ?? ColorStyle.primary.color)
 
                 Text(title)
-                    .customStyle(.kitab(size: 14))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 14), .onSurface)
 
                 if hasChevron {
                     Spacer()
                     Image(systemName: "chevron.backward")
                         .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customForeground(.primary)
                 }
             }
             .padding(.horizontal, 12)
@@ -387,7 +377,7 @@ struct VerseActionSheet: View {
         Button(action: action) {
             Image(systemName: icon)
                 .font(.system(size: 18))
-                .foregroundColor(ColorStyle.primary.color)
+                .customForeground(.primary)
                 .frame(width: 48, height: 48)
                 .background(
                     RoundedRectangle(cornerRadius: 12)

@@ -53,7 +53,7 @@ extension AllahNameReadingView {
                     .customForeground(.onSurface)
                     .frame(width: 36, height: 36)
                     .background(Color.surfaceContainerLow)
-                    .cornerRadius(10)
+                    .customCornerRadius(10)
             }
             Spacer()
             Text(AppLocalizedKeys.allahNamesTitle.value)
@@ -130,8 +130,7 @@ extension AllahNameReadingView {
                         .customForeground(currentIndex > 0 ? .primary : .onSurfaceVariant)
                     if currentIndex > 0 {
                         Text(names[currentIndex - 1].nameAr.trimmingCharacters(in: .whitespaces))
-                            .customStyle(.kitab(size: 11, bold: true))
-                            .customForeground(.onSurfaceVariant)
+                            .customStyle(.kitab(size: 11, bold: true), .onSurfaceVariant)
                             .lineLimit(1)
                     }
                 }
@@ -146,7 +145,7 @@ extension AllahNameReadingView {
                     .fill(ColorStyle.secondary.color.opacity(colorScheme == .dark ? 0.2 : 0.1))
                     .frame(width: 44, height: 44)
                 Text(String(format: "%d", current.id))
-                    .customStyle(.kitab(size: 16, bold: true))                    .customForeground(.secondary)
+                    .customStyle(.kitab(size: 16, bold: true), .secondary)
             }
 
             Spacer()
@@ -166,8 +165,7 @@ extension AllahNameReadingView {
                         .customForeground(currentIndex < names.count - 1 ? .primary : .onSurfaceVariant)
                     if currentIndex < names.count - 1 {
                         Text(names[currentIndex + 1].nameAr.trimmingCharacters(in: .whitespaces))
-                            .customStyle(.kitab(size: 11, bold: true))
-                            .customForeground(.onSurfaceVariant)
+                            .customStyle(.kitab(size: 11, bold: true), .onSurfaceVariant)
                             .lineLimit(1)
                     }
                 }
@@ -213,8 +211,7 @@ struct NamePageView: View {
                 Spacer(minLength: 16)
 
                 Text(name.nameAr.trimmingCharacters(in: .whitespaces))
-                    .customStyle(.kitab(size: 52, bold: true))
-                    .customForeground(.primary)
+                    .customStyle(.kitab(size: 52, bold: true), .primary)
                     .multilineTextAlignment(.center)
                     .environment(\.layoutDirection, .rightToLeft)
                     .padding(.horizontal, .big)
@@ -237,8 +234,7 @@ struct NamePageView: View {
 
                 if let desc = name.descriptionAr {
                     Text(desc)
-                        .customStyle(.kitab(size: 17))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 17), .onSurface)
                         .multilineTextAlignment(.trailing)
                         .lineSpacing(6)
                         .environment(\.layoutDirection, .rightToLeft)
