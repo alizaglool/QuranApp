@@ -123,7 +123,7 @@ struct HadithReadingView: View {
 
     private var breadcrumbDot: some View {
         Text("•")
-            .customStyle(.kitab(size: 8))            .foregroundColor(Color.hadithMuted)
+            .customStyle(.adhkar(size: 8))            .foregroundColor(Color.hadithMuted)
     }
 
     // MARK: Hadith Pager
@@ -245,7 +245,7 @@ struct HadithPageContent: View {
             VStack(alignment: .leading, spacing: 0) {
                 if !hadith.narrator.isEmpty {
                     Text(hadith.narrator)
-                        .customStyle(.kitab(size: 15))
+                        .customStyle(.adhkar(size: 15))
                         .italic()
                         .customForeground(.hadithSecondary)
                         .lineSpacing(5)
@@ -393,7 +393,7 @@ struct HadithScholarlyRow: View {
     private var scholarlyContentView: some View {
         if item.isRTL {
             Text(item.content)
-                .customStyle(.kitab(size: 15))
+                .customStyle(.adhkar(size: 15))
                 .foregroundColor(gradeAwareColor)
                 .lineSpacing(7)
                 .multilineTextAlignment(.trailing)

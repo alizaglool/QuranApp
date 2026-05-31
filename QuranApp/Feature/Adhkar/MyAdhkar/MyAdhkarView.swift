@@ -214,7 +214,7 @@ extension MyAdhkarView {
             // Counter display
             VStack(spacing: 8) {
                 Text("\(tapCount)")
-                    .customStyle(.kitab(size: 52, bold: true), .primary)
+                    .customStyle(.adhkar(size: 52, bold: true), .primary)
                     .contentTransition(.numericText())
                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: tapCount)
 
@@ -395,7 +395,7 @@ struct MyAdhkarCard: View {
                         .fill(ColorStyle.primary.color.opacity(colorScheme == .dark ? 0.15 : 0.08))
                         .frame(width: 36, height: 36)
                     Text("\(index)")
-                        .customStyle(.kitab(size: 13, bold: true), .primary)
+                        .customStyle(.adhkar(size: 13, bold: true), .primary)
                 }
 
                 VStack(alignment: .trailing, spacing: 4) {

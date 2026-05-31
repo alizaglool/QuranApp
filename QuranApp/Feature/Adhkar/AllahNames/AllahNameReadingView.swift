@@ -130,7 +130,7 @@ extension AllahNameReadingView {
                         .customForeground(currentIndex > 0 ? .primary : .onSurfaceVariant)
                     if currentIndex > 0 {
                         Text(names[currentIndex - 1].nameAr.trimmingCharacters(in: .whitespaces))
-                            .customStyle(.kitab(size: 11, bold: true), .onSurfaceVariant)
+                            .customStyle(.adhkar(size: 11, bold: true), .onSurfaceVariant)
                             .lineLimit(1)
                     }
                 }
@@ -145,7 +145,7 @@ extension AllahNameReadingView {
                     .fill(ColorStyle.secondary.color.opacity(colorScheme == .dark ? 0.2 : 0.1))
                     .frame(width: 44, height: 44)
                 Text(String(format: "%d", current.id))
-                    .customStyle(.kitab(size: 16, bold: true), .secondary)
+                    .customStyle(.adhkar(size: 16, bold: true), .secondary)
             }
 
             Spacer()
@@ -165,7 +165,7 @@ extension AllahNameReadingView {
                         .customForeground(currentIndex < names.count - 1 ? .primary : .onSurfaceVariant)
                     if currentIndex < names.count - 1 {
                         Text(names[currentIndex + 1].nameAr.trimmingCharacters(in: .whitespaces))
-                            .customStyle(.kitab(size: 11, bold: true), .onSurfaceVariant)
+                            .customStyle(.adhkar(size: 11, bold: true), .onSurfaceVariant)
                             .lineLimit(1)
                     }
                 }
@@ -211,7 +211,7 @@ struct NamePageView: View {
                 Spacer(minLength: 16)
 
                 Text(name.nameAr.trimmingCharacters(in: .whitespaces))
-                    .customStyle(.kitab(size: 52, bold: true), .primary)
+                    .customStyle(.adhkar(size: 52, bold: true), .primary)
                     .multilineTextAlignment(.center)
                     .environment(\.layoutDirection, .rightToLeft)
                     .padding(.horizontal, .big)
@@ -234,7 +234,7 @@ struct NamePageView: View {
 
                 if let desc = name.descriptionAr {
                     Text(desc)
-                        .customStyle(.kitab(size: 17), .onSurface)
+                        .customStyle(.adhkar(size: 17), .onSurface)
                         .multilineTextAlignment(.trailing)
                         .lineSpacing(6)
                         .environment(\.layoutDirection, .rightToLeft)

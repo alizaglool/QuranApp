@@ -103,10 +103,10 @@ struct AllahNameCard: View {
     var body: some View {
         VStack(spacing: 6) {
             Text(String(format: "%d", name.id))
-                .customStyle(.kitab(size: 10), .onSurfaceVariant)
+                .customStyle(.adhkar(size: 10), .onSurfaceVariant)
 
             Text(name.nameAr.trimmingCharacters(in: .whitespaces))
-                .customStyle(.kitab(size: 17, bold: true), .primary)
+                .customStyle(.adhkar(size: 17, bold: true), .primary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
                 .environment(\.layoutDirection, .rightToLeft)

@@ -28,6 +28,9 @@
 		<string>QuranTitles.ttf</string>
 		<string>Kitab-Bold.ttf</string>
 		<string>Kitab-Regular.ttf</string>
+		<string>TheYearofHandicrafts-Regular.otf</string>
+		<string>TheYearofHandicrafts-SemiBold.otf</string>
+		<string>TheYearofHandicrafts-Bold.otf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

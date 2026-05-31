@@ -232,13 +232,13 @@ extension TasbihCounterView {
 
             VStack(spacing: 2) {
                 Text("\(viewModel.currentCount)")
-                    .customStyle(.kitab(size: 48, bold: true), viewModel.justCompleted ? .secondary : .onSurface)
+                    .customStyle(.adhkar(size: 48, bold: true), viewModel.justCompleted ? .secondary : .onSurface)
                     .monospacedDigit()
                     .animation(.easeOut(duration: 0.2), value: viewModel.justCompleted)
 
                 if viewModel.targetCount > 0 {
                     Text("/ \(viewModel.targetCount)")
-                        .customStyle(.kitab(size: 14), .onSurfaceVariant)
+                        .customStyle(.adhkar(size: 14), .onSurfaceVariant)
                         .monospacedDigit()
                 }
             }
@@ -265,7 +265,7 @@ extension TasbihCounterView {
                     Text("التالي")
                         .customStyle(.headline, .onSurface)
                     Image(systemName: "chevron.left")
-                        .customStyle(.kitab(size: 13), .onSurface)
+                        .customStyle(.adhkar(size: 13), .onSurface)
                 }
                 .padding(.horizontal, 28)
                 .padding(.vertical, 13)

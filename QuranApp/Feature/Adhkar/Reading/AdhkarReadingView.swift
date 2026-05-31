@@ -83,7 +83,7 @@ extension AdhkarReadingView {
             Spacer()
 
             Text(AppLocalizedKeys.adhkar.value)
-                .customStyle(.kitab(size: 22, bold: true), .primary)
+                .customStyle(.adhkar(size: 22, bold: true), .primary)
 
             Spacer()
 
@@ -159,11 +159,11 @@ extension AdhkarReadingView {
         HStack(alignment: .bottom, spacing: 0) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(AppLocalizedKeys.adhkar.value.uppercased())
-                    .customStyle(.kitab(size: 10, bold: true), .outline)
+                    .customStyle(.adhkar(size: 10, bold: true), .outline)
                     .kerning(2.4)
 
                 Text(displayTitle)
-                    .customStyle(.kitab(size: 26), .onSurface)
+                    .customStyle(.adhkar(size: 26), .onSurface)
                     .lineLimit(2)
             }
 
@@ -171,15 +171,15 @@ extension AdhkarReadingView {
 
             VStack(alignment: .trailing, spacing: 6) {
                 Text(AppLocalizedKeys.progress.value.uppercased())
-                    .customStyle(.kitab(size: 10, bold: true), .primary)
+                    .customStyle(.adhkar(size: 10, bold: true), .primary)
                     .kerning(2.2)
 
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(en(viewModel.currentIndex + 1))
-                        .customStyle(.kitab(size: 28), .onSurface)
+                        .customStyle(.adhkar(size: 28), .onSurface)
                         .monospacedDigit()
                     Text("/ \(en(viewModel.category.adhkar.count))")
-                        .customStyle(.kitab(size: 14), .outline)
+                        .customStyle(.adhkar(size: 14), .outline)
                         .monospacedDigit()
                 }
             }
@@ -220,7 +220,7 @@ extension AdhkarReadingView {
                     .padding(.bottom, 16)
 
                 Text(description)
-                    .customStyle(.kitab(size: 15), .onSurfaceVariant)
+                    .customStyle(.adhkar(size: 15), .onSurfaceVariant)
                     .multilineTextAlignment(isRightToLeft ? .trailing : .leading)
                     .lineSpacing(7)
                     .fixedSize(horizontal: false, vertical: true)
@@ -320,10 +320,10 @@ extension AdhkarReadingView {
             if let dhikr = viewModel.currentDhikr, dhikr.count > 1 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(en(viewModel.currentTapCount))
-                        .customStyle(.kitab(size: 15, bold: true), .onSurface)
+                        .customStyle(.adhkar(size: 15, bold: true), .onSurface)
                         .monospacedDigit()
                     Text("/ \(en(dhikr.count))")
-                        .customStyle(.kitab(size: 12), .outline)
+                        .customStyle(.adhkar(size: 12), .outline)
                         .monospacedDigit()
                 }
                 .animation(.easeOut(duration: 0.2), value: viewModel.currentTapCount)
@@ -478,7 +478,7 @@ extension AdhkarReadingView {
                     .frame(width: 56, height: 56)
 
                 Text(en(viewModel.currentTapCount))
-                    .customStyle(.kitab(size: 20, bold: true), .onSurface)
+                    .customStyle(.adhkar(size: 20, bold: true), .onSurface)
                     .monospacedDigit()
             }
         }
