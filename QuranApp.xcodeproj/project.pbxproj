@@ -103,6 +103,9 @@
 		F8B854D92FCB460E007666A5 /* QuranTextService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854D82FCB460E007666A5 /* QuranTextService.swift */; };
 		F8B854DB2FCB4BC1007666A5 /* TafsirDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */; };
 		F8B854DD2FCB4BD7007666A5 /* DailyVerseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854DC2FCB4BD7007666A5 /* DailyVerseService.swift */; };
+		F8B859992FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F8B859982FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf */; };
+		F8B8599A2FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */; };
+		F8B8599B2FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F8B859972FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf */; };
 		F8BDD0382F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BDD0372F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift */; };
 		F8BEB9B32F71744C009F1094 /* SurahEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9B22F71744C009F1094 /* SurahEntity.swift */; };
 		F8BEB9B52F71745A009F1094 /* AyahEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9B42F71745A009F1094 /* AyahEntity.swift */; };
@@ -233,6 +236,9 @@
 		F8B854D82FCB460E007666A5 /* QuranTextService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextService.swift; sourceTree = "<group>"; };
 		F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirDownloadManager.swift; sourceTree = "<group>"; };
 		F8B854DC2FCB4BD7007666A5 /* DailyVerseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVerseService.swift; sourceTree = "<group>"; };
+		F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-Bold.otf"; sourceTree = "<group>"; };
+		F8B859972FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-Regular.otf"; sourceTree = "<group>"; };
+		F8B859982FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-SemiBold.otf"; sourceTree = "<group>"; };
 		F8BDD0372F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesAPIResponse.swift; sourceTree = "<group>"; };
 		F8BEB9B22F71744C009F1094 /* SurahEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahEntity.swift; sourceTree = "<group>"; };
 		F8BEB9B42F71745A009F1094 /* AyahEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AyahEntity.swift; sourceTree = "<group>"; };
@@ -655,6 +661,22 @@
 			path = VerseActionSheet;
 			sourceTree = "<group>";
 		};
+		F8B8599C2FCCB0F3007666A5 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				F88DD9072F753DC10025939D /* Kitab-Bold.ttf */,
+				F88DD9082F753DC10025939D /* Kitab-Regular.ttf */,
+				F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */,
+				F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */,
+				F88DD9032F753DAB0025939D /* QuranNumbers.ttf */,
+				F88DD9042F753DAB0025939D /* QuranTitles.ttf */,
+				F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */,
+				F8B859972FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf */,
+				F8B859982FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf */,
+			);
+			path = Font;
+			sourceTree = "<group>";
+		};
 		F8BEB9AF2F717434009F1094 /* Quran */ = {
 			isa = PBXGroup;
 			children = (
@@ -730,18 +752,13 @@
 		F8F71DE12DEEF2E900FA529D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F8B854A82FC9BDB0007666A5 /* quran_text.json */,
-				F84DAA3C2FC8942000C86233 /* books_manifest.json */,
 				F88D4B8B2F75487F0025939D /* quran-images */,
 				F88DD90B2F753DDF0025939D /* quran_positioning.db */,
-				F88DD9072F753DC10025939D /* Kitab-Bold.ttf */,
-				F88DD9082F753DC10025939D /* Kitab-Regular.ttf */,
-				F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */,
-				F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */,
-				F88DD9032F753DAB0025939D /* QuranNumbers.ttf */,
-				F88DD9042F753DAB0025939D /* QuranTitles.ttf */,
+				F8B8599C2FCCB0F3007666A5 /* Font */,
 				C88166C82DB662BC00EDECB8 /* Assets.xcassets */,
 				F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */,
+				F8B854A82FC9BDB0007666A5 /* quran_text.json */,
+				F84DAA3C2FC8942000C86233 /* books_manifest.json */,
 				F45ABB2CFB4B4500B164A904 /* adhkar.json */,
 				F9AA00042F71800000AA0004 /* allahNames.json */,
 				F9AA000B2F71800000AA000B /* takbeerat.m4a */,
@@ -916,6 +933,9 @@
 				F88DD9062F753DAB0025939D /* QuranNumbers.ttf in Resources */,
 				F88DD9092F753DC10025939D /* Kitab-Regular.ttf in Resources */,
 				F88DD90A2F753DC10025939D /* Kitab-Bold.ttf in Resources */,
+				F8B859992FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf in Resources */,
+				F8B8599A2FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf in Resources */,
+				F8B8599B2FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf in Resources */,
 				F88DD90C2F753DDF0025939D /* quran_positioning.db in Resources */,
 				F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */,
 				F8FB7F582E10A6C10051D1EA /* InfoPlist.strings in Resources */,

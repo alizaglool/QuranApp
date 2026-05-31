@@ -95,11 +95,10 @@ private struct ReciterRow: View {
 
                 VStack(alignment: .leading, spacing: 3) {
                     Text(reciter.arabicName)
-                        .customStyle(.kitab(size: 16, bold: true))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 16, bold: true), .onSurface)
 
                     Text(reciter.englishName)
-                        .customStyle(.kitab(size: 12))                        .customForeground(.subtitle)
+                        .customStyle(.kitab(size: 12), .subtitle)
                 }
 
                 Spacer()
@@ -134,7 +133,7 @@ private struct ReciterRow: View {
                         .font(.system(size: 16))
                         .foregroundStyle(Color.primaryColor)
                     Text("مختار")
-                        .customStyle(.kitab(size: 12))                        .customForeground(.subtitle)
+                        .customStyle(.kitab(size: 12), .subtitle)
                 }
             } else {
                 Text("محمّل")
@@ -148,7 +147,7 @@ private struct ReciterRow: View {
         } else if isDownloading, let progress = downloadProgress {
             VStack(alignment: .trailing, spacing: 2) {
                 Text("\(Int(progress.fractionCompleted * 100))%")
-                    .customStyle(.kitab(size: 12))                    .customForeground(.subtitle)
+                    .customStyle(.kitab(size: 12), .subtitle)
 
                 Button {
                     downloads.cancelDownload(for: reciter.id)
