@@ -72,6 +72,8 @@ public extension Color {
     static let verseMarkerGold = Color(.verseMarkerGold)
     static let verseMarkerCream = Color(.verseMarkerCream)
     static let verseMarkerDigits = Color(.verseMarkerDigits)
+
+    static let playerControls = Color(.playerControls)
 }
 
 // Hadith Reading

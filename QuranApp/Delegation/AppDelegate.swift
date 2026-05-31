@@ -12,7 +12,7 @@ import Core
 class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        FontsManager.registerFonts()
         return true
     }
 
@@ -30,6 +30,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
+    // MARK: - Background URLSession
+
+    /// Stored completion handler from the system — called after DownloadManager
+    /// finishes processing all pending background download events.
+    var backgroundSessionCompletionHandler: (() -> Void)?
+
+    func application(
+        _ application: UIApplication,
+        handleEventsForBackgroundURLSession identifier: String,
+        completionHandler: @escaping () -> Void
+    ) {
+        backgroundSessionCompletionHandler = completionHandler
+        // Accessing shared recreates the session if needed so its delegate
+        // is live and can receive the pending callbacks from the OS.
+        _ = DownloadManager.shared
+    }
 
 }
 

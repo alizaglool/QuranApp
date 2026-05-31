@@ -11,6 +11,7 @@ import Core
 struct HadithLibraryView: View {
 
     @StateObject private var viewModel: HadithLibraryViewModel
+    @ObservedObject private var downloadManager = HadithDownloadManager.shared
     // Kept for SwiftUI re-render subscription on language change
     @EnvironmentObject private var localizationManager: LocalizationManager
     @Environment(\.colorScheme) var colorScheme
@@ -107,12 +108,12 @@ extension HadithLibraryView {
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: .xSm) {
             Text(AppLocalizedKeys.theAuthenticTraditions.value.uppercased())
-                .customFont(.caption2)
+                .customStyle(.caption2)
                 .tracking(1.8)
                 .customForeground(.primary)
 
             Text(AppLocalizedKeys.exploringLegacy.value)
-                .font(.custom("Kitab-Bold", size: 28))
+                .customStyle(.kitab(size: 28, bold: true))
                 .customForeground(.onSurface)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -171,12 +172,12 @@ extension HadithLibraryView {
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundColor(Color.secondaryColor)
                     Text(AppLocalizedKeys.continueReading.value.uppercased())
-                        .customFont(.caption2)
+                        .customStyle(.caption2)
                         .tracking(1.4)
                         .foregroundColor(Color.secondaryColor)
                     Spacer()
                     Text("\(formatNumber(position.hadithIndex + 1)) OF \(formatNumber(position.bookHadithCount)) HADITH")
-                        .customFont(.caption2)
+                        .customStyle(.caption2)
                         .tracking(0.4)
                         .foregroundColor(Color.white.opacity(0.50))
                 }
@@ -185,11 +186,11 @@ extension HadithLibraryView {
                 HStack(alignment: .center, spacing: .sm) {
                     VStack(alignment: .leading, spacing: .xxSm) {
                         Text(position.bookTitle)
-                            .customFont(.headline)
+                            .customStyle(.headline)
                             .foregroundColor(.white)
                             .lineLimit(1)
                         Text(position.chapterTitle)
-                            .customFont(.caption1)
+                            .customStyle(.caption1)
                             .foregroundColor(Color.white.opacity(0.60))
                             .lineLimit(1)
                     }
@@ -198,7 +199,7 @@ extension HadithLibraryView {
                         Image(systemName: "play.fill")
                             .font(.system(size: 9, weight: .bold))
                         Text(AppLocalizedKeys.resume.value.uppercased())
-                            .customFont(.caption2)
+                            .customStyle(.caption2)
                             .tracking(0.6)
                     }
                     .foregroundColor(Color.primaryColor)
@@ -260,52 +261,56 @@ extension HadithLibraryView {
     // MARK: Featured Book Card (first book — full-height hero)
 
     private func featuredBookCard(_ book: HadithBook) -> some View {
+        let dlState    = downloadManager.state(for: book.id)
+        let downloaded = dlState == .downloaded
         let stats = "\(formatNumber(book.hadithCount)) HADITH · \(formatNumber(book.chapterCount)) BOOKS"
 
-        return Button { viewModel.selectBook(book) } label: {
-            ZStack(alignment: .bottomLeading) {
-                primaryCardGradient
+        return ZStack(alignment: .bottomLeading) {
+            primaryCardGradient
 
-                // Ghosted decorative icon — top right
-                VStack {
-                    HStack {
-                        Spacer()
-                        Image(systemName: "book.open.fill")
-                            .font(.system(size: 36, weight: .thin))
-                            .foregroundColor(Color.white.opacity(0.10))
-                            .padding([.top, .trailing], 18)
-                    }
+            // Ghosted decorative icon — top right
+            VStack {
+                HStack {
                     Spacer()
+                    Image(systemName: "book.open.fill")
+                        .font(.system(size: 36, weight: .thin))
+                        .foregroundColor(Color.white.opacity(0.10))
+                        .padding([.top, .trailing], 18)
                 }
+                Spacer()
+            }
 
-                // Metadata — bottom left
-                VStack(alignment: .leading, spacing: .xSm) {
-                    Spacer()
-                    Text(book.title)
-                        .font(.custom("Kitab-Bold", size: 24))
-                        .foregroundColor(.white)
+            // Metadata — bottom left
+            VStack(alignment: .leading, spacing: .xSm) {
+                Spacer()
+                Text(book.title)
+                    .customStyle(.kitab(size: 24, bold: true))
+                    .foregroundColor(.white)
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                if !book.author.isEmpty {
+                    Text(book.author)
+                        .customStyle(.caption1)
+                        .foregroundColor(Color.white.opacity(0.55))
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
-                    if !book.author.isEmpty {
-                        Text(book.author)
-                            .customFont(.caption1)
-                            .foregroundColor(Color.white.opacity(0.55))
-                            .lineLimit(2)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    Text(stats)
-                        .customFont(.caption2)
-                        .tracking(0.5)
-                        .foregroundColor(Color.secondaryColor)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.big)
+                Text(stats)
+                    .customStyle(.caption2)
+                    .tracking(0.5)
+                    .foregroundColor(Color.secondaryColor)
             }
-            .frame(height: 200)
-            .cornerRadius(.cornerXxl)
-            .contentShape(Rectangle())
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.big)
         }
-        .buttonStyle(.plain)
+        .overlay(alignment: .topTrailing) {
+            downloadButton(for: book, state: dlState, dark: true)
+                .padding(.md)
+        }
+        .frame(height: 200)
+        .cornerRadius(.cornerXxl)
+        .contentShape(Rectangle())
+        .onTapGesture { if downloaded { viewModel.selectBook(book) } }
     }
 
     // MARK: Book Card (all remaining books)
@@ -314,49 +319,113 @@ extension HadithLibraryView {
         let icons      = ["books.vertical.fill", "scroll.fill", "doc.richtext.fill", "book.pages.fill"]
         let icon       = icons[iconIndex % icons.count]
         let isDark     = colorScheme == .dark
+        let dlState    = downloadManager.state(for: book.id)
+        let downloaded = dlState == .downloaded
         let iconColor  = isDark ? Color.white.opacity(0.55)  : Color.primaryColor.opacity(0.70)
         let titleColor = isDark ? Color.white                : Color.primaryColor
         let metaColor  = isDark ? Color.white.opacity(0.35)  : Color.primaryColor.opacity(0.45)
 
-        return Button { viewModel.selectBook(book) } label: {
-            VStack(alignment: .leading, spacing: 0) {
+        return VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .top) {
                 Image(systemName: icon)
                     .font(.system(size: 20, weight: .medium))
                     .foregroundColor(iconColor)
-                    .padding(.bottom, .sm)
-
-                Text(book.title)
-                    .font(.custom("Kitab-Bold", size: 18))
-                    .foregroundColor(titleColor)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding(.bottom, .xxSm + 1)
-
-                Text("\(formatNumber(book.hadithCount)) HADITH")
-                    .customFont(.caption2)
-                    .tracking(0.5)
-                    .foregroundColor(Color.secondaryColor)
-
-                if !book.author.isEmpty {
-                    Text(book.author.uppercased())
-                        .customFont(.caption2)
-                        .tracking(1.0)
-                        .foregroundColor(metaColor)
-                        .lineLimit(1)
-                        .padding(.top, .xxSm - 1)
-                }
+                Spacer()
+                downloadButton(for: book, state: dlState, dark: isDark)
             }
-            .padding(.md)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(adaptiveCardBackground)
-            .cornerRadius(.cornerXl)
-            .overlay(
-                RoundedRectangle(cornerRadius: .cornerXl)
-                    .strokeBorder(Color.outlineVariant.opacity(0.18), lineWidth: 1)
-            )
-            .contentShape(Rectangle())
+            .padding(.bottom, .sm)
+
+            Text(book.title)
+                .customStyle(.kitab(size: 18, bold: true))
+                .foregroundColor(titleColor)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.bottom, .xxSm + 1)
+
+            Text("\(formatNumber(book.hadithCount)) HADITH")
+                .customStyle(.caption2)
+                .tracking(0.5)
+                .foregroundColor(Color.secondaryColor)
+
+            if !book.author.isEmpty {
+                Text(book.author.uppercased())
+                    .customStyle(.caption2)
+                    .tracking(1.0)
+                    .foregroundColor(metaColor)
+                    .lineLimit(1)
+                    .padding(.top, .xxSm - 1)
+            }
         }
-        .buttonStyle(.plain)
+        .padding(.md)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(adaptiveCardBackground)
+        .cornerRadius(.cornerXl)
+        .overlay(
+            RoundedRectangle(cornerRadius: .cornerXl)
+                .strokeBorder(Color.outlineVariant.opacity(0.18), lineWidth: 1)
+        )
+        .contentShape(Rectangle())
+        .onTapGesture { if downloaded { viewModel.selectBook(book) } }
+    }
+}
+
+// MARK: - Download Button
+
+extension HadithLibraryView {
+
+    @ViewBuilder
+    private func downloadButton(for book: HadithBook, state: HadithDownloadState, dark: Bool) -> some View {
+        let stroke: Color = dark ? Color.white.opacity(0.35)       : Color.onSurface.opacity(0.30)
+        let bg: Color     = dark ? Color.white.opacity(0.10)       : Color.onSurface.opacity(0.06)
+        let icon: Color   = dark ? Color.white.opacity(0.80)       : Color.onSurface.opacity(0.70)
+
+        switch state {
+        case .notDownloaded:
+            Button { viewModel.download(book) } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: .cornerSm).fill(bg)
+                    RoundedRectangle(cornerRadius: .cornerSm).strokeBorder(stroke, lineWidth: 1)
+                    Image(systemName: "arrow.down")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(icon)
+                }
+                .frame(width: 36, height: 36)
+            }
+            .buttonStyle(.plain)
+
+        case .downloading(let progress):
+            Button { viewModel.cancelDownload(book) } label: {
+                ZStack {
+                    Circle().stroke(stroke.opacity(0.40), lineWidth: 2.5)
+                    Circle()
+                        .trim(from: 0, to: CGFloat(progress))
+                        .stroke(Color.secondaryColor, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
+                        .rotationEffect(.degrees(-90))
+                        .animation(.linear(duration: 0.15), value: progress)
+                    Image(systemName: "xmark")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(icon)
+                }
+                .frame(width: 36, height: 36)
+            }
+            .buttonStyle(.plain)
+
+        case .downloaded:
+            EmptyView()
+
+        case .failed:
+            Button { viewModel.download(book) } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: .cornerSm).fill(Color.red.opacity(0.10))
+                    RoundedRectangle(cornerRadius: .cornerSm).strokeBorder(Color.red.opacity(0.40), lineWidth: 1)
+                    Image(systemName: "arrow.clockwise")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(.red.opacity(0.80))
+                }
+                .frame(width: 36, height: 36)
+            }
+            .buttonStyle(.plain)
+        }
     }
 }
 
@@ -367,13 +436,12 @@ extension HadithLibraryView {
     private var propheticQuoteSection: some View {
         VStack(spacing: 0) {
             Text("\u{201C}")
-                .font(.system(size: 28, weight: .semibold, design: .serif))
-                .foregroundColor(Color.secondaryColor.opacity(0.75))
+                .customStyle(.kitab(size: 28, bold: true))                .foregroundColor(Color.secondaryColor.opacity(0.75))
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, .xSm)
 
             Text(AppLocalizedKeys.hadithLibraryQuote.value)
-                .font(.custom("Kitab-Bold", size: 17))
+                .customStyle(.kitab(size: 17, bold: true))
                 .customForeground(.onSurface)
                 .multilineTextAlignment(.center)
                 .italic()
@@ -387,7 +455,7 @@ extension HadithLibraryView {
                 .padding(.bottom, .sm)
 
             Text(AppLocalizedKeys.propheticNarration.value.uppercased())
-                .customFont(.caption2)
+                .customStyle(.caption2)
                 .tracking(1.8)
                 .customForeground(.primary)
         }
@@ -460,7 +528,7 @@ struct HadithSearchRow: View {
                 VStack(alignment: .leading, spacing: .xSm) {
                     HStack {
                         Text(result.book.title)
-                            .customFont(.caption2)
+                            .customStyle(.caption2)
                             .foregroundColor(accentColor)
                             .lineLimit(1)
                         Spacer()
@@ -468,7 +536,7 @@ struct HadithSearchRow: View {
                             .customStyle(.caption2, .onSurfaceVariant)
                     }
                     Text(result.hadith.arabicText)
-                        .font(.custom("Kitab-Bold", size: 14))
+                        .customStyle(.kitab(size: 14, bold: true))
                         .customForeground(.onSurface)
                         .lineLimit(2)
                         .multilineTextAlignment(.trailing)

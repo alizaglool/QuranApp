@@ -130,7 +130,7 @@ extension AllahNameReadingView {
                         .customForeground(currentIndex > 0 ? .primary : .onSurfaceVariant)
                     if currentIndex > 0 {
                         Text(names[currentIndex - 1].nameAr.trimmingCharacters(in: .whitespaces))
-                            .font(.custom("Kitab-Bold", size: 11))
+                            .customStyle(.kitab(size: 11, bold: true))
                             .customForeground(.onSurfaceVariant)
                             .lineLimit(1)
                     }
@@ -146,8 +146,7 @@ extension AllahNameReadingView {
                     .fill(ColorStyle.secondary.color.opacity(colorScheme == .dark ? 0.2 : 0.1))
                     .frame(width: 44, height: 44)
                 Text(String(format: "%d", current.id))
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .customForeground(.secondary)
+                    .customStyle(.kitab(size: 16, bold: true))                    .customForeground(.secondary)
             }
 
             Spacer()
@@ -167,7 +166,7 @@ extension AllahNameReadingView {
                         .customForeground(currentIndex < names.count - 1 ? .primary : .onSurfaceVariant)
                     if currentIndex < names.count - 1 {
                         Text(names[currentIndex + 1].nameAr.trimmingCharacters(in: .whitespaces))
-                            .font(.custom("Kitab-Bold", size: 11))
+                            .customStyle(.kitab(size: 11, bold: true))
                             .customForeground(.onSurfaceVariant)
                             .lineLimit(1)
                     }
@@ -214,7 +213,7 @@ struct NamePageView: View {
                 Spacer(minLength: 16)
 
                 Text(name.nameAr.trimmingCharacters(in: .whitespaces))
-                    .font(.custom("Kitab-Bold", size: 52))
+                    .customStyle(.kitab(size: 52, bold: true))
                     .customForeground(.primary)
                     .multilineTextAlignment(.center)
                     .environment(\.layoutDirection, .rightToLeft)
@@ -238,7 +237,7 @@ struct NamePageView: View {
 
                 if let desc = name.descriptionAr {
                     Text(desc)
-                        .font(.custom("Kitab-Regular", size: 17))
+                        .customStyle(.kitab(size: 17))
                         .customForeground(.onSurface)
                         .multilineTextAlignment(.trailing)
                         .lineSpacing(6)

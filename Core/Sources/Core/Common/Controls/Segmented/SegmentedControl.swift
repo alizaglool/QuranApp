@@ -55,7 +55,7 @@ public struct SegmentedControl: View {
                 }, label: {
                     
                     Text(options[index])
-                        .customFont(isSelected ? .subheadline : .bodySmall)
+                        .customStyle(isSelected ? .subheadline : .bodySmall)
                         .customForeground(isSelected ? selectedTextColor : notSelectedTextColor)
                         .padding(.vertical, 6)
                         .padding(.horizontal, 16)

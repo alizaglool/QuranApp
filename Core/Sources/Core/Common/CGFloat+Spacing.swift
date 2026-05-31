@@ -37,3 +37,15 @@ public extension CGFloat {
     static var cornerCard: CGFloat = 18
     static var cornerXxl: CGFloat  = 20
 }
+
+// MARK: - Arabic Numerals
+
+public extension Int {
+    var arabicNumerals: String {
+        let digits = ["٠","١","٢","٣","٤","٥","٦","٧","٨","٩"]
+        return String(self).map { c in
+            guard let d = c.wholeNumberValue else { return String(c) }
+            return digits[d]
+        }.joined()
+    }
+}

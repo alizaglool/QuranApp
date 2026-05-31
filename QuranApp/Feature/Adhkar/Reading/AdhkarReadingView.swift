@@ -83,8 +83,7 @@ extension AdhkarReadingView {
             Spacer()
 
             Text(AppLocalizedKeys.adhkar.value)
-                .font(.system(size: 22, weight: .bold, design: .serif))
-                .customForeground(.primary)
+                .customStyle(.kitab(size: 22, bold: true))                .customForeground(.primary)
 
             Spacer()
 
@@ -160,13 +159,11 @@ extension AdhkarReadingView {
         HStack(alignment: .bottom, spacing: 0) {
             VStack(alignment: .leading, spacing: 6) {
                 Text(AppLocalizedKeys.adhkar.value.uppercased())
-                    .font(.system(size: 10, weight: .semibold))
-                    .kerning(2.4)
+                    .customStyle(.kitab(size: 10, bold: true))                    .kerning(2.4)
                     .customForeground(.outline)
 
                 Text(displayTitle)
-                    .font(.system(size: 26, weight: .medium, design: .serif))
-                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 26))                    .customForeground(.onSurface)
                     .lineLimit(2)
             }
 
@@ -174,18 +171,15 @@ extension AdhkarReadingView {
 
             VStack(alignment: .trailing, spacing: 6) {
                 Text(AppLocalizedKeys.progress.value.uppercased())
-                    .font(.system(size: 10, weight: .bold))
-                    .kerning(2.2)
+                    .customStyle(.kitab(size: 10, bold: true))                    .kerning(2.2)
                     .customForeground(.primary)
 
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(en(viewModel.currentIndex + 1))
-                        .font(.system(size: 28, weight: .medium, design: .serif))
-                        .monospacedDigit()
+                        .customStyle(.kitab(size: 28))                        .monospacedDigit()
                         .customForeground(.onSurface)
                     Text("/ \(en(viewModel.category.adhkar.count))")
-                        .font(.system(size: 14, weight: .regular))
-                        .monospacedDigit()
+                        .customStyle(.kitab(size: 14))                        .monospacedDigit()
                         .customForeground(.outline)
                 }
             }
@@ -226,8 +220,7 @@ extension AdhkarReadingView {
                     .padding(.bottom, 16)
 
                 Text(description)
-                    .font(.system(size: 15, weight: .regular))
-                    .customForeground(.onSurfaceVariant)
+                    .customStyle(.kitab(size: 15))                    .customForeground(.onSurfaceVariant)
                     .multilineTextAlignment(isRightToLeft ? .trailing : .leading)
                     .lineSpacing(7)
                     .fixedSize(horizontal: false, vertical: true)
@@ -327,12 +320,10 @@ extension AdhkarReadingView {
             if let dhikr = viewModel.currentDhikr, dhikr.count > 1 {
                 HStack(alignment: .lastTextBaseline, spacing: 3) {
                     Text(en(viewModel.currentTapCount))
-                        .font(.system(size: 15, weight: .bold))
-                        .monospacedDigit()
+                        .customStyle(.kitab(size: 15, bold: true))                        .monospacedDigit()
                         .customForeground(.onSurface)
                     Text("/ \(en(dhikr.count))")
-                        .font(.system(size: 12, weight: .regular))
-                        .monospacedDigit()
+                        .customStyle(.kitab(size: 12))                        .monospacedDigit()
                         .customForeground(.outline)
                 }
                 .animation(.easeOut(duration: 0.2), value: viewModel.currentTapCount)
@@ -487,8 +478,7 @@ extension AdhkarReadingView {
                     .frame(width: 56, height: 56)
 
                 Text(en(viewModel.currentTapCount))
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .monospacedDigit()
+                    .customStyle(.kitab(size: 20, bold: true))                    .monospacedDigit()
                     .customForeground(.onSurface)
             }
         }

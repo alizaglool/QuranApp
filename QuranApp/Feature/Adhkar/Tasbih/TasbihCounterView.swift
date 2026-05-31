@@ -172,8 +172,7 @@ extension TasbihCounterView {
     private func dhikrTextSection(_ dhikr: Dhikr) -> some View {
         VStack(spacing: 10) {
             Text(dhikr.textAr)
-                .font(.custom("HafsSmart_08_fixed", size: 26))
-                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.quranPageFixed(size: 26))                .foregroundColor(ColorStyle.onSurface.color)
                 .multilineTextAlignment(.center)
                 .lineSpacing(12)
                 .environment(\.layoutDirection, .rightToLeft)
@@ -233,15 +232,13 @@ extension TasbihCounterView {
 
             VStack(spacing: 2) {
                 Text("\(viewModel.currentCount)")
-                    .font(.system(size: 48, weight: .bold, design: .rounded))
-                    .monospacedDigit()
+                    .customStyle(.kitab(size: 48, bold: true))                    .monospacedDigit()
                     .customForeground(viewModel.justCompleted ? .secondary : .onSurface)
                     .animation(.easeOut(duration: 0.2), value: viewModel.justCompleted)
 
                 if viewModel.targetCount > 0 {
                     Text("/ \(viewModel.targetCount)")
-                        .font(.system(size: 14, weight: .regular))
-                        .monospacedDigit()
+                        .customStyle(.kitab(size: 14))                        .monospacedDigit()
                         .customForeground(.onSurfaceVariant)
                 }
             }
@@ -268,8 +265,7 @@ extension TasbihCounterView {
                     Text("التالي")
                         .customStyle(.headline, .onSurface)
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 13, weight: .medium))
-                        .customForeground(.onSurface)
+                        .customStyle(.kitab(size: 13))                        .customForeground(.onSurface)
                 }
                 .padding(.horizontal, 28)
                 .padding(.vertical, 13)

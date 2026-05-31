@@ -67,6 +67,7 @@
 "recitation" = "Recitation";
 "playTo" = "Play to";
 "play" = "Play";
+"pause" = "Pause";
 "tafsir" = "Tafsir";
 "tafsirSummary" = "Brief Tafsir";
 "tafsirComingSoon" = "Tafsir will be added soon";
@@ -75,6 +76,20 @@
 "share" = "Share";
 "highlight" = "Highlight";
 "clearHighlight" = "Clear";
+"done" = "Done";
+"reciterSelection" = "Choose Recitation";
+"recitations" = "Recitations";
+"tafsirAudio" = "Tafsir Audio";
+"downloadJuz" = "Download Juz";
+"repeatSettings" = "Repeat Settings";
+"rangeSection" = "Range";
+"fromLabel" = "From";
+"toLabel" = "To";
+"repeatSection" = "Repeat";
+"rangeRepeat" = "Range Repeat";
+"verseRepeat" = "Verse Repeat";
+"repetitions" = "Repetitions";
+"chooseVerse" = "Choose Verse";
 "hadithGrade" = "Grade";
 "narratorChain" = "Narrators";
 "takhrij" = "References";
@@ -96,3 +111,64 @@
 "hadithIndexTitle" = "Index";
 "goToHadith" = "Go to";
 "tableOfContents" = "Table of Contents";
+
+// MARK: - Quran Page Settings Sheet
+"pageSettings" = "Page Settings";
+"mushafOption" = "Mushaf";
+"mushafMadinahSubtitle" = "Madinah Mushaf";
+"textMushaf" = "Text Mushaf";
+"textMushafSubtitle" = "Resizable text";
+"chooseBook" = "Choose Book...";
+"chooseBookTitle" = "Choose Book";
+"scrollDirection" = "Scroll Direction";
+"horizontal" = "Horizontal";
+"vertical" = "Vertical";
+"theme" = "Theme";
+"classicTheme" = "Classic";
+"coloredTheme" = "Colored";
+"systemAppearance" = "Auto";
+"lightAppearance" = "Light";
+"darkAppearance" = "Dark";
+"mushafSettings" = "Mushaf Settings...";
+"appearance" = "Appearance";
+"arabicTafsirSection" = "Arabic Tafsir";
+"translationsSection" = "Translations";
+
+// MARK: - Surah List Sheet
+"surahIndex" = "Index";
+"surahs" = "Surahs";
+"quarters" = "Quarters";
+"pagePrefix" = "Page";
+"versesCount" = "%@ verses";
+
+// Juz names
+"juz1"  = "Juz 1";
+"juz2"  = "Juz 2";
+"juz3"  = "Juz 3";
+"juz4"  = "Juz 4";
+"juz5"  = "Juz 5";
+"juz6"  = "Juz 6";
+"juz7"  = "Juz 7";
+"juz8"  = "Juz 8";
+"juz9"  = "Juz 9";
+"juz10" = "Juz 10";
+"juz11" = "Juz 11";
+"juz12" = "Juz 12";
+"juz13" = "Juz 13";
+"juz14" = "Juz 14";
+"juz15" = "Juz 15";
+"juz16" = "Juz 16";
+"juz17" = "Juz 17";
+"juz18" = "Juz 18";
+"juz19" = "Juz 19";
+"juz20" = "Juz 20";
+"juz21" = "Juz 21";
+"juz22" = "Juz 22";
+"juz23" = "Juz 23";
+"juz24" = "Juz 24";
+"juz25" = "Juz 25";
+"juz26" = "Juz 26";
+"juz27" = "Juz 27";
+"juz28" = "Juz 28";
+"juz29" = "Juz 29";
+"juz30" = "Juz 30";

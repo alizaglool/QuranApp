@@ -22,12 +22,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneDelegateProtocol {
     }
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        // Setup localization
         setupLocalization()
-        
-        // Prepare app
         prepareApp()
-        
+        applyStoredTheme()
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 
@@ -63,10 +60,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, SceneDelegateProtocol {
 
 // MARK: - Localization Setup
 private extension SceneDelegate {
-    
+
     func setupLocalization() {
         LocalizationManager.shared.delegate = self
         LocalizationManager.shared.setAppInnitLanguage()
+    }
+
+    func applyStoredTheme() {
+        let mode = StorageManager.shared.getSettings()?.themeMode ?? "system"
+        let style: UIUserInterfaceStyle
+        switch mode {
+        case "light": style = .light
+        case "dark":  style = .dark
+        default:      style = .unspecified
+        }
+        window?.overrideUserInterfaceStyle = style
     }
 }
 

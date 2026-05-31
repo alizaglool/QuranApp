@@ -150,12 +150,10 @@ struct PrayerTimeChip: View {
     var body: some View {
         VStack(spacing: 6) {
             Text(prayer.name)
-                .font(.system(size: 10, weight: .bold))
-                .tracking(0.5)
+                .customStyle(.kitab(size: 10, bold: true))                .tracking(0.5)
             
             Text(prayer.time)
-                .font(.system(size: 12, weight: .heavy))
-        }
+                .customStyle(.kitab(size: 12, bold: true))        }
         .foregroundColor(activeForeground)
         .frame(maxWidth: .infinity)
         .padding(.vertical, 12)
@@ -266,13 +264,11 @@ extension HomeView {
                 HStack {
                     VStack(alignment: .leading, spacing: 8) {
                         Text(AppLocalizedKeys.continueReading.value)
-                            .font(.system(size: 10, weight: .bold))
-                            .foregroundColor(ColorStyle.onPrimaryContainer.color.opacity(0.6))
+                            .customStyle(.kitab(size: 10, bold: true))                            .foregroundColor(ColorStyle.onPrimaryContainer.color.opacity(0.6))
                             .tracking(1.5)
                         
                         Text("Surah Al-Kahf")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(.white)
+                            .customStyle(.kitab(size: 18, bold: true))                            .foregroundColor(.white)
                         
                         HStack(spacing: 10) {
                             ZStack(alignment: .leading) {
@@ -286,8 +282,7 @@ extension HomeView {
                             }
                             
                             Text("32%")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.white.opacity(0.8))
+                                .customStyle(.kitab(size: 10, bold: true))                                .foregroundColor(.white.opacity(0.8))
                         }
                     }
                     
@@ -307,16 +302,14 @@ extension HomeView {
         let colorScheme = UITraitCollection.current.userInterfaceStyle
         if colorScheme == .dark {
             Text(AppLocalizedKeys.resume.value)
-                .font(.system(size: 12, weight: .bold))
-                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.kitab(size: 12, bold: true))                .foregroundColor(ColorStyle.onSurface.color)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(ColorStyle.secondary.color)
                 .cornerRadius(10)
         } else {
             Text(AppLocalizedKeys.resume.value)
-                .font(.system(size: 12, weight: .bold))
-                .foregroundColor(ColorStyle.primary.color)
+                .customStyle(.kitab(size: 12, bold: true))                .foregroundColor(ColorStyle.primary.color)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(Color.white)
@@ -352,8 +345,7 @@ extension HomeView {
                     .frame(height: 0.5)
                 
                 Text(viewModel.hadithReference)
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(ColorStyle.onSurfaceVariant.color.opacity(0.6))
+                    .customStyle(.kitab(size: 10, bold: true))                    .foregroundColor(ColorStyle.onSurfaceVariant.color.opacity(0.6))
                     .tracking(1.5)
                     .lineLimit(1)
                     .fixedSize()
@@ -387,8 +379,7 @@ extension HomeView {
                 Spacer()
                 
                 Button(AppLocalizedKeys.seeAll.value) {}
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundColor(ColorStyle.secondary.color)
+                    .customStyle(.kitab(size: 12, bold: true))                    .foregroundColor(ColorStyle.secondary.color)
                     .tracking(1)
             }
             .padding(.horizontal, .big)
@@ -424,8 +415,7 @@ struct FeaturedLessonCard: View {
                 )
             
             Text(lesson.name)
-                .font(.system(size: 11, weight: .bold))
-                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 11, bold: true))                .customForeground(.onSurface)
                 .multilineTextAlignment(.center)
                 .frame(width: 100)
         }

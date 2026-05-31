@@ -60,3 +60,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Hadith database build artefacts
+populate_hadith_fields.py
+split_hadith_db.py
+split_books/

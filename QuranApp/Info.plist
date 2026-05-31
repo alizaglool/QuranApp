@@ -29,6 +29,10 @@
 		<string>Kitab-Bold.ttf</string>
 		<string>Kitab-Regular.ttf</string>
 	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
