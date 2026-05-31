@@ -112,7 +112,7 @@ extension HadithLibraryView {
                 .tracking(1.8)
 
             Text(AppLocalizedKeys.exploringLegacy.value)
-                .customStyle(.kitab(size: 28, bold: true), .onSurface)
+                .customStyle(.adhkar(size: 28, bold: true), .onSurface)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -282,7 +282,7 @@ extension HadithLibraryView {
             VStack(alignment: .leading, spacing: .xSm) {
                 Spacer()
                 Text(book.title)
-                    .customStyle(.kitab(size: 24, bold: true))
+                    .customStyle(.adhkar(size: 24, bold: true))
                     .foregroundColor(.white)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
@@ -334,7 +334,7 @@ extension HadithLibraryView {
             .padding(.bottom, .sm)
 
             Text(book.title)
-                .customStyle(.kitab(size: 18, bold: true))
+                .customStyle(.adhkar(size: 18, bold: true))
                 .foregroundColor(titleColor)
                 .lineLimit(2)
                 .fixedSize(horizontal: false, vertical: true)
@@ -434,12 +434,12 @@ extension HadithLibraryView {
     private var propheticQuoteSection: some View {
         VStack(spacing: 0) {
             Text("\u{201C}")
-                .customStyle(.kitab(size: 28, bold: true))                .foregroundColor(Color.secondaryColor.opacity(0.75))
+                .customStyle(.adhkar(size: 28, bold: true))                .foregroundColor(Color.secondaryColor.opacity(0.75))
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, .xSm)
 
             Text(AppLocalizedKeys.hadithLibraryQuote.value)
-                .customStyle(.kitab(size: 17, bold: true), .onSurface)
+                .customStyle(.adhkar(size: 17, bold: true), .onSurface)
                 .multilineTextAlignment(.center)
                 .italic()
                 .frame(maxWidth: .infinity)
@@ -532,7 +532,7 @@ struct HadithSearchRow: View {
                             .customStyle(.caption2, .onSurfaceVariant)
                     }
                     Text(result.hadith.arabicText)
-                        .customStyle(.kitab(size: 14, bold: true), .onSurface)
+                        .customStyle(.adhkar(size: 14, bold: true), .onSurface)
                         .lineLimit(2)
                         .multilineTextAlignment(.trailing)
                         .environment(\.layoutDirection, .rightToLeft)

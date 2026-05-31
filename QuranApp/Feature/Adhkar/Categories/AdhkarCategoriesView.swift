@@ -65,7 +65,7 @@ extension AdhkarCategoriesView {
         Rectangle()
             .fill(ColorStyle.secondary.color)
             .frame(width: 48, height: 3)
-            .cornerRadius(2)
+            .customCornerRadius(2)
             .padding(.horizontal, .big)
             .padding(.top, .sm)
     }
@@ -214,7 +214,7 @@ struct AdhkarQuickCard: View {
             .padding(16)
             .frame(minHeight: 130)
             .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
-            .cornerRadius(16)
+            .customCornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(ColorStyle.outlineVariant.color.opacity(colorScheme == .dark ? 0.2 : 0.1), lineWidth: 1)
@@ -306,7 +306,7 @@ struct AdhkarCategoryCard: View {
         .padding(16)
         .frame(minHeight: 130)
         .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
-        .cornerRadius(16)
+        .customCornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(ColorStyle.outlineVariant.color.opacity(colorScheme == .dark ? 0.2 : 0.1), lineWidth: 1)

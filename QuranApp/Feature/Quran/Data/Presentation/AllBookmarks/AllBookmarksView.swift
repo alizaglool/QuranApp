@@ -58,17 +58,17 @@ struct AllBookmarksView: View {
                 HStack(spacing: 4) {
                     Image(systemName: "chevron.backward")
                         .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .customForeground(.primary)
 
                     Text("\(viewModel.surahName): \(viewModel.verseNumber)")
-                        .customStyle(.kitab(size: 15))                        .foregroundColor(ColorStyle.primary.color)
+                        .customStyle(.kitab(size: 15), .primary)
                 }
             }
 
             Spacer()
 
             Text(AppLocalizedKeys.bookmarks.value)
-                .customStyle(.kitab(size: 17, bold: true))                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
             Spacer()
 
@@ -141,7 +141,7 @@ struct AllBookmarksView: View {
                     .frame(width: 24, height: 24)
 
                 Text(bookmark.titleKey.value)
-                    .customStyle(.kitab(size: 16))                    .customForeground(.onSurface)
+                    .customStyle(.kitab(size: 16), .onSurface)
 
                 Spacer(minLength: 0)
 

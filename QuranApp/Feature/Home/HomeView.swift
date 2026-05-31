@@ -93,8 +93,8 @@ extension HomeView {
                     HStack(spacing: 4) {
                         Image(systemName: "calendar")
                             .font(.system(size: 10))
-                            .foregroundColor(ColorStyle.secondary.color)
-                        
+                            .customForeground(.secondary)
+
                         Text(viewModel.hijriDate)
                             .customStyle(.caption2, .secondary)
                     }
@@ -102,8 +102,8 @@ extension HomeView {
                     HStack(spacing: 4) {
                         Image(systemName: "clock")
                             .font(.system(size: 10))
-                            .foregroundColor(ColorStyle.secondary.color)
-                        
+                            .customForeground(.secondary)
+
                         Text(viewModel.gregorianDate)
                             .customStyle(.caption2, .secondary)
                     }
@@ -119,7 +119,7 @@ extension HomeView {
         }
         .padding(20)
         .background(Color.surfaceContainerLow)
-        .cornerRadius(16)
+        .customCornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
                 .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
@@ -232,7 +232,7 @@ struct QuickAccessCard: View {
             .padding(16)
             .frame(height: 110)
             .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
-            .cornerRadius(16)
+            .customCornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
                     .stroke(ColorStyle.outlineVariant.color.opacity(colorScheme == .dark ? 0.2 : 0.1), lineWidth: 1)
@@ -302,18 +302,18 @@ extension HomeView {
         let colorScheme = UITraitCollection.current.userInterfaceStyle
         if colorScheme == .dark {
             Text(AppLocalizedKeys.resume.value)
-                .customStyle(.kitab(size: 12, bold: true))                .foregroundColor(ColorStyle.onSurface.color)
+                .customStyle(.kitab(size: 12, bold: true), .onSurface)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(ColorStyle.secondary.color)
-                .cornerRadius(10)
+                .customCornerRadius(10)
         } else {
             Text(AppLocalizedKeys.resume.value)
-                .customStyle(.kitab(size: 12, bold: true))                .foregroundColor(ColorStyle.primary.color)
+                .customStyle(.kitab(size: 12, bold: true), .primary)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
                 .background(Color.white)
-                .cornerRadius(10)
+                .customCornerRadius(10)
         }
     }
 }
@@ -357,7 +357,7 @@ extension HomeView {
         }
         .padding(32)
         .background(Color.surfaceContainerLowest)
-        .cornerRadius(20)
+        .customCornerRadius(20)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
@@ -379,7 +379,7 @@ extension HomeView {
                 Spacer()
                 
                 Button(AppLocalizedKeys.seeAll.value) {}
-                    .customStyle(.kitab(size: 12, bold: true))                    .foregroundColor(ColorStyle.secondary.color)
+                    .customStyle(.kitab(size: 12, bold: true), .secondary)
                     .tracking(1)
             }
             .padding(.horizontal, .big)
@@ -415,7 +415,7 @@ struct FeaturedLessonCard: View {
                 )
             
             Text(lesson.name)
-                .customStyle(.kitab(size: 11, bold: true))                .customForeground(.onSurface)
+                .customStyle(.kitab(size: 11, bold: true), .onSurface)
                 .multilineTextAlignment(.center)
                 .frame(width: 100)
         }

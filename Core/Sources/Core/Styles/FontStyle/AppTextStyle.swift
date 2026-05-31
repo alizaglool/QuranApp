@@ -26,6 +26,10 @@ public enum AppTextStyle {
     /// San Francisco — all Arabic interface text (system font, regular or semibold).
     case kitab(size: CGFloat, bold: Bool = false)
 
+    // ── Adhkar & Hadith ───────────────────────────────────────────────────────
+    /// TheYearofHandicrafts — used exclusively in Adhkar and Hadith modules.
+    case adhkar(size: CGFloat, bold: Bool = false)
+
     // ── Quran page text ───────────────────────────────────────────────────────
     /// KFGQPCHafsSmart-Regular — main Quran page text (Hafs script).
     case quranPage(size: CGFloat)
@@ -71,6 +75,8 @@ public enum AppTextStyle {
         switch self {
         case .kitab(let size, let bold):
             return .system(size: size, weight: bold ? .semibold : .regular)
+        case .adhkar(let size, let bold):
+            return .custom(bold ? "TheYearofHandicrafts-SemiBold" : "TheYearofHandicrafts-Regular", size: size)
         case .quranPage(let size):
             return QuranFont.hafs.font(size: size)
         case .quranPageFixed(let size):
