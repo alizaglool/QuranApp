@@ -76,14 +76,14 @@ extension TabBarController {
         )
         TabBarItem.hadith = hadith
         
-        let lessons = TabBarItem(
-            title: AppLocalizedKeys.lessons.value,
-            image: UIImage(systemName: "play.rectangle.fill")!.withRenderingMode(.alwaysTemplate),
-            viewControllerProvider: getLessonsViewController
+        let settings = TabBarItem(
+            title: AppLocalizedKeys.settings.value,
+            image: UIImage(systemName: "gearshape.fill")!.withRenderingMode(.alwaysTemplate),
+            viewControllerProvider: getSettingsViewController
         )
-        TabBarItem.lessons = lessons
+        TabBarItem.settings = settings
 
-        tabBarItems = [home, quran, adhkar, hadith, lessons]
+        tabBarItems = [home, quran, adhkar, hadith, settings]
     }
 }
 
@@ -155,8 +155,17 @@ extension TabBarController {
         return navigationController
     }
 
-    private func getLessonsViewController() -> UIViewController {
-        // TODO: Lessons
+    private func getSettingsViewController() -> UIViewController {
+//        let navigationController = UINavigationController()
+//        let view = SettingsView()
+//        let viewController = UIHostingController(
+//            rootView: view
+//                .environmentObject(LocalizationManager.shared)
+//                .environment(\.layoutDirection, .rightToLeft)
+//        )
+//        navigationController.setViewControllers([viewController], animated: false)
+//        navigationController.isNavigationBarHidden = true
+//        return navigationController
         return UIViewController()
     }
 }
