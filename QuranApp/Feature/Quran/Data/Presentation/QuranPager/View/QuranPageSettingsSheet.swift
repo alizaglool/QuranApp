@@ -246,15 +246,15 @@ struct QuranPageSettingsSheet: View {
                 scrollDirection = direction
             }
             saveSettings()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { dismiss() }
+            dismiss()
         } label: {
             ScrollDirectionAnimationView(animationType: animationType(for: direction))
-                .frame(width: 32, height: 42)
+                .frame(width: 38, height: 50)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 66)
                 .background {
                     if selected {
-                        RoundedRectangle(cornerRadius: 10)
+                        RoundedRectangle(cornerRadius: 12)
                             .fill(Color.mushafPage)
                             .matchedGeometryEffect(id: "scrollBg", in: scrollDirectionNS)
                     }
@@ -285,7 +285,8 @@ struct QuranPageSettingsSheet: View {
             Image(image)
                 .resizable()
                 .scaledToFit()
-                .padding(12)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 14)
                 .frame(maxWidth: .infinity)
                 .background(bgColor)
                 .clipShape(RoundedRectangle(cornerRadius: 14))

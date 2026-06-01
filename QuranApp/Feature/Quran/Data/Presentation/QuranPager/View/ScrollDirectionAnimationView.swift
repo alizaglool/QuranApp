@@ -21,15 +21,12 @@ struct ScrollDirectionAnimationView: View {
     // Gold/brown stroke matching Ayah design system
     private let stroke = Color(red: 0.63, green: 0.48, blue: 0.33)
 
-    // Relative line widths to simulate Arabic text rows
-    private let lineRatios: [CGFloat] = [0.85, 0.60, 0.85, 0.50, 0.75]
-
     var body: some View {
         GeometryReader { geo in
             let pad = geo.size.width * 0.13
             ZStack {
                 // Phone / page border
-                RoundedRectangle(cornerRadius: geo.size.width * 0.14)
+                RoundedRectangle(cornerRadius: geo.size.width * 0.16)
                     .stroke(stroke, lineWidth: 1.5)
 
                 // Lines — clipped strictly inside the border
@@ -40,7 +37,6 @@ struct ScrollDirectionAnimationView: View {
                 .clipShape(RoundedRectangle(cornerRadius: geo.size.width * 0.10))
             }
         }
-        .aspectRatio(0.75, contentMode: .fit)
     }
 
     // MARK: - Animated lines
@@ -64,17 +60,16 @@ struct ScrollDirectionAnimationView: View {
         }
     }
 
-    // One "screen" worth of text lines
+    // One "screen" worth of equal-width text lines
     private func linesBlock(w: CGFloat, h: CGFloat) -> some View {
-        VStack(alignment: .leading, spacing: h * 0.12) {
-            ForEach(lineRatios.indices, id: \.self) { i in
-                Capsule()
+        VStack(spacing: h * 0.18) {
+            ForEach(0..<4, id: \.self) { _ in
+                RoundedRectangle(cornerRadius: 1)
                     .fill(stroke)
-                    .frame(width: w * lineRatios[i], height: max(1.5, h * 0.10))
+                    .frame(width: w * 0.82, height: max(1.5, h * 0.09))
             }
         }
-        .frame(width: w, height: h, alignment: .leading)
-        .padding(.horizontal, 2)
+        .frame(width: w, height: h)
     }
 
     private func startAnimation(by distance: CGFloat) {
