@@ -26,8 +26,8 @@ struct QuranPagerView: View {
         Calendar(identifier: .islamicUmmAlQura).component(.day, from: Date())
     }
 
-    private var scrollDirection: String {
-        storage.getSettings()?.scrollDirection ?? "horizontal"
+    private var scrollDirection: ScrollDirection {
+        storage.getSettings()?.scrollDirection ?? .horizontal
     }
 
     init(startPage: Int? = nil, onBack: (() -> Void)? = nil) {
@@ -40,7 +40,7 @@ struct QuranPagerView: View {
         ZStack {
             backgroundColor.ignoresSafeArea()
 
-            if scrollDirection == "vertical" {
+            if scrollDirection == .vertical {
                 verticalPager
             } else {
                 horizontalPager

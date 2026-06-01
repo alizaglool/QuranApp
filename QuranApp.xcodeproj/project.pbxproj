@@ -88,6 +88,7 @@
 		F8AB00042F71787900AB0004 /* HadithCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8AB00032F71787900AB0003 /* HadithCoordinator.swift */; };
 		F8B651EF2F85145C00C4C7EC /* VerseActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */; };
 		F8B651F12F853B3E00C4C7EC /* LongPressLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */; };
+		F8SD0001AABBCC00001234AB /* ScrollDirectionAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */; };
 		F8B854A72FC9AC80007666A5 /* VersePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854A62FC9AC80007666A5 /* VersePickerSheet.swift */; };
 		F8B854A92FC9BDB0007666A5 /* quran_text.json in Resources */ = {isa = PBXBuildFile; fileRef = F8B854A82FC9BDB0007666A5 /* quran_text.json */; };
 		F8B854AB2FC9BDC3007666A5 /* QuranTextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854AA2FC9BDC3007666A5 /* QuranTextProvider.swift */; };
@@ -222,6 +223,7 @@
 		F8AB00032F71787900AB0003 /* HadithCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithCoordinator.swift; sourceTree = "<group>"; };
 		F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseActionSheet.swift; sourceTree = "<group>"; };
 		F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressLocationView.swift; sourceTree = "<group>"; };
+		F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDirectionAnimationView.swift; sourceTree = "<group>"; };
 		F8B854A62FC9AC80007666A5 /* VersePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersePickerSheet.swift; sourceTree = "<group>"; };
 		F8B854A82FC9BDB0007666A5 /* quran_text.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quran_text.json; sourceTree = "<group>"; };
 		F8B854AA2FC9BDC3007666A5 /* QuranTextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextProvider.swift; sourceTree = "<group>"; };
@@ -651,6 +653,7 @@
 				F88DD9142F7540610025939D /* QuranPagerView.swift */,
 				F88DD9102F7540510025939D /* QuranPageView.swift */,
 				F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */,
+				F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -989,6 +992,7 @@
 				F800B8702DBA5FD00035501A /* Encodable+extension.swift in Sources */,
 				F800B8712DBA5FD00035501A /* Header.swift in Sources */,
 				F8B651F12F853B3E00C4C7EC /* LongPressLocationView.swift in Sources */,
+				F8SD0001AABBCC00001234AB /* ScrollDirectionAnimationView.swift in Sources */,
 				F800B8732DBA5FD00035501A /* TargetType.swift in Sources */,
 				F800B8742DBA5FD00035501A /* ErrorMessage.swift in Sources */,
 				F800B8A02DBD716C0035501A /* String+Validation.swift in Sources */,

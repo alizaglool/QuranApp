@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "newClassicVerseMarker_light.png",
+      "filename" : "newClassicPageMarker_light.png",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "newClassicVerseMarker_dark.png",
+      "filename" : "newClassicPageMarker_dark.png",
       "idiom" : "universal"
     }
   ],

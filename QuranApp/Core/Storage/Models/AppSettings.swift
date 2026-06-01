@@ -20,8 +20,22 @@ final class AppSettings {
     var createdAt: Date
     /// "mushaf" | "text" | tafsir-book-id (e.g. "ar-saadi")
     var mushafType: String
-    /// "horizontal" | "vertical"
-    var scrollDirection: String
+    /// Raw storage — use `scrollDirection` computed property instead
+    var scrollDirectionRaw: String
+    /// Raw storage — use `selectedTheme` computed property instead
+    var selectedThemeRaw: String
+
+    /// Computed — not persisted directly; backed by `scrollDirectionRaw`
+    var scrollDirection: ScrollDirection {
+        get { ScrollDirection(rawValue: scrollDirectionRaw) ?? .horizontal }
+        set { scrollDirectionRaw = newValue.rawValue }
+    }
+
+    /// Computed — not persisted directly; backed by `selectedThemeRaw`
+    var selectedTheme: Theme {
+        get { Theme(rawValue: selectedThemeRaw) ?? .classic }
+        set { selectedThemeRaw = newValue.rawValue }
+    }
 
     init(
         selectedLanguage: String = "ar",
@@ -31,7 +45,8 @@ final class AppSettings {
         themeMode: String = "system",
         isOnboardingCompleted: Bool = false,
         mushafType: String = "mushaf",
-        scrollDirection: String = "horizontal"
+        scrollDirection: ScrollDirection = .horizontal,
+        selectedTheme: Theme = .classic
     ) {
         self.selectedLanguage = selectedLanguage
         self.selectedReciterId = selectedReciterId
@@ -41,6 +56,15 @@ final class AppSettings {
         self.isOnboardingCompleted = isOnboardingCompleted
         self.createdAt = Date()
         self.mushafType = mushafType
-        self.scrollDirection = scrollDirection
+        self.scrollDirectionRaw = scrollDirection.rawValue
+        self.selectedThemeRaw = selectedTheme.rawValue
     }
+}
+
+enum Theme: String, CaseIterable, Codable {
+    case classic, tinted
+}
+
+enum ScrollDirection: String, CaseIterable, Codable {
+    case horizontal, vertical
 }

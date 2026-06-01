@@ -15,9 +15,11 @@ struct QuranPageSettingsSheet: View {
     @ObservedObject private var storage = StorageManager.shared
 
     @State private var mushafType: String = "mushaf"
-    @State private var scrollDirection: String = "horizontal"
+    @State private var scrollDirection: ScrollDirection = .horizontal
+    @State private var selectedTheme: Theme = .classic
     @State private var selectedAppearance: String = "system"
     @State private var isBookPickerPresenting = false
+    @Namespace private var scrollDirectionNS
 
     var body: some View {
         ScrollView(showsIndicators: false) {
@@ -35,7 +37,7 @@ struct QuranPageSettingsSheet: View {
                 scrollDirectionCard
                     .padding(.bottom, 24)
 
-                themeSectionLabel
+                sectionLabel(AppLocalizedKeys.theme.value)
                     .padding(.bottom, 10)
                 themeCards
                     .padding(.bottom, 24)
@@ -65,9 +67,10 @@ struct QuranPageSettingsSheet: View {
 
     private func loadSettings() {
         guard let s = storage.getSettings() else { return }
-        mushafType      = s.mushafType
-        scrollDirection = s.scrollDirection
+        mushafType         = s.mushafType
+        scrollDirection    = s.scrollDirection
         selectedAppearance = s.themeMode
+        selectedTheme      = s.selectedTheme
     }
 
     private func saveSettings() {
@@ -75,6 +78,7 @@ struct QuranPageSettingsSheet: View {
             $0.mushafType      = mushafType
             $0.scrollDirection = scrollDirection
             $0.themeMode       = selectedAppearance
+            $0.selectedTheme   = selectedTheme
         }
         if TafsirBook.find(id: mushafType) != nil {
             UserDefaults.standard.set(mushafType, forKey: "selectedTafsirBookId")
@@ -161,8 +165,11 @@ struct QuranPageSettingsSheet: View {
     ) -> some View {
         let selected = mushafType == id
         return Button {
-            mushafType = id
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                mushafType = id
+            }
             saveSettings()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
         } label: {
             HStack(spacing: 12) {
                 VStack(alignment: .trailing, spacing: 2) {
@@ -223,119 +230,82 @@ struct QuranPageSettingsSheet: View {
 
     private var scrollDirectionCard: some View {
         HStack(spacing: 6) {
-            scrollDirectionButton(direction: "horizontal")
-            scrollDirectionButton(direction: "vertical")
+            scrollDirectionButton(direction: .horizontal)
+            scrollDirectionButton(direction: .vertical)
         }
         .padding(4)
         .background(Color.background, in: RoundedRectangle(cornerRadius: 14))
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: scrollDirection)
     }
 
-    private func scrollDirectionButton(direction: String) -> some View {
+    private func animationType(for direction: ScrollDirection) -> ScrollAnimationType {
+        let isSkeuomorphic = (mushafType == "mushaf")
+        return direction == .horizontal
+            ? .horizontal(isSkeuomorphic: isSkeuomorphic)
+            : .vertical(isSkeuomorphic: isSkeuomorphic)
+    }
+
+    private func scrollDirectionButton(direction: ScrollDirection) -> some View {
         let selected = scrollDirection == direction
         return Button {
-            scrollDirection = direction
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                scrollDirection = direction
+            }
             saveSettings()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { dismiss() }
         } label: {
-            scrollDirectionIcon(direction: direction, selected: selected)
+            ScrollDirectionAnimationView(animationType: animationType(for: direction))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
-                .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(selected ? Color.mushafPage : Color.clear)
+                .frame(height: 74)
+                .background {
+                    if selected {
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.mushafPage)
+                            .matchedGeometryEffect(id: "scrollBg", in: scrollDirectionNS)
+                    }
+                }
+        }
+        .buttonStyle(.plain)
+    }
+
+    // MARK: - Theme Cards
+
+    private var themeCards: some View {
+        HStack(spacing: 12) {
+            // In RTL: classic (beige) appears on the right, tinted (green) on the left — matches Ayah.app.
+            themeCard(theme: .classic, image: "newClassicThumbnail")
+            themeCard(theme: .tinted,  image: "newTintedThumbnail")
+        }
+    }
+
+    private func themeCard(theme: Theme, image: String) -> some View {
+        let selected = selectedTheme == theme
+        // Classic = beige parchment background; Tinted = white so ornament colors pop.
+        let bgColor: Color = (theme == .classic) ? Color.mushafPage : Color.white
+        return Button {
+            selectedTheme = theme
+            saveSettings()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
+        } label: {
+            Image(image)
+                .resizable()
+                .scaledToFit()
+                .padding(12)
+                .frame(maxWidth: .infinity)
+                .background(bgColor)
+                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(
+                            selected ? ColorStyle.primary.color : Color.outlineVariant.opacity(0.35),
+                            lineWidth: selected ? 2.5 : 0.5
+                        )
                 )
         }
         .buttonStyle(.plain)
         .animation(.easeInOut(duration: 0.15), value: selected)
-    }
-
-    @ViewBuilder
-    private func scrollDirectionIcon(direction: String, selected: Bool) -> some View {
-        let pageColor: Color = selected
-            ? Color(red: 0.28, green: 0.18, blue: 0.08).opacity(0.55)
-            : Color.outlineVariant
-        if direction == "horizontal" {
-            HStack(spacing: 5) {
-                ForEach(0..<2, id: \.self) { _ in
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(pageColor)
-                        .frame(width: 22, height: 31)
-                }
-            }
-        } else {
-            RoundedRectangle(cornerRadius: 3)
-                .fill(pageColor)
-                .frame(width: 24, height: 34)
-                .overlay(
-                    VStack(spacing: 4) {
-                        ForEach(0..<4, id: \.self) { _ in
-                            Capsule()
-                                .fill(Color.white.opacity(0.4))
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 2)
-                        }
-                    }
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 6)
-                )
-        }
-    }
-
-    // MARK: - Theme Cards (Premium / Locked)
-
-    private var themeSectionLabel: some View {
-        HStack(spacing: 6) {
-            Text(AppLocalizedKeys.theme.value)
-                .customStyle(.kitab(size: 15, bold: true), .onSurface)
-            Image(systemName: "lock.fill")
-                .font(.system(size: 11))
-                .foregroundColor(.secondary)
-            Spacer()
-        }
-    }
-
-    private var themeCards: some View {
-        HStack(spacing: 12) {
-            themeCard(isColorful: true,  label: AppLocalizedKeys.classicTheme.value)
-            themeCard(isColorful: false, label: AppLocalizedKeys.coloredTheme.value)
-        }
-    }
-
-    private func themeCard(isColorful: Bool, label: String) -> some View {
-        ZStack(alignment: .topTrailing) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isColorful ? Color.mushafPage : Color.background)
-                .frame(height: 90)
-                .overlay(
-                    VStack(spacing: 0) {
-                        Image("newClassicChapterHeader")
-                            .resizable()
-                            .scaledToFit()
-                            .saturation(isColorful ? 1.0 : 0.15)
-                            .colorMultiply(isColorful ? .white : Color(red: 0.88, green: 0.83, blue: 0.76))
-                            .padding(.horizontal, 10)
-                            .padding(.top, 10)
-                        Spacer()
-                    }
-                )
-                .overlay(
-                    VStack {
-                        Spacer()
-                        Text(label)
-                            .customStyle(.kitab(size: 12))
-                            .foregroundColor(Color.black.opacity(0.4))
-                            .padding(.bottom, 8)
-                    }
-                )
-
-            Image(systemName: "lock.fill")
-                .font(.system(size: 10))
-                .foregroundColor(.secondary)
-                .frame(width: 22, height: 22)
-                .background(Color.secondary.opacity(0.15), in: Circle())
-                .padding(8)
-        }
-        .frame(maxWidth: .infinity)
-        .opacity(0.82)
     }
 
     // MARK: - Appearance Card
@@ -362,6 +332,7 @@ struct QuranPageSettingsSheet: View {
             selectedAppearance = value
             applyTheme(value)
             saveSettings()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
         } label: {
             Text(label)
                 .customStyle(.kitab(size: 14, bold: selected))
@@ -381,7 +352,7 @@ struct QuranPageSettingsSheet: View {
 
     private var mushafSettingsLink: some View {
         Button {
-            // Navigate to full mushaf settings
+            // Navigate to full mushaf settings — design to be added later
         } label: {
             HStack(spacing: 8) {
                 Text(AppLocalizedKeys.mushafSettings.value)
