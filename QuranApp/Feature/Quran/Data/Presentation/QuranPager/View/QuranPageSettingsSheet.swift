@@ -223,7 +223,7 @@ struct QuranPageSettingsSheet: View {
     // MARK: - Scroll Direction Card
 
     private var scrollDirectionCard: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 4) {
             scrollDirectionButton(direction: .horizontal)
             scrollDirectionButton(direction: .vertical)
         }
@@ -249,15 +249,13 @@ struct QuranPageSettingsSheet: View {
             dismiss()
         } label: {
             ScrollDirectionAnimationView(animationType: animationType(for: direction))
-                .frame(width: 38, height: 50)
+                .frame(width: 32, height: 42)
                 .frame(maxWidth: .infinity)
-                .frame(height: 66)
+                .frame(height: 56)
                 .background {
-                    if selected {
-                        RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.mushafPage)
-                            .matchedGeometryEffect(id: "scrollBg", in: scrollDirectionNS)
-                    }
+                    RoundedRectangle(cornerRadius: 11)
+                        .fill(selected ? Color.mushafPage : Color.clear)
+                        .matchedGeometryEffect(id: "scrollBg", in: scrollDirectionNS)
                 }
         }
         .buttonStyle(.plain)
@@ -267,7 +265,6 @@ struct QuranPageSettingsSheet: View {
 
     private var themeCards: some View {
         HStack(spacing: 12) {
-            // In RTL: classic (beige) appears on the right, tinted (green) on the left — matches Ayah.app.
             themeCard(theme: .classic, image: "newClassicThumbnail")
             themeCard(theme: .tinted,  image: "newTintedThumbnail")
         }
@@ -275,31 +272,29 @@ struct QuranPageSettingsSheet: View {
 
     private func themeCard(theme: Theme, image: String) -> some View {
         let selected = selectedTheme == theme
-        // Classic = beige parchment background; Tinted = white so ornament colors pop.
-        let bgColor: Color = (theme == .classic) ? Color.mushafPage : Color.white
         return Button {
             selectedTheme = theme
             saveSettings()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
+            dismiss()
         } label: {
             Image(image)
                 .resizable()
                 .scaledToFit()
-                .padding(.horizontal, 6)
-                .padding(.vertical, 14)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 10)
                 .frame(maxWidth: .infinity)
-                .background(bgColor)
+                .background(selected ? Color.mushafPage : Color.background)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
                 .overlay(
                     RoundedRectangle(cornerRadius: 14)
                         .stroke(
-                            selected ? ColorStyle.primary.color : Color.outlineVariant.opacity(0.35),
-                            lineWidth: selected ? 2.5 : 0.5
+                            selected ? ColorStyle.primary.color : Color.outlineVariant.opacity(0.2),
+                            lineWidth: selected ? 1.5 : 0.5
                         )
                 )
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.15), value: selected)
+        .animation(.easeInOut(duration: 0.2), value: selected)
     }
 
     // MARK: - Appearance Card
@@ -320,24 +315,24 @@ struct QuranPageSettingsSheet: View {
             selectedAppearance = mode
             applyTheme(mode)
             saveSettings()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
+            dismiss()
         } label: {
             Text(mode.label)
                 .customStyle(.kitab(size: 14, bold: selected))
                 .foregroundColor(
                     selected
                         ? ColorStyle.primary.color
-                        : ColorStyle.primary.color.opacity(0.55)
+                        : ColorStyle.primary.color.opacity(0.5)
                 )
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.vertical, 11)
                 .background(
                     RoundedRectangle(cornerRadius: 10)
                         .fill(selected ? Color.mushafPage : Color.clear)
                 )
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.15), value: selected)
+        .animation(.easeInOut(duration: 0.2), value: selected)
     }
 
     // MARK: - Mushaf Settings Link
