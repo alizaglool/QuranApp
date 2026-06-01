@@ -17,7 +17,7 @@ struct QuranPageSettingsSheet: View {
     @State private var mushafType: String = "mushaf"
     @State private var scrollDirection: ScrollDirection = .horizontal
     @State private var selectedTheme: Theme = .classic
-    @State private var selectedAppearance: String = "system"
+    @State private var selectedAppearance: AppearanceMode = .system
     @State private var isBookPickerPresenting = false
     @Namespace private var scrollDirectionNS
 
@@ -69,7 +69,7 @@ struct QuranPageSettingsSheet: View {
         guard let s = storage.getSettings() else { return }
         mushafType         = s.mushafType
         scrollDirection    = s.scrollDirection
-        selectedAppearance = s.themeMode
+        selectedAppearance = AppearanceMode(rawValue: s.themeMode) ?? .system
         selectedTheme      = s.selectedTheme
     }
 
@@ -77,7 +77,7 @@ struct QuranPageSettingsSheet: View {
         storage.updateSettings {
             $0.mushafType      = mushafType
             $0.scrollDirection = scrollDirection
-            $0.themeMode       = selectedAppearance
+            $0.themeMode       = selectedAppearance.rawValue
             $0.selectedTheme   = selectedTheme
         }
         if TafsirBook.find(id: mushafType) != nil {
@@ -85,17 +85,11 @@ struct QuranPageSettingsSheet: View {
         }
     }
 
-    private func applyTheme(_ mode: String) {
-        let style: UIUserInterfaceStyle
-        switch mode {
-        case "light": style = .light
-        case "dark":  style = .dark
-        default:      style = .unspecified
-        }
+    private func applyTheme(_ mode: AppearanceMode) {
         UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .flatMap { $0.windows }
-            .forEach { $0.overrideUserInterfaceStyle = style }
+            .forEach { $0.overrideUserInterfaceStyle = mode.uiStyle }
     }
 
     // MARK: - Header
@@ -255,10 +249,9 @@ struct QuranPageSettingsSheet: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { dismiss() }
         } label: {
             ScrollDirectionAnimationView(animationType: animationType(for: direction))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
+                .frame(width: 32, height: 42)
                 .frame(maxWidth: .infinity)
-                .frame(height: 74)
+                .frame(height: 60)
                 .background {
                     if selected {
                         RoundedRectangle(cornerRadius: 10)
@@ -312,31 +305,29 @@ struct QuranPageSettingsSheet: View {
 
     private var appearanceCard: some View {
         HStack(spacing: 0) {
-            appearanceOption(value: "system", label: AppLocalizedKeys.systemAppearance.value)
-            Rectangle()
-                .fill(Color.outlineVariant.opacity(0.25))
-                .frame(width: 0.5, height: 26)
-            appearanceOption(value: "light", label: AppLocalizedKeys.lightAppearance.value)
-            Rectangle()
-                .fill(Color.outlineVariant.opacity(0.25))
-                .frame(width: 0.5, height: 26)
-            appearanceOption(value: "dark", label: AppLocalizedKeys.darkAppearance.value)
+            ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                appearanceOption(mode)
+            }
         }
         .padding(4)
         .background(Color.background, in: RoundedRectangle(cornerRadius: 14))
     }
 
-    private func appearanceOption(value: String, label: String) -> some View {
-        let selected = selectedAppearance == value
+    private func appearanceOption(_ mode: AppearanceMode) -> some View {
+        let selected = selectedAppearance == mode
         return Button {
-            selectedAppearance = value
-            applyTheme(value)
+            selectedAppearance = mode
+            applyTheme(mode)
             saveSettings()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
         } label: {
-            Text(label)
+            Text(mode.label)
                 .customStyle(.kitab(size: 14, bold: selected))
-                .foregroundColor(selected ? Color(UIColor.label) : .secondary)
+                .foregroundColor(
+                    selected
+                        ? ColorStyle.primary.color
+                        : ColorStyle.primary.color.opacity(0.55)
+                )
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
                 .background(
@@ -467,5 +458,31 @@ private struct MushafBookPickerSheet: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - AppearanceMode
+
+enum AppearanceMode: String, CaseIterable, Identifiable {
+    case system = "system"
+    case light  = "light"
+    case dark   = "dark"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .system: return AppLocalizedKeys.systemAppearance.value
+        case .light:  return AppLocalizedKeys.lightAppearance.value
+        case .dark:   return AppLocalizedKeys.darkAppearance.value
+        }
+    }
+
+    var uiStyle: UIUserInterfaceStyle {
+        switch self {
+        case .system: return .unspecified
+        case .light:  return .light
+        case .dark:   return .dark
+        }
     }
 }
