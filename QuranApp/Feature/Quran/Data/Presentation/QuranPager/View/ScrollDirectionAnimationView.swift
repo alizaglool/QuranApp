@@ -21,29 +21,49 @@ enum ScrollAnimationType {
 
 struct ScrollDirectionAnimationView: View {
     let animationType: ScrollAnimationType
-
-    // Start at 0 so the image is visible immediately.
-    // The animation slides it out to -20 (fading to 0 opacity),
-    // then instantly resets to 0 (full opacity) and loops.
     @State private var offset: CGFloat = 0.0
 
     var body: some View {
+        GeometryReader { geo in
+            scrollingContent(geo: geo)
+                .onAppear {
+                    let distance = isHorizontal ? -geo.size.width : -geo.size.height
+                    withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: false)) {
+                        offset = distance
+                    }
+                }
+        }
+        .clipped()
+    }
+
+    // Two copies of the image laid out in the scroll direction.
+    // Container clips to one image width/height at a time.
+    // Offset slides from 0 (first copy visible) → -size (second copy visible),
+    // then snaps back to 0 and loops — the "half icon → other half" repeat.
+    @ViewBuilder
+    private func scrollingContent(geo: GeometryProxy) -> some View {
+        let w = geo.size.width
+        let h = geo.size.height
+        if isHorizontal {
+            HStack(spacing: 0) {
+                pageImage(w: w, h: h)
+                pageImage(w: w, h: h)
+            }
+            .offset(x: offset)
+        } else {
+            VStack(spacing: 0) {
+                pageImage(w: w, h: h)
+                pageImage(w: w, h: h)
+            }
+            .offset(y: offset)
+        }
+    }
+
+    private func pageImage(w: CGFloat, h: CGFloat) -> some View {
         Image(animationType.imageName)
             .resizable()
-            .scaledToFit()
-            .offset(
-                x: isHorizontal ? offset : 0,
-                y: isHorizontal ? 0 : offset
-            )
-            .opacity(1.0 - abs(offset) / 20.0)
-            .onAppear {
-                withAnimation(
-                    Animation.easeInOut(duration: 1.2)
-                        .repeatForever(autoreverses: false)
-                ) {
-                    offset = -20.0
-                }
-            }
+            .scaledToFill()
+            .frame(width: w, height: h)
     }
 
     private var isHorizontal: Bool {
