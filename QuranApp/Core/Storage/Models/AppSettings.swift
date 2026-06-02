@@ -37,6 +37,12 @@ final class AppSettings {
         set { selectedThemeRaw = newValue.rawValue }
     }
 
+    /// Computed — not persisted directly; backed by `mushafType`
+    var mushafDisplayType: MushafType {
+        get { MushafType(rawValue: mushafType) }
+        set { mushafType = newValue.rawValue }
+    }
+
     init(
         selectedLanguage: String = "ar",
         selectedReciterId: String = "afasy",
@@ -67,4 +73,28 @@ enum Theme: String, CaseIterable, Codable {
 
 enum ScrollDirection: String, CaseIterable, Codable {
     case horizontal, vertical
+}
+
+enum MushafType: Equatable {
+    case mushaf
+    case text
+    case tafsir(id: String)
+
+    var rawValue: String {
+        switch self {
+        case .mushaf:           return "mushaf"
+        case .text:             return "text"
+        case .tafsir(let id):   return id
+        }
+    }
+
+    init(rawValue: String) {
+        switch rawValue {
+        case "mushaf": self = .mushaf
+        case "text":   self = .text
+        default:       self = .tafsir(id: rawValue)
+        }
+    }
+
+    var isSkeuomorphic: Bool { self == .mushaf }
 }

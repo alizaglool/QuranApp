@@ -237,6 +237,14 @@ final class StorageManager: ObservableObject {
         return (try? context.fetch(descriptor)) ?? []
     }
 
+    /// Removes the bookmark for a specific verse (used by the highlight clear button).
+    func removeBookmarkForVerse(page: Int, ayahNumber: Int?) {
+        guard let existing = getBookmark(page: page, ayahNumber: ayahNumber) else { return }
+        context.delete(existing)
+        try? context.save()
+        bookmarksRevision &+= 1
+    }
+
     /// The single most recently created bookmark across all pages.
     /// Used to drive the "default color" inline shortcut in VerseActionSheet —
     /// whichever color the user picked last becomes the new quick-action default.

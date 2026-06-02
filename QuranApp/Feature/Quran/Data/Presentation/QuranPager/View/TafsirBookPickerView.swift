@@ -96,9 +96,20 @@ struct TafsirBookPickerView: View {
     private func statusIcon(book: TafsirBook, state: TafsirDownloadState) -> some View {
         switch state {
         case .downloaded:
-            Image(systemName: selectedBook == book ? "checkmark.circle.fill" : "circle")
-                .font(.system(size: 20))
-                .foregroundColor(selectedBook == book ? ColorStyle.primary.color : Color.outlineVariant)
+            HStack(spacing: 6) {
+                if book.isBundle {
+                    Text("مضمّن")
+                        .customStyle(.kitab(size: 11))
+                        .foregroundColor(ColorStyle.primary.color)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(ColorStyle.primary.color.opacity(0.12),
+                                    in: RoundedRectangle(cornerRadius: 6))
+                }
+                Image(systemName: selectedBook == book ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 20))
+                    .foregroundColor(selectedBook == book ? ColorStyle.primary.color : Color.outlineVariant)
+            }
 
         case .downloading(let progress):
             ZStack {

@@ -76,6 +76,18 @@ public extension Color {
     static let playerControls = Color(.playerControls)
 }
 
+// Settings Pickers
+public extension Color {
+    /// Outer container background for scroll / theme / appearance picker segments
+    static let pickerContainer = Color(lightHex: "FCFBF9", darkHex: "28282A")
+    /// Selected-item fill inside a picker segment
+    static let pickerSelection = Color(lightHex: "DFD1C2", darkHex: "3A3A3C")
+    /// Label color for the currently selected picker item
+    static let pickerSelectedLabel = Color(lightHex: "1E6B47", darkHex: "13BC7C")
+    /// Label color for unselected picker items
+    static let pickerUnselectedLabel = Color(lightHex: "000000", darkHex: "FFFFFF")
+}
+
 // Hadith Reading
 public extension Color {
 

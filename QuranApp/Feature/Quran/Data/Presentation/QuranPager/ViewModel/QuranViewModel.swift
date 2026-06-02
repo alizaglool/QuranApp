@@ -123,6 +123,17 @@ final class QuranViewModel: MainViewModel {
         return max(1, min(totalPages, page))
     }
     
+    func selectVerseDirectly(verseID: Int, surahNumber: Int, verseNumber: Int, pageNumber: Int) {
+        let surahs = quranDB.getSurahsForPage(pageNumber)
+        selectedVerseID = verseID
+        selectedPage = pageNumber
+        highlightRects = []
+        selectedVerseSurahName = surahs.first(where: { $0.id == surahNumber })?.arabicTitle ?? ""
+        selectedVerseSurahNumber = surahNumber
+        selectedVerseNumber = verseNumber
+        showVerseActionSheet = true
+    }
+
     func selectVerse(atLine line: Int, normalizedX: CGFloat, pageNumber: Int) {
         let highlights = quranDB.getAllHighlightsForPage(pageNumber)
         let verses = quranDB.getVersesForPage(pageNumber)

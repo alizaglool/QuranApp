@@ -10,11 +10,13 @@ final class TafsirService {
 
     static let shared = TafsirService()
 
-    // NSCache for per-verse lookups (all sources)
+    // NSCache for per-verse lookups (all sources) — NSCache is thread-safe
     private let cache = NSCache<NSString, NSString>()
 
     // User-downloaded book data (loaded lazily from Documents)
     // Key: bookId → {"surah_verse": "text"}
+    // Protected by dataLock — Swift Dictionary is NOT thread-safe
+    private let dataLock = NSLock()
     private var downloadedData: [String: [String: String]] = [:]
 
     private let quranComDecoder: JSONDecoder = {
@@ -30,27 +32,42 @@ final class TafsirService {
     // MARK: - Public
 
     /// Returns tafsir text for a verse.
-    /// - Downloaded books (any source) → instant, no network.
+    /// - Bundled books (ar-mokhtasar) → instant, from app bundle.
+    /// - Downloaded books → instant, from Documents.
     /// - Everything else → live API call (can throw on failure).
     func fetch(bookId: String, surah: Int, verse: Int) async throws -> String {
-        // 1. Downloaded (hot cache)
-        if let dict = downloadedData[bookId] {
+        // 1. Bundle — bundled books are always available
+        if let dict = loadFromBundle(bookId: bookId) {
             return lookup(dict: dict, bookId: bookId, surah: surah, verse: verse)
         }
 
-        // 2. Downloaded (cold — file exists on disk but not yet loaded)
+        // 2. Hot cache — copy out under lock, then release before any await
+        let hotDict: [String: String]? = { dataLock.lock(); defer { dataLock.unlock() }
+            return downloadedData[bookId]
+        }()
+        if let dict = hotDict {
+            return lookup(dict: dict, bookId: bookId, surah: surah, verse: verse)
+        }
+
+        // 3. Cold disk — I/O runs unlocked; only the resulting write is locked
         if let dict = loadFromDisk(bookId: bookId) {
             return lookup(dict: dict, bookId: bookId, surah: surah, verse: verse)
         }
 
-        // 3. Live API
+        // 4. Live API (translations only — other books require pre-download)
         return try await fetchRemote(bookId: bookId, surah: surah, verse: verse)
     }
 
-    /// Synchronous lookup for already-downloaded books.
+    /// Synchronous lookup for bundled or already-downloaded books.
     /// Returns nil if the book needs a network call.
     func fetchSync(bookId: String, surah: Int, verse: Int) -> String? {
-        if let dict = downloadedData[bookId] {
+        if let dict = loadFromBundle(bookId: bookId) {
+            return lookup(dict: dict, bookId: bookId, surah: surah, verse: verse)
+        }
+        let hotDict: [String: String]? = { dataLock.lock(); defer { dataLock.unlock() }
+            return downloadedData[bookId]
+        }()
+        if let dict = hotDict {
             return lookup(dict: dict, bookId: bookId, surah: surah, verse: verse)
         }
         if let dict = loadFromDisk(bookId: bookId) {
@@ -61,12 +78,16 @@ final class TafsirService {
 
     /// Called by TafsirDownloadManager once a download is complete.
     func loadDownloaded(bookId: String, dict: [String: String]) {
+        dataLock.lock()
         downloadedData[bookId] = dict
+        dataLock.unlock()
     }
 
     /// Called by TafsirDownloadManager when a book is deleted.
     func evict(bookId: String) {
+        dataLock.lock()
         downloadedData.removeValue(forKey: bookId)
+        dataLock.unlock()
         cache.removeAllObjects()
     }
 
@@ -84,13 +105,35 @@ final class TafsirService {
         return text
     }
 
+    private func loadFromBundle(bookId: String) -> [String: String]? {
+        guard TafsirBook.find(id: bookId)?.isBundle == true else { return nil }
+        // Return from hot cache if already loaded
+        let hotDict: [String: String]? = { dataLock.lock(); defer { dataLock.unlock() }
+            return downloadedData[bookId]
+        }()
+        if let dict = hotDict { return dict }
+        // Load from the app bundle
+        guard let url = Bundle.main.url(forResource: bookId, withExtension: "json"),
+              let raw  = try? Data(contentsOf: url),
+              let dict = try? JSONDecoder().decode([String: String].self, from: raw)
+        else { return nil }
+        dataLock.lock()
+        downloadedData[bookId] = dict
+        dataLock.unlock()
+        return dict
+    }
+
     private func loadFromDisk(bookId: String) -> [String: String]? {
         let url = TafsirDownloadManager.shared.jsonURL(for: bookId)
+        // I/O runs without the lock — reading the file is thread-safe
         guard FileManager.default.fileExists(atPath: url.path),
               let raw  = try? Data(contentsOf: url),
               let dict = try? JSONDecoder().decode([String: String].self, from: raw)
         else { return nil }
+        // Only the mutation is locked
+        dataLock.lock()
         downloadedData[bookId] = dict
+        dataLock.unlock()
         return dict
     }
 

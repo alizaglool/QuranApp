@@ -67,6 +67,31 @@ final class QuranGlyphRenderer {
     private static func glyphColor(isDarkMode: Bool) -> UIColor {
         isDarkMode ? UIColor.white.withAlphaComponent(0.6) : UIColor(Color.verseMarkerGold)
     }
+
+    /// Returns a standalone UIImage of the verse-number badge.
+    /// Use this in flow-layout views (e.g. QuranTextPageView) where a CGContext
+    /// position is not available.
+    static func verseMarkerImage(
+        _ verseNumber: Int,
+        lineHeight: CGFloat,
+        isDarkMode: Bool,
+        theme: Theme
+    ) -> UIImage {
+        let markerH = lineHeight * 0.65
+        let markerW = markerH * 0.75
+        let size    = CGSize(width: markerW, height: markerH)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { ctx in
+            drawVerseNumber(
+                verseNumber,
+                centeredAt: CGPoint(x: size.width / 2, y: size.height / 2),
+                lineHeight: lineHeight,
+                isDarkMode: isDarkMode,
+                theme: theme,
+                in: ctx.cgContext
+            )
+        }
+    }
 }
 
 // MARK: - QuranPageOverlayView
@@ -201,20 +226,20 @@ struct QuranPageView: View {
     // MARK: - Page Info helpers
 
     private var pageSurahName: String {
-        quranDB.getSurahsForPage(pageNumber).first?.arabicTitle ?? ""
+        let surahNumber = quranDB.getSurahsForPage(pageNumber).first?.id
+            ?? quranDB.getVersesForPage(pageNumber).first?.chapterNumber
+        guard let number = surahNumber else { return "" }
+        return ReciterLibrary.surahArabicNames[number] ?? ""
     }
 
-    private var pageJuz: Int {
-        quranDB.getJuz(forPage: pageNumber)
-    }
-
-    private var isRightPage: Bool {
-        pageNumber % 2 != 0
+    private var firstVerseNumber: Int {
+        quranDB.getVersesForPage(pageNumber)
+            .min(by: { $0.markerLine < $1.markerLine })?.number ?? 1
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            pageTopBar
+            QuranPageHeaderBar(surahName: pageSurahName, firstVerse: firstVerseNumber, textColor: textColor)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
 
@@ -273,52 +298,14 @@ struct QuranPageView: View {
                 }
             }
 
-            pageBottomBar
-                .padding(.bottom, 8)
+            QuranPageFooterBar(
+                pageNumber: pageNumber,
+                isDarkMode: isDarkMode,
+                theme: storage.getSettings()?.selectedTheme ?? .classic
+            )
+            .padding(.bottom, 8)
         }
         .ignoresSafeArea(edges: .horizontal)
-    }
-
-    // MARK: - Page Top Bar (surah name + juz, always visible)
-
-    private var pageTopBar: some View {
-        HStack {
-            Text("الجزء \(pageJuz.arabicNumerals)")
-                .customStyle(.kitab(size: 17))
-                .foregroundColor(textColor.opacity(0.55))
-            Spacer()
-            Text(pageSurahName)
-                .customStyle(.kitab(size: 17))
-                .foregroundColor(textColor.opacity(0.55))
-        }
-        .padding(.horizontal, 16)
-        .allowsHitTesting(false)
-        .environment(\.layoutDirection, .rightToLeft)
-    }
-
-    // MARK: - Page Bottom Bar (page number badge, always visible)
-
-    private var pageBottomBar: some View {
-        HStack {
-            if isRightPage {
-                Spacer()
-                pageNumberBadge
-                    .padding(.leading, 12)
-            } else {
-                pageNumberBadge
-                    .padding(.trailing, 12)
-                Spacer()
-            }
-        }
-        .allowsHitTesting(false)
-    }
-
-    private var pageNumberBadge: some View {
-        OrnamentalPageBadge(
-            text: pageNumber.arabicNumerals,
-            isDarkMode: isDarkMode,
-            theme: storage.getSettings()?.selectedTheme ?? .classic
-        )
     }
 
     // MARK: - Surah Headers
@@ -451,7 +438,7 @@ struct QuranPageView: View {
 
 // MARK: - Ornamental Page Number Badge
 
-private struct OrnamentalPageBadge: View {
+struct OrnamentalPageBadge: View {
     let text: String
     let isDarkMode: Bool
     let theme: Theme

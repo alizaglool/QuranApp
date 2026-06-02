@@ -30,6 +30,10 @@ struct QuranPagerView: View {
         storage.getSettings()?.scrollDirection ?? .horizontal
     }
 
+    private var mushafDisplayType: MushafType {
+        storage.getSettings()?.mushafDisplayType ?? .mushaf
+    }
+
     init(startPage: Int? = nil, onBack: (() -> Void)? = nil) {
         let vm = QuranViewModel(startPage: startPage)
         _viewModel = StateObject(wrappedValue: vm)
@@ -89,7 +93,7 @@ struct QuranPagerView: View {
                 }
             )
         }
-        .customSheet(isPresented: $isPageSettingsPresenting, fraction: 1.0, detents: [.large]) {
+        .customSheet(isPresented: $isPageSettingsPresenting, detents: [.medium, .large]) {
             QuranPageSettingsSheet()
                 .presentationDragIndicator(.visible)
         }
@@ -120,7 +124,12 @@ struct QuranPagerView: View {
         }
     }
 
-    private var backgroundColor: Color { Color.mushafPage }
+    private var backgroundColor: Color {
+        switch mushafDisplayType {
+        case .text, .tafsir: return Color.background
+        case .mushaf: return Color.mushafPage
+        }
+    }
 
     private func scheduleOverlayHide() {
         overlayHideTask?.cancel()
@@ -143,10 +152,22 @@ struct QuranPagerView: View {
 
 extension QuranPagerView {
 
+    @ViewBuilder
+    private func pageContent(for page: Int) -> some View {
+        switch mushafDisplayType {
+        case .text:
+            QuranTextPageView(pageNumber: page, viewModel: viewModel)
+        case .tafsir:
+            QuranTafsirPageView(pageNumber: page, viewModel: viewModel)
+        case .mushaf:
+            QuranPageView(pageNumber: page, viewModel: viewModel)
+        }
+    }
+
     private var horizontalPager: some View {
         TabView(selection: $viewModel.currentPage) {
             ForEach(1...viewModel.totalPages, id: \.self) { page in
-                QuranPageView(pageNumber: page, viewModel: viewModel)
+                pageContent(for: page)
                     .tag(page)
             }
         }
@@ -162,7 +183,7 @@ extension QuranPagerView {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 0) {
                     ForEach(1...viewModel.totalPages, id: \.self) { page in
-                        QuranPageView(pageNumber: page, viewModel: viewModel)
+                        pageContent(for: page)
                             .frame(height: UIScreen.main.bounds.height)
                             .id(page)
                             .background(pageVisibilityBackground(page: page))
@@ -255,7 +276,7 @@ extension QuranPagerView {
             }
 
             Button(action: { isSurahListPresenting = true }) {
-                Image("booksVerticalFill")
+                Image(systemName: "list.bullet")
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()
