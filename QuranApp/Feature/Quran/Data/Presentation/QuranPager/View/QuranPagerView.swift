@@ -18,6 +18,7 @@ struct QuranPagerView: View {
     @State private var isTodaySheetPresenting = false
     @State private var isSurahListPresenting = false
     @State private var isPageSettingsPresenting = false
+    @State private var isSearchPresenting = false
     @State private var overlayHideTask: Task<Void, Never>? = nil
 
     private static let overlayAutoHideDelay: TimeInterval = 4
@@ -96,6 +97,13 @@ struct QuranPagerView: View {
         .customSheet(isPresented: $isPageSettingsPresenting, detents: [.medium, .large]) {
             QuranPageSettingsSheet()
                 .presentationDragIndicator(.visible)
+        }
+        .customSheet(isPresented: $isSearchPresenting, fraction: 1.0, detents: [.large]) {
+            QuranSearchView(onSelect: { surah, verse in
+                viewModel.goToVerse(surah: surah, verse: verse)
+                isSearchPresenting = false
+            })
+            .presentationDragIndicator(.visible)
         }
         .onChange(of: viewModel.showOverlay) { _, showing in
             audio.quranOverlayActive = showing
@@ -269,7 +277,7 @@ extension QuranPagerView {
 
             Spacer()
 
-            Button(action: { /* TODO: search */ }) {
+            Button(action: { isSearchPresenting = true }) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(Color.playerControls)

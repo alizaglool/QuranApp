@@ -125,6 +125,9 @@ enum AppLocalizedKeys: String {
     case endOfSurah
     case continuousPlay
 
+    // MARK: - Search
+    case searchQuran
+
     // MARK: - Quran Page Settings Sheet
     case pageSettings
     case mushafOption
