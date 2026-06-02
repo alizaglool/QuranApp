@@ -23,6 +23,18 @@ struct VerseActionSheet: View {
     @ObservedObject private var audio = AudioEngine.shared
     @State private var isAllBookmarksPresenting = false
     @State private var isTafsirPresenting = false
+    @State private var isPlayToPresenting = false
+    @State private var inlineTafsir: String? = nil
+    @State private var isCopied = false
+    @State private var isTafsirExpanded = false
+
+    // MARK: - Computed helpers
+
+    /// Color currently saved on THIS specific verse (nil = no highlight).
+    private var currentVerseHighlightColor: String? {
+        _ = storage.bookmarksRevision
+        return storage.getBookmark(page: page, ayahNumber: verseNumber)?.color
+    }
 
     // MARK: - Inline bookmark "default" derivation
 
@@ -61,6 +73,25 @@ struct VerseActionSheet: View {
         return "\(bm.surahName): \(ayah)"
     }
 
+    // Tafsir book used for the inline preview — selected tafsir book or default (المختصر)
+    private var selectedTafsirBook: TafsirBook {
+        if case .tafsir(let id) = storage.getSettings()?.mushafDisplayType,
+           let book = TafsirBook.find(id: id) {
+            return book
+        }
+        if let id = UserDefaults.standard.string(forKey: "selectedTafsirBookId"),
+           let book = TafsirBook.find(id: id) {
+            return book
+        }
+        return TafsirBook.default
+    }
+
+    private var textColor: Color { colorScheme == .dark ? .white : .black }
+
+    private var verseText: String {
+        QuranTextService.shared.text(surah: surahNumber, verse: verseNumber) ?? ""
+    }
+
     /// Layout direction driven by the current app language (LTR for English, RTL for Arabic)
     private var layoutDirection: LayoutDirection {
         localization.currentLanguage.direction
@@ -91,6 +122,15 @@ struct VerseActionSheet: View {
         }
         .background(Color.background)
         .environment(\.layoutDirection, layoutDirection)
+        .task {
+            isTafsirExpanded = false
+            let book = selectedTafsirBook
+            inlineTafsir = try? await TafsirService.shared.fetch(
+                bookId: book.id,
+                surah: surahNumber,
+                verse: verseNumber
+            )
+        }
         .customSheet(isPresented: $isAllBookmarksPresenting, fraction: 0.45, detents: [.medium]) {
             AllBookmarksView(
                 page: page,
@@ -114,6 +154,16 @@ struct VerseActionSheet: View {
             )
             .presentationDragIndicator(.visible)
         }
+        .customSheet(isPresented: $isPlayToPresenting, fraction: 0.88, detents: [.large]) {
+            PlayToSheetView(
+                page: page,
+                surahNumber: surahNumber,
+                surahName: surahName,
+                verseNumber: verseNumber,
+                onPlay: { dismiss() }
+            )
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: - Header
@@ -122,7 +172,7 @@ struct VerseActionSheet: View {
 
     private var header: some View {
         HStack {
-            Button(action: { print("📋 Edit tapped") }) {
+            Button(action: { }) {
                 Text(AppLocalizedKeys.edit.value)
                     .customStyle(.kitab(size: 15), .primary)
             }
@@ -224,9 +274,7 @@ struct VerseActionSheet: View {
     private var recitationButtons: some View {
         HStack(spacing: 12) {
             actionCard(icon: "play.fill", title: AppLocalizedKeys.playTo.value, hasChevron: true) {
-                audio.setRepeatMode(.surah)
-                audio.play(surahNumber: surahNumber, verseNumber: verseNumber)
-                dismiss()
+                isPlayToPresenting = true
             }
 
             actionCard(
@@ -245,33 +293,56 @@ struct VerseActionSheet: View {
 
     // MARK: - Tafsir Section
 
+    private static let tafsirCollapsedLines = 4
+
     private var tafsirSection: some View {
-        Button {
-            isTafsirPresenting = true
-        } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "text.book.closed.fill")
-                    .font(.system(size: 22))
-                    .customForeground(.primary)
-                    .frame(width: 44, height: 44)
-                    .background(ColorStyle.primary.color.opacity(0.1), in: RoundedRectangle(cornerRadius: 10))
+        VStack(spacing: 8) {
+            // Inline tafsir card — shows fetched text or a spinner
+            VStack(alignment: .trailing, spacing: 10) {
+                Group {
+                    if let tafsir = inlineTafsir {
+                        VStack(alignment: .trailing, spacing: 6) {
+                            Text(tafsir)
+                                .customStyle(.kitab(size: 15))
+                                .foregroundColor(textColor.opacity(0.85))
+                                .multilineTextAlignment(.trailing)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                                .lineLimit(isTafsirExpanded ? nil : Self.tafsirCollapsedLines)
 
-                VStack(alignment: .trailing, spacing: 3) {
-                    Text(AppLocalizedKeys.tafsir.value)
-                        .customStyle(.kitab(size: 16, bold: true), .onSurface)
-                    Text("٦ تفاسير • ترجمات")
-                        .customStyle(.kitab(size: 13), .subtitle)
+                            Button {
+                                withAnimation(.easeInOut(duration: 0.2)) {
+                                    isTafsirExpanded.toggle()
+                                }
+                            } label: {
+                                Text(isTafsirExpanded
+                                     ? AppLocalizedKeys.seeLess.value
+                                     : AppLocalizedKeys.seeMore.value)
+                                    .customStyle(.kitab(size: 13))
+                                    .foregroundColor(ColorStyle.primary.color)
+                            }
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                        }
+                    } else {
+                        HStack { Spacer(); ProgressView(); Spacer() }
+                            .padding(.vertical, 8)
+                    }
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
 
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(Color.outlineVariant)
+                // Book name — green, trailing edge
+                Text(selectedTafsirBook.nameArabic)
+                    .customStyle(.kitab(size: 13))
+                    .foregroundColor(ColorStyle.primary.color)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
             }
             .padding(14)
             .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 14))
+            .environment(\.layoutDirection, .rightToLeft)
+
+            // Library row — opens the full tafsir picker
+            actionCard(icon: "books.vertical.fill", title: AppLocalizedKeys.library.value, hasChevron: true) {
+                isTafsirPresenting = true
+            }
         }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Sharing Buttons
@@ -280,37 +351,82 @@ struct VerseActionSheet: View {
     private var sharingButtons: some View {
         HStack(spacing: 12) {
             actionCard(icon: "square.and.arrow.up", title: AppLocalizedKeys.share.value, hasChevron: true) {
-                print("📋 Share tapped")
+                shareVerse()
             }
 
             squareIconCard(icon: "arrow.down.to.line") {
-                print("📋 Save image tapped")
+                // Save as image — premium feature
             }
 
-            squareIconCard(icon: "doc.on.doc") {
-                print("📋 Copy text tapped")
+            squareIconCard(icon: isCopied ? "checkmark" : "doc.on.doc") {
+                copyVerse()
             }
+        }
+    }
+
+    private func shareVerse() {
+        let shareText = "\(verseText)\n\n— \(surahName): \(verseNumber)"
+        let vc = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let root = scene.windows.first?.rootViewController {
+            root.present(vc, animated: true)
+        }
+    }
+
+    private func copyVerse() {
+        UIPasteboard.general.string = verseText
+        withAnimation(.spring(duration: 0.2)) { isCopied = true }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            withAnimation(.spring(duration: 0.2)) { isCopied = false }
         }
     }
 
     // MARK: - Highlight Colors
 
     private var highlightColors: some View {
-        HStack(spacing: 12) {
-            ForEach(Array(highlightColorOptions.enumerated()), id: \.offset) { _, color in
-                Button(action: { print("📋 Highlight color tapped") }) {
+        let pairs: [(Color, BookmarkColor)] = [
+            (Color.purple.opacity(0.55), .purple),
+            (Color.blue.opacity(0.45),   .blue),
+            (Color.green.opacity(0.5),   .green),
+            (Color.cyan.opacity(0.65),   .cyan),
+            (Color.orange.opacity(0.55), .orange),
+        ]
+        return HStack(spacing: 12) {
+            ForEach(Array(pairs.enumerated()), id: \.offset) { _, pair in
+                let isActive = currentVerseHighlightColor == pair.1.rawValue
+                Button {
+                    _ = storage.setBookmarkColor(
+                        page: page,
+                        surahNumber: surahNumber,
+                        surahName: surahName,
+                        ayahNumber: verseNumber,
+                        color: pair.1.rawValue
+                    )
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { dismiss() }
+                } label: {
                     Circle()
-                        .fill(color)
+                        .fill(pair.0)
                         .frame(width: 44, height: 44)
                         .overlay(
-                            Image(systemName: "lock.fill")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(.white)
+                            Group {
+                                if isActive {
+                                    Image(systemName: "checkmark")
+                                        .font(.system(size: 16, weight: .bold))
+                                        .foregroundColor(.white)
+                                }
+                            }
+                        )
+                        .overlay(
+                            Circle()
+                                .strokeBorder(isActive ? Color.white.opacity(0.6) : Color.clear, lineWidth: 2)
                         )
                 }
             }
 
-            Button(action: { print("📋 Clear highlight") }) {
+            Button {
+                storage.removeBookmarkForVerse(page: page, ayahNumber: verseNumber)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { dismiss() }
+            } label: {
                 Circle()
                     .stroke(ColorStyle.primary.color, lineWidth: 2)
                     .frame(width: 44, height: 44)
@@ -322,16 +438,6 @@ struct VerseActionSheet: View {
             }
         }
         .frame(maxWidth: .infinity)
-    }
-
-    private var highlightColorOptions: [Color] {
-        [
-            Color.purple.opacity(0.55),
-            Color.blue.opacity(0.45),
-            Color.green.opacity(0.5),
-            Color.cyan.opacity(0.65),
-            Color.orange.opacity(0.55)
-        ]
     }
 
     // MARK: - Reusable Action Card

@@ -101,6 +101,8 @@ enum AppLocalizedKeys: String {
     case tafsirSummary
     case tafsirComingSoon
     case library
+    case seeMore
+    case seeLess
     case sharing
     case share
     case highlight
@@ -119,6 +121,12 @@ enum AppLocalizedKeys: String {
     case verseRepeat
     case repetitions
     case chooseVerse
+    case endOfPage
+    case endOfSurah
+    case continuousPlay
+
+    // MARK: - Search
+    case searchQuran
 
     // MARK: - Quran Page Settings Sheet
     case pageSettings

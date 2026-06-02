@@ -94,19 +94,3 @@ extension Image {
     static let billsIcon = Image("bills_ic")
 }
 
-// MARK: Store Icon
-extension UIImage {
-    static let addSupplierIcon = UIImage(resource: .addSupplierIc)
-    static let itemRequestIcon = UIImage(resource: .itemRequestIc)
-    static let storeSettingsIcon = UIImage(resource: .storeSettingsIc)
-}
-
-extension UIImage {
-    
-    // tabbar icons
-    static let homeIcon = UIImage(resource: .homeIc)
-    static let cartIcon = UIImage(resource: .cartIc)
-    static let searchIcon = UIImage(resource: .searchIc)
-    static let trackIcon = UIImage(resource: .trackIc)
-    static let moreIcon = UIImage(resource: .moreIc)
-}

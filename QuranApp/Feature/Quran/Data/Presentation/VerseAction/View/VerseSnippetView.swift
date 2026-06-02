@@ -124,6 +124,7 @@ struct VerseMarkerSnippetOverlay: UIViewRepresentable {
     let firstLine: Int
     let lineCount: Int
     let isDarkMode: Bool
+    var theme: Theme = .classic
 
     func makeUIView(context: Context) -> VerseMarkerSnippetUIView {
         VerseMarkerSnippetUIView()
@@ -137,6 +138,7 @@ struct VerseMarkerSnippetOverlay: UIViewRepresentable {
         view.firstLine = firstLine
         view.lineCount = lineCount
         view.isDarkMode = isDarkMode
+        view.theme = theme
         view.setNeedsDisplay()
     }
 }
@@ -151,6 +153,7 @@ final class VerseMarkerSnippetUIView: UIView {
     var firstLine: Int = 0
     var lineCount: Int = 1
     var isDarkMode: Bool = false
+    var theme: Theme = .classic
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -168,8 +171,9 @@ final class VerseMarkerSnippetUIView: UIView {
         QuranGlyphRenderer.drawVerseNumber(
             verseNumber,
             centeredAt: CGPoint(x: x, y: y),
-            fontSize: lineH * 0.65,
+            lineHeight: lineH,
             isDarkMode: isDarkMode,
+            theme: theme,
             in: ctx
         )
     }

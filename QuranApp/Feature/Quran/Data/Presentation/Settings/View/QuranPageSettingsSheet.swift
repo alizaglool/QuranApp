@@ -14,9 +14,10 @@ struct QuranPageSettingsSheet: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var storage = StorageManager.shared
 
-    @State private var mushafType: String = "mushaf"
-    @State private var scrollDirection: String = "horizontal"
-    @State private var selectedAppearance: String = "system"
+    @State private var mushafType: MushafType = .mushaf
+    @State private var scrollDirection: ScrollDirection = .horizontal
+    @State private var selectedTheme: Theme = .classic
+    @State private var selectedAppearance: AppearanceMode = .system
     @State private var isBookPickerPresenting = false
 
     var body: some View {
@@ -35,7 +36,7 @@ struct QuranPageSettingsSheet: View {
                 scrollDirectionCard
                     .padding(.bottom, 24)
 
-                themeSectionLabel
+                sectionLabel(AppLocalizedKeys.theme.value)
                     .padding(.bottom, 10)
                 themeCards
                     .padding(.bottom, 24)
@@ -45,7 +46,6 @@ struct QuranPageSettingsSheet: View {
                 appearanceCard
                     .padding(.bottom, 28)
 
-                mushafSettingsLink
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 40)
@@ -53,8 +53,8 @@ struct QuranPageSettingsSheet: View {
         .background(Color.surfaceContainerLow.ignoresSafeArea())
         .environment(\.layoutDirection, .rightToLeft)
         .onAppear { loadSettings() }
-        .customSheet(isPresented: $isBookPickerPresenting, fraction: 0.5, detents: [.medium, .large]) {
-            MushafBookPickerSheet(mushafType: $mushafType) {
+        .customSheet(isPresented: $isBookPickerPresenting, detents: [.medium, .large]) {
+            MushafBookPickerSheet(selectedType: $mushafType) {
                 saveSettings()
             }
             .presentationDragIndicator(.visible)
@@ -65,33 +65,29 @@ struct QuranPageSettingsSheet: View {
 
     private func loadSettings() {
         guard let s = storage.getSettings() else { return }
-        mushafType      = s.mushafType
-        scrollDirection = s.scrollDirection
-        selectedAppearance = s.themeMode
+        mushafType         = s.mushafDisplayType
+        scrollDirection    = s.scrollDirection
+        selectedAppearance = AppearanceMode(rawValue: s.themeMode) ?? .system
+        selectedTheme      = s.selectedTheme
     }
 
     private func saveSettings() {
         storage.updateSettings {
-            $0.mushafType      = mushafType
-            $0.scrollDirection = scrollDirection
-            $0.themeMode       = selectedAppearance
+            $0.mushafDisplayType = mushafType
+            $0.scrollDirection   = scrollDirection
+            $0.themeMode         = selectedAppearance.rawValue
+            $0.selectedTheme     = selectedTheme
         }
-        if TafsirBook.find(id: mushafType) != nil {
-            UserDefaults.standard.set(mushafType, forKey: "selectedTafsirBookId")
+        if case .tafsir(let id) = mushafType {
+            UserDefaults.standard.set(id, forKey: "selectedTafsirBookId")
         }
     }
 
-    private func applyTheme(_ mode: String) {
-        let style: UIUserInterfaceStyle
-        switch mode {
-        case "light": style = .light
-        case "dark":  style = .dark
-        default:      style = .unspecified
-        }
+    private func applyTheme(_ mode: AppearanceMode) {
         UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .flatMap { $0.windows }
-            .forEach { $0.overrideUserInterfaceStyle = style }
+            .forEach { $0.overrideUserInterfaceStyle = mode.uiStyle }
     }
 
     // MARK: - Header
@@ -123,20 +119,23 @@ struct QuranPageSettingsSheet: View {
     // MARK: - Mushaf Type Card
 
     private var currentTafsirBook: TafsirBook {
-        TafsirBook.find(id: mushafType) ?? TafsirBook.arabicTafsirs[2]
+        if case .tafsir(let id) = mushafType {
+            return TafsirBook.find(id: id) ?? TafsirBook.arabicTafsirs[2]
+        }
+        return TafsirBook.arabicTafsirs[2]
     }
 
     private var mushafTypeCard: some View {
         VStack(spacing: 0) {
-            mushafRow(id: "mushaf",
+            mushafRow(.mushaf,
                       title: AppLocalizedKeys.mushafOption.value,
                       subtitle: AppLocalizedKeys.mushafMadinahSubtitle.value)
             rowDivider
-            mushafRow(id: "text",
+            mushafRow(.text,
                       title: AppLocalizedKeys.textMushaf.value,
                       subtitle: AppLocalizedKeys.textMushafSubtitle.value)
             rowDivider
-            mushafRow(id: currentTafsirBook.id,
+            mushafRow(.tafsir(id: currentTafsirBook.id),
                       title: currentTafsirBook.nameArabic,
                       subtitle: currentTafsirBook.author.isEmpty ? nil : currentTafsirBook.author,
                       badge: currentTafsirBook.length?.label)
@@ -150,51 +149,49 @@ struct QuranPageSettingsSheet: View {
         Rectangle()
             .fill(Color.outlineVariant.opacity(0.25))
             .frame(height: 0.5)
-            .padding(.horizontal, 16)
     }
 
     private func mushafRow(
-        id: String,
+        _ type: MushafType,
         title: String,
         subtitle: String?,
         badge: String? = nil
     ) -> some View {
-        let selected = mushafType == id
+        let selected = mushafType == type
         return Button {
-            mushafType = id
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                mushafType = type
+            }
             saveSettings()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
         } label: {
-            HStack(spacing: 12) {
-                VStack(alignment: .trailing, spacing: 2) {
-                    Text(title)
-                        .customStyle(.kitab(size: 15), .onSurface)
-                        .multilineTextAlignment(.trailing)
-                    if let subtitle, !subtitle.isEmpty {
-                        Text(subtitle)
-                            .customStyle(.kitab(size: 12), .subtitle)
+            HStack(alignment: .center, spacing: 12) {
+                // Checkmark — renders on LEFT in RTL
+                Image(systemName: "checkmark")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(selected ? ColorStyle.primary.color : .clear)
+                    .frame(width: 24)
+
+                Spacer()
+
+                // Text block — renders on RIGHT in RTL
+                VStack(alignment: .trailing, spacing: 4) {
+                    HStack(spacing: 6) {
+                        Text(title)
+                            .customStyle(.kitab(size: 17, bold: true), .onSurface)
                             .multilineTextAlignment(.trailing)
                     }
+                    if let subtitle, !subtitle.isEmpty {
+                        Text(subtitle)
+                            .customStyle(.kitab(size: 14), .secondary)
+                            .multilineTextAlignment(.trailing)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-
-                if let badge {
-                    Text(badge)
-                        .customStyle(.kitab(size: 11), .primary)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 3)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(ColorStyle.primary.color.opacity(0.12))
-                        )
-                }
-
-                Image(systemName: "checkmark")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(selected ? ColorStyle.primary.color : .clear)
-                    .frame(width: 22)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 13)
+            .padding(.vertical, 14)
+            .frame(maxWidth: .infinity, alignment: .trailing)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -203,17 +200,18 @@ struct QuranPageSettingsSheet: View {
     private var bookPickerRow: some View {
         Button { isBookPickerPresenting = true } label: {
             HStack(spacing: 12) {
-                Text(AppLocalizedKeys.chooseBook.value)
-                    .customStyle(.kitab(size: 15), .primary)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-
                 Image(systemName: "chevron.forward")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundColor(Color.outlineVariant)
-                    .frame(width: 22)
+                    .frame(width: 24)
+
+                Spacer()
+
+                Text(AppLocalizedKeys.chooseBook.value)
+                    .customStyle(.kitab(size: 15, bold: true), .primary)
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 14)
+            .padding(.vertical, 16)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -222,178 +220,114 @@ struct QuranPageSettingsSheet: View {
     // MARK: - Scroll Direction Card
 
     private var scrollDirectionCard: some View {
-        HStack(spacing: 6) {
-            scrollDirectionButton(direction: "horizontal")
-            scrollDirectionButton(direction: "vertical")
+        HStack(spacing: 4) {
+            scrollDirectionButton(direction: .horizontal)
+            scrollDirectionButton(direction: .vertical)
         }
         .padding(4)
-        .background(Color.background, in: RoundedRectangle(cornerRadius: 14))
+        .background(Color.pickerContainer, in: RoundedRectangle(cornerRadius: 14))
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: scrollDirection)
     }
 
-    private func scrollDirectionButton(direction: String) -> some View {
+    private func animationType(for direction: ScrollDirection) -> ScrollAnimationType {
+        let isSkeuomorphic = mushafType.isSkeuomorphic
+        return direction == .horizontal
+            ? .horizontal(isSkeuomorphic: isSkeuomorphic)
+            : .vertical(isSkeuomorphic: isSkeuomorphic)
+    }
+
+    private func scrollDirectionButton(direction: ScrollDirection) -> some View {
         let selected = scrollDirection == direction
         return Button {
-            scrollDirection = direction
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                scrollDirection = direction
+            }
             saveSettings()
+            dismiss()
         } label: {
-            scrollDirectionIcon(direction: direction, selected: selected)
+            ScrollDirectionAnimationView(animationType: animationType(for: direction))
+                .frame(width: 24, height: 30)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 36)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(selected ? Color.mushafPage : Color.clear)
+                    RoundedRectangle(cornerRadius: 11)
+                        .fill(selected ? Color.pickerSelection : Color.clear)
                 )
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.15), value: selected)
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: selected)
     }
 
-    @ViewBuilder
-    private func scrollDirectionIcon(direction: String, selected: Bool) -> some View {
-        let pageColor: Color = selected
-            ? Color(red: 0.28, green: 0.18, blue: 0.08).opacity(0.55)
-            : Color.outlineVariant
-        if direction == "horizontal" {
-            HStack(spacing: 5) {
-                ForEach(0..<2, id: \.self) { _ in
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(pageColor)
-                        .frame(width: 22, height: 31)
-                }
-            }
-        } else {
-            RoundedRectangle(cornerRadius: 3)
-                .fill(pageColor)
-                .frame(width: 24, height: 34)
-                .overlay(
-                    VStack(spacing: 4) {
-                        ForEach(0..<4, id: \.self) { _ in
-                            Capsule()
-                                .fill(Color.white.opacity(0.4))
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 2)
-                        }
-                    }
-                    .padding(.horizontal, 4)
-                    .padding(.vertical, 6)
-                )
-        }
-    }
-
-    // MARK: - Theme Cards (Premium / Locked)
-
-    private var themeSectionLabel: some View {
-        HStack(spacing: 6) {
-            Text(AppLocalizedKeys.theme.value)
-                .customStyle(.kitab(size: 15, bold: true), .onSurface)
-            Image(systemName: "lock.fill")
-                .font(.system(size: 11))
-                .foregroundColor(.secondary)
-            Spacer()
-        }
-    }
+    // MARK: - Theme Cards
 
     private var themeCards: some View {
-        HStack(spacing: 12) {
-            themeCard(isColorful: true,  label: AppLocalizedKeys.classicTheme.value)
-            themeCard(isColorful: false, label: AppLocalizedKeys.coloredTheme.value)
+        HStack(spacing: 4) {
+            themeCard(theme: .tinted,  image: "newTintedThumbnail")
+            themeCard(theme: .classic, image: "newClassicThumbnail")
         }
+        .padding(4)
+        .background(Color.pickerContainer, in: RoundedRectangle(cornerRadius: 14))
     }
 
-    private func themeCard(isColorful: Bool, label: String) -> some View {
-        ZStack(alignment: .topTrailing) {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(isColorful ? Color.mushafPage : Color.background)
-                .frame(height: 90)
-                .overlay(
-                    VStack(spacing: 0) {
-                        Image("newClassicChapterHeader")
-                            .resizable()
-                            .scaledToFit()
-                            .saturation(isColorful ? 1.0 : 0.15)
-                            .colorMultiply(isColorful ? .white : Color(red: 0.88, green: 0.83, blue: 0.76))
-                            .padding(.horizontal, 10)
-                            .padding(.top, 10)
-                        Spacer()
-                    }
+    private func themeCard(theme: Theme, image: String) -> some View {
+        let selected = selectedTheme == theme
+        return Button {
+            selectedTheme = theme
+            saveSettings()
+            dismiss()
+        } label: {
+            Image(image)
+                .resizable()
+                .scaledToFit()
+                .padding(.horizontal, 6)
+                .padding(.vertical, 6)
+                .frame(maxWidth: .infinity)
+                .frame(height: 36)
+                .background(
+                    RoundedRectangle(cornerRadius: 11)
+                        .fill(selected ? Color.pickerSelection : Color.clear)
                 )
-                .overlay(
-                    VStack {
-                        Spacer()
-                        Text(label)
-                            .customStyle(.kitab(size: 12))
-                            .foregroundColor(Color.black.opacity(0.4))
-                            .padding(.bottom, 8)
-                    }
-                )
-
-            Image(systemName: "lock.fill")
-                .font(.system(size: 10))
-                .foregroundColor(.secondary)
-                .frame(width: 22, height: 22)
-                .background(Color.secondary.opacity(0.15), in: Circle())
-                .padding(8)
         }
-        .frame(maxWidth: .infinity)
-        .opacity(0.82)
+        .buttonStyle(.plain)
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: selected)
     }
 
     // MARK: - Appearance Card
 
     private var appearanceCard: some View {
-        HStack(spacing: 0) {
-            appearanceOption(value: "system", label: AppLocalizedKeys.systemAppearance.value)
-            Rectangle()
-                .fill(Color.outlineVariant.opacity(0.25))
-                .frame(width: 0.5, height: 26)
-            appearanceOption(value: "light", label: AppLocalizedKeys.lightAppearance.value)
-            Rectangle()
-                .fill(Color.outlineVariant.opacity(0.25))
-                .frame(width: 0.5, height: 26)
-            appearanceOption(value: "dark", label: AppLocalizedKeys.darkAppearance.value)
+        HStack(spacing: 4) {
+            ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                appearanceOption(mode)
+            }
         }
         .padding(4)
-        .background(Color.background, in: RoundedRectangle(cornerRadius: 14))
+        .background(Color.pickerContainer, in: RoundedRectangle(cornerRadius: 14))
     }
 
-    private func appearanceOption(value: String, label: String) -> some View {
-        let selected = selectedAppearance == value
+    private func appearanceOption(_ mode: AppearanceMode) -> some View {
+        let selected = selectedAppearance == mode
         return Button {
-            selectedAppearance = value
-            applyTheme(value)
+            selectedAppearance = mode
+            applyTheme(mode)
             saveSettings()
+            dismiss()
         } label: {
-            Text(label)
+            Text(mode.label)
                 .customStyle(.kitab(size: 14, bold: selected))
-                .foregroundColor(selected ? Color(UIColor.label) : .secondary)
+                .foregroundColor(
+                    selected
+                        ? Color.pickerSelectedLabel
+                        : Color.pickerUnselectedLabel.opacity(0.5)
+                )
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .frame(height: 36)
                 .background(
-                    RoundedRectangle(cornerRadius: 10)
-                        .fill(selected ? Color.mushafPage : Color.clear)
+                    RoundedRectangle(cornerRadius: 11)
+                        .fill(selected ? Color.pickerSelection : Color.clear)
                 )
         }
         .buttonStyle(.plain)
-        .animation(.easeInOut(duration: 0.15), value: selected)
-    }
-
-    // MARK: - Mushaf Settings Link
-
-    private var mushafSettingsLink: some View {
-        Button {
-            // Navigate to full mushaf settings
-        } label: {
-            HStack(spacing: 8) {
-                Text(AppLocalizedKeys.mushafSettings.value)
-                    .customStyle(.kitab(size: 15), .primary)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-
-                Image(systemName: "chevron.forward")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundColor(Color.outlineVariant)
-            }
-        }
-        .buttonStyle(.plain)
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: selected)
     }
 }
 
@@ -401,7 +335,7 @@ struct QuranPageSettingsSheet: View {
 
 private struct MushafBookPickerSheet: View {
 
-    @Binding var mushafType: String
+    @Binding var selectedType: MushafType
     let onSelected: () -> Void
     @Environment(\.dismiss) private var dismiss
 
@@ -449,7 +383,7 @@ private struct MushafBookPickerSheet: View {
 
     private func bookRow(_ book: TafsirBook) -> some View {
         Button {
-            mushafType = book.id
+            selectedType = .tafsir(id: book.id)
             onSelected()
             dismiss()
         } label: {
@@ -488,13 +422,39 @@ private struct MushafBookPickerSheet: View {
                     }
                 }
 
-                Image(systemName: mushafType == book.id ? "checkmark.circle.fill" : "circle")
+                Image(systemName: selectedType == .tafsir(id: book.id) ? "checkmark.circle.fill" : "circle")
                     .font(.system(size: 20))
-                    .foregroundColor(mushafType == book.id ? ColorStyle.primary.color : Color.outlineVariant)
+                    .foregroundColor(selectedType == .tafsir(id: book.id) ? ColorStyle.primary.color : Color.outlineVariant)
             }
             .padding(.vertical, 4)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - AppearanceMode
+
+enum AppearanceMode: String, CaseIterable, Identifiable {
+    case system = "system"
+    case light  = "light"
+    case dark   = "dark"
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .system: return AppLocalizedKeys.systemAppearance.value
+        case .light:  return AppLocalizedKeys.lightAppearance.value
+        case .dark:   return AppLocalizedKeys.darkAppearance.value
+        }
+    }
+
+    var uiStyle: UIUserInterfaceStyle {
+        switch self {
+        case .system: return .unspecified
+        case .light:  return .light
+        case .dark:   return .dark
+        }
     }
 }

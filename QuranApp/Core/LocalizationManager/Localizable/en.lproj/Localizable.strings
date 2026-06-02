@@ -72,6 +72,8 @@
 "tafsirSummary" = "Brief Tafsir";
 "tafsirComingSoon" = "Tafsir will be added soon";
 "library" = "Library";
+"seeMore" = "Read more";
+"seeLess" = "Read less";
 "sharing" = "Sharing";
 "share" = "Share";
 "highlight" = "Highlight";
@@ -90,6 +92,10 @@
 "verseRepeat" = "Verse Repeat";
 "repetitions" = "Repetitions";
 "chooseVerse" = "Choose Verse";
+"endOfPage" = "End of Page";
+"endOfSurah" = "End of Surah";
+"continuousPlay" = "Continuous";
+"searchQuran" = "Search the Quran";
 "hadithGrade" = "Grade";
 "narratorChain" = "Narrators";
 "takhrij" = "References";
@@ -129,7 +135,7 @@
 "systemAppearance" = "Auto";
 "lightAppearance" = "Light";
 "darkAppearance" = "Dark";
-"mushafSettings" = "Mushaf Settings...";
+"mushafSettings" = "Mushaf Settings";
 "appearance" = "Appearance";
 "arabicTafsirSection" = "Arabic Tafsir";
 "translationsSection" = "Translations";

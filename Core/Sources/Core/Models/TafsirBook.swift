@@ -27,18 +27,34 @@ public struct TafsirBook: Identifiable, Equatable {
     public let language: TafsirLanguage
     public let length: TafsirLength?
     public let source: TafsirSource
+    /// True = JSON is bundled inside the app (no download needed). Currently only ar-mokhtasar.
+    public let isBundle: Bool
+    /// GitHub raw URL for single-file download. Empty for translations and bundled books.
+    public let downloadURL: String
 
-    public var canDownload: Bool { source.canDownload }
+    /// Can the user trigger a download? Only books with a non-empty downloadURL that aren't bundled.
+    public var canDownload: Bool { !isBundle && !downloadURL.isEmpty }
 
     public static func == (lhs: TafsirBook, rhs: TafsirBook) -> Bool { lhs.id == rhs.id }
 
-    public init(id: String, nameArabic: String, author: String, language: TafsirLanguage, length: TafsirLength?, source: TafsirSource) {
+    public init(
+        id: String,
+        nameArabic: String,
+        author: String,
+        language: TafsirLanguage,
+        length: TafsirLength?,
+        source: TafsirSource,
+        isBundle: Bool = false,
+        downloadURL: String = ""
+    ) {
         self.id = id
         self.nameArabic = nameArabic
         self.author = author
         self.language = language
         self.length = length
         self.source = source
+        self.isBundle = isBundle
+        self.downloadURL = downloadURL
     }
 
     public enum TafsirLanguage {
@@ -76,15 +92,19 @@ public struct TafsirBook: Identifiable, Equatable {
 
 public extension TafsirBook {
 
+    private static let githubBase = "https://raw.githubusercontent.com/alizaglool/tafsir-books/main"
+
     // MARK: Arabic tafsirs (brief → detailed, then classical depth)
     static let arabicTafsirs: [TafsirBook] = [
-        TafsirBook(id: "ar-mokhtasar",  nameArabic: "المختصر",        author: "دار المختصر",               language: .arabic, length: .brief,    source: .quranEnc(slug: "arabic_mokhtasar")),
-        TafsirBook(id: "ar-muyassar",   nameArabic: "التفسير الميسر", author: "مجمع الملك فهد",             language: .arabic, length: .brief,    source: .quranCom(id: 16)),
-        TafsirBook(id: "ar-saadi",      nameArabic: "تفسير السعدي",   author: "ابن سعدي (1376هـ)",          language: .arabic, length: .detailed, source: .quranCom(id: 91)),
-        TafsirBook(id: "ar-ibn-kathir", nameArabic: "تفسير ابن كثير", author: "ابن كثير الدمشقي (774هـ)",   language: .arabic, length: .detailed, source: .quranCom(id: 14)),
-        TafsirBook(id: "ar-baghawi",    nameArabic: "معالم التنزيل",  author: "البغوي (516هـ)",             language: .arabic, length: .detailed, source: .quranCom(id: 94)),
-        TafsirBook(id: "ar-qurtubi",    nameArabic: "تفسير القرطبي",  author: "القرطبي (671هـ)",            language: .arabic, length: .detailed, source: .quranCom(id: 90)),
-        TafsirBook(id: "ar-tabari",     nameArabic: "جامع البيان",    author: "الطبري (310هـ)",             language: .arabic, length: .detailed, source: .quranCom(id: 15)),
+        // Bundled in app — always available, no download needed
+        TafsirBook(id: "ar-mokhtasar",  nameArabic: "المختصر",        author: "دار المختصر",             language: .arabic, length: .brief,    source: .quranEnc(slug: "arabic_mokhtasar"), isBundle: true),
+        // GitHub-hosted — single-file download
+        TafsirBook(id: "ar-muyassar",   nameArabic: "التفسير الميسر", author: "مجمع الملك فهد",           language: .arabic, length: .brief,    source: .quranCom(id: 16),  downloadURL: "\(githubBase)/ar-muyassar.json"),
+        TafsirBook(id: "ar-saadi",      nameArabic: "تفسير السعدي",   author: "ابن سعدي (1376هـ)",        language: .arabic, length: .detailed, source: .quranCom(id: 91),  downloadURL: "\(githubBase)/ar-saadi.json"),
+        TafsirBook(id: "ar-ibn-kathir", nameArabic: "تفسير ابن كثير", author: "ابن كثير الدمشقي (774هـ)", language: .arabic, length: .detailed, source: .quranCom(id: 14),  downloadURL: "\(githubBase)/ar-ibn-kathir.json"),
+        TafsirBook(id: "ar-baghawi",    nameArabic: "معالم التنزيل",  author: "البغوي (516هـ)",           language: .arabic, length: .detailed, source: .quranCom(id: 94),  downloadURL: "\(githubBase)/ar-baghawi.json"),
+        TafsirBook(id: "ar-qurtubi",    nameArabic: "تفسير القرطبي",  author: "القرطبي (671هـ)",          language: .arabic, length: .detailed, source: .quranCom(id: 90),  downloadURL: "\(githubBase)/ar-qurtubi.json"),
+        TafsirBook(id: "ar-tabari",     nameArabic: "جامع البيان",    author: "الطبري (310هـ)",           language: .arabic, length: .detailed, source: .quranCom(id: 15),  downloadURL: "\(githubBase)/ar-tabari.json"),
     ]
 
     // MARK: Translations — per-verse API only (no bulk download)

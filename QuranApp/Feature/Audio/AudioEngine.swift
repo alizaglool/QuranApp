@@ -8,6 +8,15 @@ import Combine
 import MediaPlayer
 import Foundation
 
+// MARK: - PlayToMode
+
+enum PlayToMode {
+    case continuous
+    case endOfSurah
+    case endOfPage(page: Int)
+    case stopAtVerse(surah: Int, verse: Int)
+}
+
 // MARK: - RepeatMode
 
 enum RepeatMode: String, CaseIterable {
@@ -64,6 +73,7 @@ final class AudioEngine: NSObject, ObservableObject {
     /// Suppresses the global TabBar mini player whenever the user is on the Quran screen,
     /// regardless of whether the overlay is currently visible.
     @Published var isQuranScreenActive: Bool = false
+    @Published var playToMode: PlayToMode = .continuous
 
     private var currentVerseIteration: Int = 0
     private var currentRangeIteration: Int = 0
@@ -140,6 +150,7 @@ final class AudioEngine: NSObject, ObservableObject {
 
     func stop() {
         pendingVerseAfterBismillah = nil
+        playToMode = .continuous
         audioPlayer?.stop()
         audioPlayer = nil
         isPlaying = false
@@ -606,6 +617,48 @@ extension AudioEngine: AVAudioPlayerDelegate {
     }
 
     private func advanceToNextVerse() {
+        // Check play-to stop conditions before advancing
+        switch playToMode {
+        case .endOfSurah:
+            let total = ReciterLibrary.verseCounts[currentSurahNumber] ?? 1
+            if currentVerseNumber >= total {
+                playToMode = .continuous
+                stop()
+                return
+            }
+        case .endOfPage(let targetPage):
+            // Calculate what the next verse would be
+            let total = ReciterLibrary.verseCounts[currentSurahNumber] ?? 1
+            let nextSurah: Int
+            let nextVerse: Int
+            if currentVerseNumber < total {
+                nextSurah = currentSurahNumber
+                nextVerse = currentVerseNumber + 1
+            } else if currentSurahNumber < 114 {
+                nextSurah = currentSurahNumber + 1
+                nextVerse = 1
+            } else {
+                playToMode = .continuous
+                stop()
+                return
+            }
+            let nextPage = QuranDatabase.shared.getPage(forSurah: nextSurah, verse: nextVerse)
+            if nextPage != targetPage {
+                playToMode = .continuous
+                stop()
+                return
+            }
+        case .stopAtVerse(let stopSurah, let stopVerse):
+            if currentSurahNumber > stopSurah ||
+               (currentSurahNumber == stopSurah && currentVerseNumber >= stopVerse) {
+                playToMode = .continuous
+                stop()
+                return
+            }
+        case .continuous:
+            break
+        }
+
         let total = ReciterLibrary.verseCounts[currentSurahNumber] ?? 1
         if currentVerseNumber < total {
             currentVerseNumber += 1

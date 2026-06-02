@@ -17,7 +17,7 @@ enum TafsirDownloadState: Equatable {
 
 // MARK: - Manager
 
-final class TafsirDownloadManager: ObservableObject {
+final class TafsirDownloadManager: NSObject, ObservableObject {
 
     static let shared = TafsirDownloadManager()
 
@@ -25,10 +25,18 @@ final class TafsirDownloadManager: ObservableObject {
 
     let booksDir: URL
 
-    private init() {
+    private lazy var session: URLSession = URLSession(
+        configuration: .default,
+        delegate: self,
+        delegateQueue: nil
+    )
+    private var activeTasks: [String: URLSessionDownloadTask] = [:]
+
+    private override init() {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         booksDir = docs.appendingPathComponent("tafsir_books", isDirectory: true)
         try? FileManager.default.createDirectory(at: booksDir, withIntermediateDirectories: true)
+        super.init()
     }
 
     // MARK: - Public API
@@ -38,137 +46,104 @@ final class TafsirDownloadManager: ObservableObject {
     }
 
     func isDownloaded(_ bookId: String) -> Bool {
-        FileManager.default.fileExists(atPath: jsonURL(for: bookId).path)
+        // Bundled books are always "downloaded"
+        if TafsirBook.find(id: bookId)?.isBundle == true { return true }
+        return FileManager.default.fileExists(atPath: jsonURL(for: bookId).path)
     }
 
     func state(for bookId: String) -> TafsirDownloadState {
-        states[bookId] ?? (isDownloaded(bookId) ? .downloaded : .notDownloaded)
+        if TafsirBook.find(id: bookId)?.isBundle == true { return .downloaded }
+        return states[bookId] ?? (isDownloaded(bookId) ? .downloaded : .notDownloaded)
     }
 
-    /// Downloads the complete tafsir for a book (all 114 chapters).
-    /// Only works for books where canDownload == true. Translations are per-verse only.
+    /// Downloads the pre-built JSON from GitHub. Only works for books with a non-empty downloadURL.
     func download(bookId: String) {
         guard let book = TafsirBook.find(id: bookId), book.canDownload else { return }
-
         guard !isDownloaded(bookId) else {
             DispatchQueue.main.async { self.states[bookId] = .downloaded }
             return
         }
-        guard states[bookId] == nil || states[bookId] == .notDownloaded else { return }
+        guard activeTasks[bookId] == nil else { return }
+        guard let url = URL(string: book.downloadURL) else { return }
 
         DispatchQueue.main.async { self.states[bookId] = .downloading(progress: 0) }
 
-        Task.detached(priority: .userInitiated) { [weak self] in
-            await self?.downloadAllChapters(bookId: bookId, source: book.source)
-        }
+        let task = session.downloadTask(with: url)
+        task.taskDescription = bookId
+        activeTasks[bookId] = task
+        task.resume()
     }
 
     func cancel(bookId: String) {
+        activeTasks[bookId]?.cancel()
+        activeTasks[bookId] = nil
         DispatchQueue.main.async { self.states[bookId] = .notDownloaded }
     }
 
     func delete(bookId: String) {
+        activeTasks[bookId]?.cancel()
+        activeTasks[bookId] = nil
         try? FileManager.default.removeItem(at: jsonURL(for: bookId))
         TafsirService.shared.evict(bookId: bookId)
         DispatchQueue.main.async { self.states[bookId] = .notDownloaded }
     }
+}
 
-    // MARK: - Private
+// MARK: - URLSessionDownloadDelegate
 
-    private func downloadAllChapters(bookId: String, source: TafsirSource) async {
-        var combined: [String: String] = [:]
-        let total = 114
-        let batchSize = 10
+extension TafsirDownloadManager: URLSessionDownloadDelegate {
 
-        for batchStart in stride(from: 1, through: total, by: batchSize) {
-            let batchEnd = min(batchStart + batchSize - 1, total)
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
+        guard let bookId = downloadTask.taskDescription else { return }
+        let progress = totalBytesExpectedToWrite > 0
+            ? Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+            : 0
+        DispatchQueue.main.async { self.states[bookId] = .downloading(progress: progress) }
+    }
 
-            await withTaskGroup(of: [String: String].self) { group in
-                for chapter in batchStart...batchEnd {
-                    group.addTask {
-                        switch source {
-                        case .quranEnc(let slug):
-                            return await Self.fetchQuranEncChapter(slug: slug, chapter: chapter)
-                        case .quranCom(let id):
-                            return await Self.fetchQuranComChapter(tafsirId: id, chapter: chapter)
-                        case .translation:
-                            return [:]
-                        }
-                    }
-                }
-
-                for await verses in group {
-                    combined.merge(verses) { _, new in new }
-                }
-            }
-
-            let progress = Double(batchEnd) / Double(total)
-            await MainActor.run { self.states[bookId] = .downloading(progress: progress) }
-        }
-
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didFinishDownloadingTo location: URL
+    ) {
+        guard let bookId = downloadTask.taskDescription else { return }
+        let dest = jsonURL(for: bookId)
         do {
-            let data = try JSONEncoder().encode(combined)
-            try data.write(to: jsonURL(for: bookId), options: .atomic)
-            TafsirService.shared.loadDownloaded(bookId: bookId, dict: combined)
-            await MainActor.run { self.states[bookId] = .downloaded }
+            try FileManager.default.moveItem(at: location, to: dest)
+            // Parse and hot-load into TafsirService memory
+            if let raw  = try? Data(contentsOf: dest),
+               let dict = try? JSONDecoder().decode([String: String].self, from: raw) {
+                TafsirService.shared.loadDownloaded(bookId: bookId, dict: dict)
+            }
+            DispatchQueue.main.async {
+                self.activeTasks[bookId] = nil
+                self.states[bookId] = .downloaded
+            }
         } catch {
-            await MainActor.run { self.states[bookId] = .failed(error.localizedDescription) }
+            DispatchQueue.main.async {
+                self.activeTasks[bookId] = nil
+                self.states[bookId] = .failed(error.localizedDescription)
+            }
         }
     }
 
-    // quranenc.com — /translation/sura/{slug}/{chapter} → plain text
-    private static func fetchQuranEncChapter(slug: String, chapter: Int) async -> [String: String] {
-        let urlStr = "https://quranenc.com/api/v1/translation/sura/\(slug)/\(chapter)"
-        guard let url = URL(string: urlStr),
-              let (data, _) = try? await URLSession.shared.data(from: url),
-              let response  = try? JSONDecoder().decode(QuranEncSuraResponse.self, from: data)
-        else { return [:] }
-
-        var verses: [String: String] = [:]
-        for entry in response.result {
-            guard let s = Int(entry.sura), let v = Int(entry.aya) else { continue }
-            verses["\(s)_\(v)"] = entry.translation
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didCompleteWithError error: Error?
+    ) {
+        guard let error,
+              (error as NSError).code != NSURLErrorCancelled,
+              let bookId = task.taskDescription else { return }
+        DispatchQueue.main.async {
+            self.activeTasks[bookId] = nil
+            self.states[bookId] = .failed(error.localizedDescription)
         }
-        return verses
     }
-
-    // api.quran.com — /tafsirs/{id}/by_chapter/{chapter} → HTML, needs stripping
-    private static func fetchQuranComChapter(tafsirId: Int, chapter: Int) async -> [String: String] {
-        let urlStr = "https://api.quran.com/api/v4/tafsirs/\(tafsirId)/by_chapter/\(chapter)"
-        guard let url = URL(string: urlStr),
-              let (data, _) = try? await URLSession.shared.data(from: url),
-              let response  = try? quranComDecoder.decode(ChapterTafsirResponse.self, from: data)
-        else { return [:] }
-
-        var verses: [String: String] = [:]
-        for entry in response.tafsirs {
-            let parts = entry.verseKey.split(separator: ":")
-            guard parts.count == 2,
-                  let s = Int(parts[0]),
-                  let v = Int(parts[1]) else { continue }
-            verses["\(s)_\(v)"] = entry.text.strippingHTML()
-        }
-        return verses
-    }
-
-    private static let quranComDecoder: JSONDecoder = {
-        let d = JSONDecoder()
-        d.keyDecodingStrategy = .convertFromSnakeCase
-        return d
-    }()
-}
-
-// MARK: - DTOs
-
-private struct QuranEncSuraResponse: Codable {
-    let result: [QuranEncEntry]
-}
-
-private struct ChapterTafsirResponse: Codable {
-    let tafsirs: [VerseTafsirEntry]
-}
-
-private struct VerseTafsirEntry: Codable {
-    let verseKey: String   // verse_key → verseKey via convertFromSnakeCase
-    let text: String
 }

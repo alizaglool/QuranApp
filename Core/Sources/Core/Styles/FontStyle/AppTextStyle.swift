@@ -71,7 +71,7 @@ public enum AppTextStyle {
     }
 
     /// Direct SwiftUI Font for custom-font cases (no extra line-height padding).
-    var directFont: Font {
+    public var directFont: Font {
         switch self {
         case .kitab(let size, let bold):
             return .system(size: size, weight: bold ? .semibold : .regular)

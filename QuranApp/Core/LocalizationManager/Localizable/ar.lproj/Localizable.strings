@@ -72,6 +72,8 @@
 "tafsirSummary" = "المختصر";
 "tafsirComingSoon" = "سيتم إضافة التفسير قريباً";
 "library" = "المكتبة";
+"seeMore" = "اقرأ المزيد";
+"seeLess" = "اقرأ أقل";
 "sharing" = "المشاركة";
 "share" = "مشاركة";
 "highlight" = "التمييز";
@@ -90,6 +92,10 @@
 "verseRepeat" = "تكرار الآية";
 "repetitions" = "التكرارات";
 "chooseVerse" = "اختيار الآية";
+"endOfPage" = "نهاية الصفحة";
+"endOfSurah" = "نهاية السورة";
+"continuousPlay" = "تشغيل مستمر";
+"searchQuran" = "بحث في القرآن";
 "hadithGrade" = "حكم";
 "narratorChain" = "رواة";
 "takhrij" = "التخريج";
@@ -129,7 +135,7 @@
 "systemAppearance" = "تلقائي";
 "lightAppearance" = "فاتح";
 "darkAppearance" = "داكن";
-"mushafSettings" = "إعدادات المصحف...";
+"mushafSettings" = "إعدادات المصحف";
 "appearance" = "المظهر";
 "arabicTafsirSection" = "التفسير العربي";
 "translationsSection" = "الترجمات";

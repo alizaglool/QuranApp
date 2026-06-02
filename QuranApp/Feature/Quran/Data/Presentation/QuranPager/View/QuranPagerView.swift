@@ -18,6 +18,7 @@ struct QuranPagerView: View {
     @State private var isTodaySheetPresenting = false
     @State private var isSurahListPresenting = false
     @State private var isPageSettingsPresenting = false
+    @State private var isSearchPresenting = false
     @State private var overlayHideTask: Task<Void, Never>? = nil
 
     private static let overlayAutoHideDelay: TimeInterval = 4
@@ -26,8 +27,12 @@ struct QuranPagerView: View {
         Calendar(identifier: .islamicUmmAlQura).component(.day, from: Date())
     }
 
-    private var scrollDirection: String {
-        storage.getSettings()?.scrollDirection ?? "horizontal"
+    private var scrollDirection: ScrollDirection {
+        storage.getSettings()?.scrollDirection ?? .horizontal
+    }
+
+    private var mushafDisplayType: MushafType {
+        storage.getSettings()?.mushafDisplayType ?? .mushaf
     }
 
     init(startPage: Int? = nil, onBack: (() -> Void)? = nil) {
@@ -40,7 +45,7 @@ struct QuranPagerView: View {
         ZStack {
             backgroundColor.ignoresSafeArea()
 
-            if scrollDirection == "vertical" {
+            if scrollDirection == .vertical {
                 verticalPager
             } else {
                 horizontalPager
@@ -77,7 +82,7 @@ struct QuranPagerView: View {
             TodayView()
                 .presentationDragIndicator(.visible)
         }
-        .customSheet(isPresented: $isSurahListPresenting, fraction: 1.0, detents: [.large]) {
+        .fullScreenCover(isPresented: $isSurahListPresenting) {
             SurahListSheet(
                 currentSurahNumber: viewModel.currentSurahNumber,
                 currentPage: viewModel.currentPage,
@@ -89,9 +94,15 @@ struct QuranPagerView: View {
                 }
             )
         }
-        .customSheet(isPresented: $isPageSettingsPresenting, fraction: 1.0, detents: [.large]) {
+        .customSheet(isPresented: $isPageSettingsPresenting, detents: [.medium, .large]) {
             QuranPageSettingsSheet()
                 .presentationDragIndicator(.visible)
+        }
+        .fullScreenCover(isPresented: $isSearchPresenting) {
+            QuranSearchView(onSelect: { surah, verse in
+                viewModel.goToVerse(surah: surah, verse: verse)
+                isSearchPresenting = false
+            })
         }
         .onChange(of: viewModel.showOverlay) { _, showing in
             audio.quranOverlayActive = showing
@@ -120,7 +131,12 @@ struct QuranPagerView: View {
         }
     }
 
-    private var backgroundColor: Color { Color.mushafPage }
+    private var backgroundColor: Color {
+        switch mushafDisplayType {
+        case .text, .tafsir: return Color.background
+        case .mushaf: return Color.mushafPage
+        }
+    }
 
     private func scheduleOverlayHide() {
         overlayHideTask?.cancel()
@@ -143,10 +159,22 @@ struct QuranPagerView: View {
 
 extension QuranPagerView {
 
+    @ViewBuilder
+    private func pageContent(for page: Int) -> some View {
+        switch mushafDisplayType {
+        case .text:
+            QuranTextPageView(pageNumber: page, viewModel: viewModel)
+        case .tafsir:
+            QuranTafsirPageView(pageNumber: page, viewModel: viewModel)
+        case .mushaf:
+            QuranPageView(pageNumber: page, viewModel: viewModel)
+        }
+    }
+
     private var horizontalPager: some View {
         TabView(selection: $viewModel.currentPage) {
             ForEach(1...viewModel.totalPages, id: \.self) { page in
-                QuranPageView(pageNumber: page, viewModel: viewModel)
+                pageContent(for: page)
                     .tag(page)
             }
         }
@@ -162,7 +190,7 @@ extension QuranPagerView {
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(spacing: 0) {
                     ForEach(1...viewModel.totalPages, id: \.self) { page in
-                        QuranPageView(pageNumber: page, viewModel: viewModel)
+                        pageContent(for: page)
                             .frame(height: UIScreen.main.bounds.height)
                             .id(page)
                             .background(pageVisibilityBackground(page: page))
@@ -248,14 +276,14 @@ extension QuranPagerView {
 
             Spacer()
 
-            Button(action: { /* TODO: search */ }) {
+            Button(action: { isSearchPresenting = true }) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(Color.playerControls)
             }
 
             Button(action: { isSurahListPresenting = true }) {
-                Image("booksVerticalFill")
+                Image(systemName: "list.bullet")
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()

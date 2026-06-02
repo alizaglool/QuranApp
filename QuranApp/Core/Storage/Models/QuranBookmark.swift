@@ -42,5 +42,5 @@ final class QuranBookmark {
 // MARK: - Color category helpers
 
 enum BookmarkColor: String, CaseIterable {
-    case red, yellow, green, blue
+    case red, yellow, green, blue, purple, cyan, orange
 }
