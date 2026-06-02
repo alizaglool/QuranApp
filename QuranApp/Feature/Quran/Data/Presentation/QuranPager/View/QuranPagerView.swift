@@ -82,7 +82,7 @@ struct QuranPagerView: View {
             TodayView()
                 .presentationDragIndicator(.visible)
         }
-        .customSheet(isPresented: $isSurahListPresenting, fraction: 1.0, detents: [.large]) {
+        .fullScreenCover(isPresented: $isSurahListPresenting) {
             SurahListSheet(
                 currentSurahNumber: viewModel.currentSurahNumber,
                 currentPage: viewModel.currentPage,
@@ -98,12 +98,11 @@ struct QuranPagerView: View {
             QuranPageSettingsSheet()
                 .presentationDragIndicator(.visible)
         }
-        .customSheet(isPresented: $isSearchPresenting, fraction: 1.0, detents: [.large]) {
+        .fullScreenCover(isPresented: $isSearchPresenting) {
             QuranSearchView(onSelect: { surah, verse in
                 viewModel.goToVerse(surah: surah, verse: verse)
                 isSearchPresenting = false
             })
-            .presentationDragIndicator(.visible)
         }
         .onChange(of: viewModel.showOverlay) { _, showing in
             audio.quranOverlayActive = showing
