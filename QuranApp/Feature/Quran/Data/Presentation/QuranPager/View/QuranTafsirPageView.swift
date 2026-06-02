@@ -251,9 +251,8 @@ struct QuranTafsirPageView: View {
     private func tafsirCard(verseID: Int) -> some View {
         Group {
             if let tafsir = tafsirTexts[verseID] {
-                Text(tafsir)
-                    .customStyle(.kitab(size: 15))
-                    .foregroundColor(textColor.opacity(0.82))
+                parsedTafsirText(tafsir)
+                    .lineSpacing(7)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .padding(14)
@@ -268,6 +267,47 @@ struct QuranTafsirPageView: View {
         }
         .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
         .environment(\.layoutDirection, .rightToLeft)
+    }
+
+    private func parsedTafsirText(_ raw: String) -> Text {
+        let normalFont  = AppTextStyle.kitab(size: 15).directFont
+        let quranFont   = AppTextStyle.kitab(size: 15, bold: true).directFont
+        let normalColor = textColor.opacity(0.82)
+        let quranColor  = ColorStyle.secondary.color
+
+        var result  = Text("")
+        var buffer  = ""
+        var inQuran = false
+
+        func flush(asQuran: Bool) {
+            guard !buffer.isEmpty else { return }
+            let seg = Text(buffer)
+                .font(asQuran ? quranFont : normalFont)
+                .foregroundColor(asQuran ? quranColor : normalColor)
+            result = result + seg
+            buffer = ""
+        }
+
+        for ch in raw {
+            // Support Arabic ornamental brackets ﴿﴾ (U+FD3E/FD3F) and ASCII { }
+            let isOpen  = (ch == "\u{FD3E}" || ch == "{") && !inQuran
+            let isClose = (ch == "\u{FD3F}" || ch == "}") && inQuran
+
+            if isOpen {
+                flush(asQuran: false)
+                inQuran = true
+                buffer.append(ch)
+            } else if isClose {
+                buffer.append(ch)
+                flush(asQuran: true)
+                inQuran = false
+            } else {
+                buffer.append(ch)
+            }
+        }
+
+        flush(asQuran: inQuran)
+        return result
     }
 
     // MARK: - Async Tafsir Load
