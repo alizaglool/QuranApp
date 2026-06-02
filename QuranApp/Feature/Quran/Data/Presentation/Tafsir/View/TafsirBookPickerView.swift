@@ -124,7 +124,7 @@ struct TafsirBookPickerView: View {
             }
 
         case .notDownloaded:
-            Image(systemName: "arrow.down.circle")
+            Image(systemName: "icloud.and.arrow.down")
                 .font(.system(size: 20))
                 .foregroundColor(ColorStyle.primary.color)
 

@@ -107,15 +107,15 @@ public extension TafsirBook {
         TafsirBook(id: "ar-tabari",     nameArabic: "جامع البيان",    author: "الطبري (310هـ)",           language: .arabic, length: .detailed, source: .quranCom(id: 15),  downloadURL: "\(githubBase)/ar-tabari.json"),
     ]
 
-    // MARK: Translations — per-verse API only (no bulk download)
+    // MARK: Translations — downloadable from GitHub; live API fallback when not downloaded
     static let translations: [TafsirBook] = [
-        TafsirBook(id: "en-saheeh",      nameArabic: "Saheeh International",           author: "",                     language: .english,    length: nil, source: .translation(id: 20)),
-        TafsirBook(id: "en-hilali-khan", nameArabic: "Hilali & Khan",                  author: "Taqiuddin Al-Hilali",  language: .english,    length: nil, source: .translation(id: 203)),
-        TafsirBook(id: "ur-maududi",     nameArabic: "تفہیم القرآن",                  author: "ابوالاعلیٰ مودودی",   language: .urdu,       length: nil, source: .translation(id: 97)),
-        TafsirBook(id: "fr-hamidullah",  nameArabic: "Muhammad Hamidullah",            author: "",                     language: .french,     length: nil, source: .translation(id: 31)),
-        TafsirBook(id: "de-bubenheim",   nameArabic: "Frank Bubenheim & Nadeem Elyas", author: "",                     language: .german,     length: nil, source: .translation(id: 27)),
-        TafsirBook(id: "tr-diyanet",     nameArabic: "Diyanet İşleri",                author: "",                     language: .turkish,    length: nil, source: .translation(id: 77)),
-        TafsirBook(id: "id-indonesian",  nameArabic: "Indonesian",                    author: "Kementerian Agama RI", language: .indonesian, length: nil, source: .translation(id: 33)),
+        TafsirBook(id: "en-saheeh",      nameArabic: "Saheeh International",           author: "",                     language: .english,    length: nil, source: .translation(id: 20),  downloadURL: "\(githubBase)/en-saheeh.json"),
+        TafsirBook(id: "en-hilali-khan", nameArabic: "Hilali & Khan",                  author: "Taqiuddin Al-Hilali",  language: .english,    length: nil, source: .translation(id: 203), downloadURL: "\(githubBase)/en-hilali-khan.json"),
+        TafsirBook(id: "ur-maududi",     nameArabic: "تفہیم القرآن",                  author: "ابوالاعلیٰ مودودی",   language: .urdu,       length: nil, source: .translation(id: 97),  downloadURL: "\(githubBase)/ur-maududi.json"),
+        TafsirBook(id: "fr-hamidullah",  nameArabic: "Muhammad Hamidullah",            author: "",                     language: .french,     length: nil, source: .translation(id: 31),  downloadURL: "\(githubBase)/fr-hamidullah.json"),
+        TafsirBook(id: "de-bubenheim",   nameArabic: "Frank Bubenheim & Nadeem Elyas", author: "",                     language: .german,     length: nil, source: .translation(id: 27),  downloadURL: "\(githubBase)/de-bubenheim.json"),
+        TafsirBook(id: "tr-diyanet",     nameArabic: "Diyanet İşleri",                author: "",                     language: .turkish,    length: nil, source: .translation(id: 77),  downloadURL: "\(githubBase)/tr-diyanet.json"),
+        TafsirBook(id: "id-indonesian",  nameArabic: "Indonesian",                    author: "Kementerian Agama RI", language: .indonesian, length: nil, source: .translation(id: 33),  downloadURL: "\(githubBase)/id-indonesian.json"),
     ]
 
     static var all: [TafsirBook] { arabicTafsirs + translations }
