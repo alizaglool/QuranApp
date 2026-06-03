@@ -144,7 +144,7 @@ struct QuranTafsirPageView: View {
             .padding(.bottom, 8)
         }
         .ignoresSafeArea(edges: .horizontal)
-        .task(id: pageNumber) {
+        .task(id: "\(bookId)/\(pageNumber)") {
             await loadTafsir()
         }
     }
@@ -247,8 +247,12 @@ struct QuranTafsirPageView: View {
 
     // MARK: - Tafsir Card
 
+    private var isBookRTL: Bool {
+        TafsirBook.find(id: bookId)?.language.isRTL ?? true
+    }
+
     private func tafsirCard(verseID: Int) -> some View {
-        TafsirCardView(tafsir: tafsirTexts[verseID], isDarkMode: isDarkMode)
+        TafsirCardView(tafsir: tafsirTexts[verseID], isDarkMode: isDarkMode, isRTL: isBookRTL)
     }
 
     // MARK: - Async Tafsir Load
@@ -257,6 +261,8 @@ struct QuranTafsirPageView: View {
         let entries = verseEntries
         let id = bookId
         tafsirTexts = [:]
+
+        var results: [Int: String] = [:]
         await withTaskGroup(of: (Int, String?).self) { group in
             for entry in entries {
                 group.addTask {
@@ -269,8 +275,11 @@ struct QuranTafsirPageView: View {
                 }
             }
             for await (verseID, text) in group {
-                if let text { tafsirTexts[verseID] = text }
+                // nil means the fetch failed — store "" so the card exits the spinner state
+                results[verseID] = text ?? ""
             }
         }
+        guard !Task.isCancelled else { return }
+        tafsirTexts = results
     }
 }

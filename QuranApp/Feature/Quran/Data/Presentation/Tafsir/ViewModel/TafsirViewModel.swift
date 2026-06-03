@@ -23,6 +23,7 @@ final class TafsirViewModel: ObservableObject {
 
     private var surah: Int?
     private var verse: Int?
+    private var loadTask: Task<Void, Never>?
 
     init() {
         let savedId = UserDefaults.standard.string(forKey: kSelectedBookId) ?? ""
@@ -32,6 +33,7 @@ final class TafsirViewModel: ObservableObject {
     // MARK: - Load
 
     func load(surah: Int, verse: Int) {
+        loadTask?.cancel()
         self.surah = surah
         self.verse = verse
         errorMessage = nil
@@ -46,12 +48,15 @@ final class TafsirViewModel: ObservableObject {
 
         // Remote books — async network fetch.
         isLoading = true
-        Task {
+        loadTask = Task {
             do {
-                text = try await TafsirService.shared.fetch(
+                let result = try await TafsirService.shared.fetch(
                     bookId: selectedBook.id, surah: surah, verse: verse
                 )
+                guard !Task.isCancelled else { return }
+                text = result
             } catch {
+                guard !Task.isCancelled else { return }
                 errorMessage = "تعذّر تحميل التفسير"
             }
             isLoading = false

@@ -10,17 +10,26 @@ struct TafsirCardView: View {
 
     let tafsir: String?
     let isDarkMode: Bool
+    var isRTL: Bool = true
 
     private var textColor: Color { isDarkMode ? .white : .black }
 
     var body: some View {
         Group {
             if let tafsir {
-                parsedText(tafsir)
-                    .lineSpacing(7)
-                    .multilineTextAlignment(.leading)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .padding(14)
+                if tafsir.isEmpty {
+                    Text("لا يوجد تفسير لهذه الآية")
+                        .customStyle(.kitab(size: 13))
+                        .foregroundColor(textColor.opacity(0.35))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(14)
+                } else {
+                    parsedText(tafsir)
+                        .lineSpacing(7)
+                        .multilineTextAlignment(isRTL ? .leading : .trailing)
+                        .frame(maxWidth: .infinity, alignment: isRTL ? .trailing : .leading)
+                        .padding(14)
+                }
             } else {
                 HStack {
                     Spacer()
@@ -31,7 +40,7 @@ struct TafsirCardView: View {
             }
         }
         .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        .environment(\.layoutDirection, .rightToLeft)
+        .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)
     }
 
     // MARK: - Text Parser
