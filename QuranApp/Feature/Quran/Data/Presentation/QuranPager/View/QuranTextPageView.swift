@@ -90,6 +90,9 @@ struct QuranTextPageView: View {
                                 .padding(.bottom, 4)
                         }
                         verseText(entry.text, entry: entry)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 16)
+                            .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 16))
                     }
                 }
                 .padding(.horizontal, 20)
@@ -105,7 +108,7 @@ struct QuranTextPageView: View {
             QuranPageFooterBar(
                 pageNumber: pageNumber,
                 isDarkMode: isDarkMode,
-                theme: storage.getSettings()?.selectedTheme ?? .classic
+                theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
         }
@@ -128,7 +131,7 @@ struct QuranTextPageView: View {
     // MARK: - Verse Text
 
     private func verseText(_ text: String, entry: VerseEntry) -> some View {
-        let theme      = storage.getSettings()?.selectedTheme ?? .classic
+        let theme      = storage.getSettings()?.selectedTheme ?? .tinted
         let fontSize: CGFloat = 26
         let badgeImage = QuranGlyphRenderer.verseMarkerImage(
             entry.verseNumber,

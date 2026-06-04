@@ -28,12 +28,12 @@ struct StorageManagementView: View {
                         reciterRow(reciter)
                     }
                 } header: {
-                    Text("التلاوات المحمّلة")
+                    Text(AppLocalizedKeys.downloadedRecitations.value)
                         .customStyle(.kitab(size: 14, bold: true), .subtitle)
                         .textCase(nil)
                 } footer: {
                     HStack {
-                        Text("إجمالي المساحة المستخدمة:")
+                        Text(AppLocalizedKeys.totalStorageUsed.value)
                         Spacer()
                         Text(String(format: "%.0f MB", downloads.totalStorageUsedMB()))
                             .fontWeight(.semibold)
@@ -44,19 +44,20 @@ struct StorageManagementView: View {
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle("إدارة التخزين")
+        .navigationTitle(AppLocalizedKeys.storageManagement.value)
         .navigationBarTitleDisplayMode(.inline)
-        .alert("حذف التلاوة", isPresented: Binding(
+        .appDirection()
+        .alert(AppLocalizedKeys.deleteRecitation.value, isPresented: Binding(
             get: { showDeleteAlert != nil },
             set: { if !$0 { showDeleteAlert = nil } }
         )) {
-            Button("حذف", role: .destructive) {
+            Button(AppLocalizedKeys.deleteButton.value, role: .destructive) {
                 if let slug = showDeleteAlert {
                     downloads.deleteReciter(slug)
                     showDeleteAlert = nil
                 }
             }
-            Button("إلغاء", role: .cancel) { showDeleteAlert = nil }
+            Button(AppLocalizedKeys.cancel.value, role: .cancel) { showDeleteAlert = nil }
         }
     }
 
@@ -66,7 +67,7 @@ struct StorageManagementView: View {
                 Text(reciter.arabicName)
                     .customStyle(.kitab(size: 15, bold: true), .onSurface)
 
-                Text("\(reciter.downloadedSurahNumbers.count) سورة محمّلة")
+                Text(String(format: AppLocalizedKeys.surahsDownloaded.value, reciter.downloadedSurahNumbers.count))
                     .customStyle(.kitab(size: 12), .subtitle)
             }
 
@@ -79,27 +80,27 @@ struct StorageManagementView: View {
                 Button(role: .destructive) {
                     showDeleteAlert = reciter.slug
                 } label: {
-                    Text("حذف")
-                        .customStyle(.kitab(size: 12))                        .foregroundStyle(Color.error)
+                    Text(AppLocalizedKeys.deleteButton.value)
+                        .customStyle(.kitab(size: 12))
+                        .foregroundStyle(Color.error)
                 }
-                .accessibilityLabel("حذف تلاوة \(reciter.arabicName)")
+                .accessibilityLabel(String(format: "%@ %@", AppLocalizedKeys.deleteButton.value, reciter.arabicName))
             }
         }
         .padding(.vertical, 4)
-        .environment(\.layoutDirection, .rightToLeft)
     }
 
     private var emptyState: some View {
         VStack(spacing: 16) {
-            Image(systemName: "icloud.and.arrow.down")
+            Image("cloudAndArrowDown")
                 .font(.system(size: 44))
                 .customForeground(.subtitle)
                 .padding(.top, 40)
 
-            Text("لم تحمّل أي تلاوة بعد")
+            Text(AppLocalizedKeys.noDownloadsTitle.value)
                 .customStyle(.kitab(size: 18, bold: true), .onSurface)
 
-            Text("اذهب إلى قسم التلاوة وحمّل قارئًا للاستماع بدون إنترنت")
+            Text(AppLocalizedKeys.noDownloadsMessage.value)
                 .customStyle(.kitab(size: 14), .subtitle)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)

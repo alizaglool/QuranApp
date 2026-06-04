@@ -327,6 +327,13 @@ final class StorageManager: ObservableObject {
         }
     }
 
+    func removeDownloadedSurah(reciterSlug: String, surahNumber: Int) {
+        guard let reciter = getDownloadedReciter(slug: reciterSlug) else { return }
+        reciter.downloadedSurahNumbers.removeAll { $0 == surahNumber }
+        reciter.updatedAt = Date()
+        try? context.save()
+    }
+
     func deleteDownloadedReciter(slug: String) {
         guard let reciter = getDownloadedReciter(slug: slug) else { return }
         context.delete(reciter)

@@ -17,7 +17,7 @@ struct TafsirBookPickerView: View {
             header
             Divider()
             ScrollView {
-                VStack(alignment: .trailing, spacing: 24) {
+                VStack(alignment: .leading, spacing: 24) {
                     bookSection(
                         title: AppLocalizedKeys.arabicTafsirSection.value,
                         books: TafsirBook.arabicTafsirs
@@ -33,12 +33,10 @@ struct TafsirBookPickerView: View {
             }
         }
         .background(Color.background)
-        .environment(\.layoutDirection, .rightToLeft)
+        .appDirection()
     }
 
     // MARK: - Header
-    // RTL: leading = right | trailing = left
-    // "رجوع" on the right (leading), X on the left (trailing)
 
     private var header: some View {
         ZStack {
@@ -46,10 +44,9 @@ struct TafsirBookPickerView: View {
                 .customStyle(.kitab(size: 17, bold: true), .onSurface)
 
             HStack {
-                // Leading (right in RTL): back button
                 Button { dismiss() } label: {
                     HStack(spacing: 4) {
-                        Image(systemName: "chevron.forward")
+                        Image(systemName: "chevron.backward")
                             .font(.system(size: 13, weight: .semibold))
                             .foregroundColor(ColorStyle.primary.color)
                         Text(AppLocalizedKeys.back.value)
@@ -58,7 +55,6 @@ struct TafsirBookPickerView: View {
                     }
                 }
                 Spacer()
-                // Trailing (left in RTL): close button
                 Button { dismiss() } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 13, weight: .semibold))
@@ -75,16 +71,17 @@ struct TafsirBookPickerView: View {
     // MARK: - Section
 
     private func bookSection(title: String, books: [TafsirBook]) -> some View {
-        VStack(alignment: .trailing, spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .customStyle(.kitab(size: 17, bold: true), .onSurface)
-                .frame(maxWidth: .infinity, alignment: .leading) // leading = right in RTL
+                .frame(maxWidth: .infinity, alignment: .leading)
 
             VStack(spacing: 0) {
                 ForEach(Array(books.enumerated()), id: \.element.id) { index, book in
                     if index > 0 {
                         Divider()
-                            .padding(.trailing, 52)
+                            .padding(.trailing, 20)
+                            .padding(.leading, 20)
                     }
                     bookRow(book)
                 }
@@ -94,8 +91,6 @@ struct TafsirBookPickerView: View {
     }
 
     // MARK: - Row
-    // HStack in RTL: first item appears on RIGHT, last item appears on LEFT
-    // → text first (right/leading), icon last (left/trailing)
 
     private func bookRow(_ book: TafsirBook) -> some View {
         let state: TafsirDownloadState = book.canDownload ? downloader.state(for: book.id) : .downloaded
@@ -105,23 +100,21 @@ struct TafsirBookPickerView: View {
             handleTap(book: book, state: state)
         } label: {
             HStack(spacing: 12) {
-                // Text block — leading (right side in RTL)
-                VStack(alignment: .trailing, spacing: 4) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(book.nameArabic)
                         .customStyle(.kitab(size: 16, bold: true), .onSurface)
-                        .multilineTextAlignment(.trailing)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     if !book.author.isEmpty {
                         Text(book.author)
                             .customStyle(.kitab(size: 13))
                             .foregroundColor(.secondary)
-                            .multilineTextAlignment(.trailing)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
 
-                // Status icon — trailing (left side in RTL), fixed 28pt column
                 statusIcon(book: book, state: state, isSelected: isSelected)
                     .frame(width: 28, height: 28)
             }
@@ -138,14 +131,8 @@ struct TafsirBookPickerView: View {
     private func statusIcon(book: TafsirBook, state: TafsirDownloadState, isSelected: Bool) -> some View {
         switch state {
         case .downloaded:
-            if isSelected {
-                Image(systemName: "checkmark")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(ColorStyle.primary.color)
-            } else {
-                Color.clear
-            }
-
+            Color.clear
+            
         case .downloading(let progress):
             ZStack {
                 Circle()
@@ -158,6 +145,7 @@ struct TafsirBookPickerView: View {
 
         case .notDownloaded, .failed:
             Image("cloudAndArrowDown")
+                .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(ColorStyle.primary.color)

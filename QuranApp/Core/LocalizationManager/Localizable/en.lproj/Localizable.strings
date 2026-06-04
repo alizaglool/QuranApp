@@ -21,6 +21,7 @@
 "sort" = "SORT";
 
 "home" = "Home";
+"today" = "Today";
 "assalamuAlaikum" = "ASSALAMU ALAIKUM";
 "welcomeToSanctuary" = "Welcome to your sanctuary";
 "continueReading" = "CONTINUE READING";
@@ -139,6 +140,30 @@
 "appearance" = "Appearance";
 "arabicTafsirSection" = "Arabic Tafsir";
 "translationsSection" = "Translations";
+
+// MARK: - Reciter / Audio Library
+"reciters" = "Reciters";
+"close" = "Close";
+"cancel" = "Cancel";
+"deleteRecitation" = "Delete Recitation";
+"deleteReciterMessage" = "All audio for %@ will be removed from your device";
+"selectedLabel" = "Selected";
+"cancelDownload" = "Cancel Download";
+"deleteButton" = "Delete";
+"tafsirAudioTitle" = "Audio Tafsir";
+"tafsirAudioSubtitle" = "Al-Asmari & Abdul-Hakam";
+"surahFallback" = "Surah %d";
+"storageManagement" = "Storage Management";
+"downloadedRecitations" = "Downloaded Recitations";
+"totalStorageUsed" = "Total storage used:";
+"surahsDownloaded" = "%d surahs downloaded";
+"noDownloadsTitle" = "No recitations downloaded yet";
+"noDownloadsMessage" = "Go to the Recitation section and download a reciter to listen offline";
+"minimizePlayer" = "Minimize Player";
+"previousVerse" = "Previous Verse";
+"nextVerse" = "Next Verse";
+"playbackSpeed" = "Playback Speed";
+"pausePlayer" = "Pause";
 
 // MARK: - Surah List Sheet
 "surahIndex" = "Index";

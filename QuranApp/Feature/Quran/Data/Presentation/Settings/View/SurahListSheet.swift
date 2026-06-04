@@ -104,6 +104,7 @@ struct SurahListSheet: View {
             }
         }
         .background(Color.background.ignoresSafeArea())
+        .appDirection()
     }
 
     // MARK: - Grab Handle
@@ -153,12 +154,14 @@ struct SurahListSheet: View {
                 .fill(Color(.systemGray5))
         )
         .frame(height: 36)
+        .appDirection()
     }
 
     private func segTab(title: String, index: Int) -> some View {
-        Button { withAnimation(.easeInOut(duration: 0.15)) { selectedTab = index } } label: {
+        Button { selectedTab = index } label: {
             Text(title)
-                .customStyle(.kitab(size: 14))                .foregroundColor(selectedTab == index ? .primary : .secondary)
+                .customStyle(.kitab(size: 14))
+                .foregroundColor(selectedTab == index ? .primary : .secondary)
                 .frame(width: 90, height: 36)
                 .background(
                     Group {
@@ -167,6 +170,7 @@ struct SurahListSheet: View {
                                 .fill(Color(.systemGray3))
                         }
                     }
+                    .animation(.easeInOut(duration: 0.15), value: selectedTab)
                 )
         }
         .buttonStyle(.plain)

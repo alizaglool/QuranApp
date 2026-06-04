@@ -50,7 +50,7 @@ struct FullPlayerView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("تلاوة")
+                    Text(AppLocalizedKeys.recitation.value)
                         .customStyle(.kitab(size: 16, bold: true), .onSurface)
                 }
                 ToolbarItem(placement: .topBarLeading) {
@@ -59,10 +59,11 @@ struct FullPlayerView: View {
                             .font(.system(size: 16, weight: .medium))
                             .customForeground(.onSurface)
                     }
-                    .accessibilityLabel("إغلاق")
+                    .accessibilityLabel(AppLocalizedKeys.close.value)
                 }
             }
         }
+        .appDirection()
         .customSheet(isPresented: $isReciterPickerPresenting, fraction: 1.0, detents: [.large]) {
             ReciterSelectionSheet()
         }

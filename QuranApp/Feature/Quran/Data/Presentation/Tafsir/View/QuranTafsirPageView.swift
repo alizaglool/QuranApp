@@ -139,7 +139,7 @@ struct QuranTafsirPageView: View {
             QuranPageFooterBar(
                 pageNumber: pageNumber,
                 isDarkMode: isDarkMode,
-                theme: storage.getSettings()?.selectedTheme ?? .classic
+                theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
         }
@@ -192,11 +192,17 @@ struct QuranTafsirPageView: View {
     // MARK: - Verse Block
 
     private func verseBlock(entry: VerseEntry) -> some View {
-        VStack(spacing: 12) {
-            if let bismillah = entry.bismillahText {
-                bismillahLine(bismillah)
+        VStack(spacing: 10) {
+            VStack(spacing: 10) {
+                if let bismillah = entry.bismillahText {
+                    bismillahLine(bismillah)
+                }
+                verseText(entry.text, entry: entry)
             }
-            verseText(entry.text, entry: entry)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 16)
+            .background(Color.mushafPage, in: RoundedRectangle(cornerRadius: 16))
+
             tafsirCard(verseID: entry.id)
         }
     }
@@ -216,7 +222,7 @@ struct QuranTafsirPageView: View {
     // MARK: - Verse Text
 
     private func verseText(_ text: String, entry: VerseEntry) -> some View {
-        let theme = storage.getSettings()?.selectedTheme ?? .classic
+        let theme = storage.getSettings()?.selectedTheme ?? .tinted
         let fontSize: CGFloat = 26
         let badgeImage = QuranGlyphRenderer.verseMarkerImage(
             entry.verseNumber,

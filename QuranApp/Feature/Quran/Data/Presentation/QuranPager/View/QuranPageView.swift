@@ -301,7 +301,7 @@ struct QuranPageView: View {
             QuranPageFooterBar(
                 pageNumber: pageNumber,
                 isDarkMode: isDarkMode,
-                theme: storage.getSettings()?.selectedTheme ?? .classic
+                theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
         }
@@ -359,7 +359,7 @@ struct QuranPageView: View {
         QuranPageOverlay(
             verseMarkers: quranDB.getVersesForPage(pageNumber),
             isDarkMode: isDarkMode,
-            theme: storage.getSettings()?.selectedTheme ?? .classic
+            theme: storage.getSettings()?.selectedTheme ?? .tinted
         )
         .frame(width: pageWidth, height: pageHeight)
     }

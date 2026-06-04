@@ -20,7 +20,7 @@ struct VersePickerSheet: View {
             verseList
         }
         .background(Color.background)
-        .environment(\.layoutDirection, .rightToLeft)
+        .appDirection()
     }
 
     // MARK: - Header

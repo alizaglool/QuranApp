@@ -16,7 +16,7 @@ struct QuranPageSettingsSheet: View {
 
     @State private var mushafType: MushafType = .mushaf
     @State private var scrollDirection: ScrollDirection = .horizontal
-    @State private var selectedTheme: Theme = .classic
+    @State private var selectedTheme: Theme = .tinted
     @State private var selectedAppearance: AppearanceMode = .system
     @State private var isBookPickerPresenting = false
 
@@ -51,13 +51,11 @@ struct QuranPageSettingsSheet: View {
             .padding(.bottom, 40)
         }
         .background(Color.surfaceContainerLow.ignoresSafeArea())
-        .environment(\.layoutDirection, .rightToLeft)
+        .appDirection()
         .onAppear { loadSettings() }
         .customSheet(isPresented: $isBookPickerPresenting, detents: [.medium, .large]) {
-            MushafBookPickerSheet(selectedType: $mushafType) {
-                saveSettings()
-            }
-            .presentationDragIndicator(.visible)
+            TafsirBookPickerView(selectedBook: selectedBookBinding)
+                .presentationDragIndicator(.visible)
         }
     }
 
@@ -125,6 +123,16 @@ struct QuranPageSettingsSheet: View {
         return TafsirBook.arabicTafsirs[2]
     }
 
+    private var selectedBookBinding: Binding<TafsirBook> {
+        Binding(
+            get: { currentTafsirBook },
+            set: { book in
+                mushafType = .tafsir(id: book.id)
+                saveSettings()
+            }
+        )
+    }
+
     private var mushafTypeCard: some View {
         VStack(spacing: 0) {
             mushafRow(.mushaf,
@@ -166,32 +174,26 @@ struct QuranPageSettingsSheet: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { dismiss() }
         } label: {
             HStack(alignment: .center, spacing: 12) {
-                // Checkmark — renders on LEFT in RTL
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .customStyle(.kitab(size: 17, bold: true), .onSurface)
+                    if let subtitle, !subtitle.isEmpty {
+                        Text(subtitle)
+                            .customStyle(.kitab(size: 14), .secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+
+                Spacer()
+
                 Image(systemName: "checkmark")
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(selected ? ColorStyle.primary.color : .clear)
                     .frame(width: 24)
-
-                Spacer()
-
-                // Text block — renders on RIGHT in RTL
-                VStack(alignment: .trailing, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Text(title)
-                            .customStyle(.kitab(size: 17, bold: true), .onSurface)
-                            .multilineTextAlignment(.trailing)
-                    }
-                    if let subtitle, !subtitle.isEmpty {
-                        Text(subtitle)
-                            .customStyle(.kitab(size: 14), .secondary)
-                            .multilineTextAlignment(.trailing)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 14)
-            .frame(maxWidth: .infinity, alignment: .trailing)
+            .frame(maxWidth: .infinity)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
@@ -200,15 +202,14 @@ struct QuranPageSettingsSheet: View {
     private var bookPickerRow: some View {
         Button { isBookPickerPresenting = true } label: {
             HStack(spacing: 12) {
-                Image(systemName: "chevron.forward")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(Color.outlineVariant)
-                    .frame(width: 24)
+                Text(AppLocalizedKeys.chooseBook.value)
+                    .customStyle(.kitab(size: 15, bold: true), .primary)
 
                 Spacer()
 
-                Text(AppLocalizedKeys.chooseBook.value)
-                    .customStyle(.kitab(size: 15, bold: true), .primary)
+                Image(systemName: "chevron.forward")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(Color.outlineVariant)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
@@ -331,107 +332,6 @@ struct QuranPageSettingsSheet: View {
     }
 }
 
-// MARK: - Mushaf Book Picker Sheet
-
-private struct MushafBookPickerSheet: View {
-
-    @Binding var selectedType: MushafType
-    let onSelected: () -> Void
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            List {
-                pickerSection(title: AppLocalizedKeys.arabicTafsirSection.value,
-                              books: TafsirBook.arabicTafsirs)
-                pickerSection(title: AppLocalizedKeys.translationsSection.value,
-                              books: TafsirBook.translations)
-            }
-            .listStyle(.insetGrouped)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(AppLocalizedKeys.chooseBookTitle.value)
-                        .customStyle(.kitab(size: 17, bold: true), .onSurface)
-                }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(.secondary)
-                            .frame(width: 30, height: 30)
-                            .background(Color.outlineVariant.opacity(0.5), in: Circle())
-                    }
-                }
-            }
-            .environment(\.layoutDirection, .rightToLeft)
-        }
-    }
-
-    @ViewBuilder
-    private func pickerSection(title: String, books: [TafsirBook]) -> some View {
-        Section {
-            ForEach(books) { book in
-                bookRow(book)
-            }
-        } header: {
-            Text(title)
-                .customStyle(.kitab(size: 13, bold: true), .onSurface)
-                .textCase(nil)
-        }
-    }
-
-    private func bookRow(_ book: TafsirBook) -> some View {
-        Button {
-            selectedType = .tafsir(id: book.id)
-            onSelected()
-            dismiss()
-        } label: {
-            HStack(spacing: 12) {
-                VStack(alignment: .trailing, spacing: 3) {
-                    Text(book.nameArabic)
-                        .customStyle(.kitab(size: 15, bold: true), .onSurface)
-                        .multilineTextAlignment(.trailing)
-                    if !book.author.isEmpty {
-                        Text(book.author)
-                            .customStyle(.kitab(size: 12), .subtitle)
-                            .multilineTextAlignment(.trailing)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-
-                HStack(spacing: 6) {
-                    if let length = book.length {
-                        Text(length.label)
-                            .customStyle(.kitab(size: 11))
-                            .foregroundColor(length == .brief ? ColorStyle.secondary.color : ColorStyle.primary.color)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 3)
-                            .background(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .fill((length == .brief ? ColorStyle.secondary.color : ColorStyle.primary.color).opacity(0.12))
-                            )
-                    }
-                    if book.language != .arabic {
-                        Text(book.language.displayName)
-                            .customStyle(.kitab(size: 17, bold: true), .subtitle)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 3)
-                            .background(RoundedRectangle(cornerRadius: 6).fill(Color.surfaceContainerLow))
-                            .environment(\.layoutDirection, .leftToRight)
-                    }
-                }
-
-                Image(systemName: selectedType == .tafsir(id: book.id) ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(selectedType == .tafsir(id: book.id) ? ColorStyle.primary.color : Color.outlineVariant)
-            }
-            .padding(.vertical, 4)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-    }
-}
 
 // MARK: - AppearanceMode
 

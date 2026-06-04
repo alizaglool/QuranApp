@@ -11,9 +11,7 @@ import Core
 extension TabBarItem {
     
     static var home: TabBarItem? = nil
-    
-    static var quran: TabBarItem? = nil
-    
+
     static var adhkar: TabBarItem? = nil
     
     static var hadith: TabBarItem? = nil

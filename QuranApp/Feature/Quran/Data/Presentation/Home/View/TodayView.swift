@@ -10,26 +10,25 @@ import Core
 
 struct TodayView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var localization = LocalizationManager.shared
 
     private let hijriCalendar = Calendar(identifier: .islamicUmmAlQura)
     private let now = Date()
 
-    private var hijriDay: Int    { hijriCalendar.component(.day,   from: now) }
-    private var hijriMonth: Int  { hijriCalendar.component(.month, from: now) }
-    private var gregDay: Int     { Calendar.current.component(.day,   from: now) }
-    private var gregMonth: Int   { Calendar.current.component(.month, from: now) }
+    private var hijriDay: Int { hijriCalendar.component(.day, from: now) }
+    private var gregDay: Int  { Calendar.current.component(.day, from: now) }
 
     private var hijriMonthName: String {
-        let names = ["محرم","صفر","ربيع الأول","ربيع الآخر",
-                     "جمادى الأولى","جمادى الآخرة","رجب","شعبان",
-                     "رمضان","شوال","ذو القعدة","ذو الحجة"]
-        guard (1...12).contains(hijriMonth) else { return "" }
-        return names[hijriMonth - 1]
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: localization.currentLanguage.code)
+        fmt.calendar = hijriCalendar
+        fmt.dateFormat = "MMMM"
+        return fmt.string(from: now)
     }
 
     private var gregMonthName: String {
         let fmt = DateFormatter()
-        fmt.locale = Locale(identifier: "ar")
+        fmt.locale = Locale(identifier: localization.currentLanguage.code)
         fmt.dateFormat = "MMMM"
         return fmt.string(from: now)
     }
@@ -50,7 +49,7 @@ struct TodayView: View {
                                 .background(Color.outlineVariant.opacity(0.5), in: Circle())
                         }
                         Spacer()
-                        Text("اليوم")
+                        Text(AppLocalizedKeys.today.value)
                             .customStyle(.kitab(size: 17, bold: true), .onSurface)
                         Spacer()
                         Color.clear.frame(width: 30)
@@ -65,7 +64,7 @@ struct TodayView: View {
                     .padding(.horizontal, 20)
 
                     VStack(spacing: 12) {
-                        Text("آية اليوم")
+                        Text(AppLocalizedKeys.ayahOfTheDay.value)
                             .customStyle(.kitab(size: 17, bold: true), .onSurface)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .padding(.horizontal, 20)
@@ -87,13 +86,13 @@ struct TodayView: View {
                                 Divider().padding(.horizontal, 16)
 
                                 HStack {
-                                    Image(systemName: "chevron.backward")
-                                        .font(.system(size: 13))
-                                        .foregroundColor(.secondary)
-                                    Spacer()
-                                    Text("التفسير")
+                                    Text(AppLocalizedKeys.tafsir.value)
                                         .customStyle(.kitab(size: 15))
                                         .foregroundColor(Color.playerControls)
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                        .font(.system(size: 13))
+                                        .foregroundColor(.secondary)
                                 }
                                 .padding(.horizontal, 20)
                                 .padding(.vertical, 12)
@@ -108,12 +107,12 @@ struct TodayView: View {
                 .padding(.bottom, 40)
             }
             .background(Color.surfaceContainerLow.ignoresSafeArea())
-            .environment(\.layoutDirection, .rightToLeft)
+            .appDirection()
             .navigationBarHidden(true)
         }
     }
 
-    // MARK: - Verse Card
+    // MARK: - Verse Card (always RTL — Quran text is always Arabic)
 
     private func verseCard(_ verse: DailyVerse) -> some View {
         let text  = QuranTextService.shared.text(surah: verse.surah, verse: verse.verse) ?? ""

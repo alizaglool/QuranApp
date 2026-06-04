@@ -43,7 +43,7 @@ struct SettingsView: View {
             .customBackground(.background)
             .navigationTitle(AppLocalizedKeys.settings.value)
             .navigationBarTitleDisplayMode(.large)
-            .environment(\.layoutDirection, .rightToLeft)
+            .appDirection()
         }
         .sheet(isPresented: $showQuranSettings) {
             QuranPageSettingsSheet()
@@ -303,7 +303,7 @@ private struct AppearancePickerSheet: View {
             .padding(.bottom, 32)
         }
         .background(Color.surfaceContainer)
-        .environment(\.layoutDirection, .rightToLeft)
+        .appDirection()
         .onAppear { selected = storage.getSettings()?.themeMode ?? "system" }
     }
 

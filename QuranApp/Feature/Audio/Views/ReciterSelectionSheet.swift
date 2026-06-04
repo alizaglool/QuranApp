@@ -38,6 +38,7 @@ struct ReciterSelectionSheet: View {
             }
         }
         .background(Color.background)
+        .appDirection()
         .sheet(item: $showDownloadSheet) { reciter in
             SurahDownloadSheet(reciter: reciter, onBack: { showDownloadSheet = nil })
                 .presentationDetents([.large])
@@ -97,7 +98,7 @@ struct ReciterSelectionSheet: View {
                 .foregroundColor(.secondary)
 
             TextField(AppLocalizedKeys.search.value, text: $searchText)
-                .customStyle(.kitab(size: 15))                .environment(\.layoutDirection, .rightToLeft)
+                .customStyle(.kitab(size: 15))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)
@@ -123,30 +124,26 @@ struct ReciterSelectionSheet: View {
 
     private var tafsirRow: some View {
         HStack(spacing: 12) {
-            // Info placeholder — far left
-            ZStack {
-                Circle()
-                    .fill(Color(.systemGray5))
-                    .frame(width: 32, height: 32)
-                Image(systemName: "info")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(.secondary)
-            }
-
-            // Disabled play icon
-            Image(systemName: "play")
-                .font(.system(size: 14, weight: .medium))
-                .foregroundColor(Color(.systemGray3))
+            // Info icon — green outline, no action (placeholder)
+            Image(systemName: "info.circle")
+                .font(.system(size: 24))
+                .foregroundColor(ColorStyle.primary.color)
+                .frame(width: 32, height: 32)
 
             Spacer()
 
             // Name + subtitle — right-aligned
             VStack(alignment: .trailing, spacing: 2) {
-                Text("المختصر الصوتي")
+                Text(AppLocalizedKeys.tafsirAudioTitle.value)
                     .customStyle(.kitab(size: 16), .onSurface)
-                Text("عبدالله الأسمري وصابر عبدالحكم")
+                Text(AppLocalizedKeys.tafsirAudioSubtitle.value)
                     .customStyle(.kitab(size: 12), .subtitle)
             }
+
+            // ▶ always visible, gray
+            Image(systemName: "play.fill")
+                .font(.system(size: 11))
+                .foregroundColor(Color(.systemGray3))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
@@ -168,7 +165,7 @@ struct ReciterSelectionSheet: View {
                     ForEach(Array(filteredReciters.enumerated()), id: \.element.id) { idx, reciter in
                         reciterRow(reciter)
                         if idx < filteredReciters.count - 1 {
-                            Divider().padding(.leading, 88)
+                            Divider().padding(.leading, 56)
                         }
                     }
                 }
@@ -183,41 +180,34 @@ struct ReciterSelectionSheet: View {
         let isSelected = audio.currentReciter.id == reciter.id
 
         HStack(spacing: 12) {
-            // Info button — taps only the circle, not the whole row
+            // ⓘ info button — green outline icon
             Button(action: { showDownloadSheet = reciter }) {
-                ZStack {
-                    Circle()
-                        .fill(Color(.systemGray5))
-                        .frame(width: 32, height: 32)
-                    Image(systemName: "info")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(.primary)
-                }
+                Image(systemName: "info.circle")
+                    .font(.system(size: 24))
+                    .foregroundColor(ColorStyle.primary.color)
+                    .frame(width: 32, height: 32)
             }
             .buttonStyle(.plain)
 
-            // Play / checkmark indicator (not a button — row tap handles selection)
-            Group {
-                if isSelected {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 14, weight: .semibold))
-                        .customForeground(.primary)
-                } else {
-                    Image(systemName: "play")
-                        .font(.system(size: 14, weight: .medium))
-                        .customForeground(.primary)
-                }
+            // ✓ checkmark — only when selected
+            if isSelected {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundColor(ColorStyle.primary.color)
+                    .frame(width: 20)
             }
-            .frame(width: 24, height: 24)
 
             Spacer()
 
             // Reciter name — right-aligned
-            VStack(alignment: .trailing, spacing: 2) {
-                Text(reciter.arabicName)
-                    .customStyle(.kitab(size: 16), isSelected ? .primary : .onSurface)
-                    .fontWeight(isSelected ? .semibold : .regular)
-            }
+            Text(reciter.arabicName)
+                .customStyle(.kitab(size: 16), isSelected ? .primary : .onSurface)
+                .fontWeight(isSelected ? .semibold : .regular)
+
+            // ▶ always visible, gray
+            Image(systemName: "play.fill")
+                .font(.system(size: 11))
+                .foregroundColor(Color(.systemGray3))
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)

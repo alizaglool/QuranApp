@@ -17,23 +17,13 @@ struct ReciterLibraryView: View {
         NavigationStack {
             List {
                 ForEach(ReciterLibrary.all) { reciter in
-                    ReciterRow(reciter: reciter)
+                    ReciterRow(reciter: reciter, onDelete: { showDeleteAlert = reciter })
                         .environmentObject(audio)
                         .environmentObject(downloads)
-                        .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                            if downloads.completedReciters.contains(reciter.id) ||
-                               downloads.activeDownloads[reciter.id] != nil {
-                                Button(role: .destructive) {
-                                    showDeleteAlert = reciter
-                                } label: {
-                                    Label("حذف", systemImage: "trash")
-                                }
-                            }
-                        }
                 }
             }
             .listStyle(.plain)
-            .navigationTitle("القراء")
+            .navigationTitle(AppLocalizedKeys.reciters.value)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -42,26 +32,27 @@ struct ReciterLibraryView: View {
                             .font(.system(size: 14, weight: .medium))
                             .customForeground(.onSurface)
                     }
-                    .accessibilityLabel("إغلاق")
+                    .accessibilityLabel(AppLocalizedKeys.close.value)
                 }
             }
-            .alert("حذف التلاوة", isPresented: Binding(
+            .alert(AppLocalizedKeys.deleteRecitation.value, isPresented: Binding(
                 get: { showDeleteAlert != nil },
                 set: { if !$0 { showDeleteAlert = nil } }
             )) {
-                Button("حذف", role: .destructive) {
+                Button(AppLocalizedKeys.deleteButton.value, role: .destructive) {
                     if let r = showDeleteAlert {
                         downloads.deleteReciter(r.id)
                         showDeleteAlert = nil
                     }
                 }
-                Button("إلغاء", role: .cancel) { showDeleteAlert = nil }
+                Button(AppLocalizedKeys.cancel.value, role: .cancel) { showDeleteAlert = nil }
             } message: {
                 if let r = showDeleteAlert {
-                    Text("سيتم حذف تلاوة \(r.arabicName) من الجهاز")
+                    Text(String(format: AppLocalizedKeys.deleteReciterMessage.value, r.arabicName))
                 }
             }
         }
+        .appDirection()
     }
 }
 
@@ -70,6 +61,7 @@ struct ReciterLibraryView: View {
 private struct ReciterRow: View {
 
     let reciter: ReciterInfo
+    let onDelete: () -> Void
     @EnvironmentObject private var audio: AudioEngine
     @EnvironmentObject private var downloads: DownloadManager
     @State private var storage = StorageManager.shared
@@ -120,29 +112,38 @@ private struct ReciterRow: View {
         }
         .listRowSeparator(.hidden)
         .listRowBackground(Color.background)
-        .environment(\.layoutDirection, .rightToLeft)
     }
 
     @ViewBuilder
     private var trailingView: some View {
         if isDownloaded {
             if isSelected {
-                // Currently selected — show playing badge
+                // Currently selected — show badge only (no delete while active)
                 HStack(spacing: 4) {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 16))
                         .foregroundStyle(Color.primaryColor)
-                    Text("مختار")
+                    Text(AppLocalizedKeys.selectedLabel.value)
                         .customStyle(.kitab(size: 12), .subtitle)
                 }
             } else {
-                Text("محمّل")
-                    .customStyle(.kitab(size: 12))                    .foregroundStyle(Color.primaryColor)
+                // Downloaded but not selected — download button flips to delete
+                Button(action: onDelete) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "trash")
+                            .font(.system(size: 13, weight: .medium))
+                        Text(AppLocalizedKeys.deleteButton.value)
+                            .customStyle(.kitab(size: 12))
+                    }
+                    .foregroundStyle(Color(.systemRed))
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 4)
+                    .padding(.vertical, 5)
                     .background(
-                        Capsule().fill(Color.primaryColor.opacity(0.1))
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color(.systemRed).opacity(0.1))
                     )
+                }
+                .accessibilityLabel(String(format: "%@ %@", AppLocalizedKeys.deleteButton.value, reciter.arabicName))
             }
         } else if isDownloading, let progress = downloadProgress {
             VStack(alignment: .trailing, spacing: 2) {
@@ -156,18 +157,19 @@ private struct ReciterRow: View {
                         .font(.system(size: 18))
                         .foregroundStyle(Color.error)
                 }
-                .accessibilityLabel("إلغاء التحميل")
+                .accessibilityLabel(AppLocalizedKeys.cancelDownload.value)
             }
         } else {
-            // Not downloaded
+            // Not downloaded — download button
             Button {
                 downloads.downloadAllSurahs(for: reciter)
             } label: {
                 HStack(spacing: 4) {
-                    Image(systemName: "icloud.and.arrow.down")
+                    Image(systemName: "arrow.down.circle")
                         .font(.system(size: 14))
                     Text("~\(reciter.estimatedSizeMB) MB")
-                        .customStyle(.kitab(size: 12))                }
+                        .customStyle(.kitab(size: 12))
+                }
                 .foregroundStyle(Color.primaryColor)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 5)
@@ -176,7 +178,7 @@ private struct ReciterRow: View {
                         .fill(Color.primaryColor.opacity(0.1))
                 )
             }
-            .accessibilityLabel("تحميل تلاوة \(reciter.arabicName)")
+            .accessibilityLabel(reciter.arabicName)
         }
     }
 

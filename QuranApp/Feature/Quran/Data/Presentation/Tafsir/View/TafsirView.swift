@@ -57,9 +57,9 @@ struct TafsirView: View {
             if hasNavigation { bottomBar }
         }
         .background(Color.surfaceContainerLow.ignoresSafeArea())
-        .environment(\.layoutDirection, .rightToLeft)
+        .appDirection()
         .navigationBarHidden(true)
-        .customSheet(isPresented: $isBookPickerPresenting, fraction: 0.5, detents: [.medium, .large]) {
+        .customSheet(isPresented: $isBookPickerPresenting, fraction: 0.92, detents: [.large]) {
             TafsirBookPickerView(selectedBook: $vm.selectedBook)
                 .presentationDragIndicator(.visible)
         }

@@ -50,6 +50,7 @@ struct RepeatSettingsSheet: View {
             }
         }
         .background(Color.background)
+        .appDirection()
         .onChange(of: fromSurah) { _, _ in clampToAfterFrom() }
         .onChange(of: fromVerse) { _, _ in clampToAfterFrom() }
         .onChange(of: surahMode) { _, on in
