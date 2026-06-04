@@ -188,9 +188,10 @@ extension HomeViewModel {
 extension HomeViewModel {
 
     private func loadHadithOfTheDay() {
-        hadithArabic = "مَنْ سَلَكَ طَرِيقًا يَلْتَمِسُ فِيهِ عِلْمًا سَهَّلَ اللَّهُ لَهُ بِهِ طَرِيقًا إِلَى الْجَنَّةِ"
-        hadithTranslation = "\"Whoever takes a path in search of knowledge, Allah will make easy for him a path to Paradise.\""
-        hadithReference = "SAHIH MUSLIM 2699"
+        let hadith = DailyHadithService.hadithForToday()
+        hadithArabic = hadith.arabicText
+        hadithTranslation = hadith.translation
+        hadithReference = hadith.reference
     }
 }
 
