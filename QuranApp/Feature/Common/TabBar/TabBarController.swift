@@ -57,7 +57,7 @@ extension TabBarController {
         
         let lessons = TabBarItem(
             title: AppLocalizedKeys.lessons.value,
-            image: UIImage(systemName: "books.vertical.fill")!.withRenderingMode(.alwaysTemplate),
+            image: UIImage(systemName: "play.rectangle.fill")!.withRenderingMode(.alwaysTemplate),
             viewControllerProvider: getLessonsViewController
         )
         TabBarItem.lessons = lessons
