@@ -26,6 +26,7 @@ enum AppLocalizedKeys: String {
     case sort
     
     case home
+    case today
     case assalamuAlaikum
     case welcomeToSanctuary
     case continueReading
@@ -124,6 +125,30 @@ enum AppLocalizedKeys: String {
     case endOfPage
     case endOfSurah
     case continuousPlay
+
+    // MARK: - Reciter / Audio Library
+    case reciters
+    case close
+    case cancel
+    case deleteRecitation
+    case deleteReciterMessage
+    case selectedLabel
+    case cancelDownload
+    case deleteButton
+    case tafsirAudioTitle
+    case tafsirAudioSubtitle
+    case surahFallback
+    case storageManagement
+    case downloadedRecitations
+    case totalStorageUsed
+    case surahsDownloaded
+    case noDownloadsTitle
+    case noDownloadsMessage
+    case minimizePlayer
+    case previousVerse
+    case nextVerse
+    case playbackSpeed
+    case pausePlayer
 
     // MARK: - Search
     case searchQuran

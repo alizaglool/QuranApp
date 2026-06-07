@@ -16,11 +16,14 @@
 		6C94842686446A51C0D3F65C /* ReciterLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79584A2647054BD4F800B003 /* ReciterLibrary.swift */; };
 		874DC48EBDDD347E9BF9E6D0 /* SurahDownloadSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464512F40072C32DC4A66D1F /* SurahDownloadSheet.swift */; };
 		A1B2C3D4E5F678901234BCDE /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F678901234ABCD /* Audio */; };
-		TC001CARD001234AB01 /* TafsirCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC001CARD001234AB00 /* TafsirCardView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */; };
+		AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */; };
+		AA22CC33DD44EE551234ABCF /* PlayToSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */; };
 		B8F58AE72E6C5A9B002673AB /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = B8F58AE62E6C5A9B002673AB /* Core */; };
 		B8F9B7EF80CE3B56C6A7D3C9 /* RepeatSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484E8B69398EA0068B05D21B /* RepeatSettingsSheet.swift */; };
+		BB11DD22EE33FF441234AB01 /* QuranSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */; };
+		BB11DD22EE33FF441234AB03 /* QuranSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */; };
 		C85002D52DBC36CA00FB4CE6 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C85002D42DBC36CA00FB4CE6 /* Alamofire */; };
 		C88166C02DB662BA00EDECB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */; };
 		C88166C22DB662BA00EDECB8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */; };
@@ -90,11 +93,7 @@
 		F8B651EF2F85145C00C4C7EC /* VerseActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */; };
 		F8B651F12F853B3E00C4C7EC /* LongPressLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */; };
 		F8B854A72FC9AC80007666A5 /* VersePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854A62FC9AC80007666A5 /* VersePickerSheet.swift */; };
-		AA22CC33DD44EE551234ABCF /* PlayToSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */; };
-		BB11DD22EE33FF441234AB01 /* QuranSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */; };
-		BB11DD22EE33FF441234AB03 /* QuranSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */; };
 		F8B854A92FC9BDB0007666A5 /* quran_text.json in Resources */ = {isa = PBXBuildFile; fileRef = F8B854A82FC9BDB0007666A5 /* quran_text.json */; };
-		AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */; };
 		F8B854AB2FC9BDC3007666A5 /* QuranTextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854AA2FC9BDC3007666A5 /* QuranTextProvider.swift */; };
 		F8B854BB2FCA3226007666A5 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854B92FCA3226007666A5 /* TodayView.swift */; };
 		F8B854BC2FCA3226007666A5 /* VerseSnippetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854BA2FCA3226007666A5 /* VerseSnippetView.swift */; };
@@ -124,8 +123,11 @@
 		F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C52F717897009F1094 /* HomeViewModel.swift */; };
 		F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C72F71789E009F1094 /* HomeView.swift */; };
 		F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C92F717912009F1094 /* SurahRow.swift */; };
+		AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */; };
 		F8C118292FCE0ACF009143E2 /* QuranPageBars.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */; };
 		F8C1182B2FCE1342009143E2 /* QuranTafsirPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */; };
+		F8C15A3D2FD03D09009143E2 /* AppDirectionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */; };
+		F8D9BC322FD13255008AEC8E /* DailyHadithService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */; };
 		F8F2DC132DC8F11D00001F76 /* CustomPickerItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */; };
 		F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */; };
 		F8FB7F582E10A6C10051D1EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F8FB7F572E10A6C10051D1EA /* InfoPlist.strings */; };
@@ -144,6 +146,7 @@
 		F9CC000D2F71900000CC000D /* HadithChaptersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */; };
 		F9CC000E2F71900000CC000E /* HadithReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00062F71900000CC0006 /* HadithReadingView.swift */; };
 		F9CC000F2F71900000CC000F /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */; };
+		TC001CARD001234AB01 /* TafsirCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC001CARD001234AB00 /* TafsirCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -156,10 +159,13 @@
 		801A93FD480AA2E4CD4CE921 /* MiniPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterLibraryView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F678901234ABCD /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
-		TC001CARD001234AB00 /* TafsirCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirCardView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksViewModel.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ar-mokhtasar.json"; sourceTree = "<group>"; };
+		AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayToSheetView.swift; sourceTree = "<group>"; };
 		B51BDEE776F991E54CED7AB8 /* ReciterSelectionSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterSelectionSheet.swift; sourceTree = "<group>"; };
+		BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchService.swift; sourceTree = "<group>"; };
+		BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchView.swift; sourceTree = "<group>"; };
 		C88166BC2DB662BA00EDECB8 /* QuranApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuranApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -233,9 +239,7 @@
 		F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseActionSheet.swift; sourceTree = "<group>"; };
 		F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LongPressLocationView.swift; sourceTree = "<group>"; };
 		F8B854A62FC9AC80007666A5 /* VersePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersePickerSheet.swift; sourceTree = "<group>"; };
-		AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayToSheetView.swift; sourceTree = "<group>"; };
 		F8B854A82FC9BDB0007666A5 /* quran_text.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quran_text.json; sourceTree = "<group>"; };
-		AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ar-mokhtasar.json"; sourceTree = "<group>"; };
 		F8B854AA2FC9BDC3007666A5 /* QuranTextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextProvider.swift; sourceTree = "<group>"; };
 		F8B854B82FCA3226007666A5 /* TafsirView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirView.swift; sourceTree = "<group>"; };
 		F8B854B92FCA3226007666A5 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
@@ -248,8 +252,6 @@
 		F8B854D02FCAFD5A007666A5 /* TafsirService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirService.swift; sourceTree = "<group>"; };
 		F8B854D62FCAFF22007666A5 /* DailyVerse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVerse.swift; sourceTree = "<group>"; };
 		F8B854D82FCB460E007666A5 /* QuranTextService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextService.swift; sourceTree = "<group>"; };
-		BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchService.swift; sourceTree = "<group>"; };
-		BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchView.swift; sourceTree = "<group>"; };
 		F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirDownloadManager.swift; sourceTree = "<group>"; };
 		F8B854DC2FCB4BD7007666A5 /* DailyVerseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVerseService.swift; sourceTree = "<group>"; };
 		F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-Bold.otf"; sourceTree = "<group>"; };
@@ -267,8 +269,11 @@
 		F8BEB9C52F717897009F1094 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F8BEB9C72F71789E009F1094 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F8BEB9C92F717912009F1094 /* SurahRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahRow.swift; sourceTree = "<group>"; };
+		AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeaturedLessonsSection.swift; sourceTree = "<group>"; };
 		F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageBars.swift; sourceTree = "<group>"; };
 		F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTafsirPageView.swift; sourceTree = "<group>"; };
+		F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDirectionModifier.swift; sourceTree = "<group>"; };
+		F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyHadithService.swift; sourceTree = "<group>"; };
 		F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerItems.swift; sourceTree = "<group>"; };
 		F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		F8FB7F552E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -288,6 +293,7 @@
 		F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersViewModel.swift; sourceTree = "<group>"; };
 		F9CC00062F71900000CC0006 /* HadithReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingView.swift; sourceTree = "<group>"; };
 		F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingViewModel.swift; sourceTree = "<group>"; };
+		TC001CARD001234AB00 /* TafsirCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -333,6 +339,14 @@
 				BK001BOOK001234AB03 /* ViewModel */,
 			);
 			path = Bookmarks;
+			sourceTree = "<group>";
+		};
+		BB11DD22EE33FF441234AB04 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				SR001SRCH001234AB01 /* View */,
+			);
+			path = Search;
 			sourceTree = "<group>";
 		};
 		BK001BOOK001234AB02 /* View */ = {
@@ -638,6 +652,7 @@
 		F843B1A52DF06337005F6CCC /* LocalizationManager */ = {
 			isa = PBXGroup;
 			children = (
+				F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */,
 				F843B1A22DF06337005F6CCC /* Localizable */,
 				F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */,
 			);
@@ -653,22 +668,6 @@
 				F88D4B952F7E8F760025939D /* AppSettings.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		BB11DD22EE33FF441234AB04 /* Search */ = {
-			isa = PBXGroup;
-			children = (
-				SR001SRCH001234AB01 /* View */,
-			);
-			path = Search;
-			sourceTree = "<group>";
-		};
-		SR001SRCH001234AB01 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		F88DD90F2F7540440025939D /* Presentation */ = {
@@ -713,92 +712,6 @@
 				F88DD9122F75405A0025939D /* QuranViewModel.swift */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		VA001VACT001234AB01 /* VerseAction */ = {
-			isa = PBXGroup;
-			children = (
-				VA001VACT001234AB02 /* View */,
-			);
-			path = VerseAction;
-			sourceTree = "<group>";
-		};
-		VA001VACT001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */,
-				F8B854BA2FCA3226007666A5 /* VerseSnippetView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB01 /* Tafsir */ = {
-			isa = PBXGroup;
-			children = (
-				TA001TAFR001234AB02 /* View */,
-				TA001TAFR001234AB04 /* ViewModel */,
-			);
-			path = Tafsir;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */,
-				F8B854B82FCA3226007666A5 /* TafsirView.swift */,
-				F8B854CB2FCAFCD5007666A5 /* TafsirBookPickerView.swift */,
-				TA001TAFR001234AB03 /* Components */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB03 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				TC001CARD001234AB00 /* TafsirCardView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB04 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				F8B854CE2FCAFCFF007666A5 /* TafsirViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		SE001SETT001234AB01 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				SE001SETT001234AB02 /* View */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		SE001SETT001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8B854CA2FCAFCD5007666A5 /* QuranPageSettingsSheet.swift */,
-				F8B854C02FCA452C007666A5 /* SurahListSheet.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		HO001HOME001234AB01 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				HO001HOME001234AB02 /* View */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		HO001HOME001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8B854B92FCA3226007666A5 /* TodayView.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		F8B8599C2FCCB0F3007666A5 /* Font */ = {
@@ -884,6 +797,7 @@
 			isa = PBXGroup;
 			children = (
 				F8BEB9C72F71789E009F1094 /* HomeView.swift */,
+				AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */,
 				F8BEB9C52F717897009F1094 /* HomeViewModel.swift */,
 				F8BEB9C92F717912009F1094 /* SurahRow.swift */,
 			);
@@ -963,6 +877,7 @@
 		F9CC00112F71900000CC0011 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */,
 				F84DAA3A2FC893E500C86233 /* HadithDownloadManager.swift */,
 				F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */,
 			);
@@ -994,6 +909,100 @@
 				F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */,
 			);
 			path = Reading;
+			sourceTree = "<group>";
+		};
+		HO001HOME001234AB01 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				HO001HOME001234AB02 /* View */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		HO001HOME001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8B854B92FCA3226007666A5 /* TodayView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		SE001SETT001234AB01 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				SE001SETT001234AB02 /* View */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		SE001SETT001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8B854CA2FCAFCD5007666A5 /* QuranPageSettingsSheet.swift */,
+				F8B854C02FCA452C007666A5 /* SurahListSheet.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		SR001SRCH001234AB01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB01 /* Tafsir */ = {
+			isa = PBXGroup;
+			children = (
+				TA001TAFR001234AB02 /* View */,
+				TA001TAFR001234AB04 /* ViewModel */,
+			);
+			path = Tafsir;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */,
+				F8B854B82FCA3226007666A5 /* TafsirView.swift */,
+				F8B854CB2FCAFCD5007666A5 /* TafsirBookPickerView.swift */,
+				TA001TAFR001234AB03 /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB03 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				TC001CARD001234AB00 /* TafsirCardView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB04 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8B854CE2FCAFCFF007666A5 /* TafsirViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		VA001VACT001234AB01 /* VerseAction */ = {
+			isa = PBXGroup;
+			children = (
+				VA001VACT001234AB02 /* View */,
+			);
+			path = VerseAction;
+			sourceTree = "<group>";
+		};
+		VA001VACT001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */,
+				F8B854BA2FCA3226007666A5 /* VerseSnippetView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1130,6 +1139,7 @@
 				F800B3192DB67FB40035501A /* AppCoordinator.swift in Sources */,
 				F8BEB9B32F71744C009F1094 /* SurahEntity.swift in Sources */,
 				F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */,
+				AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */,
 				F843B1A72DF06337005F6CCC /* AppLocalizedKeys.swift in Sources */,
 				F800B3652DB681920035501A /* SplashCoordinator.swift in Sources */,
 				F8B854CC2FCAFCD5007666A5 /* QuranPageSettingsSheet.swift in Sources */,
@@ -1139,6 +1149,7 @@
 				F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */,
 				F8BEB9BD2F7174A0009F1094 /* QuranServiceError.swift in Sources */,
 				F800B87E2DBA6E7A0035501A /* StatueCode.swift in Sources */,
+				F8C15A3D2FD03D09009143E2 /* AppDirectionModifier.swift in Sources */,
 				F8A1CECD2DF9E53B0012E23B /* UIView+Extension.swift in Sources */,
 				F8BEB9C42F717879009F1094 /* HomeCoordinator.swift in Sources */,
 				F8AB00022F71787900AB0002 /* AdhkarCoordinator.swift in Sources */,
@@ -1149,6 +1160,7 @@
 				F800B8232DB6824B0035501A /* SplashViewModel.swift in Sources */,
 				F8BEB9C02F7174B5009F1094 /* QuranRepository.swift in Sources */,
 				F88DD90E2F75401B0025939D /* SurahInfo.swift in Sources */,
+				F8D9BC322FD13255008AEC8E /* DailyHadithService.swift in Sources */,
 				F800B3922DB681920035501A /* TabBarCoordinator.swift in Sources */,
 				F800B83C2DB682FE0035501A /* ViewController.swift in Sources */,
 				F800B84B2DB6833C0035501A /* UserDefaultsManager+Extenions.swift in Sources */,

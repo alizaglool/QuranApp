@@ -13,163 +13,156 @@ struct TafsirBookPickerView: View {
     @ObservedObject private var downloader = TafsirDownloadManager.shared
 
     var body: some View {
-        NavigationStack {
-            List {
-                section(title: "التفسير العربي", books: TafsirBook.arabicTafsirs)
-                section(title: "الترجمات",        books: TafsirBook.translations)
-            }
-            .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text("اختر التفسير")
-                        .customStyle(.kitab(size: 17, bold: true), .onSurface)
+        VStack(spacing: 0) {
+            header
+            Divider()
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    bookSection(
+                        title: AppLocalizedKeys.arabicTafsirSection.value,
+                        books: TafsirBook.arabicTafsirs
+                    )
+                    bookSection(
+                        title: AppLocalizedKeys.translationsSection.value,
+                        books: TafsirBook.translations
+                    )
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(.secondary)
-                            .frame(width: 30, height: 30)
-                            .background(Color.outlineVariant.opacity(0.5), in: Circle())
-                    }
-                }
+                .padding(.horizontal, 16)
+                .padding(.top, 20)
+                .padding(.bottom, 40)
             }
-            .environment(\.layoutDirection, .rightToLeft)
         }
         .background(Color.background)
+        .appDirection()
     }
 
-    @ViewBuilder
-    private func section(title: String, books: [TafsirBook]) -> some View {
-        Section {
-            ForEach(books) { book in
-                bookRow(book)
-                    .listRowBackground(Color.surfaceContainerLow)
+    // MARK: - Header
+
+    private var header: some View {
+        ZStack {
+            Text(AppLocalizedKeys.chooseBookTitle.value)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
+
+            HStack {
+                Button { dismiss() } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.backward")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(ColorStyle.primary.color)
+                        Text(AppLocalizedKeys.back.value)
+                            .customStyle(.kitab(size: 15))
+                            .foregroundColor(ColorStyle.primary.color)
+                    }
+                }
+                Spacer()
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(.secondary)
+                        .frame(width: 30, height: 30)
+                        .background(Color.outlineVariant.opacity(0.5), in: Circle())
+                }
             }
-        } header: {
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 14)
+    }
+
+    // MARK: - Section
+
+    private func bookSection(title: String, books: [TafsirBook]) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .customStyle(.kitab(size: 13, bold: true), .onSurface)
-                .textCase(nil)
+                .customStyle(.kitab(size: 17, bold: true), .onSurface)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            VStack(spacing: 0) {
+                ForEach(Array(books.enumerated()), id: \.element.id) { index, book in
+                    if index > 0 {
+                        Divider()
+                            .padding(.trailing, 20)
+                            .padding(.leading, 20)
+                    }
+                    bookRow(book)
+                }
+            }
+            .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 14))
         }
     }
 
+    // MARK: - Row
+
     private func bookRow(_ book: TafsirBook) -> some View {
-        let downloadState: TafsirDownloadState = book.canDownload ? downloader.state(for: book.id) : .downloaded
+        let state: TafsirDownloadState = book.canDownload ? downloader.state(for: book.id) : .downloaded
+        let isSelected = selectedBook == book
 
         return Button {
-            handleTap(book: book, state: downloadState)
+            handleTap(book: book, state: state)
         } label: {
             HStack(spacing: 12) {
-                VStack(alignment: .trailing, spacing: 3) {
+                VStack(alignment: .leading, spacing: 4) {
                     Text(book.nameArabic)
                         .customStyle(.kitab(size: 16, bold: true), .onSurface)
-                        .multilineTextAlignment(.trailing)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
 
                     if !book.author.isEmpty {
                         Text(book.author)
-                            .customStyle(.kitab(size: 12), .subtitle)
-                            .multilineTextAlignment(.trailing)
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .trailing)
-
-                HStack(spacing: 6) {
-                    if let length = book.length {
-                        lengthBadge(length)
-                    }
-                    if book.language != .arabic {
-                        languageBadge(book.language)
+                            .customStyle(.kitab(size: 13))
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
 
-                statusIcon(book: book, state: downloadState)
+                statusIcon(book: book, state: state, isSelected: isSelected)
+                    .frame(width: 28, height: 28)
             }
-            .padding(.vertical, 4)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 14)
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
 
+    // MARK: - Status Icon
+
     @ViewBuilder
-    private func statusIcon(book: TafsirBook, state: TafsirDownloadState) -> some View {
+    private func statusIcon(book: TafsirBook, state: TafsirDownloadState, isSelected: Bool) -> some View {
         switch state {
         case .downloaded:
-            HStack(spacing: 6) {
-                if book.isBundle {
-                    Text("مضمّن")
-                        .customStyle(.kitab(size: 11))
-                        .foregroundColor(ColorStyle.primary.color)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 3)
-                        .background(ColorStyle.primary.color.opacity(0.12),
-                                    in: RoundedRectangle(cornerRadius: 6))
-                }
-                Image(systemName: selectedBook == book ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 20))
-                    .foregroundColor(selectedBook == book ? ColorStyle.primary.color : Color.outlineVariant)
-            }
-
+            Color.clear
+            
         case .downloading(let progress):
             ZStack {
                 Circle()
                     .stroke(Color.outlineVariant.opacity(0.3), lineWidth: 2)
-                    .frame(width: 22, height: 22)
                 Circle()
                     .trim(from: 0, to: progress)
                     .stroke(ColorStyle.primary.color, style: StrokeStyle(lineWidth: 2, lineCap: .round))
                     .rotationEffect(.degrees(-90))
-                    .frame(width: 22, height: 22)
             }
 
-        case .notDownloaded:
-            Image(systemName: "arrow.down.circle")
-                .font(.system(size: 20))
+        case .notDownloaded, .failed:
+            Image("cloudAndArrowDown")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
                 .foregroundColor(ColorStyle.primary.color)
-
-        case .failed:
-            Image(systemName: "exclamationmark.circle")
-                .font(.system(size: 20))
-                .foregroundColor(.red)
         }
     }
+
+    // MARK: - Actions
 
     private func handleTap(book: TafsirBook, state: TafsirDownloadState) {
         switch state {
         case .downloaded:
             selectedBook = book
             dismiss()
-
         case .notDownloaded, .failed:
             downloader.download(bookId: book.id)
-
         case .downloading:
             break
         }
-    }
-
-    private func lengthBadge(_ length: TafsirBook.TafsirLength) -> some View {
-        Text(length.label)
-            .customStyle(.kitab(size: 11))
-            .foregroundColor(length == .brief ? ColorStyle.secondary.color : ColorStyle.primary.color)
-            .padding(.horizontal, 7)
-            .padding(.vertical, 3)
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill((length == .brief ? ColorStyle.secondary.color : ColorStyle.primary.color).opacity(0.12))
-            )
-    }
-
-    private func languageBadge(_ language: TafsirBook.TafsirLanguage) -> some View {
-        Text(language.displayName)
-            .customStyle(.caption1, .subtitle)
-            .padding(.horizontal, 7)
-            .padding(.vertical, 3)
-            .background(
-                RoundedRectangle(cornerRadius: 6)
-                    .fill(Color.surfaceContainerLow)
-            )
-            .environment(\.layoutDirection, .leftToRight)
     }
 }

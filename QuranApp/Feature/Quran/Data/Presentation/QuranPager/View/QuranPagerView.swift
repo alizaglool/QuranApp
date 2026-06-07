@@ -10,7 +10,6 @@ import Core
 
 struct QuranPagerView: View {
     @StateObject private var viewModel: QuranViewModel
-    @ObservedObject private var audio = AudioEngine.shared
     @ObservedObject private var storage = StorageManager.shared
     @Environment(\.colorScheme) var colorScheme
 
@@ -20,6 +19,7 @@ struct QuranPagerView: View {
     @State private var isPageSettingsPresenting = false
     @State private var isSearchPresenting = false
     @State private var overlayHideTask: Task<Void, Never>? = nil
+    @State private var isMiniPlayerSheetOpen = false
 
     private static let overlayAutoHideDelay: TimeInterval = 4
 
@@ -105,40 +105,51 @@ struct QuranPagerView: View {
             })
         }
         .onChange(of: viewModel.showOverlay) { _, showing in
-            audio.quranOverlayActive = showing
+            AudioEngine.shared.quranOverlayActive = showing
             if showing {
                 scheduleOverlayHide()
             } else {
                 cancelOverlayHide()
             }
         }
-        .onChange(of: audio.isPlaying) { _, playing in
-            if playing, viewModel.showOverlay {
+        .onChange(of: isMiniPlayerSheetOpen) { _, isOpen in
+            if isOpen {
+                cancelOverlayHide()
+            } else {
+                scheduleOverlayHide()
+            }
+        }
+        .onReceive(AudioEngine.shared.$isPlaying.dropFirst()) { playing in
+            if playing, viewModel.showOverlay, !isMiniPlayerSheetOpen {
                 withAnimation(.easeInOut(duration: 0.25)) {
                     viewModel.showOverlay = false
                 }
             }
         }
-        .onChange(of: audio.currentVerseNumber) { _, _ in
-            viewModel.goToVerse(surah: audio.currentSurahNumber, verse: audio.currentVerseNumber)
+        .onReceive(AudioEngine.shared.$currentVerseNumber.dropFirst()) { _ in
+            viewModel.goToVerse(
+                surah: AudioEngine.shared.currentSurahNumber,
+                verse: AudioEngine.shared.currentVerseNumber
+            )
         }
         .onAppear {
-            audio.isQuranScreenActive = true
+            AudioEngine.shared.isQuranScreenActive = true
         }
         .onDisappear {
-            audio.quranOverlayActive = false
-            audio.isQuranScreenActive = false
+            AudioEngine.shared.quranOverlayActive = false
+            AudioEngine.shared.isQuranScreenActive = false
         }
     }
 
     private var backgroundColor: Color {
         switch mushafDisplayType {
-        case .text, .tafsir: return Color.background
-        case .mushaf: return Color.mushafPage
+        case .tafsir: return Color.background
+        case .text, .mushaf: return Color.mushafPage
         }
     }
 
     private func scheduleOverlayHide() {
+        guard !isMiniPlayerSheetOpen else { return }
         overlayHideTask?.cancel()
         overlayHideTask = Task { @MainActor in
             try? await Task.sleep(for: .seconds(Self.overlayAutoHideDelay))
@@ -235,29 +246,67 @@ extension QuranPagerView {
         VStack(spacing: 0) {
             topBar
             Spacer()
-            MiniPlayerView(onPlayTapped: {
-                if audio.playSurahMode {
-                    audio.playWholeSurah(surahNumber: viewModel.currentSurahNumber)
-                } else {
-                    audio.playFrom(
-                        surahNumber: viewModel.currentSurahNumber,
-                        verseNumber: viewModel.currentFirstVerseNumber
-                    )
+            MiniPlayerView(
+                onPlayTapped: {
+                    if AudioEngine.shared.playSurahMode {
+                        AudioEngine.shared.playWholeSurah(surahNumber: viewModel.currentSurahNumber)
+                    } else {
+                        AudioEngine.shared.playFrom(
+                            surahNumber: viewModel.currentSurahNumber,
+                            verseNumber: viewModel.currentFirstVerseNumber
+                        )
+                    }
+                },
+                onSheetOpenChanged: { open in
+                    isMiniPlayerSheetOpen = open
                 }
-            })
-            .environmentObject(audio)
+            )
+            .environmentObject(AudioEngine.shared)
             .padding(.horizontal, 16)
             .padding(.bottom, 12)
             bottomBar
         }
         .transition(.opacity)
         .simultaneousGesture(TapGesture().onEnded { scheduleOverlayHide() })
+        .appDirection()
     }
 
     // MARK: - Top Bar
 
     private var topBar: some View {
         HStack(spacing: 16) {
+            
+            if let onBack {
+                Button(action: { onBack() }) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundColor(Color.playerControls)
+                }
+            } else {
+                Button(action: { isPageSettingsPresenting = true }) {
+                    Image(systemName: "gearshape")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color.playerControls)
+                }
+            }
+
+            Button(action: { isSurahListPresenting = true }) {
+                Image(systemName: "list.bullet")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(Color.playerControls)
+                    .frame(width: 24, height: 24)
+            }
+
+            Spacer()
+            
+            Button(action: { isSearchPresenting = true }) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundColor(Color.playerControls)
+            }
+            
             Button(action: { isTodaySheetPresenting = true }) {
                 ZStack {
                     Image("todayButton")
@@ -274,41 +323,10 @@ extension QuranPagerView {
                 }
             }
 
-            Spacer()
-
-            Button(action: { isSearchPresenting = true }) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 18, weight: .medium))
-                    .foregroundColor(Color.playerControls)
-            }
-
-            Button(action: { isSurahListPresenting = true }) {
-                Image(systemName: "list.bullet")
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFit()
-                    .foregroundColor(Color.playerControls)
-                    .frame(width: 24, height: 24)
-            }
-
-            if let onBack {
-                Button(action: { onBack() }) {
-                    Image(systemName: "chevron.backward")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(Color.playerControls)
-                }
-            } else {
-                Button(action: { isPageSettingsPresenting = true }) {
-                    Image(systemName: "gearshape")
-                        .font(.system(size: 20))
-                        .foregroundColor(Color.playerControls)
-                }
-            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(backgroundColor.opacity(0.95))
-        .environment(\.layoutDirection, .leftToRight)
     }
 
     // MARK: - Bottom Bar

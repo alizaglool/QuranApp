@@ -28,6 +28,7 @@ final class DownloadManager: NSObject, ObservableObject {
 
     @Published var activeDownloads: [String: DownloadProgress] = [:]
     @Published var completedReciters: Set<String> = []
+    @Published var deleteTick: Int = 0
 
     private var backgroundSession: URLSession!
     private var taskToReciter: [Int: String] = [:]        // taskIdentifier → reciterSlug
@@ -97,30 +98,59 @@ final class DownloadManager: NSObject, ObservableObject {
         }
     }
 
+    func deleteSurah(for reciter: ReciterInfo, surahNumber: Int) {
+        let count = ReciterLibrary.verseCounts[surahNumber] ?? 0
+        for verse in 1...max(1, count) {
+            if let url = localURL(reciterSlug: reciter.id, surahNumber: surahNumber, verseNumber: verse) {
+                try? FileManager.default.removeItem(at: url)
+            }
+        }
+        storage.removeDownloadedSurah(reciterSlug: reciter.id, surahNumber: surahNumber)
+        completedReciters.remove(reciter.id)
+        deleteTick += 1
+    }
+
     func deleteReciter(_ reciterSlug: String) {
         cancelDownload(for: reciterSlug)
         let dir = Self.audioDir.appendingPathComponent(reciterSlug)
         try? FileManager.default.removeItem(at: dir)
         storage.deleteDownloadedReciter(slug: reciterSlug)
         completedReciters.remove(reciterSlug)
+        deleteTick += 1
     }
 
     func downloadSurah(for reciter: ReciterInfo, surahNumber: Int) {
-        guard !isSurahFullyDownloaded(reciterSlug: reciter.id, surahNumber: surahNumber) else { return }
+        print("[DL] downloadSurah called — reciter=\(reciter.id) surah=\(surahNumber)")
+
+        let alreadyDone = isSurahFullyDownloaded(reciterSlug: reciter.id, surahNumber: surahNumber)
+        print("[DL] isSurahFullyDownloaded=\(alreadyDone)")
+        guard !alreadyDone else {
+            print("[DL] ↩ guard: already fully downloaded, returning early")
+            return
+        }
 
         storage.upsertDownloadedReciter(slug: reciter.id, name: reciter.englishName, arabicName: reciter.arabicName)
 
         let count = ReciterLibrary.verseCounts[surahNumber] ?? 0
+        print("[DL] verseCount for surah \(surahNumber) = \(count)")
+
         var urls: [URL] = []
         for verse in 1...max(1, count) {
             let dest = localURL(reciterSlug: reciter.id, surahNumber: surahNumber, verseNumber: verse)!
-            if !FileManager.default.fileExists(atPath: dest.path) {
+            let exists = FileManager.default.fileExists(atPath: dest.path)
+            if !exists {
                 urls.append(ReciterLibrary.everyAyahURL(reciter: reciter.id, surah: surahNumber, verse: verse))
             }
         }
-        guard !urls.isEmpty else { return }
+        print("[DL] files already on disk=\(count - urls.count), need to download=\(urls.count)")
+
+        guard !urls.isEmpty else {
+            print("[DL] ↩ guard: urls empty (all files exist on disk), returning early")
+            return
+        }
 
         if activeDownloads[reciter.id] == nil {
+            print("[DL] creating new DownloadProgress entry")
             activeDownloads[reciter.id] = DownloadProgress(
                 reciterSlug: reciter.id,
                 completedVerses: 0,
@@ -129,10 +159,12 @@ final class DownloadManager: NSObject, ObservableObject {
             downloadQueues[reciter.id] = []
             activeTaskCount[reciter.id] = 0
         } else {
+            print("[DL] appending to existing download — adding \(urls.count) URLs")
             activeDownloads[reciter.id]?.totalVerses += urls.count
         }
 
         downloadQueues[reciter.id, default: []] += urls
+        print("[DL] queue size after append=\(downloadQueues[reciter.id]?.count ?? 0)")
         drainQueue(for: reciter.id)
     }
 
@@ -180,11 +212,13 @@ final class DownloadManager: NSObject, ObservableObject {
 
     private func drainQueue(for slug: String) {
         guard var queue = downloadQueues[slug], !queue.isEmpty else {
+            print("[DL] drainQueue: queue empty for \(slug) — calling checkCompletion")
             checkCompletion(for: slug)
             return
         }
         let running = activeTaskCount[slug] ?? 0
         let slots = maxConcurrent - running
+        print("[DL] drainQueue: queue=\(queue.count) running=\(running) slots=\(slots)")
         guard slots > 0 else { return }
 
         let batch = queue.prefix(slots)
@@ -252,16 +286,39 @@ extension DownloadManager: URLSessionDownloadDelegate {
         didFinishDownloadingTo location: URL
     ) {
         let taskId = downloadTask.taskIdentifier
+        print("[DL] didFinishDownloadingTo taskId=\(taskId)")
+
+        // Move to app-owned tmp immediately — `location` is only valid for
+        // the duration of this method call. Dispatching to MainActor first
+        // would let the method return and the system would delete the file.
+        let stableTmp = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString + "-" + location.lastPathComponent)
+        do {
+            try FileManager.default.moveItem(at: location, to: stableTmp)
+        } catch {
+            print("[DL] ❌ failed to secure tmp file for taskId=\(taskId): \(error.localizedDescription)")
+            return
+        }
+
         Task { @MainActor in
             guard let dest = self.taskToLocalURL[taskId],
                   let slug = self.taskToReciter[taskId]
-            else { return }
+            else {
+                try? FileManager.default.removeItem(at: stableTmp)
+                print("[DL] ⚠️ didFinish: no dest/slug for taskId=\(taskId) — likely reconnected background session")
+                return
+            }
 
             do {
+                try? FileManager.default.createDirectory(
+                    at: dest.deletingLastPathComponent(),
+                    withIntermediateDirectories: true
+                )
                 if FileManager.default.fileExists(atPath: dest.path) {
                     try FileManager.default.removeItem(at: dest)
                 }
-                try FileManager.default.moveItem(at: location, to: dest)
+                try FileManager.default.moveItem(at: stableTmp, to: dest)
+                print("[DL] ✅ saved \(dest.lastPathComponent)")
 
                 let size = (try? FileManager.default.attributesOfItem(atPath: dest.path)[.size] as? Int64) ?? 0
 
@@ -273,7 +330,10 @@ extension DownloadManager: URLSessionDownloadDelegate {
                 }
 
                 self.activeDownloads[slug]?.completedVerses += 1
-            } catch {}
+            } catch {
+                try? FileManager.default.removeItem(at: stableTmp)
+                print("[DL] ❌ move to dest failed for taskId=\(taskId): \(error.localizedDescription)")
+            }
 
             self.taskToReciter.removeValue(forKey: taskId)
             self.taskToLocalURL.removeValue(forKey: taskId)
@@ -290,6 +350,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
         guard let error else { return }
         let taskId = task.taskIdentifier
         let cancelled = (error as? URLError)?.code == .cancelled
+        print("[DL] didCompleteWithError taskId=\(taskId) cancelled=\(cancelled) error=\(error.localizedDescription)")
         Task { @MainActor in
             guard let slug = self.taskToReciter[taskId] else { return }
             self.taskToReciter.removeValue(forKey: taskId)
@@ -298,6 +359,7 @@ extension DownloadManager: URLSessionDownloadDelegate {
             if !cancelled {
                 // Re-enqueue failed URL
                 if let url = task.originalRequest?.url {
+                    print("[DL] ♻️ re-enqueuing failed URL: \(url.lastPathComponent)")
                     self.downloadQueues[slug, default: []].insert(url, at: 0)
                 }
                 self.drainQueue(for: slug)

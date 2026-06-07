@@ -21,6 +21,7 @@
 "sort" = "ترتيب";
 
 "home" = "الرئيسية";
+"today" = "اليوم";
 "assalamuAlaikum" = "السلام عليكم";
 "welcomeToSanctuary" = "مرحباً بك في محرابك";
 "continueReading" = "متابعة القراءة";
@@ -55,7 +56,7 @@
 "asr" = "العصر";
 "maghrib" = "المغرب";
 "isha" = "العشاء";
-"seeAll" = "seeAll";
+"seeAll" = "المزيد";
 
 "edit" = "تعديل";
 "bookmarks" = "الفواصل";
@@ -139,6 +140,30 @@
 "appearance" = "المظهر";
 "arabicTafsirSection" = "التفسير العربي";
 "translationsSection" = "الترجمات";
+
+// MARK: - Reciter / Audio Library
+"reciters" = "القراء";
+"close" = "إغلاق";
+"cancel" = "إلغاء";
+"deleteRecitation" = "حذف التلاوة";
+"deleteReciterMessage" = "سيتم حذف تلاوة %@ من الجهاز";
+"selectedLabel" = "مختار";
+"cancelDownload" = "إلغاء التحميل";
+"deleteButton" = "حذف";
+"tafsirAudioTitle" = "المختصر الصوتي";
+"tafsirAudioSubtitle" = "عبدالله الأسمري وصابر عبدالحكم";
+"surahFallback" = "سورة %d";
+"storageManagement" = "إدارة التخزين";
+"downloadedRecitations" = "التلاوات المحمّلة";
+"totalStorageUsed" = "إجمالي المساحة المستخدمة:";
+"surahsDownloaded" = "%d سورة محمّلة";
+"noDownloadsTitle" = "لم تحمّل أي تلاوة بعد";
+"noDownloadsMessage" = "اذهب إلى قسم التلاوة وحمّل قارئًا للاستماع بدون إنترنت";
+"minimizePlayer" = "تصغير المشغل";
+"previousVerse" = "الآية السابقة";
+"nextVerse" = "الآية التالية";
+"playbackSpeed" = "سرعة التشغيل";
+"pausePlayer" = "إيقاف مؤقت";
 
 // MARK: - Surah List Sheet
 "surahIndex" = "الفهرس";

@@ -15,6 +15,7 @@ struct MiniPlayerView: View {
     @State private var isRepeatSheetPresenting = false
 
     var onPlayTapped: (() -> Void)? = nil
+    var onSheetOpenChanged: ((Bool) -> Void)? = nil
 
     var body: some View {
         Group {
@@ -24,6 +25,7 @@ struct MiniPlayerView: View {
                 collapsedBar
             }
         }
+        .appDirection()
         .transition(.move(edge: .bottom).combined(with: .opacity))
         .animation(.spring(response: 0.35, dampingFraction: 0.82), value: isExpanded)
         .onChange(of: audio.isPlaying) { _, playing in
@@ -48,6 +50,12 @@ struct MiniPlayerView: View {
             RepeatSettingsSheet()
                 .presentationDragIndicator(.visible)
         }
+        .onChange(of: isRepeatSheetPresenting) { _, open in
+            onSheetOpenChanged?(open)
+        }
+        .onChange(of: isReciterSheetPresenting) { _, open in
+            onSheetOpenChanged?(open)
+        }
     }
 
     // MARK: - Collapsed Bar (Image #11 — audio not playing)
@@ -67,7 +75,7 @@ struct MiniPlayerView: View {
                     .foregroundColor(Color.playerControls)
                     .frame(width: 44, height: 44)
             }
-            .accessibilityLabel("تشغيل")
+            .accessibilityLabel(AppLocalizedKeys.play.value)
 
             Spacer()
 
@@ -141,7 +149,7 @@ struct MiniPlayerView: View {
                     .frame(width: 30, height: 30)
                     .background(Color.secondary.opacity(0.13), in: Circle())
             }
-            .accessibilityLabel("تصغير المشغل")
+            .accessibilityLabel(AppLocalizedKeys.minimizePlayer.value)
 
             Spacer()
 
@@ -236,7 +244,7 @@ struct MiniPlayerView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .accessibilityLabel("إعدادات التكرار")
+            .accessibilityLabel(AppLocalizedKeys.repeatSettings.value)
 
             Button { audio.previousVerse() } label: {
                 Image(systemName: "backward.fill")
@@ -244,7 +252,7 @@ struct MiniPlayerView: View {
                     .foregroundColor(Color.playerControls)
             }
             .frame(maxWidth: .infinity)
-            .accessibilityLabel("الآية السابقة")
+            .accessibilityLabel(AppLocalizedKeys.previousVerse.value)
 
             // Large center play/pause
             Button {
@@ -262,7 +270,7 @@ struct MiniPlayerView: View {
                 }
                 .frame(width: 56, height: 56)
             }
-            .accessibilityLabel(audio.isPlaying ? "إيقاف مؤقت" : "تشغيل")
+            .accessibilityLabel(audio.isPlaying ? AppLocalizedKeys.pausePlayer.value : AppLocalizedKeys.play.value)
 
             Button { audio.nextVerse() } label: {
                 Image(systemName: "forward.fill")
@@ -270,7 +278,7 @@ struct MiniPlayerView: View {
                     .foregroundColor(Color.playerControls)
             }
             .frame(maxWidth: .infinity)
-            .accessibilityLabel("الآية التالية")
+            .accessibilityLabel(AppLocalizedKeys.nextVerse.value)
 
             Button { audio.cycleSpeed() } label: {
                 Text(audio.currentSpeedLabel)
@@ -278,7 +286,7 @@ struct MiniPlayerView: View {
                     .frame(minWidth: 32)
             }
             .frame(maxWidth: .infinity)
-            .accessibilityLabel("سرعة التشغيل")
+            .accessibilityLabel(AppLocalizedKeys.playbackSpeed.value)
         }
         .padding(.top, 2)
     }

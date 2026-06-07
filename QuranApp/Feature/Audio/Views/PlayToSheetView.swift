@@ -56,7 +56,7 @@ struct PlayToSheetView: View {
             }
         }
         .background(Color.background)
-        .environment(\.layoutDirection, .rightToLeft)
+        .appDirection()
     }
 
     // MARK: - Header

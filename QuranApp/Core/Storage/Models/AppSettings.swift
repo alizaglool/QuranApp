@@ -33,7 +33,7 @@ final class AppSettings {
 
     /// Computed — not persisted directly; backed by `selectedThemeRaw`
     var selectedTheme: Theme {
-        get { Theme(rawValue: selectedThemeRaw) ?? .classic }
+        get { Theme(rawValue: selectedThemeRaw) ?? .tinted }
         set { selectedThemeRaw = newValue.rawValue }
     }
 
@@ -52,7 +52,7 @@ final class AppSettings {
         isOnboardingCompleted: Bool = false,
         mushafType: String = "mushaf",
         scrollDirection: ScrollDirection = .horizontal,
-        selectedTheme: Theme = .classic
+        selectedTheme: Theme = .tinted
     ) {
         self.selectedLanguage = selectedLanguage
         self.selectedReciterId = selectedReciterId

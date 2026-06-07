@@ -13,7 +13,7 @@ import SwiftUI
 protocol HomeCoordinating: AnyObject {
     func coordinateToSurahDetail(surah: SurahEntity)
     func coordinateToSearch()
-    func coordinateToQuran()
+    func coordinateToQuran(startPage: Int?)
     func coordinateToAdhkar()
     func coordinateToHadith()
 }
@@ -49,11 +49,9 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
         tabBarController.selectedTabItem = TabBarItem.hadith
     }
 
-    func coordinateToQuran() {
-        // Capture nav weakly so the closure doesn't keep the controller alive
-        // beyond its natural lifecycle.
+    func coordinateToQuran(startPage: Int? = nil) {
         let nav = navigationController
-        let view = QuranPagerView(onBack: { [weak nav] in
+        let view = QuranPagerView(startPage: startPage, onBack: { [weak nav] in
             nav?.popViewController(animated: true)
         })
         let viewController = UIHostingController(

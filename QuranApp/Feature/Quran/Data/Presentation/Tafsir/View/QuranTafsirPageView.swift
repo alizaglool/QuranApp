@@ -139,12 +139,12 @@ struct QuranTafsirPageView: View {
             QuranPageFooterBar(
                 pageNumber: pageNumber,
                 isDarkMode: isDarkMode,
-                theme: storage.getSettings()?.selectedTheme ?? .classic
+                theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
         }
         .ignoresSafeArea(edges: .horizontal)
-        .task(id: pageNumber) {
+        .task(id: "\(bookId)/\(pageNumber)") {
             await loadTafsir()
         }
     }
@@ -192,11 +192,17 @@ struct QuranTafsirPageView: View {
     // MARK: - Verse Block
 
     private func verseBlock(entry: VerseEntry) -> some View {
-        VStack(spacing: 12) {
-            if let bismillah = entry.bismillahText {
-                bismillahLine(bismillah)
+        VStack(spacing: 10) {
+            VStack(spacing: 10) {
+                if let bismillah = entry.bismillahText {
+                    bismillahLine(bismillah)
+                }
+                verseText(entry.text, entry: entry)
             }
-            verseText(entry.text, entry: entry)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 16)
+            .background(Color.mushafPage, in: RoundedRectangle(cornerRadius: 16))
+
             tafsirCard(verseID: entry.id)
         }
     }
@@ -216,7 +222,7 @@ struct QuranTafsirPageView: View {
     // MARK: - Verse Text
 
     private func verseText(_ text: String, entry: VerseEntry) -> some View {
-        let theme = storage.getSettings()?.selectedTheme ?? .classic
+        let theme = storage.getSettings()?.selectedTheme ?? .tinted
         let fontSize: CGFloat = 26
         let badgeImage = QuranGlyphRenderer.verseMarkerImage(
             entry.verseNumber,
@@ -247,8 +253,12 @@ struct QuranTafsirPageView: View {
 
     // MARK: - Tafsir Card
 
+    private var isBookRTL: Bool {
+        TafsirBook.find(id: bookId)?.language.isRTL ?? true
+    }
+
     private func tafsirCard(verseID: Int) -> some View {
-        TafsirCardView(tafsir: tafsirTexts[verseID], isDarkMode: isDarkMode)
+        TafsirCardView(tafsir: tafsirTexts[verseID], isDarkMode: isDarkMode, isRTL: isBookRTL)
     }
 
     // MARK: - Async Tafsir Load
@@ -257,6 +267,8 @@ struct QuranTafsirPageView: View {
         let entries = verseEntries
         let id = bookId
         tafsirTexts = [:]
+
+        var results: [Int: String] = [:]
         await withTaskGroup(of: (Int, String?).self) { group in
             for entry in entries {
                 group.addTask {
@@ -269,8 +281,11 @@ struct QuranTafsirPageView: View {
                 }
             }
             for await (verseID, text) in group {
-                if let text { tafsirTexts[verseID] = text }
+                // nil means the fetch failed — store "" so the card exits the spinner state
+                results[verseID] = text ?? ""
             }
         }
+        guard !Task.isCancelled else { return }
+        tafsirTexts = results
     }
 }
