@@ -13,7 +13,7 @@ struct QuranTafsirPageView: View {
     let pageNumber: Int
     @ObservedObject var viewModel: QuranViewModel
     @ObservedObject private var storage = StorageManager.shared
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     @State private var tafsirTexts: [Int: String] = [:]
 

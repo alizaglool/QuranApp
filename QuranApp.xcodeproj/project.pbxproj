@@ -7,33 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		050AD8AC179E44519F776CBB /* YouTubeContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46820F970E49457098380691 /* YouTubeContentService.swift */; };
+		07EBA782308143BDA698CF93 /* SheikhHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A9558DC914E30AF50EB94 /* SheikhHeaderView.swift */; };
 		0AF062969D370A21F0C96E25 /* ReciterLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */; };
 		0CA8D7D2B7652268D0FDBC52 /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96B5DA5A1045B25C2F23D60 /* FullPlayerView.swift */; };
 		10FF35F853CC761975846A24 /* AudioModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7571D0775518B7FA72F71D9A /* AudioModels.swift */; };
+		195A1B50A3CC4CE285E19B0C /* LessonPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7709D829B39A4829A7DF833E /* LessonPlayerViewModel.swift */; };
+		21C94052B00B45578D07AD3C /* YouTubeChannelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1828651FD0741E285475A4E /* YouTubeChannelService.swift */; };
 		2E4D8D4C22244CF0A9C3FD11 /* adhkar.json in Resources */ = {isa = PBXBuildFile; fileRef = F45ABB2CFB4B4500B164A904 /* adhkar.json */; };
+		4EA28A1DEACC48C3AF14E0C5 /* LessonsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */; };
 		500A1A95659DBE888F30C388 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C478BC8987FB7EF82006521 /* DownloadManager.swift */; };
+		535EBD8CD83641FCA390FB18 /* SheikhCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2DF43D26474C5CAC91C7B6 /* SheikhCardView.swift */; };
 		5ABAC30287B4E688F8838B47 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801A93FD480AA2E4CD4CE921 /* MiniPlayerView.swift */; };
 		6C94842686446A51C0D3F65C /* ReciterLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79584A2647054BD4F800B003 /* ReciterLibrary.swift */; };
+		738C6A8F289449B0A7F0270B /* SheikhListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F808A68C98A9446AA043E310 /* SheikhListView.swift */; };
 		874DC48EBDDD347E9BF9E6D0 /* SurahDownloadSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464512F40072C32DC4A66D1F /* SurahDownloadSheet.swift */; };
+		8AA23B868D6540E99D298541 /* LessonPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88367D341E614F228C2DC47A /* LessonPlayerView.swift */; };
+		9D399669B8D24A4BB7B1C3D7 /* SheikhDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A2F4D7B59413CA3C1A5DB /* SheikhDetailView.swift */; };
+		9D7F05994C4142E18CD56B1C /* SheikhListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */; };
 		A1B2C3D4E5F678901234BCDE /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F678901234ABCD /* Audio */; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */; };
 		AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */; };
 		AA22CC33DD44EE551234ABCF /* PlayToSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */; };
+		AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */; };
 		B8F58AE72E6C5A9B002673AB /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = B8F58AE62E6C5A9B002673AB /* Core */; };
 		B8F9B7EF80CE3B56C6A7D3C9 /* RepeatSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484E8B69398EA0068B05D21B /* RepeatSettingsSheet.swift */; };
 		BB11DD22EE33FF441234AB01 /* QuranSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */; };
 		BB11DD22EE33FF441234AB03 /* QuranSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */; };
+		C02A46A0AEB540958993D85E /* PlaylistCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */; };
+		C0F17EACEE744BD3A358C736 /* SheikhSortPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199B144D70B4139A9CDB6D6 /* SheikhSortPickerView.swift */; };
+		CF1A2B3C4D5E6F789012ABD1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A2B3C4D5E6F789012ABCE /* Environment.swift */; };
 		C85002D52DBC36CA00FB4CE6 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C85002D42DBC36CA00FB4CE6 /* Alamofire */; };
+		FE2A3B4C5D6E7F8901234ABE /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */; };
 		C88166C02DB662BA00EDECB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */; };
 		C88166C22DB662BA00EDECB8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */; };
 		C88166C92DB662BC00EDECB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C88166C82DB662BC00EDECB8 /* Assets.xcassets */; };
 		C88DD6802DB92B6600731D19 /* OptionalAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */; };
 		CC52FEECAFD82D118DA714FC /* ReciterSelectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51BDEE776F991E54CED7AB8 /* ReciterSelectionSheet.swift */; };
+		D31BCB72AA4D49E5B8EFD17C /* VideoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE70DA92B7F411787D771F8 /* VideoCardView.swift */; };
 		DC7A11B78C31D864A16986BA /* StorageManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0229D087115A83633C615A /* StorageManagementView.swift */; };
 		DDFAAD356DA3437CB51B441C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */; };
 		DE1BF8A047BF9B6CDDA93190 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 143D1E8731428B60D2178F66 /* AudioEngine.swift */; };
+		E7614C7ACB66475C9CC15A9A /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63702544ABAE4832808DB1BA /* RemoteConfigService.swift */; };
 		E91210AF2E1E6230007EE3E0 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = E91210AE2E1E6230007EE3E0 /* Core */; };
+		EA8062E4B7E640718C4E8634 /* SheikhDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */; };
+		AA11BB22CC33DD44EE55FF03 /* PlaylistItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */; };
+		AA11BB22CC33DD44EE55FF04 /* PlaylistItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */; };
+		F0C4A2DB9BFE4E489A853835 /* BatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2BEDE66E44D309E91598E /* BatchService.swift */; };
 		F800B3112DB67DDA0035501A /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30C2DB67DDA0035501A /* EmptyViewController.swift */; };
 		F800B3122DB67DDA0035501A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30B2DB67DDA0035501A /* TabBarController.swift */; };
 		F800B3152DB67DDA0035501A /* TabBarItem+Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30D2DB67DDA0035501A /* TabBarItem+Tabs.swift */; };
@@ -123,7 +144,6 @@
 		F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C52F717897009F1094 /* HomeViewModel.swift */; };
 		F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C72F71789E009F1094 /* HomeView.swift */; };
 		F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C92F717912009F1094 /* SurahRow.swift */; };
-		AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */; };
 		F8C118292FCE0ACF009143E2 /* QuranPageBars.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */; };
 		F8C1182B2FCE1342009143E2 /* QuranTafsirPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */; };
 		F8C15A3D2FD03D09009143E2 /* AppDirectionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */; };
@@ -151,18 +171,36 @@
 
 /* Begin PBXFileReference section */
 		143D1E8731428B60D2178F66 /* AudioEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhDetailViewModel.swift; sourceTree = "<group>"; };
+		2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCardView.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsView.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsViewModel.swift; sourceTree = "<group>"; };
+		3199B144D70B4139A9CDB6D6 /* SheikhSortPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhSortPickerView.swift; sourceTree = "<group>"; };
+		454A9558DC914E30AF50EB94 /* SheikhHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhHeaderView.swift; sourceTree = "<group>"; };
 		464512F40072C32DC4A66D1F /* SurahDownloadSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SurahDownloadSheet.swift; sourceTree = "<group>"; };
+		46820F970E49457098380691 /* YouTubeContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeContentService.swift; sourceTree = "<group>"; };
 		484E8B69398EA0068B05D21B /* RepeatSettingsSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RepeatSettingsSheet.swift; sourceTree = "<group>"; };
+		CF1A2B3C4D5E6F789012ABCE /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Secrets.xcconfig.example; sourceTree = "<group>"; };
+		63702544ABAE4832808DB1BA /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
 		6C478BC8987FB7EF82006521 /* DownloadManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		7571D0775518B7FA72F71D9A /* AudioModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioModels.swift; sourceTree = "<group>"; };
+		7709D829B39A4829A7DF833E /* LessonPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerViewModel.swift; sourceTree = "<group>"; };
 		79584A2647054BD4F800B003 /* ReciterLibrary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterLibrary.swift; sourceTree = "<group>"; };
+		7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhListViewModel.swift; sourceTree = "<group>"; };
 		801A93FD480AA2E4CD4CE921 /* MiniPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
+		88367D341E614F228C2DC47A /* LessonPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerView.swift; sourceTree = "<group>"; };
 		992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterLibraryView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F678901234ABCD /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksViewModel.swift; sourceTree = "<group>"; };
 		AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ar-mokhtasar.json"; sourceTree = "<group>"; };
 		AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayToSheetView.swift; sourceTree = "<group>"; };
+		AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeaturedLessonsSection.swift; sourceTree = "<group>"; };
+		ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsCoordinator.swift; sourceTree = "<group>"; };
+		ADE70DA92B7F411787D771F8 /* VideoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCardView.swift; sourceTree = "<group>"; };
+		B1828651FD0741E285475A4E /* YouTubeChannelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeChannelService.swift; sourceTree = "<group>"; };
 		B51BDEE776F991E54CED7AB8 /* ReciterSelectionSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterSelectionSheet.swift; sourceTree = "<group>"; };
 		BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchService.swift; sourceTree = "<group>"; };
 		BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranSearchView.swift; sourceTree = "<group>"; };
@@ -174,8 +212,11 @@
 		C88166E62DB6659200EDECB8 /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Core; sourceTree = "<group>"; };
 		C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalAnimation.swift; sourceTree = "<group>"; };
 		CB0229D087115A83633C615A /* StorageManagementView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StorageManagementView.swift; sourceTree = "<group>"; };
+		CC2DF43D26474C5CAC91C7B6 /* SheikhCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhCardView.swift; sourceTree = "<group>"; };
 		D96B5DA5A1045B25C2F23D60 /* FullPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
+		DFB2BEDE66E44D309E91598E /* BatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchService.swift; sourceTree = "<group>"; };
 		E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		EC4A2F4D7B59413CA3C1A5DB /* SheikhDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhDetailView.swift; sourceTree = "<group>"; };
 		F45ABB2CFB4B4500B164A904 /* adhkar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = adhkar.json; sourceTree = "<group>"; };
 		F800B30A2DB67DDA0035501A /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
 		F800B30B2DB67DDA0035501A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -205,6 +246,7 @@
 		F800B8852DBA6F1B0035501A /* BaseAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAPI.swift; sourceTree = "<group>"; };
 		F800B89F2DBD716C0035501A /* String+Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Validation.swift"; sourceTree = "<group>"; };
 		F800B8A72DBF6C980035501A /* DeviceTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTokenManager.swift; sourceTree = "<group>"; };
+		F808A68C98A9446AA043E310 /* SheikhListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhListView.swift; sourceTree = "<group>"; };
 		F82FA2CB2FC1DF9800E60E39 /* AdhkarModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarModels.swift; sourceTree = "<group>"; };
 		F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoriesView.swift; sourceTree = "<group>"; };
 		F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoriesViewModel.swift; sourceTree = "<group>"; };
@@ -269,7 +311,6 @@
 		F8BEB9C52F717897009F1094 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F8BEB9C72F71789E009F1094 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		F8BEB9C92F717912009F1094 /* SurahRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahRow.swift; sourceTree = "<group>"; };
-		AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeaturedLessonsSection.swift; sourceTree = "<group>"; };
 		F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageBars.swift; sourceTree = "<group>"; };
 		F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTafsirPageView.swift; sourceTree = "<group>"; };
 		F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDirectionModifier.swift; sourceTree = "<group>"; };
@@ -308,6 +349,7 @@
 				C85002D52DBC36CA00FB4CE6 /* Alamofire in Frameworks */,
 				E91210AF2E1E6230007EE3E0 /* Core in Frameworks */,
 				B8F58AE72E6C5A9B002673AB /* Core in Frameworks */,
+				FE2A3B4C5D6E7F8901234ABE /* YouTubePlayerKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,12 +366,62 @@
 			path = Data;
 			sourceTree = "<group>";
 		};
+		1BBEB1607D2C4489B9DC40FE /* SheikhDetail */ = {
+			isa = PBXGroup;
+			children = (
+				EC4A2F4D7B59413CA3C1A5DB /* SheikhDetailView.swift */,
+				2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */,
+				4C82F1A2B02E4F0197BC72AE /* Components */,
+				AA11BB22CC33DD44EE55FF05 /* PlaylistItems */,
+			);
+			path = SheikhDetail;
+			sourceTree = "<group>";
+		};
+		AA11BB22CC33DD44EE55FF05 /* PlaylistItems */ = {
+			isa = PBXGroup;
+			children = (
+				AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */,
+				AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */,
+			);
+			path = PlaylistItems;
+			sourceTree = "<group>";
+		};
 		2A2E04EA6167457693C46171 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		38A2EC0AF24E400B8EC65FAF /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CC2DF43D26474C5CAC91C7B6 /* SheikhCardView.swift */,
+				3199B144D70B4139A9CDB6D6 /* SheikhSortPickerView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		4C82F1A2B02E4F0197BC72AE /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				454A9558DC914E30AF50EB94 /* SheikhHeaderView.swift */,
+				2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */,
+				ADE70DA92B7F411787D771F8 /* VideoCardView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		72F0D373F616477A8E6D0C89 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				63702544ABAE4832808DB1BA /* RemoteConfigService.swift */,
+				B1828651FD0741E285475A4E /* YouTubeChannelService.swift */,
+				46820F970E49457098380691 /* YouTubeContentService.swift */,
+				DFB2BEDE66E44D309E91598E /* BatchService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		A1B2C3D4E5F6A7B8C9D0E1F6 /* Bookmarks */ = {
@@ -341,12 +433,33 @@
 			path = Bookmarks;
 			sourceTree = "<group>";
 		};
+		ADF9AF1F41C14A289D989254 /* Lessons */ = {
+			isa = PBXGroup;
+			children = (
+				ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */,
+				E28AFE97D74E4070B8BA6CB3 /* SheikhList */,
+				1BBEB1607D2C4489B9DC40FE /* SheikhDetail */,
+				BF3C4E94D7AB4BA992DB9AA3 /* Player */,
+				72F0D373F616477A8E6D0C89 /* Services */,
+			);
+			path = Lessons;
+			sourceTree = "<group>";
+		};
 		BB11DD22EE33FF441234AB04 /* Search */ = {
 			isa = PBXGroup;
 			children = (
 				SR001SRCH001234AB01 /* View */,
 			);
 			path = Search;
+			sourceTree = "<group>";
+		};
+		BF3C4E94D7AB4BA992DB9AA3 /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				88367D341E614F228C2DC47A /* LessonPlayerView.swift */,
+				7709D829B39A4829A7DF833E /* LessonPlayerViewModel.swift */,
+			);
+			path = Player;
 			sourceTree = "<group>";
 		};
 		BK001BOOK001234AB02 /* View */ = {
@@ -394,9 +507,20 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		CF1A2B3C4D5E6F789012ABCD /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CF1A2B3C4D5E6F789012ABCE /* Environment.swift */,
+				CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */,
+				CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		C88166BE2DB662BA00EDECB8 /* QuranApp */ = {
 			isa = PBXGroup;
 			children = (
+				CF1A2B3C4D5E6F789012ABCD /* Config */,
 				F800B6342DB6824B0035501A /* Feature */,
 				F800B8332DB682DD0035501A /* Core */,
 				F800B8532DB7DC760035501A /* Delegation */,
@@ -411,6 +535,16 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E28AFE97D74E4070B8BA6CB3 /* SheikhList */ = {
+			isa = PBXGroup;
+			children = (
+				F808A68C98A9446AA043E310 /* SheikhListView.swift */,
+				7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */,
+				38A2EC0AF24E400B8EC65FAF /* Components */,
+			);
+			path = SheikhList;
 			sourceTree = "<group>";
 		};
 		E888F651C4525A49B3C8CB34 /* Views */ = {
@@ -505,6 +639,7 @@
 				F82FA2D12FC1DF9800E60E39 /* Adhkar */,
 				F82FA2DD2FC1DFA200E60E39 /* Hadith */,
 				C3DE851FF4A71CC459D2BD75 /* Audio */,
+				ADF9AF1F41C14A289D989254 /* Lessons */,
 				2A2E04EA6167457693C46171 /* Settings */,
 			);
 			path = Feature;
@@ -1028,6 +1163,7 @@
 				C85002D42DBC36CA00FB4CE6 /* Alamofire */,
 				E91210AE2E1E6230007EE3E0 /* Core */,
 				B8F58AE62E6C5A9B002673AB /* Core */,
+				FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */,
 			);
 			productName = QuranApp;
 			productReference = C88166BC2DB662BA00EDECB8 /* QuranApp.app */;
@@ -1061,6 +1197,7 @@
 			packageReferences = (
 				C85002D32DBC36CA00FB4CE6 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				B8F58AE52E6C5A9B002673AB /* XCRemoteSwiftPackageReference "SVGKit" */,
+				FE2A3B4C5D6E7F8901234ABC /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */,
 			);
 			productRefGroup = C88166BD2DB662BA00EDECB8 /* Products */;
 			projectDirPath = "";
@@ -1224,6 +1361,25 @@
 				B8F9B7EF80CE3B56C6A7D3C9 /* RepeatSettingsSheet.swift in Sources */,
 				874DC48EBDDD347E9BF9E6D0 /* SurahDownloadSheet.swift in Sources */,
 				CC52FEECAFD82D118DA714FC /* ReciterSelectionSheet.swift in Sources */,
+				4EA28A1DEACC48C3AF14E0C5 /* LessonsCoordinator.swift in Sources */,
+				738C6A8F289449B0A7F0270B /* SheikhListView.swift in Sources */,
+				9D7F05994C4142E18CD56B1C /* SheikhListViewModel.swift in Sources */,
+				535EBD8CD83641FCA390FB18 /* SheikhCardView.swift in Sources */,
+				C0F17EACEE744BD3A358C736 /* SheikhSortPickerView.swift in Sources */,
+				9D399669B8D24A4BB7B1C3D7 /* SheikhDetailView.swift in Sources */,
+				AA11BB22CC33DD44EE55FF03 /* PlaylistItemsView.swift in Sources */,
+				AA11BB22CC33DD44EE55FF04 /* PlaylistItemsViewModel.swift in Sources */,
+				EA8062E4B7E640718C4E8634 /* SheikhDetailViewModel.swift in Sources */,
+				07EBA782308143BDA698CF93 /* SheikhHeaderView.swift in Sources */,
+				C02A46A0AEB540958993D85E /* PlaylistCardView.swift in Sources */,
+				D31BCB72AA4D49E5B8EFD17C /* VideoCardView.swift in Sources */,
+				8AA23B868D6540E99D298541 /* LessonPlayerView.swift in Sources */,
+				195A1B50A3CC4CE285E19B0C /* LessonPlayerViewModel.swift in Sources */,
+				CF1A2B3C4D5E6F789012ABD1 /* Environment.swift in Sources */,
+				E7614C7ACB66475C9CC15A9A /* RemoteConfigService.swift in Sources */,
+				21C94052B00B45578D07AD3C /* YouTubeChannelService.swift in Sources */,
+				050AD8AC179E44519F776CBB /* YouTubeContentService.swift in Sources */,
+				F0C4A2DB9BFE4E489A853835 /* BatchService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1400,6 +1556,7 @@
 				DEVELOPMENT_TEAM = G63QA4PMY8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QuranApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Wird;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to let you take photos for your profile picture.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your location at all times to provide location-based services even when the app is in the background.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set your current location during registration for better service.";
@@ -1416,12 +1573,13 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ayah;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wird;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
+			baseConfigurationReference = CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */;
 			name = Debug;
 		};
 		C88166D22DB662BC00EDECB8 /* Release */ = {
@@ -1434,6 +1592,7 @@
 				DEVELOPMENT_TEAM = G63QA4PMY8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = QuranApp/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Wird;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to let you take photos for your profile picture.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your location at all times to provide location-based services even when the app is in the background.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need access to your location to set your current location during registration for better service.";
@@ -1450,12 +1609,13 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.ayah;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wird;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
+			baseConfigurationReference = CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */;
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
@@ -1498,6 +1658,14 @@
 				minimumVersion = 5.10.2;
 			};
 		};
+		FE2A3B4C5D6E7F8901234ABC /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SvenTiigi/YouTubePlayerKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1514,6 +1682,11 @@
 		E91210AE2E1E6230007EE3E0 /* Core */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Core;
+		};
+		FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE2A3B4C5D6E7F8901234ABC /* XCRemoteSwiftPackageReference "YouTubePlayerKit" */;
+			productName = YouTubePlayerKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

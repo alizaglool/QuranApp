@@ -14,8 +14,8 @@ struct MyAdhkarView: View {
 
     let coordinator: AdhkarCoordinating
     @StateObject private var viewModel = MyAdhkarViewModel()
-    @EnvironmentObject private var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject var localizationManager: LocalizationManager
+    @Environment(\.colorScheme) var colorScheme
 
     @State private var isAddPresenting = false
     @State private var newDhikrText = ""
