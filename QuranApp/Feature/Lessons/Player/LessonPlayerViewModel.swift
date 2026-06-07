@@ -42,7 +42,7 @@ final class LessonPlayerViewModel: MainViewModel {
         }
         return YouTubePlayer(
             source: ytSource,
-            configuration: .init(autoPlay: true, playInline: true)
+            configuration: .init(autoPlay: true, playInline: false)
         )
     }
 }

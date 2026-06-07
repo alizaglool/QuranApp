@@ -73,11 +73,7 @@ final class SheikhDetailViewModel: MainViewModel {
     // MARK: Navigation
 
     func onPlaylistTapped(_ playlist: LessonPlaylist) {
-        coordinator?.coordinateToPlayer(
-            source: .playlist(id: playlist.id),
-            title: playlist.title,
-            sheikhName: sheikh.name
-        )
+        coordinator?.coordinateToPlaylistItems(playlist: playlist, sheikhName: sheikh.name)
     }
 
     func onVideoTapped(_ video: LessonVideo) {

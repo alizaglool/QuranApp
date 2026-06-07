@@ -68,9 +68,8 @@ extension LessonPlayerView {
 
     var playerView: some View {
         YouTubePlayerView(viewModel.player)
-            .frame(height: 220)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .padding(.horizontal, .big)
+            .aspectRatio(16 / 9, contentMode: .fit)
+            .cornerRadius(12)
             .padding(.top, 16)
     }
 
