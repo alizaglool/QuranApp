@@ -12,8 +12,8 @@ struct AllahNamesView: View {
 
     let coordinator: AdhkarCoordinating
     let names: [AllahName]
-    @EnvironmentObject private var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject var localizationManager: LocalizationManager
+    @Environment(\.colorScheme) var colorScheme
 
     private var isRTL: Bool { localizationManager.currentLanguage == .Arabic }
 

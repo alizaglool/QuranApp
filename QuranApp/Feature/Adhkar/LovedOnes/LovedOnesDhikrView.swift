@@ -12,8 +12,8 @@ struct LovedOnesDhikrView: View {
 
     let coordinator: AdhkarCoordinating
     let category: DhikrCategory
-    @EnvironmentObject private var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject var localizationManager: LocalizationManager
+    @Environment(\.colorScheme) var colorScheme
 
     @State private var personName: String = ""
     @FocusState private var isNameFocused: Bool

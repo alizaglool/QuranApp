@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>YoutubeApiKey</key>
+	<string>$(YOUTUBE_API_KEY)</string>
 	<key>NSAllowsArbitraryLoads</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -11,8 +13,6 @@
 		<key>NSExceptionDomains</key>
 		<dict/>
 	</dict>
-	<key>CFBundleDisplayName</key>
-	<string>Wird</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>HafsSmart_08_fixed.ttf</string>
@@ -31,10 +31,6 @@
 		<string>TheYearofHandicrafts-Regular.otf</string>
 		<string>TheYearofHandicrafts-SemiBold.otf</string>
 		<string>TheYearofHandicrafts-Bold.otf</string>
-	</array>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -55,5 +51,9 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 </dict>
 </plist>
