@@ -203,3 +203,19 @@
 "juz28" = "Juz 28";
 "juz29" = "Juz 29";
 "juz30" = "Juz 30";
+
+// Lessons
+"lessons.islamicLessons" = "Islamic Lessons";
+"lessons.exploreThe" = "Explore the";
+"lessons.wisdom" = "Wisdom";
+"lessons.searchPlaceholder" = "Search by Sheikh or specialty...";
+"lessons.allSheikhs" = "ALL SHEIKHS";
+"lessons.tafsir" = "TAFSIR";
+"lessons.fiqh" = "FIQH";
+"lessons.hadith" = "HADITH";
+"lessons.seerah" = "SEERAH";
+"lessons.lessonsCount" = "Lessons";
+"lessons.subscribers" = "Subscribers";
+"lessons.retry" = "Retry";
+"lessons.errorMessage" = "Failed to load sheikhs. Check your connection and try again.";
+"lessons.emptyFilter" = "No sheikhs found for this specialty";

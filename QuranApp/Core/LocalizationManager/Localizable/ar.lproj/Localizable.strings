@@ -203,3 +203,19 @@
 "juz28" = "الجزء الثامن والعشرون";
 "juz29" = "الجزء التاسع والعشرون";
 "juz30" = "الجزء الثلاثون";
+
+// Lessons
+"lessons.islamicLessons" = "الدروس الإسلامية";
+"lessons.exploreThe" = "استكشف";
+"lessons.wisdom" = "الحكمة";
+"lessons.searchPlaceholder" = "ابحث عن شيخ أو تخصص...";
+"lessons.allSheikhs" = "الكل";
+"lessons.tafsir" = "تفسير";
+"lessons.fiqh" = "فقه";
+"lessons.hadith" = "حديث";
+"lessons.seerah" = "سيرة";
+"lessons.lessonsCount" = "درس";
+"lessons.subscribers" = "متابع";
+"lessons.retry" = "إعادة المحاولة";
+"lessons.errorMessage" = "تعذّر تحميل المشايخ، تحقق من الاتصال وأعد المحاولة.";
+"lessons.emptyFilter" = "لا يوجد مشايخ في هذا التخصص";

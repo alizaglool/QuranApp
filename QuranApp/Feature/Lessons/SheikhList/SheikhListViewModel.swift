@@ -13,12 +13,29 @@ enum SheikhSortOption: String, CaseIterable {
     case videoCount  = "الأكثر فيديوهات"
 }
 
-enum SheikhFilter: String, CaseIterable {
-    case all     = "ALL SHEIKHS"
-    case tafsir  = "TAFSIR"
-    case fiqh    = "FIQH"
-    case hadith  = "HADITH"
-    case seerah  = "SEERAH"
+enum SheikhFilter: CaseIterable {
+    case all, tafsir, fiqh, hadith, seerah
+
+    var localized: String {
+        switch self {
+        case .all:    return "lessons.allSheikhs".localized
+        case .tafsir: return "lessons.tafsir".localized
+        case .fiqh:   return "lessons.fiqh".localized
+        case .hadith: return "lessons.hadith".localized
+        case .seerah: return "lessons.seerah".localized
+        }
+    }
+
+    // Keywords checked against channelDescription + name (Arabic & English)
+    var keywords: [String] {
+        switch self {
+        case .all:    return []
+        case .tafsir: return ["تفسير", "قرآن", "تلاوة", "tafsir", "quran", "quranic"]
+        case .fiqh:   return ["فقه", "فتاوى", "فتاوي", "فتوى", "fiqh", "fatwa", "fatawa"]
+        case .hadith: return ["حديث", "السنة", "أحاديث", "hadith", "sunnah", "hadeeth"]
+        case .seerah: return ["سيرة", "النبي", "محمد", "seerah", "sirah", "prophet"]
+        }
+    }
 }
 
 @MainActor
@@ -33,19 +50,29 @@ final class SheikhListViewModel: MainViewModel {
     @Published var searchText: String = ""
     @Published var selectedFilter: SheikhFilter = .all
 
-    var displayedSheikhs: [Sheikh] {
-        guard !searchText.isEmpty else { return sheikhs }
-        return allSheikhs.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText) ||
-            $0.channelHandle.localizedCaseInsensitiveContains(searchText)
-        }
-    }
-
     weak var coordinator: (any LessonsCoordinating)?
 
     private var allSheikhs: [Sheikh] = []
     private var displayedPage: Int = 0
     private let pageSize = 20
+
+    var displayedSheikhs: [Sheikh] {
+        var result = searchText.isEmpty ? sheikhs : allSheikhs.filter {
+            $0.name.localizedCaseInsensitiveContains(searchText) ||
+            $0.channelHandle.localizedCaseInsensitiveContains(searchText)
+        }
+
+        if selectedFilter != .all {
+            result = result.filter { sheikh in
+                selectedFilter.keywords.contains { keyword in
+                    sheikh.channelDescription.localizedCaseInsensitiveContains(keyword) ||
+                    sheikh.name.localizedCaseInsensitiveContains(keyword)
+                }
+            }
+        }
+
+        return result
+    }
 
     init(coordinator: (any LessonsCoordinating)?) {
         self.coordinator = coordinator
@@ -77,7 +104,7 @@ extension SheikhListViewModel {
             sheikhs = nextPage()
             hasMorePages = sheikhs.count < allSheikhs.count
         } catch {
-            errorMessage = "تعذّر تحميل المشايخ، تحقق من الاتصال وأعد المحاولة."
+            errorMessage = "lessons.errorMessage".localized
         }
 
         isLoading = false
@@ -109,13 +136,11 @@ extension SheikhListViewModel {
         hasMorePages = sheikhs.count < allSheikhs.count
     }
 
-    // MARK: Navigation
-
     func onSheikhTapped(_ sheikh: Sheikh) {
         coordinator?.coordinateToSheikhDetail(sheikh: sheikh)
     }
 
-    // MARK: Private helpers
+    // MARK: Private
 
     private func nextPage() -> [Sheikh] {
         let start = displayedPage * pageSize

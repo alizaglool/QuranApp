@@ -45,7 +45,7 @@ extension SheikhListView {
 extension SheikhListView {
 
     var navBar: some View {
-        Text("Islamic Lessons")
+        Text("lessons.islamicLessons".localized)
             .customStyle(.subheadline, .onSurface)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, .big)
@@ -64,19 +64,23 @@ extension SheikhListView {
                 searchBar
                 filterPills
 
-                LazyVStack(spacing: 10) {
-                    ForEach(viewModel.displayedSheikhs) { sheikh in
-                        SheikhCardView(sheikh: sheikh)
-                            .onTapGesture { viewModel.onSheikhTapped(sheikh) }
+                if viewModel.displayedSheikhs.isEmpty {
+                    emptyFilterState
+                } else {
+                    LazyVStack(spacing: 10) {
+                        ForEach(viewModel.displayedSheikhs) { sheikh in
+                            SheikhCardView(sheikh: sheikh)
+                                .onTapGesture { viewModel.onSheikhTapped(sheikh) }
+                        }
                     }
-                }
-                .padding(.horizontal, .big)
-                .padding(.top, 4)
+                    .padding(.horizontal, .big)
+                    .padding(.top, 4)
 
-                if viewModel.hasMorePages && viewModel.searchText.isEmpty {
-                    ProgressView()
-                        .padding(.vertical, 16)
-                        .onAppear { viewModel.loadNextPage() }
+                    if viewModel.hasMorePages && viewModel.searchText.isEmpty && viewModel.selectedFilter == .all {
+                        ProgressView()
+                            .padding(.vertical, 16)
+                            .onAppear { viewModel.loadNextPage() }
+                    }
                 }
             }
             .padding(.bottom, 32)
@@ -85,12 +89,12 @@ extension SheikhListView {
 
     var heroSection: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("Explore the")
+            Text("lessons.exploreThe".localized)
                 .font(.system(size: 34, weight: .bold))
                 .customForeground(.onSurface)
-            Text("Wisdom")
+            Text("lessons.wisdom".localized)
                 .font(.system(size: 34, weight: .bold).italic())
-                .foregroundColor(ColorStyle.hadithGold.color)
+                .foregroundColor(Color.hadithGold)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, .big)
@@ -103,7 +107,7 @@ extension SheikhListView {
             Image(systemName: "magnifyingglass")
                 .customForeground(.subtitle)
                 .font(.system(size: 15))
-            TextField("Search by Sheikh or specialty...", text: $viewModel.searchText)
+            TextField("lessons.searchPlaceholder".localized, text: $viewModel.searchText)
                 .font(.system(size: 15))
                 .customForeground(.onSurface)
         }
@@ -120,7 +124,7 @@ extension SheikhListView {
     var filterPills: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                ForEach(SheikhFilter.allCases, id: \.self) { filter in
+                ForEach(SheikhFilter.allCases, id: \.localized) { filter in
                     filterPill(filter)
                 }
             }
@@ -134,7 +138,7 @@ extension SheikhListView {
         return Button {
             viewModel.selectedFilter = filter
         } label: {
-            Text(filter.rawValue)
+            Text(filter.localized)
                 .font(.system(size: 12, weight: .semibold))
                 .foregroundColor(isSelected ? .white : ColorStyle.subtitle.color)
                 .padding(.horizontal, 16)
@@ -149,6 +153,18 @@ extension SheikhListView {
                 )
         }
         .animation(.easeInOut(duration: 0.15), value: viewModel.selectedFilter)
+    }
+
+    var emptyFilterState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "person.slash")
+                .font(.system(size: 36))
+                .customForeground(.subtitle)
+                .padding(.top, 60)
+            Text("lessons.emptyFilter".localized)
+                .customStyle(.bodySmall, .subtitle)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -225,7 +241,7 @@ extension SheikhListView {
             Button {
                 viewModel.refreshData()
             } label: {
-                Text("إعادة المحاولة")
+                Text("lessons.retry".localized)
                     .customStyle(.subheadline, .onPrimary)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 10)

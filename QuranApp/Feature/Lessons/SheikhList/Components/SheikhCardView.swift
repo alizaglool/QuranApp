@@ -18,6 +18,7 @@ struct SheikhCardView: View {
             Image(systemName: "chevron.right")
                 .font(.system(size: 13, weight: .semibold))
                 .customForeground(.subtitle)
+                .flipsForRightToLeftLayoutDirection(true)
         }
         .padding(16)
         .background(
@@ -45,14 +46,16 @@ struct SheikhCardView: View {
                 .customForeground(.onSurface)
                 .lineLimit(1)
 
-            Text(sheikh.channelHandle.trimmingCharacters(in: CharacterSet(charactersIn: "@")).uppercased())
+            Text(sheikh.channelHandle
+                .trimmingCharacters(in: CharacterSet(charactersIn: "@"))
+                .uppercased())
                 .font(.system(size: 11, weight: .semibold))
-                .foregroundColor(ColorStyle.hadithGold.color)
+                .foregroundColor(Color.hadithGold)
                 .lineLimit(1)
 
             HStack(spacing: 14) {
                 Label {
-                    Text("\(sheikh.videoCount) Lessons")
+                    Text("\(sheikh.videoCount) \("lessons.lessonsCount".localized)")
                         .font(.system(size: 12))
                         .customForeground(.subtitle)
                 } icon: {
