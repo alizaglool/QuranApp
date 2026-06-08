@@ -9,29 +9,51 @@ import Core
 enum SheikhDetailTab: String, CaseIterable {
     case playlists = "قوائم التشغيل"
     case videos    = "فيديوهات"
-    case reels     = "ريلز"
+    case shorts    = "شورتس"
+    case podcasts  = "بودكاست"
+    case live      = "مباشر"
 }
 
 @MainActor
 final class SheikhDetailViewModel: MainViewModel {
 
     @Published var selectedTab: SheikhDetailTab = .playlists
+
+    // Playlists
     @Published var playlists: [LessonPlaylist] = []
-    @Published var videos: [LessonVideo] = []
-    @Published var reels: [LessonVideo] = []
     @Published var isLoadingPlaylists = false
-    @Published var isLoadingVideos    = false
-    @Published var isLoadingReels     = false
     @Published var hasMorePlaylists   = false
-    @Published var hasMoreVideos      = false
-    @Published var hasMoreReels       = false
+
+    // Videos
+    @Published var videos: [LessonVideo] = []
+    @Published var isLoadingVideos = false
+    @Published var hasMoreVideos   = false
+
+    // Shorts
+    @Published var shorts: [LessonVideo] = []
+    @Published var isLoadingShorts = false
+    @Published var hasMoreShorts   = false
+    @Published var showShortsPlayer = false
+    @Published var shortsStartIndex = 0
+
+    // Podcasts
+    @Published var podcasts: [LessonVideo] = []
+    @Published var isLoadingPodcasts = false
+    @Published var hasMorePodcasts   = false
+
+    // Live
+    @Published var liveVideos: [LessonVideo] = []
+    @Published var isLoadingLive = false
+    @Published var hasMoreLive   = false
 
     let sheikh: Sheikh
     weak var coordinator: (any LessonsCoordinating)?
 
     private var playlistsPageToken: String? = nil
     private var videosPageToken: String?    = nil
-    private var reelsPageToken: String?     = nil
+    private var shortsPageToken: String?    = nil
+    private var podcastsPageToken: String?  = nil
+    private var livePageToken: String?      = nil
 
     private var loadedTabs: Set<SheikhDetailTab> = []
 
@@ -65,9 +87,19 @@ final class SheikhDetailViewModel: MainViewModel {
         Task { await fetchVideos() }
     }
 
-    func loadMoreReels() {
-        guard !isLoadingReels, hasMoreReels else { return }
-        Task { await fetchReels() }
+    func loadMoreShorts() {
+        guard !isLoadingShorts, hasMoreShorts else { return }
+        Task { await fetchShorts() }
+    }
+
+    func loadMorePodcasts() {
+        guard !isLoadingPodcasts, hasMorePodcasts else { return }
+        Task { await fetchPodcasts() }
+    }
+
+    func loadMoreLive() {
+        guard !isLoadingLive, hasMoreLive else { return }
+        Task { await fetchLive() }
     }
 
     // MARK: Navigation
@@ -80,8 +112,15 @@ final class SheikhDetailViewModel: MainViewModel {
         coordinator?.coordinateToPlayer(
             source: .video(id: video.id),
             title: video.title,
-            sheikhName: sheikh.name
+            sheikhName: sheikh.name,
+            playerType: .regular
         )
+    }
+
+    func onShortTapped(_ video: LessonVideo) {
+        guard let index = shorts.firstIndex(where: { $0.id == video.id }) else { return }
+        shortsStartIndex = index
+        showShortsPlayer = true
     }
 
     // MARK: Private
@@ -92,7 +131,9 @@ final class SheikhDetailViewModel: MainViewModel {
         switch tab {
         case .playlists: Task { await fetchPlaylists() }
         case .videos:    Task { await fetchVideos() }
-        case .reels:     Task { await fetchReels() }
+        case .shorts:    Task { await fetchShorts() }
+        case .podcasts:  Task { await fetchPodcasts() }
+        case .live:      Task { await fetchLive() }
         }
     }
 
@@ -124,17 +165,45 @@ final class SheikhDetailViewModel: MainViewModel {
         } catch {}
     }
 
-    private func fetchReels() async {
-        isLoadingReels = true
-        defer { isLoadingReels = false }
+    private func fetchShorts() async {
+        isLoadingShorts = true
+        defer { isLoadingShorts = false }
         do {
-            let result = try await YouTubeContentService.shared.fetchReels(
+            let result = try await YouTubeContentService.shared.fetchShorts(
                 channelId: sheikh.id,
-                pageToken: reelsPageToken
+                pageToken: shortsPageToken
             )
-            reels.append(contentsOf: result.items)
-            reelsPageToken = result.nextPageToken
-            hasMoreReels = result.nextPageToken != nil
+            shorts.append(contentsOf: result.items)
+            shortsPageToken = result.nextPageToken
+            hasMoreShorts = result.nextPageToken != nil
+        } catch {}
+    }
+
+    private func fetchPodcasts() async {
+        isLoadingPodcasts = true
+        defer { isLoadingPodcasts = false }
+        do {
+            let result = try await YouTubeContentService.shared.fetchPodcasts(
+                channelId: sheikh.id,
+                pageToken: podcastsPageToken
+            )
+            podcasts.append(contentsOf: result.items)
+            podcastsPageToken = result.nextPageToken
+            hasMorePodcasts = result.nextPageToken != nil
+        } catch {}
+    }
+
+    private func fetchLive() async {
+        isLoadingLive = true
+        defer { isLoadingLive = false }
+        do {
+            let result = try await YouTubeContentService.shared.fetchLive(
+                channelId: sheikh.id,
+                pageToken: livePageToken
+            )
+            liveVideos.append(contentsOf: result.items)
+            livePageToken = result.nextPageToken
+            hasMoreLive = result.nextPageToken != nil
         } catch {}
     }
 }

@@ -51,15 +51,84 @@ final class YouTubeContentService {
         return (playlists, decoded.nextPageToken)
     }
 
-    // MARK: Videos (any duration except reels-only content)
+    // MARK: Videos (medium duration 4–20 min, distinct from Shorts)
 
     func fetchVideos(channelId: String, pageToken: String? = nil) async throws -> (items: [LessonVideo], nextPageToken: String?) {
         return try await fetchSearchResults(
             channelId: channelId,
-            duration: "any",
+            duration: "medium",
             pageToken: pageToken,
             isReel: false
         )
+    }
+
+    // MARK: Shorts (<4 min — YouTube Shorts)
+
+    func fetchShorts(channelId: String, pageToken: String? = nil) async throws -> (items: [LessonVideo], nextPageToken: String?) {
+        return try await fetchSearchResults(
+            channelId: channelId,
+            duration: "short",
+            pageToken: pageToken,
+            isReel: false
+        )
+    }
+
+    // MARK: Podcasts (>20 min long-form content)
+
+    func fetchPodcasts(channelId: String, pageToken: String? = nil) async throws -> (items: [LessonVideo], nextPageToken: String?) {
+        return try await fetchSearchResults(
+            channelId: channelId,
+            duration: "long",
+            pageToken: pageToken,
+            isReel: false
+        )
+    }
+
+    // MARK: Live (completed live streams)
+
+    func fetchLive(channelId: String, pageToken: String? = nil) async throws -> (items: [LessonVideo], nextPageToken: String?) {
+        var components = URLComponents(string: "\(baseURL)/search")!
+        var queryItems: [URLQueryItem] = [
+            .init(name: "part", value: "snippet"),
+            .init(name: "channelId", value: channelId),
+            .init(name: "type", value: "video"),
+            .init(name: "eventType", value: "completed"),
+            .init(name: "order", value: "date"),
+            .init(name: "maxResults", value: "25"),
+            .init(name: "key", value: apiKey)
+        ]
+        if let token = pageToken {
+            queryItems.append(.init(name: "pageToken", value: token))
+        }
+        components.queryItems = queryItems
+
+        guard let url = components.url else { throw URLError(.badURL) }
+
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoded = try JSONDecoder().decode(YouTubeSearchResponse.self, from: data)
+
+        let videos = decoded.items.compactMap { item -> LessonVideo? in
+            guard
+                let videoId = item.id.videoId,
+                let snippet = item.snippet
+            else { return nil }
+
+            let thumbnail = snippet.thumbnails?.high?.url
+                ?? snippet.thumbnails?.medium?.url
+                ?? snippet.thumbnails?.default?.url
+                ?? ""
+
+            return LessonVideo(
+                id: videoId,
+                title: snippet.title ?? "",
+                thumbnailUrl: thumbnail,
+                publishedAt: snippet.publishedAt ?? "",
+                channelTitle: snippet.channelTitle ?? "",
+                isReel: false
+            )
+        }
+
+        return (videos, decoded.nextPageToken)
     }
 
     // MARK: Playlist Items
@@ -105,17 +174,6 @@ final class YouTubeContentService {
         }
 
         return (videos, decoded.nextPageToken)
-    }
-
-    // MARK: Reels (short duration)
-
-    func fetchReels(channelId: String, pageToken: String? = nil) async throws -> (items: [LessonVideo], nextPageToken: String?) {
-        return try await fetchSearchResults(
-            channelId: channelId,
-            duration: "short",
-            pageToken: pageToken,
-            isReel: true
-        )
     }
 
     // MARK: Private

@@ -17,6 +17,13 @@ struct SheikhDetailView: View {
         MainView(viewModel: viewModel) {
             mainContent
         }
+        .fullScreenCover(isPresented: $viewModel.showShortsPlayer) {
+            ShortsPlayerView(
+                videos: $viewModel.shorts,
+                startIndex: viewModel.shortsStartIndex,
+                onLoadMore: { viewModel.loadMoreShorts() }
+            )
+        }
     }
 }
 
@@ -29,7 +36,6 @@ extension SheikhDetailView {
             navBar
             SheikhHeaderView(sheikh: viewModel.sheikh)
             tabPicker
-            Divider()
             tabContent
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -56,22 +62,44 @@ extension SheikhDetailView {
     }
 }
 
-// MARK: - Tab Picker
+// MARK: - Tab Picker (scrollable, YouTube-style underline)
 
 extension SheikhDetailView {
 
     var tabPicker: some View {
-        let tabs = SheikhDetailTab.allCases
-        let selectedIndex = Binding(
-            get: { tabs.firstIndex(of: viewModel.selectedTab) ?? 0 },
-            set: { viewModel.onTabSelected(tabs[$0]) }
-        )
-        return SegmentedControl(
-            selectedIndex: selectedIndex,
-            options: tabs.map(\.rawValue)
-        )
-        .padding(.horizontal, .big)
-        .padding(.vertical, 8)
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 0) {
+                ForEach(SheikhDetailTab.allCases, id: \.self) { tab in
+                    tabButton(tab)
+                }
+            }
+        }
+        .background(alignment: .bottom) {
+            Rectangle()
+                .customFill(.neutral)
+                .frame(height: 1)
+        }
+    }
+
+    func tabButton(_ tab: SheikhDetailTab) -> some View {
+        let isSelected = viewModel.selectedTab == tab
+        return Button {
+            viewModel.onTabSelected(tab)
+        } label: {
+            VStack(spacing: 0) {
+                Text(tab.rawValue)
+                    .customStyle(isSelected ? .subheadline : .bodySmall)
+                    .customForeground(isSelected ? .secondary : .subtitle)
+                    .padding(.vertical, 12)
+                    .padding(.horizontal, 16)
+                    .fixedSize()
+
+                Rectangle()
+                    .customFill(isSelected ? .secondary : .clear)
+                    .frame(height: 2)
+            }
+        }
+        .animation(.easeInOut(duration: 0.15), value: viewModel.selectedTab)
     }
 }
 
@@ -82,14 +110,15 @@ extension SheikhDetailView {
     @ViewBuilder
     var tabContent: some View {
         switch viewModel.selectedTab {
-        case .playlists:
-            playlistsTab
-        case .videos:
-            videosTab
-        case .reels:
-            reelsTab
+        case .playlists: playlistsTab
+        case .videos:    videosTab
+        case .shorts:    shortsTab
+        case .podcasts:  podcastsTab
+        case .live:      liveTab
         }
     }
+
+    // MARK: Playlists
 
     var playlistsTab: some View {
         NoIndicatorsScrollView {
@@ -98,12 +127,11 @@ extension SheikhDetailView {
                     PlaylistCardView(playlist: playlist)
                         .onTapGesture { viewModel.onPlaylistTapped(playlist) }
                 }
-                if viewModel.isLoadingPlaylists {
-                    ProgressView().padding()
-                } else if viewModel.hasMorePlaylists {
-                    Color.clear.frame(height: 1)
-                        .onAppear { viewModel.loadMorePlaylists() }
-                }
+                paginationTrigger(
+                    isLoading: viewModel.isLoadingPlaylists,
+                    hasMore: viewModel.hasMorePlaylists,
+                    loadMore: viewModel.loadMorePlaylists
+                )
                 if !viewModel.isLoadingPlaylists && viewModel.playlists.isEmpty {
                     emptyState(text: "لا توجد قوائم تشغيل")
                 }
@@ -113,6 +141,8 @@ extension SheikhDetailView {
         }
     }
 
+    // MARK: Videos
+
     var videosTab: some View {
         NoIndicatorsScrollView {
             LazyVStack(spacing: 8) {
@@ -120,12 +150,11 @@ extension SheikhDetailView {
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
                 }
-                if viewModel.isLoadingVideos {
-                    ProgressView().padding()
-                } else if viewModel.hasMoreVideos {
-                    Color.clear.frame(height: 1)
-                        .onAppear { viewModel.loadMoreVideos() }
-                }
+                paginationTrigger(
+                    isLoading: viewModel.isLoadingVideos,
+                    hasMore: viewModel.hasMoreVideos,
+                    loadMore: viewModel.loadMoreVideos
+                )
                 if !viewModel.isLoadingVideos && viewModel.videos.isEmpty {
                     emptyState(text: "لا توجد فيديوهات")
                 }
@@ -135,25 +164,84 @@ extension SheikhDetailView {
         }
     }
 
-    var reelsTab: some View {
+    // MARK: Shorts
+
+    var shortsTab: some View {
         NoIndicatorsScrollView {
             LazyVStack(spacing: 8) {
-                ForEach(viewModel.reels) { video in
+                ForEach(viewModel.shorts) { video in
                     VideoCardView(video: video)
-                        .onTapGesture { viewModel.onVideoTapped(video) }
+                        .onTapGesture { viewModel.onShortTapped(video) }
                 }
-                if viewModel.isLoadingReels {
-                    ProgressView().padding()
-                } else if viewModel.hasMoreReels {
-                    Color.clear.frame(height: 1)
-                        .onAppear { viewModel.loadMoreReels() }
-                }
-                if !viewModel.isLoadingReels && viewModel.reels.isEmpty {
-                    emptyState(text: "لا توجد ريلز")
+                paginationTrigger(
+                    isLoading: viewModel.isLoadingShorts,
+                    hasMore: viewModel.hasMoreShorts,
+                    loadMore: viewModel.loadMoreShorts
+                )
+                if !viewModel.isLoadingShorts && viewModel.shorts.isEmpty {
+                    emptyState(text: "لا توجد شورتس")
                 }
             }
             .padding(.top, 8)
             .padding(.bottom, 32)
+        }
+    }
+
+    // MARK: Podcasts
+
+    var podcastsTab: some View {
+        NoIndicatorsScrollView {
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.podcasts) { video in
+                    VideoCardView(video: video)
+                        .onTapGesture { viewModel.onVideoTapped(video) }
+                }
+                paginationTrigger(
+                    isLoading: viewModel.isLoadingPodcasts,
+                    hasMore: viewModel.hasMorePodcasts,
+                    loadMore: viewModel.loadMorePodcasts
+                )
+                if !viewModel.isLoadingPodcasts && viewModel.podcasts.isEmpty {
+                    emptyState(text: "لا توجد بودكاست")
+                }
+            }
+            .padding(.top, 8)
+            .padding(.bottom, 32)
+        }
+    }
+
+    // MARK: Live
+
+    var liveTab: some View {
+        NoIndicatorsScrollView {
+            LazyVStack(spacing: 8) {
+                ForEach(viewModel.liveVideos) { video in
+                    VideoCardView(video: video)
+                        .onTapGesture { viewModel.onVideoTapped(video) }
+                }
+                paginationTrigger(
+                    isLoading: viewModel.isLoadingLive,
+                    hasMore: viewModel.hasMoreLive,
+                    loadMore: viewModel.loadMoreLive
+                )
+                if !viewModel.isLoadingLive && viewModel.liveVideos.isEmpty {
+                    emptyState(text: "لا توجد بثوث مباشرة")
+                }
+            }
+            .padding(.top, 8)
+            .padding(.bottom, 32)
+        }
+    }
+
+    // MARK: Shared Helpers
+
+    @ViewBuilder
+    func paginationTrigger(isLoading: Bool, hasMore: Bool, loadMore: @escaping () -> Void) -> some View {
+        if isLoading {
+            ProgressView().padding()
+        } else if hasMore {
+            Color.clear.frame(height: 1)
+                .onAppear { loadMore() }
         }
     }
 

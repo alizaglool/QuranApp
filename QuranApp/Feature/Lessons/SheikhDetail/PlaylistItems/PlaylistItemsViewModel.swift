@@ -42,7 +42,8 @@ final class PlaylistItemsViewModel: MainViewModel {
         coordinator?.coordinateToPlayer(
             source: .video(id: video.id),
             title: video.title,
-            sheikhName: sheikhName
+            sheikhName: sheikhName,
+            playerType: .regular
         )
     }
 

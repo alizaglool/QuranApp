@@ -8,7 +8,9 @@ import Foundation
 final class RemoteConfigService {
     static let shared = RemoteConfigService()
 
-    private let configURL = "https://raw.githubusercontent.com/alizaglool/hadith-books/main/config/channels_config.json"
+    // Google Sheets published-to-web CSV URL
+    // Sheet: https://docs.google.com/spreadsheets/d/1yrQFXcEoAuakuDljBrWR40bJMebmjyJGIBt3dj9hZNs
+    private let configURL = "https://docs.google.com/spreadsheets/d/1yrQFXcEoAuakuDljBrWR40bJMebmjyJGIBt3dj9hZNs/pub?output=csv&gid=52017434"
     private let cacheKey = "lessons_channel_ids_cache"
     private let cacheTimestampKey = "lessons_channel_ids_cache_timestamp"
     private let cacheTTL: TimeInterval = 3600
@@ -26,8 +28,7 @@ final class RemoteConfigService {
 
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            let response = try JSONDecoder().decode(ChannelsConfig.self, from: data)
-            let ids = response.channelIds
+            let ids = try parseChannelIds(from: data)
             saveToCache(ids)
             return ids
         } catch {
@@ -42,6 +43,33 @@ final class RemoteConfigService {
         UserDefaults.standard.removeObject(forKey: cacheKey)
         UserDefaults.standard.removeObject(forKey: cacheTimestampKey)
     }
+
+    // MARK: - CSV Parsing
+
+    private func parseChannelIds(from data: Data) throws -> [String] {
+        guard let csv = String(data: data, encoding: .utf8) else {
+            throw URLError(.cannotDecodeContentData)
+        }
+
+        var ids: [String] = []
+        let rows = csv.components(separatedBy: "\n")
+
+        for row in rows {
+            let cols = row.components(separatedBy: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            // Find the column that contains a YouTube channel ID (starts with "UC", 24 chars)
+            if let id = cols.first(where: { $0.hasPrefix("UC") && $0.count == 24 }) {
+                ids.append(id)
+            }
+        }
+
+        guard !ids.isEmpty else {
+            throw URLError(.cannotParseResponse)
+        }
+
+        return ids
+    }
+
+    // MARK: - Cache
 
     private func loadFromCache() -> [String]? {
         guard
@@ -60,8 +88,4 @@ final class RemoteConfigService {
         UserDefaults.standard.set(ids, forKey: cacheKey)
         UserDefaults.standard.set(Date(), forKey: cacheTimestampKey)
     }
-}
-
-private struct ChannelsConfig: Decodable {
-    let channelIds: [String]
 }

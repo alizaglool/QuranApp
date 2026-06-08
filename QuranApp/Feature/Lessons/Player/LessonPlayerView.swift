@@ -10,9 +10,19 @@ import Core
 struct LessonPlayerView: View {
     @StateObject var viewModel: LessonPlayerViewModel
 
-    init(source: LessonPlayerViewModel.PlayerSource, title: String, sheikhName: String) {
+    init(
+        source: LessonPlayerViewModel.PlayerSource,
+        title: String,
+        sheikhName: String,
+        playerType: LessonPlayerViewModel.PlayerType = .regular
+    ) {
         _viewModel = StateObject(
-            wrappedValue: LessonPlayerViewModel(source: source, title: title, sheikhName: sheikhName)
+            wrappedValue: LessonPlayerViewModel(
+                source: source,
+                title: title,
+                sheikhName: sheikhName,
+                playerType: playerType
+            )
         )
     }
 
@@ -71,6 +81,7 @@ extension LessonPlayerView {
             .aspectRatio(16 / 9, contentMode: .fit)
             .cornerRadius(12)
             .padding(.top, 16)
+            .padding(.horizontal, .big)
     }
 
     var playerInfo: some View {

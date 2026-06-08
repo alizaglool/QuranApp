@@ -12,7 +12,12 @@ import Core
 protocol LessonsCoordinating: AnyObject {
     func coordinateToSheikhDetail(sheikh: Sheikh)
     func coordinateToPlaylistItems(playlist: LessonPlaylist, sheikhName: String)
-    func coordinateToPlayer(source: LessonPlayerViewModel.PlayerSource, title: String, sheikhName: String)
+    func coordinateToPlayer(
+        source: LessonPlayerViewModel.PlayerSource,
+        title: String,
+        sheikhName: String,
+        playerType: LessonPlayerViewModel.PlayerType
+    )
     func coordinateBack()
 }
 
@@ -52,8 +57,13 @@ final class LessonsCoordinator: MainCoordinator, LessonsCoordinating {
         navigationController.pushViewController(vc, animated: true)
     }
 
-    func coordinateToPlayer(source: LessonPlayerViewModel.PlayerSource, title: String, sheikhName: String) {
-        let view = LessonPlayerView(source: source, title: title, sheikhName: sheikhName)
+    func coordinateToPlayer(
+        source: LessonPlayerViewModel.PlayerSource,
+        title: String,
+        sheikhName: String,
+        playerType: LessonPlayerViewModel.PlayerType = .regular
+    ) {
+        let view = LessonPlayerView(source: source, title: title, sheikhName: sheikhName, playerType: playerType)
         let vc = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)

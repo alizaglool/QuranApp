@@ -23,12 +23,15 @@
 		738C6A8F289449B0A7F0270B /* SheikhListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F808A68C98A9446AA043E310 /* SheikhListView.swift */; };
 		874DC48EBDDD347E9BF9E6D0 /* SurahDownloadSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464512F40072C32DC4A66D1F /* SurahDownloadSheet.swift */; };
 		8AA23B868D6540E99D298541 /* LessonPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88367D341E614F228C2DC47A /* LessonPlayerView.swift */; };
+		BB11CC22DD33EE44FF550012 /* ShortsPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* ShortsPlayerView.swift */; };
 		9D399669B8D24A4BB7B1C3D7 /* SheikhDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A2F4D7B59413CA3C1A5DB /* SheikhDetailView.swift */; };
 		9D7F05994C4142E18CD56B1C /* SheikhListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */; };
 		A1B2C3D4E5F678901234BCDE /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F678901234ABCD /* Audio */; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */; };
 		AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */; };
+		AA11BB22CC33DD44EE55FF03 /* PlaylistItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */; };
+		AA11BB22CC33DD44EE55FF04 /* PlaylistItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */; };
 		AA22CC33DD44EE551234ABCF /* PlayToSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */; };
 		AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */; };
 		B8F58AE72E6C5A9B002673AB /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = B8F58AE62E6C5A9B002673AB /* Core */; };
@@ -37,14 +40,13 @@
 		BB11DD22EE33FF441234AB03 /* QuranSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */; };
 		C02A46A0AEB540958993D85E /* PlaylistCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */; };
 		C0F17EACEE744BD3A358C736 /* SheikhSortPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3199B144D70B4139A9CDB6D6 /* SheikhSortPickerView.swift */; };
-		CF1A2B3C4D5E6F789012ABD1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A2B3C4D5E6F789012ABCE /* Environment.swift */; };
 		C85002D52DBC36CA00FB4CE6 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = C85002D42DBC36CA00FB4CE6 /* Alamofire */; };
-		FE2A3B4C5D6E7F8901234ABE /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */; };
 		C88166C02DB662BA00EDECB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166BF2DB662BA00EDECB8 /* AppDelegate.swift */; };
 		C88166C22DB662BA00EDECB8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88166C12DB662BA00EDECB8 /* SceneDelegate.swift */; };
 		C88166C92DB662BC00EDECB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C88166C82DB662BC00EDECB8 /* Assets.xcassets */; };
 		C88DD6802DB92B6600731D19 /* OptionalAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */; };
 		CC52FEECAFD82D118DA714FC /* ReciterSelectionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = B51BDEE776F991E54CED7AB8 /* ReciterSelectionSheet.swift */; };
+		CF1A2B3C4D5E6F789012ABD1 /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF1A2B3C4D5E6F789012ABCE /* Environment.swift */; };
 		D31BCB72AA4D49E5B8EFD17C /* VideoCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADE70DA92B7F411787D771F8 /* VideoCardView.swift */; };
 		DC7A11B78C31D864A16986BA /* StorageManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0229D087115A83633C615A /* StorageManagementView.swift */; };
 		DDFAAD356DA3437CB51B441C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */; };
@@ -52,8 +54,6 @@
 		E7614C7ACB66475C9CC15A9A /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63702544ABAE4832808DB1BA /* RemoteConfigService.swift */; };
 		E91210AF2E1E6230007EE3E0 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = E91210AE2E1E6230007EE3E0 /* Core */; };
 		EA8062E4B7E640718C4E8634 /* SheikhDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */; };
-		AA11BB22CC33DD44EE55FF03 /* PlaylistItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */; };
-		AA11BB22CC33DD44EE55FF04 /* PlaylistItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */; };
 		F0C4A2DB9BFE4E489A853835 /* BatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2BEDE66E44D309E91598E /* BatchService.swift */; };
 		F800B3112DB67DDA0035501A /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30C2DB67DDA0035501A /* EmptyViewController.swift */; };
 		F800B3122DB67DDA0035501A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30B2DB67DDA0035501A /* TabBarController.swift */; };
@@ -166,6 +166,7 @@
 		F9CC000D2F71900000CC000D /* HadithChaptersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */; };
 		F9CC000E2F71900000CC000E /* HadithReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00062F71900000CC0006 /* HadithReadingView.swift */; };
 		F9CC000F2F71900000CC000F /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */; };
+		FE2A3B4C5D6E7F8901234ABE /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */; };
 		TC001CARD001234AB01 /* TafsirCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC001CARD001234AB00 /* TafsirCardView.swift */; };
 /* End PBXBuildFile section */
 
@@ -173,16 +174,11 @@
 		143D1E8731428B60D2178F66 /* AudioEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhDetailViewModel.swift; sourceTree = "<group>"; };
 		2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCardView.swift; sourceTree = "<group>"; };
-		AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsView.swift; sourceTree = "<group>"; };
-		AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsViewModel.swift; sourceTree = "<group>"; };
 		3199B144D70B4139A9CDB6D6 /* SheikhSortPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhSortPickerView.swift; sourceTree = "<group>"; };
 		454A9558DC914E30AF50EB94 /* SheikhHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhHeaderView.swift; sourceTree = "<group>"; };
 		464512F40072C32DC4A66D1F /* SurahDownloadSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SurahDownloadSheet.swift; sourceTree = "<group>"; };
 		46820F970E49457098380691 /* YouTubeContentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeContentService.swift; sourceTree = "<group>"; };
 		484E8B69398EA0068B05D21B /* RepeatSettingsSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RepeatSettingsSheet.swift; sourceTree = "<group>"; };
-		CF1A2B3C4D5E6F789012ABCE /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
-		CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
-		CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Secrets.xcconfig.example; sourceTree = "<group>"; };
 		63702544ABAE4832808DB1BA /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
 		6C478BC8987FB7EF82006521 /* DownloadManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		7571D0775518B7FA72F71D9A /* AudioModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioModels.swift; sourceTree = "<group>"; };
@@ -191,11 +187,14 @@
 		7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhListViewModel.swift; sourceTree = "<group>"; };
 		801A93FD480AA2E4CD4CE921 /* MiniPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		88367D341E614F228C2DC47A /* LessonPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerView.swift; sourceTree = "<group>"; };
+		BB11CC22DD33EE44FF550011 /* ShortsPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortsPlayerView.swift; sourceTree = "<group>"; };
 		992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterLibraryView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F678901234ABCD /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksViewModel.swift; sourceTree = "<group>"; };
 		AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ar-mokhtasar.json"; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsView.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsViewModel.swift; sourceTree = "<group>"; };
 		AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayToSheetView.swift; sourceTree = "<group>"; };
 		AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeaturedLessonsSection.swift; sourceTree = "<group>"; };
 		ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsCoordinator.swift; sourceTree = "<group>"; };
@@ -213,6 +212,9 @@
 		C88DD67F2DB92B6600731D19 /* OptionalAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalAnimation.swift; sourceTree = "<group>"; };
 		CB0229D087115A83633C615A /* StorageManagementView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StorageManagementView.swift; sourceTree = "<group>"; };
 		CC2DF43D26474C5CAC91C7B6 /* SheikhCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhCardView.swift; sourceTree = "<group>"; };
+		CF1A2B3C4D5E6F789012ABCE /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Secrets.xcconfig.example; sourceTree = "<group>"; };
 		D96B5DA5A1045B25C2F23D60 /* FullPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
 		DFB2BEDE66E44D309E91598E /* BatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchService.swift; sourceTree = "<group>"; };
 		E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -377,15 +379,6 @@
 			path = SheikhDetail;
 			sourceTree = "<group>";
 		};
-		AA11BB22CC33DD44EE55FF05 /* PlaylistItems */ = {
-			isa = PBXGroup;
-			children = (
-				AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */,
-				AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */,
-			);
-			path = PlaylistItems;
-			sourceTree = "<group>";
-		};
 		2A2E04EA6167457693C46171 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,10 +426,18 @@
 			path = Bookmarks;
 			sourceTree = "<group>";
 		};
+		AA11BB22CC33DD44EE55FF05 /* PlaylistItems */ = {
+			isa = PBXGroup;
+			children = (
+				AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */,
+				AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */,
+			);
+			path = PlaylistItems;
+			sourceTree = "<group>";
+		};
 		ADF9AF1F41C14A289D989254 /* Lessons */ = {
 			isa = PBXGroup;
 			children = (
-				ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */,
 				E28AFE97D74E4070B8BA6CB3 /* SheikhList */,
 				1BBEB1607D2C4489B9DC40FE /* SheikhDetail */,
 				BF3C4E94D7AB4BA992DB9AA3 /* Player */,
@@ -458,6 +459,7 @@
 			children = (
 				88367D341E614F228C2DC47A /* LessonPlayerView.swift */,
 				7709D829B39A4829A7DF833E /* LessonPlayerViewModel.swift */,
+				BB11CC22DD33EE44FF550011 /* ShortsPlayerView.swift */,
 			);
 			path = Player;
 			sourceTree = "<group>";
@@ -507,16 +509,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CF1A2B3C4D5E6F789012ABCD /* Config */ = {
-			isa = PBXGroup;
-			children = (
-				CF1A2B3C4D5E6F789012ABCE /* Environment.swift */,
-				CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */,
-				CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */,
-			);
-			path = Config;
-			sourceTree = "<group>";
-		};
 		C88166BE2DB662BA00EDECB8 /* QuranApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -535,6 +527,16 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CF1A2B3C4D5E6F789012ABCD /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				CF1A2B3C4D5E6F789012ABCE /* Environment.swift */,
+				CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */,
+				CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		E28AFE97D74E4070B8BA6CB3 /* SheikhList */ = {
@@ -594,6 +596,7 @@
 		F800B3412DB681920035501A /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
+				ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */,
 				F88DD9162F75407E0025939D /* QuranCoordinating.swift */,
 				F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */,
 				F8AB00012F71787900AB0001 /* AdhkarCoordinator.swift */,
@@ -1374,6 +1377,7 @@
 				C02A46A0AEB540958993D85E /* PlaylistCardView.swift in Sources */,
 				D31BCB72AA4D49E5B8EFD17C /* VideoCardView.swift in Sources */,
 				8AA23B868D6540E99D298541 /* LessonPlayerView.swift in Sources */,
+				BB11CC22DD33EE44FF550012 /* ShortsPlayerView.swift in Sources */,
 				195A1B50A3CC4CE285E19B0C /* LessonPlayerViewModel.swift in Sources */,
 				CF1A2B3C4D5E6F789012ABD1 /* Environment.swift in Sources */,
 				E7614C7ACB66475C9CC15A9A /* RemoteConfigService.swift in Sources */,
@@ -1548,6 +1552,7 @@
 		};
 		C88166D12DB662BC00EDECB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1579,11 +1584,11 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			baseConfigurationReference = CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */;
 			name = Debug;
 		};
 		C88166D22DB662BC00EDECB8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1615,7 +1620,6 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
-			baseConfigurationReference = CF1A2B3C4D5E6F789012ABCF /* Secrets.xcconfig */;
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
