@@ -11,35 +11,66 @@ struct SheikhCardView: View {
     let sheikh: Sheikh
 
     var body: some View {
-        VStack(spacing: 8) {
-            WebImage(url: URL(string: sheikh.thumbnailUrl)) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-            } placeholder: {
-                Rectangle()
-                    .customFill(.container)
-                    .withShimmerOverlay().redacted(reason: .placeholder)
-            }
-            .frame(width: 80, height: 80)
-            .clipShape(Circle())
-            .overlay(Circle().stroke(Color.gray.opacity(0.15), lineWidth: 1))
-
-            Text(sheikh.name)
-                .customStyle(.bodySmall, .onSurface)
-                .multilineTextAlignment(.center)
-                .lineLimit(2)
-                .frame(maxWidth: .infinity)
-
-            Text(sheikh.formattedSubscriberCount)
-                .customStyle(.caption2, .subtitle)
+        HStack(spacing: 14) {
+            avatarView
+            infoView
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+                .customForeground(.subtitle)
         }
-        .padding(12)
-        .frame(maxWidth: .infinity)
+        .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 14)
                 .customFill(.surface)
-                .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
         )
+    }
+
+    private var avatarView: some View {
+        WebImage(url: URL(string: sheikh.thumbnailUrl)) { image in
+            image.resizable().scaledToFill()
+        } placeholder: {
+            Circle()
+                .customFill(.container)
+                .withShimmerOverlay().redacted(reason: .placeholder)
+        }
+        .frame(width: 64, height: 64)
+        .clipShape(Circle())
+    }
+
+    private var infoView: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(sheikh.name)
+                .font(.system(size: 16, weight: .bold))
+                .customForeground(.onSurface)
+                .lineLimit(1)
+
+            Text(sheikh.channelHandle.trimmingCharacters(in: CharacterSet(charactersIn: "@")).uppercased())
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundColor(ColorStyle.hadithGold.color)
+                .lineLimit(1)
+
+            HStack(spacing: 14) {
+                Label {
+                    Text("\(sheikh.videoCount) Lessons")
+                        .font(.system(size: 12))
+                        .customForeground(.subtitle)
+                } icon: {
+                    Image(systemName: "play.circle")
+                        .font(.system(size: 12))
+                        .customForeground(.subtitle)
+                }
+
+                Label {
+                    Text(sheikh.formattedSubscriberCount)
+                        .font(.system(size: 12))
+                        .customForeground(.subtitle)
+                } icon: {
+                    Image(systemName: "person.2")
+                        .font(.system(size: 12))
+                        .customForeground(.subtitle)
+                }
+            }
+        }
     }
 }

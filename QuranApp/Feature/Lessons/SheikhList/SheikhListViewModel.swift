@@ -13,6 +13,14 @@ enum SheikhSortOption: String, CaseIterable {
     case videoCount  = "الأكثر فيديوهات"
 }
 
+enum SheikhFilter: String, CaseIterable {
+    case all     = "ALL SHEIKHS"
+    case tafsir  = "TAFSIR"
+    case fiqh    = "FIQH"
+    case hadith  = "HADITH"
+    case seerah  = "SEERAH"
+}
+
 @MainActor
 final class SheikhListViewModel: MainViewModel {
 
@@ -22,6 +30,16 @@ final class SheikhListViewModel: MainViewModel {
     @Published var sortOption: SheikhSortOption = .subscribers
     @Published var hasMorePages: Bool = false
     @Published var errorMessage: String? = nil
+    @Published var searchText: String = ""
+    @Published var selectedFilter: SheikhFilter = .all
+
+    var displayedSheikhs: [Sheikh] {
+        guard !searchText.isEmpty else { return sheikhs }
+        return allSheikhs.filter {
+            $0.name.localizedCaseInsensitiveContains(searchText) ||
+            $0.channelHandle.localizedCaseInsensitiveContains(searchText)
+        }
+    }
 
     weak var coordinator: (any LessonsCoordinating)?
 

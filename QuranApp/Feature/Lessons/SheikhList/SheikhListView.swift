@@ -8,7 +8,6 @@ import Core
 
 struct SheikhListView: View {
     @StateObject var viewModel: SheikhListViewModel
-    @State private var showSortPicker = false
 
     init(coordinator: any LessonsCoordinating) {
         _viewModel = StateObject(wrappedValue: SheikhListViewModel(coordinator: coordinator))
@@ -29,21 +28,15 @@ extension SheikhListView {
         VStack(spacing: 0) {
             navBar
             if viewModel.isLoading {
-                loadingGrid
+                loadingList
             } else if let error = viewModel.errorMessage {
                 errorView(message: error)
             } else {
-                sheikhGrid
+                sheikhList
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .customBackground(.background)
-        .sheet(isPresented: $showSortPicker) {
-            SheikhSortPickerView(selected: Binding(
-                get: { viewModel.sortOption },
-                set: { viewModel.updateSort($0) }
-            ), onDismiss: { showSortPicker = false })
-        }
     }
 }
 
@@ -52,84 +45,166 @@ extension SheikhListView {
 extension SheikhListView {
 
     var navBar: some View {
-        HStack {
-            Text("المشايخ")
-                .customStyle(.heading3, .primary)
-            Spacer()
-            Button {
-                showSortPicker = true
-            } label: {
-                HStack(spacing: 4) {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .font(.system(size: 14, weight: .medium))
-                    Text(viewModel.sortOption.rawValue)
-                        .customStyle(.caption2, .subtitle)
-                }
-                .customForeground(.subtitle)
-            }
-        }
-        .padding(.horizontal, .big)
-        .padding(.vertical, .sm)
+        Text("Islamic Lessons")
+            .customStyle(.subheadline, .onSurface)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, .big)
+            .padding(.vertical, .sm)
     }
 }
 
-// MARK: - Sheikh Grid
+// MARK: - Sheikh List
 
 extension SheikhListView {
 
-    var sheikhGrid: some View {
-        let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-        return NoIndicatorsScrollView {
-            LazyVGrid(columns: columns, spacing: 12) {
-                ForEach(viewModel.sheikhs) { sheikh in
-                    SheikhCardView(sheikh: sheikh)
-                        .onTapGesture { viewModel.onSheikhTapped(sheikh) }
+    var sheikhList: some View {
+        NoIndicatorsScrollView {
+            VStack(spacing: 0) {
+                heroSection
+                searchBar
+                filterPills
+
+                LazyVStack(spacing: 10) {
+                    ForEach(viewModel.displayedSheikhs) { sheikh in
+                        SheikhCardView(sheikh: sheikh)
+                            .onTapGesture { viewModel.onSheikhTapped(sheikh) }
+                    }
+                }
+                .padding(.horizontal, .big)
+                .padding(.top, 4)
+
+                if viewModel.hasMorePages && viewModel.searchText.isEmpty {
+                    ProgressView()
+                        .padding(.vertical, 16)
+                        .onAppear { viewModel.loadNextPage() }
+                }
+            }
+            .padding(.bottom, 32)
+        }
+    }
+
+    var heroSection: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Explore the")
+                .font(.system(size: 34, weight: .bold))
+                .customForeground(.onSurface)
+            Text("Wisdom")
+                .font(.system(size: 34, weight: .bold).italic())
+                .foregroundColor(ColorStyle.hadithGold.color)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, .big)
+        .padding(.top, 20)
+        .padding(.bottom, 24)
+    }
+
+    var searchBar: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "magnifyingglass")
+                .customForeground(.subtitle)
+                .font(.system(size: 15))
+            TextField("Search by Sheikh or specialty...", text: $viewModel.searchText)
+                .font(.system(size: 15))
+                .customForeground(.onSurface)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .customFill(.surface)
+        )
+        .padding(.horizontal, .big)
+        .padding(.bottom, 16)
+    }
+
+    var filterPills: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(SheikhFilter.allCases, id: \.self) { filter in
+                    filterPill(filter)
                 }
             }
             .padding(.horizontal, .big)
-            .padding(.top, 8)
-            .padding(.bottom, 32)
-
-            if viewModel.hasMorePages {
-                ProgressView()
-                    .padding(.bottom, 16)
-                    .onAppear { viewModel.loadNextPage() }
-            }
         }
+        .padding(.bottom, 20)
+    }
+
+    func filterPill(_ filter: SheikhFilter) -> some View {
+        let isSelected = viewModel.selectedFilter == filter
+        return Button {
+            viewModel.selectedFilter = filter
+        } label: {
+            Text(filter.rawValue)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(isSelected ? .white : ColorStyle.subtitle.color)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    Capsule()
+                        .fill(isSelected ? ColorStyle.secondary.color : Color.clear)
+                        .overlay(
+                            Capsule()
+                                .stroke(isSelected ? Color.clear : ColorStyle.neutral.color, lineWidth: 1)
+                        )
+                )
+        }
+        .animation(.easeInOut(duration: 0.15), value: viewModel.selectedFilter)
     }
 }
 
-// MARK: - Loading Grid
+// MARK: - Loading List
 
 extension SheikhListView {
 
-    var loadingGrid: some View {
-        let columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
-        return LazyVGrid(columns: columns, spacing: 12) {
-            ForEach(0..<9, id: \.self) { _ in
-                sheikhCardSkeleton
+    var loadingList: some View {
+        NoIndicatorsScrollView {
+            VStack(spacing: 0) {
+                heroSection
+                loadingSearchBar
+                LazyVStack(spacing: 10) {
+                    ForEach(0..<8, id: \.self) { _ in
+                        sheikhCardSkeleton
+                    }
+                }
+                .padding(.horizontal, .big)
+                .padding(.top, 4)
             }
         }
-        .padding(.horizontal, .big)
-        .padding(.top, 8)
+    }
+
+    var loadingSearchBar: some View {
+        RoundedRectangle(cornerRadius: 12)
+            .customFill(.surface)
+            .frame(height: 44)
+            .withShimmerOverlay().redacted(reason: .placeholder)
+            .padding(.horizontal, .big)
+            .padding(.bottom, 16)
     }
 
     var sheikhCardSkeleton: some View {
-        VStack(spacing: 8) {
+        HStack(spacing: 14) {
             Circle()
                 .customFill(.container)
-                .frame(width: 80, height: 80)
+                .frame(width: 64, height: 64)
                 .withShimmerOverlay().redacted(reason: .placeholder)
-            RoundedRectangle(cornerRadius: 4)
-                .customFill(.container)
-                .frame(height: 12)
-                .withShimmerOverlay().redacted(reason: .placeholder)
-            RoundedRectangle(cornerRadius: 4)
-                .customFill(.container)
-                .frame(width: 50, height: 10)
-                .withShimmerOverlay().redacted(reason: .placeholder)
+            VStack(alignment: .leading, spacing: 8) {
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(width: 160, height: 14)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(width: 100, height: 10)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(width: 130, height: 10)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+            }
+            Spacer()
         }
-        .padding(12)
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 14).customFill(.surface))
     }
 }
 
