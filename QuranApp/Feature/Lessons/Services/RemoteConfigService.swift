@@ -8,9 +8,7 @@ import Foundation
 final class RemoteConfigService {
     static let shared = RemoteConfigService()
 
-    // Google Sheets published-to-web CSV URL
-    // Sheet: https://docs.google.com/spreadsheets/d/1yrQFXcEoAuakuDljBrWR40bJMebmjyJGIBt3dj9hZNs
-    private let configURL = "https://docs.google.com/spreadsheets/d/1yrQFXcEoAuakuDljBrWR40bJMebmjyJGIBt3dj9hZNs/pub?output=csv&gid=52017434"
+    private let configURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQK0sMD_D0aKr240bnSoaZFZd-Zy7jv6RjNXu1IEnP7YduxCk-euQ5trUtZEcyTn7bG6hNEqSlvm37g/pub?output=csv"
     private let cacheKey = "lessons_channel_ids_cache"
     private let cacheTimestampKey = "lessons_channel_ids_cache_timestamp"
     private let cacheTTL: TimeInterval = 3600
