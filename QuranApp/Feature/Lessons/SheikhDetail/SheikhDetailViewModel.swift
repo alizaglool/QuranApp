@@ -12,6 +12,16 @@ enum SheikhDetailTab: String, CaseIterable {
     case shorts    = "شورتس"
     case podcasts  = "بودكاست"
     case live      = "مباشر"
+
+    var localizedTitle: String {
+        switch self {
+        case .playlists: return AppLocalizedKeys.detailTabPlaylists.value
+        case .videos:    return AppLocalizedKeys.detailTabVideos.value
+        case .shorts:    return AppLocalizedKeys.detailTabShorts.value
+        case .podcasts:  return AppLocalizedKeys.detailTabPodcasts.value
+        case .live:      return AppLocalizedKeys.detailTabLive.value
+        }
+    }
 }
 
 @MainActor
@@ -113,7 +123,8 @@ final class SheikhDetailViewModel: MainViewModel {
             source: .video(id: video.id),
             title: video.title,
             sheikhName: sheikh.name,
-            playerType: .regular
+            playerType: .regular,
+            relatedVideos: videos
         )
     }
 

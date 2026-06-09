@@ -11,39 +11,104 @@ struct PlaylistCardView: View {
     let playlist: LessonPlaylist
 
     var body: some View {
-        HStack(spacing: 12) {
+        VStack(alignment: .leading, spacing: 14) {
+            thumbnailSection
+            infoSection
+        }
+        .padding(.horizontal, .big)
+        .padding(.bottom, 12)
+    }
+}
+
+// MARK: - Thumbnail
+
+extension PlaylistCardView {
+
+    var thumbnailSection: some View {
+        ZStack {
             WebImage(url: URL(string: playlist.thumbnailUrl)) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
+                image.resizable().scaledToFill()
             } placeholder: {
                 Rectangle()
                     .customFill(.container)
                     .withShimmerOverlay().redacted(reason: .placeholder)
             }
-            .frame(width: 90, height: 60)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .frame(maxWidth: .infinity)
+            .aspectRatio(4 / 3, contentMode: .fill)
+            .clipped()
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(playlist.title)
-                    .customStyle(.bodySmall, .onSurface)
-                    .lineLimit(2)
+            // Subtle dark gradient so badges are readable
+            LinearGradient(
+                colors: [Color.black.opacity(0.35), Color.black.opacity(0.05), Color.black.opacity(0.5)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
 
-                Text("\(playlist.itemCount) فيديو")
-                    .customStyle(.caption2, .subtitle)
+            VStack {
+                HStack {
+                    countBadge   // top-left
+                    Spacer()
+                }
+                Spacer()
+                HStack {
+                    Spacer()
+                    playButton   // bottom-right
+                }
             }
-
-            Spacer()
-
-            Image(systemName: "chevron.left")
-                .font(.system(size: 12, weight: .medium))
-                .customForeground(.subtitle)
+            .padding(12)
         }
-        .padding(12)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .customFill(.surface)
-        )
-        .padding(.horizontal, .big)
+        .frame(maxWidth: .infinity)
+        .aspectRatio(4 / 3, contentMode: .fit)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
+
+    var countBadge: some View {
+        HStack(spacing: 5) {
+            Image(systemName: "square.stack.fill")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundColor(.white)
+            Text("\(playlist.itemCount)")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(.white)
+            Text(AppLocalizedKeys.lessonsCount.value)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundColor(.white)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(.ultraThinMaterial)
+        .clipShape(Capsule())
+    }
+
+    var playButton: some View {
+        Image(systemName: "play.fill")
+            .font(.system(size: 20, weight: .bold))
+            .foregroundColor(.black)
+            .padding(17)
+            .background(Circle().fill(Color.hadithGold))
+    }
+}
+
+// MARK: - Info
+
+extension PlaylistCardView {
+
+    var infoSection: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            Text(playlist.title)
+                .font(.system(size: 20, weight: .bold))
+                .customForeground(.onSurface)
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            if !playlist.description.isEmpty {
+                Text(playlist.description)
+                    .font(.system(size: 14))
+                    .customForeground(.subtitle)
+                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+        }
+        .padding(.horizontal, 2)
     }
 }

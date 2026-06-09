@@ -18,11 +18,11 @@ enum SheikhFilter: CaseIterable {
 
     var localized: String {
         switch self {
-        case .all:    return "lessons.allSheikhs".localized
-        case .tafsir: return "lessons.tafsir".localized
-        case .fiqh:   return "lessons.fiqh".localized
-        case .hadith: return "lessons.hadith".localized
-        case .seerah: return "lessons.seerah".localized
+        case .all:    return AppLocalizedKeys.filterAllSheikhs.value
+        case .tafsir: return AppLocalizedKeys.filterTafsir.value
+        case .fiqh:   return AppLocalizedKeys.filterFiqh.value
+        case .hadith: return AppLocalizedKeys.filterHadith.value
+        case .seerah: return AppLocalizedKeys.filterSeerah.value
         }
     }
 
@@ -104,7 +104,7 @@ extension SheikhListViewModel {
             sheikhs = nextPage()
             hasMorePages = sheikhs.count < allSheikhs.count
         } catch {
-            errorMessage = "lessons.errorMessage".localized
+            errorMessage = AppLocalizedKeys.lessonsLoadError.value
         }
 
         isLoading = false

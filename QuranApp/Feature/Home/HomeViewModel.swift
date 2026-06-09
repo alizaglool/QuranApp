@@ -27,11 +27,6 @@ enum QuickAccessType {
     case quran, adhkar, hadith, lessons
 }
 
-struct FeaturedLesson: Identifiable {
-    let id = UUID()
-    let name: String
-    let imageName: String
-}
 
 final class HomeViewModel: MainViewModel {
 
@@ -44,6 +39,7 @@ final class HomeViewModel: MainViewModel {
     @Published var gregorianDate: String = ""
     @Published var userName: String = "'Zaghloul'"
     @Published var loadingState: LoadingState = .loading
+    @Published var featuredSheikhs: [Sheikh] = []
 
     // Last read — nil means the user hasn't started reading yet
     @Published var lastReadPage: Int? = nil
@@ -60,12 +56,6 @@ final class HomeViewModel: MainViewModel {
         QuickAccessItem(title: AppLocalizedKeys.lessons.value, icon: "play.rectangle.fill", type: .lessons)
     ]
 
-    let featuredLessons: [FeaturedLesson] = [
-        FeaturedLesson(name: "Sheikh Omar\nSuleiman", imageName: "sheikh_omar"),
-        FeaturedLesson(name: "Dr. Yasir Qadhi", imageName: "sheikh_yasir"),
-        FeaturedLesson(name: "Mufti Menk", imageName: "mufti_menk")
-    ]
-
     init(coordinator: HomeCoordinating) {
         self.coordinator = coordinator
     }
@@ -79,6 +69,8 @@ extension HomeViewModel {
         loadPrayerTimes()
         loadHadithOfTheDay()
         loadLastRead()
+        guard featuredSheikhs.isEmpty else { return }
+        Task { await loadFeaturedSheikhs() }
     }
 
     func onRefresh() {
@@ -195,6 +187,20 @@ extension HomeViewModel {
     }
 }
 
+// MARK: - Featured Sheikhs
+
+extension HomeViewModel {
+
+    private func loadFeaturedSheikhs() async {
+        do {
+            let ids = try await RemoteConfigService.shared.fetchChannelIds()
+            let all = try await BatchService.shared.fetchSheikhs(from: ids)
+            let sorted = all.sorted { $0.subscriberCount > $1.subscriberCount }
+            featuredSheikhs = Array(sorted.prefix(5))
+        } catch {}
+    }
+}
+
 // MARK: - Navigation
 
 extension HomeViewModel {
@@ -208,8 +214,12 @@ extension HomeViewModel {
         case .hadith:
             coordinator.coordinateToHadith()
         case .lessons:
-            break
+            coordinator.coordinateToLessons()
         }
+    }
+
+    func onSeeAllLessonsTapped() {
+        coordinator.coordinateToLessons()
     }
 
     func onResumeTapped() {

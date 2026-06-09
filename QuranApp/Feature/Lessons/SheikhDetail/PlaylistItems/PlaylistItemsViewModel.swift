@@ -5,6 +5,7 @@
 
 import Foundation
 import Core
+import YouTubePlayerKit
 
 @MainActor
 final class PlaylistItemsViewModel: MainViewModel {
@@ -12,6 +13,8 @@ final class PlaylistItemsViewModel: MainViewModel {
     @Published var videos: [LessonVideo] = []
     @Published var isLoading = false
     @Published var hasMore = false
+    @Published var nowPlayingVideoId: String?
+    @Published var player: YouTubePlayer?
 
     let playlist: LessonPlaylist
     let sheikhName: String
@@ -39,12 +42,20 @@ final class PlaylistItemsViewModel: MainViewModel {
     }
 
     func onVideoTapped(_ video: LessonVideo) {
-        coordinator?.coordinateToPlayer(
-            source: .video(id: video.id),
-            title: video.title,
-            sheikhName: sheikhName,
-            playerType: .regular
-        )
+        nowPlayingVideoId = video.id
+        if let existing = player {
+            existing.source = .video(id: video.id)
+        } else {
+            player = YouTubePlayer(
+                source: .video(id: video.id),
+                configuration: .init(
+                    fullscreenMode: .system,
+                    autoPlay: true,
+                    showFullscreenButton: true,
+                    playInline: true
+                )
+            )
+        }
     }
 
     private func fetchItems() async {

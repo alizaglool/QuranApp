@@ -55,14 +55,20 @@ struct SheikhCardView: View {
 
             HStack(spacing: 14) {
                 Label {
-                    Text("\(sheikh.videoCount) \("lessons.lessonsCount".localized)")
-                        .font(.system(size: 12))
-                        .customForeground(.subtitle)
+                    HStack(spacing: 3) {
+                        Text("\(sheikh.videoCount)")
+                            .font(.system(size: 12))
+                            .customForeground(.subtitle)
+                        Text(AppLocalizedKeys.lessonsCount.value)
+                            .font(.system(size: 12))
+                            .customForeground(.subtitle)
+                    }
                 } icon: {
                     Image(systemName: "play.circle")
                         .font(.system(size: 12))
                         .customForeground(.subtitle)
                 }
+                .environment(\.layoutDirection, .leftToRight)
 
                 Label {
                     Text(sheikh.formattedSubscriberCount)

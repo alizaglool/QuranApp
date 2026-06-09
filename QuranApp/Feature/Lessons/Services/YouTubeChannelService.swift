@@ -18,7 +18,7 @@ final class YouTubeChannelService {
         let joinedIds = ids.joined(separator: ",")
         var components = URLComponents(string: "\(baseURL)/channels")!
         components.queryItems = [
-            .init(name: "part", value: "snippet,statistics"),
+            .init(name: "part", value: "snippet,statistics,brandingSettings"),
             .init(name: "id", value: joinedIds),
             .init(name: "key", value: apiKey)
         ]
@@ -45,11 +45,13 @@ final class YouTubeChannelService {
 
             let subscribers = Int(statistics.subscriberCount ?? "0") ?? 0
             let videos = Int(statistics.videoCount ?? "0") ?? 0
+            let banner = item.brandingSettings?.image?.bannerExternalUrl ?? ""
 
             return Sheikh(
                 id: item.id,
                 name: snippet.title ?? "",
                 thumbnailUrl: thumbnail,
+                bannerImageUrl: banner,
                 subscriberCount: subscribers,
                 videoCount: videos,
                 channelHandle: snippet.customUrl ?? "",
@@ -69,6 +71,7 @@ private struct YouTubeChannelItem: Decodable {
     let id: String
     let snippet: Snippet?
     let statistics: Statistics?
+    let brandingSettings: BrandingSettings?
 
     struct Snippet: Decodable {
         let title: String?
@@ -90,5 +93,13 @@ private struct YouTubeChannelItem: Decodable {
     struct Statistics: Decodable {
         let subscriberCount: String?
         let videoCount: String?
+    }
+
+    struct BrandingSettings: Decodable {
+        let image: BrandingImage?
+
+        struct BrandingImage: Decodable {
+            let bannerExternalUrl: String?
+        }
     }
 }

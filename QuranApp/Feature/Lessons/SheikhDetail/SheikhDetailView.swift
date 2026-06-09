@@ -8,6 +8,7 @@ import Core
 
 struct SheikhDetailView: View {
     @StateObject var viewModel: SheikhDetailViewModel
+    @Environment(\.dismiss) private var dismiss
 
     init(sheikh: Sheikh, coordinator: any LessonsCoordinating) {
         _viewModel = StateObject(wrappedValue: SheikhDetailViewModel(sheikh: sheikh, coordinator: coordinator))
@@ -21,6 +22,7 @@ struct SheikhDetailView: View {
             ShortsPlayerView(
                 videos: $viewModel.shorts,
                 startIndex: viewModel.shortsStartIndex,
+                sheikh: viewModel.sheikh,
                 onLoadMore: { viewModel.loadMoreShorts() }
             )
         }
@@ -34,9 +36,17 @@ extension SheikhDetailView {
     var mainContent: some View {
         VStack(spacing: 0) {
             navBar
-            SheikhHeaderView(sheikh: viewModel.sheikh)
-            tabPicker
-            tabContent
+            ScrollView(.vertical, showsIndicators: false) {
+                LazyVStack(pinnedViews: [.sectionHeaders]) {
+                    SheikhHeaderView(sheikh: viewModel.sheikh)
+                    Section {
+                        tabContent
+                    } header: {
+                        tabPicker
+                            .customBackground(.background)
+                    }
+                }
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .customBackground(.background)
@@ -49,20 +59,25 @@ extension SheikhDetailView {
 
     var navBar: some View {
         HStack {
-            BackButton(foregroundColor: .onSurface)
+            Button { dismiss() } label: {
+                Image(systemName: "arrow.backward")
+                    .font(.system(size: 18, weight: .medium))
+                    .customForeground(.onSurface)
+                    .frame(width: 36, height: 36)
+            }
             Spacer()
             Text(viewModel.sheikh.name)
                 .customStyle(.subheadline, .onSurface)
                 .lineLimit(1)
             Spacer()
-            Color.clear.frame(width: 32, height: 32)
+            Color.clear.frame(width: 36, height: 36)
         }
         .padding(.horizontal, .big)
         .padding(.vertical, .sm)
     }
 }
 
-// MARK: - Tab Picker (scrollable, YouTube-style underline)
+// MARK: - Tab Picker (sticky, YouTube-style underline)
 
 extension SheikhDetailView {
 
@@ -87,7 +102,7 @@ extension SheikhDetailView {
             viewModel.onTabSelected(tab)
         } label: {
             VStack(spacing: 0) {
-                Text(tab.rawValue)
+                Text(tab.localizedTitle)
                     .customStyle(isSelected ? .subheadline : .bodySmall)
                     .customForeground(isSelected ? .secondary : .subtitle)
                     .padding(.vertical, 12)
@@ -121,8 +136,10 @@ extension SheikhDetailView {
     // MARK: Playlists
 
     var playlistsTab: some View {
-        NoIndicatorsScrollView {
-            LazyVStack(spacing: 8) {
+        LazyVStack(spacing: 20) {
+            if viewModel.isLoadingPlaylists && viewModel.playlists.isEmpty {
+                ForEach(0..<4, id: \.self) { _ in playlistShimmer }
+            } else {
                 ForEach(viewModel.playlists) { playlist in
                     PlaylistCardView(playlist: playlist)
                         .onTapGesture { viewModel.onPlaylistTapped(playlist) }
@@ -133,19 +150,21 @@ extension SheikhDetailView {
                     loadMore: viewModel.loadMorePlaylists
                 )
                 if !viewModel.isLoadingPlaylists && viewModel.playlists.isEmpty {
-                    emptyState(text: "لا توجد قوائم تشغيل")
+                    emptyState(text: AppLocalizedKeys.emptyPlaylists.value)
                 }
             }
-            .padding(.top, 8)
-            .padding(.bottom, 32)
         }
+        .padding(.top, 16)
+        .padding(.bottom, 40)
     }
 
     // MARK: Videos
 
     var videosTab: some View {
-        NoIndicatorsScrollView {
-            LazyVStack(spacing: 8) {
+        LazyVStack(spacing: 20) {
+            if viewModel.isLoadingVideos && viewModel.videos.isEmpty {
+                ForEach(0..<4, id: \.self) { _ in videoShimmer }
+            } else {
                 ForEach(viewModel.videos) { video in
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
@@ -156,22 +175,23 @@ extension SheikhDetailView {
                     loadMore: viewModel.loadMoreVideos
                 )
                 if !viewModel.isLoadingVideos && viewModel.videos.isEmpty {
-                    emptyState(text: "لا توجد فيديوهات")
+                    emptyState(text: AppLocalizedKeys.emptyVideos.value)
                 }
             }
-            .padding(.top, 8)
-            .padding(.bottom, 32)
         }
+        .padding(.top, 16)
+        .padding(.bottom, 40)
     }
 
     // MARK: Shorts
 
     var shortsTab: some View {
-        NoIndicatorsScrollView {
-            LazyVStack(spacing: 8) {
-                ForEach(viewModel.shorts) { video in
-                    VideoCardView(video: video)
-                        .onTapGesture { viewModel.onShortTapped(video) }
+        VStack(spacing: 12) {
+            if viewModel.isLoadingShorts && viewModel.shorts.isEmpty {
+                ForEach(0..<3, id: \.self) { _ in shortsRowShimmer }
+            } else {
+                ForEach(Array(stride(from: 0, to: viewModel.shorts.count, by: 2)), id: \.self) { i in
+                    shortsRow(at: i)
                 }
                 paginationTrigger(
                     isLoading: viewModel.isLoadingShorts,
@@ -179,19 +199,39 @@ extension SheikhDetailView {
                     loadMore: viewModel.loadMoreShorts
                 )
                 if !viewModel.isLoadingShorts && viewModel.shorts.isEmpty {
-                    emptyState(text: "لا توجد شورتس")
+                    emptyState(text: AppLocalizedKeys.emptyShorts.value)
                 }
             }
-            .padding(.top, 8)
-            .padding(.bottom, 32)
+        }
+        .padding(.horizontal, .big)
+        .padding(.top, 16)
+        .padding(.bottom, 40)
+    }
+
+    @ViewBuilder
+    private func shortsRow(at i: Int) -> some View {
+        HStack(alignment: .top, spacing: 12) {
+            let left = viewModel.shorts[i]
+            ShortsCardView(video: left)
+                .onTapGesture { viewModel.onShortTapped(left) }
+
+            if i + 1 < viewModel.shorts.count {
+                let right = viewModel.shorts[i + 1]
+                ShortsCardView(video: right)
+                    .onTapGesture { viewModel.onShortTapped(right) }
+            } else {
+                Color.clear
+            }
         }
     }
 
     // MARK: Podcasts
 
     var podcastsTab: some View {
-        NoIndicatorsScrollView {
-            LazyVStack(spacing: 8) {
+        LazyVStack(spacing: 20) {
+            if viewModel.isLoadingPodcasts && viewModel.podcasts.isEmpty {
+                ForEach(0..<4, id: \.self) { _ in videoShimmer }
+            } else {
                 ForEach(viewModel.podcasts) { video in
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
@@ -202,19 +242,21 @@ extension SheikhDetailView {
                     loadMore: viewModel.loadMorePodcasts
                 )
                 if !viewModel.isLoadingPodcasts && viewModel.podcasts.isEmpty {
-                    emptyState(text: "لا توجد بودكاست")
+                    emptyState(text: AppLocalizedKeys.emptyPodcasts.value)
                 }
             }
-            .padding(.top, 8)
-            .padding(.bottom, 32)
         }
+        .padding(.top, 16)
+        .padding(.bottom, 40)
     }
 
     // MARK: Live
 
     var liveTab: some View {
-        NoIndicatorsScrollView {
-            LazyVStack(spacing: 8) {
+        LazyVStack(spacing: 20) {
+            if viewModel.isLoadingLive && viewModel.liveVideos.isEmpty {
+                ForEach(0..<4, id: \.self) { _ in videoShimmer }
+            } else {
                 ForEach(viewModel.liveVideos) { video in
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
@@ -225,12 +267,12 @@ extension SheikhDetailView {
                     loadMore: viewModel.loadMoreLive
                 )
                 if !viewModel.isLoadingLive && viewModel.liveVideos.isEmpty {
-                    emptyState(text: "لا توجد بثوث مباشرة")
+                    emptyState(text: AppLocalizedKeys.emptyLive.value)
                 }
             }
-            .padding(.top, 8)
-            .padding(.bottom, 32)
         }
+        .padding(.top, 16)
+        .padding(.bottom, 40)
     }
 
     // MARK: Shared Helpers
@@ -255,5 +297,88 @@ extension SheikhDetailView {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 60)
+    }
+}
+
+// MARK: - Shimmer Placeholders
+
+extension SheikhDetailView {
+
+    // Playlist card skeleton — mirrors PlaylistCardView (4:3 + 2 text lines)
+    var playlistShimmer: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            RoundedRectangle(cornerRadius: 16)
+                .customFill(.container)
+                .aspectRatio(4 / 3, contentMode: .fit)
+                .withShimmerOverlay().redacted(reason: .placeholder)
+
+            VStack(alignment: .leading, spacing: 8) {
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(maxWidth: .infinity).frame(height: 22)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(maxWidth: .infinity).frame(height: 16)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+            }
+            .padding(.horizontal, 2)
+        }
+        .padding(.horizontal, .big)
+        .padding(.bottom, 12)
+    }
+
+    // Video / podcast / live card skeleton — mirrors VideoCardView (4:3 + title + subtitle)
+    var videoShimmer: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            RoundedRectangle(cornerRadius: 16)
+                .customFill(.container)
+                .aspectRatio(4 / 3, contentMode: .fit)
+                .withShimmerOverlay().redacted(reason: .placeholder)
+
+            VStack(alignment: .leading, spacing: 8) {
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(maxWidth: .infinity).frame(height: 22)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+
+                RoundedRectangle(cornerRadius: 4)
+                    .customFill(.container)
+                    .frame(width: 160).frame(height: 14)
+                    .withShimmerOverlay().redacted(reason: .placeholder)
+            }
+            .padding(.horizontal, 2)
+        }
+        .padding(.horizontal, .big)
+        .padding(.bottom, 12)
+    }
+
+    // Shorts row skeleton — 2 side-by-side short card shapes (9:16 + 2 text lines)
+    var shortsRowShimmer: some View {
+        HStack(alignment: .top, spacing: 12) {
+            shortCardShimmer
+            shortCardShimmer
+        }
+    }
+
+    private var shortCardShimmer: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            RoundedRectangle(cornerRadius: 10)
+                .customFill(.container)
+                .aspectRatio(9 / 16, contentMode: .fit)
+                .withShimmerOverlay().redacted(reason: .placeholder)
+
+            RoundedRectangle(cornerRadius: 4)
+                .customFill(.container)
+                .frame(maxWidth: .infinity).frame(height: 14)
+                .withShimmerOverlay().redacted(reason: .placeholder)
+
+            RoundedRectangle(cornerRadius: 4)
+                .customFill(.container)
+                .frame(width: 70).frame(height: 12)
+                .withShimmerOverlay().redacted(reason: .placeholder)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

@@ -45,7 +45,7 @@ extension SheikhListView {
 extension SheikhListView {
 
     var navBar: some View {
-        Text("lessons.islamicLessons".localized)
+        Text(AppLocalizedKeys.islamicLessonsTitle.value)
             .customStyle(.subheadline, .onSurface)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, .big)
@@ -89,10 +89,10 @@ extension SheikhListView {
 
     var heroSection: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text("lessons.exploreThe".localized)
+            Text(AppLocalizedKeys.exploreThe.value)
                 .font(.system(size: 34, weight: .bold))
                 .customForeground(.onSurface)
-            Text("lessons.wisdom".localized)
+            Text(AppLocalizedKeys.wisdomWord.value)
                 .font(.system(size: 34, weight: .bold).italic())
                 .foregroundColor(Color.hadithGold)
         }
@@ -107,7 +107,7 @@ extension SheikhListView {
             Image(systemName: "magnifyingglass")
                 .customForeground(.subtitle)
                 .font(.system(size: 15))
-            TextField("lessons.searchPlaceholder".localized, text: $viewModel.searchText)
+            TextField(AppLocalizedKeys.searchSheikh.value, text: $viewModel.searchText)
                 .font(.system(size: 15))
                 .customForeground(.onSurface)
         }
@@ -161,7 +161,7 @@ extension SheikhListView {
                 .font(.system(size: 36))
                 .customForeground(.subtitle)
                 .padding(.top, 60)
-            Text("lessons.emptyFilter".localized)
+            Text(AppLocalizedKeys.emptySpecialty.value)
                 .customStyle(.bodySmall, .subtitle)
         }
         .frame(maxWidth: .infinity)
@@ -241,7 +241,7 @@ extension SheikhListView {
             Button {
                 viewModel.refreshData()
             } label: {
-                Text("lessons.retry".localized)
+                Text(AppLocalizedKeys.retryAction.value)
                     .customStyle(.subheadline, .onPrimary)
                     .padding(.horizontal, 24)
                     .padding(.vertical, 10)

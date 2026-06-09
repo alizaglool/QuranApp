@@ -44,7 +44,8 @@ final class YouTubeContentService {
                 id: item.id,
                 title: snippet.title ?? "",
                 thumbnailUrl: thumbnail,
-                itemCount: item.contentDetails?.itemCount ?? 0
+                itemCount: item.contentDetails?.itemCount ?? 0,
+                description: snippet.description ?? ""
             )
         }
 
@@ -107,7 +108,7 @@ final class YouTubeContentService {
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(YouTubeSearchResponse.self, from: data)
 
-        let videos = decoded.items.compactMap { item -> LessonVideo? in
+        let rawLive = decoded.items.compactMap { item -> LessonVideo? in
             guard
                 let videoId = item.id.videoId,
                 let snippet = item.snippet
@@ -128,7 +129,8 @@ final class YouTubeContentService {
             )
         }
 
-        return (videos, decoded.nextPageToken)
+        let enrichedLive = await enrichWithDetails(rawLive)
+        return (enrichedLive, decoded.nextPageToken)
     }
 
     // MARK: Playlist Items
@@ -151,7 +153,7 @@ final class YouTubeContentService {
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(YouTubePlaylistItemsResponse.self, from: data)
 
-        let videos = decoded.items.compactMap { item -> LessonVideo? in
+        let rawItems = decoded.items.compactMap { item -> LessonVideo? in
             guard
                 let snippet = item.snippet,
                 let videoId = snippet.resourceId?.videoId,
@@ -173,7 +175,67 @@ final class YouTubeContentService {
             )
         }
 
-        return (videos, decoded.nextPageToken)
+        let enrichedItems = await enrichWithDetails(rawItems)
+        return (enrichedItems, decoded.nextPageToken)
+    }
+
+    // MARK: Video Details Enrichment
+
+    func enrichWithDetails(_ videos: [LessonVideo]) async -> [LessonVideo] {
+        guard !videos.isEmpty else { return videos }
+        let ids = videos.map { $0.id }.joined(separator: ",")
+        var components = URLComponents(string: "\(baseURL)/videos")!
+        components.queryItems = [
+            .init(name: "part", value: "contentDetails,statistics"),
+            .init(name: "id", value: ids),
+            .init(name: "key", value: apiKey)
+        ]
+        guard let url = components.url,
+              let (data, _) = try? await URLSession.shared.data(from: url),
+              let decoded = try? JSONDecoder().decode(YouTubeVideoDetailsResponse.self, from: data)
+        else { return videos }
+
+        var detailsMap: [String: (String?, Int?)] = [:]
+        for item in decoded.items {
+            let dur = item.contentDetails?.duration.flatMap { parseDuration($0) }
+            let views = item.statistics?.viewCount.flatMap { Int($0) }
+            detailsMap[item.id] = (dur, views)
+        }
+
+        return videos.map { video in
+            guard let details = detailsMap[video.id] else { return video }
+            return LessonVideo(
+                id: video.id,
+                title: video.title,
+                thumbnailUrl: video.thumbnailUrl,
+                publishedAt: video.publishedAt,
+                channelTitle: video.channelTitle,
+                isReel: video.isReel,
+                duration: details.0,
+                viewCount: details.1
+            )
+        }
+    }
+
+    private func parseDuration(_ iso: String) -> String? {
+        var hours = 0, minutes = 0, seconds = 0
+        var current = ""
+        for char in iso {
+            if char.isNumber {
+                current.append(char)
+            } else if char == "H" {
+                hours = Int(current) ?? 0; current = ""
+            } else if char == "M" {
+                minutes = Int(current) ?? 0; current = ""
+            } else if char == "S" {
+                seconds = Int(current) ?? 0; current = ""
+            }
+        }
+        guard hours > 0 || minutes > 0 || seconds > 0 else { return nil }
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+        }
+        return String(format: "%d:%02d", minutes, seconds)
     }
 
     // MARK: Private
@@ -204,7 +266,7 @@ final class YouTubeContentService {
         let (data, _) = try await URLSession.shared.data(from: url)
         let decoded = try JSONDecoder().decode(YouTubeSearchResponse.self, from: data)
 
-        let videos = decoded.items.compactMap { item -> LessonVideo? in
+        let raw = decoded.items.compactMap { item -> LessonVideo? in
             guard
                 let videoId = item.id.videoId,
                 let snippet = item.snippet
@@ -225,7 +287,8 @@ final class YouTubeContentService {
             )
         }
 
-        return (videos, decoded.nextPageToken)
+        let enriched = await enrichWithDetails(raw)
+        return (enriched, decoded.nextPageToken)
     }
 }
 
@@ -242,6 +305,7 @@ private struct YouTubePlaylistResponse: Decodable {
 
         struct Snippet: Decodable {
             let title: String?
+            let description: String?
             let thumbnails: Thumbnails?
         }
 
@@ -299,5 +363,23 @@ private struct Thumbnails: Decodable {
 
     struct ThumbnailEntry: Decodable {
         let url: String?
+    }
+}
+
+private struct YouTubeVideoDetailsResponse: Decodable {
+    let items: [VideoItem]
+
+    struct VideoItem: Decodable {
+        let id: String
+        let contentDetails: ContentDetails?
+        let statistics: Statistics?
+
+        struct ContentDetails: Decodable {
+            let duration: String?
+        }
+
+        struct Statistics: Decodable {
+            let viewCount: String?
+        }
     }
 }

@@ -219,3 +219,35 @@
 "lessons.retry" = "إعادة المحاولة";
 "lessons.errorMessage" = "تعذّر تحميل المشايخ، تحقق من الاتصال وأعد المحاولة.";
 "lessons.emptyFilter" = "لا يوجد مشايخ في هذا التخصص";
+
+"islamicLessonsTitle" = "الدروس الإسلامية";
+"exploreThe" = "استكشف";
+"wisdomWord" = "الحكمة";
+"searchSheikh" = "ابحث عن شيخ أو تخصص...";
+"filterAllSheikhs" = "الكل";
+"filterTafsir" = "تفسير";
+"filterFiqh" = "فقه";
+"filterHadith" = "حديث";
+"filterSeerah" = "سيرة";
+"lessonsCount" = "درس";
+"retryAction" = "إعادة المحاولة";
+"lessonsLoadError" = "تعذّر تحميل المشايخ، تحقق من الاتصال وأعد المحاولة.";
+"emptySpecialty" = "لا يوجد مشايخ في هذا التخصص";
+
+"detailTabPlaylists" = "قوائم التشغيل";
+"detailTabVideos" = "فيديوهات";
+"detailTabShorts" = "مقاطع قصيرة";
+"detailTabPodcasts" = "بودكاست";
+"detailTabLive" = "مباشر";
+"emptyPlaylists" = "لا توجد قوائم تشغيل";
+"emptyVideos" = "لا توجد فيديوهات";
+"emptyShorts" = "لا توجد مقاطع قصيرة";
+"emptyPodcasts" = "لا توجد بودكاست";
+"emptyLive" = "لا توجد بثوث مباشرة";
+"nowPlaying" = "يُشغَّل الآن";
+"lessonsInSeries" = "دروس هذه السلسلة";
+"playlistDownload" = "تنزيل";
+"playlistSave" = "حفظ";
+"playlistNotes" = "ملاحظات";
+"relatedLessons" = "دروس ذات صلة";
+"originalSound" = "صوت أصلي";

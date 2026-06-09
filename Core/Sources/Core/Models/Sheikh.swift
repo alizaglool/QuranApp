@@ -9,6 +9,7 @@ public struct Sheikh: Identifiable, Codable, Equatable, Sendable {
     public let id: String
     public let name: String
     public let thumbnailUrl: String
+    public let bannerImageUrl: String
     public let subscriberCount: Int
     public let videoCount: Int
     public let channelHandle: String
@@ -18,6 +19,7 @@ public struct Sheikh: Identifiable, Codable, Equatable, Sendable {
         id: String,
         name: String,
         thumbnailUrl: String,
+        bannerImageUrl: String = "",
         subscriberCount: Int,
         videoCount: Int,
         channelHandle: String,
@@ -26,6 +28,7 @@ public struct Sheikh: Identifiable, Codable, Equatable, Sendable {
         self.id = id
         self.name = name
         self.thumbnailUrl = thumbnailUrl
+        self.bannerImageUrl = bannerImageUrl
         self.subscriberCount = subscriberCount
         self.videoCount = videoCount
         self.channelHandle = channelHandle

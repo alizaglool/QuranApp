@@ -219,3 +219,35 @@
 "lessons.retry" = "Retry";
 "lessons.errorMessage" = "Failed to load sheikhs. Check your connection and try again.";
 "lessons.emptyFilter" = "No sheikhs found for this specialty";
+
+"islamicLessonsTitle" = "Islamic Lessons";
+"exploreThe" = "Explore the";
+"wisdomWord" = "Wisdom";
+"searchSheikh" = "Search by Sheikh or specialty...";
+"filterAllSheikhs" = "ALL SHEIKHS";
+"filterTafsir" = "TAFSIR";
+"filterFiqh" = "FIQH";
+"filterHadith" = "HADITH";
+"filterSeerah" = "SEERAH";
+"lessonsCount" = "Lessons";
+"retryAction" = "Retry";
+"lessonsLoadError" = "Failed to load sheikhs. Check your connection and try again.";
+"emptySpecialty" = "No sheikhs found for this specialty";
+
+"detailTabPlaylists" = "Playlists";
+"detailTabVideos" = "Videos";
+"detailTabShorts" = "Shorts";
+"detailTabPodcasts" = "Podcasts";
+"detailTabLive" = "Live";
+"emptyPlaylists" = "No playlists available";
+"emptyVideos" = "No videos available";
+"emptyShorts" = "No shorts available";
+"emptyPodcasts" = "No podcasts available";
+"emptyLive" = "No live streams available";
+"nowPlaying" = "NOW PLAYING";
+"lessonsInSeries" = "Lessons in this Series";
+"playlistDownload" = "Download";
+"playlistSave" = "Save";
+"playlistNotes" = "Notes";
+"relatedLessons" = "Related Lessons";
+"originalSound" = "Original Sound";

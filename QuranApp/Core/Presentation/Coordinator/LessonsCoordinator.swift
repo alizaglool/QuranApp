@@ -16,7 +16,8 @@ protocol LessonsCoordinating: AnyObject {
         source: LessonPlayerViewModel.PlayerSource,
         title: String,
         sheikhName: String,
-        playerType: LessonPlayerViewModel.PlayerType
+        playerType: LessonPlayerViewModel.PlayerType,
+        relatedVideos: [LessonVideo]
     )
     func coordinateBack()
 }
@@ -61,9 +62,16 @@ final class LessonsCoordinator: MainCoordinator, LessonsCoordinating {
         source: LessonPlayerViewModel.PlayerSource,
         title: String,
         sheikhName: String,
-        playerType: LessonPlayerViewModel.PlayerType = .regular
+        playerType: LessonPlayerViewModel.PlayerType = .regular,
+        relatedVideos: [LessonVideo] = []
     ) {
-        let view = LessonPlayerView(source: source, title: title, sheikhName: sheikhName, playerType: playerType)
+        let view = LessonPlayerView(
+            source: source,
+            title: title,
+            sheikhName: sheikhName,
+            playerType: playerType,
+            relatedVideos: relatedVideos
+        )
         let vc = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)

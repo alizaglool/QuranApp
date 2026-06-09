@@ -150,6 +150,40 @@ enum AppLocalizedKeys: String {
     case playbackSpeed
     case pausePlayer
 
+    // MARK: - Lessons Feature
+    case islamicLessonsTitle
+    case exploreThe
+    case wisdomWord
+    case searchSheikh
+    case filterAllSheikhs
+    case filterTafsir
+    case filterFiqh
+    case filterHadith
+    case filterSeerah
+    case lessonsCount
+    case retryAction
+    case lessonsLoadError
+    case emptySpecialty
+
+    // MARK: - Sheikh Detail Tabs
+    case detailTabPlaylists
+    case detailTabVideos
+    case detailTabShorts
+    case detailTabPodcasts
+    case detailTabLive
+    case emptyPlaylists
+    case emptyVideos
+    case emptyShorts
+    case emptyPodcasts
+    case emptyLive
+    case nowPlaying
+    case lessonsInSeries
+    case playlistDownload
+    case playlistSave
+    case playlistNotes
+    case relatedLessons
+    case originalSound
+
     // MARK: - Search
     case searchQuran
 
