@@ -16,6 +16,10 @@ final class AdhkarCategoriesViewModel: MainViewModel {
     @Published var moreCategories: [DhikrCategory] = []
     @Published var allahNames: [AllahName] = []
 
+    private var conditionalCategories: [DhikrCategory] = []
+    private let visibilityService = DhikrVisibilityService()
+    private var refreshTask: Task<Void, Never>?
+
     var isTabBarVisible: Bool { true }
 
     var hasSpecialContent: Bool { !specialCategories.isEmpty }
@@ -39,9 +43,17 @@ final class AdhkarCategoriesViewModel: MainViewModel {
     }
 
     func onAppear() {
-        guard dailyCategories.isEmpty else { return }
-        loadCategories()
-        loadAllahNames()
+        if dailyCategories.isEmpty {
+            loadCategories()
+            loadAllahNames()
+        }
+        refreshSpecialCategories()
+        startVisibilityRefresh()
+    }
+
+    func onDisappear() {
+        refreshTask?.cancel()
+        refreshTask = nil
     }
 
     private func loadCategories() {
@@ -49,13 +61,9 @@ final class AdhkarCategoriesViewModel: MainViewModel {
               let data = try? Data(contentsOf: url),
               let decoded = try? JSONDecoder().decode([DhikrCategory].self, from: data) else { return }
 
-        let today = Date()
         dailyCategories = decoded.filter { ($0.section ?? "daily") == "daily" }
         moreCategories = decoded.filter { $0.section == "more" }
-        specialCategories = decoded.filter { $0.section == "special" }.filter { cat in
-            guard let condition = cat.condition else { return true }
-            return satisfiesCondition(condition, on: today)
-        }
+        conditionalCategories = decoded.filter { $0.section == "special" }
     }
 
     private func loadAllahNames() {
@@ -65,20 +73,24 @@ final class AdhkarCategoriesViewModel: MainViewModel {
         allahNames = decoded
     }
 
-    private func satisfiesCondition(_ condition: String, on date: Date) -> Bool {
-        switch condition {
-        case "dhul_hijjah_1_10":
-            return isDhulHijjahFirstTenDays(date)
-        default:
-            return true
+    private func refreshSpecialCategories() {
+        let now = Date()
+        let visible = conditionalCategories.filter { category in
+            guard let condition = category.condition else { return true }
+            return visibilityService.isOpen(condition: condition, on: now)
         }
+        guard visible != specialCategories else { return }
+        specialCategories = visible
     }
 
-    private func isDhulHijjahFirstTenDays(_ date: Date) -> Bool {
-        let hijriCalendar = Calendar(identifier: .islamicUmmAlQura)
-        let components = hijriCalendar.dateComponents([.month, .day], from: date)
-        let month = components.month ?? 0
-        let day = components.day ?? 0
-        return month == 12 && day >= 1 && day <= 10
+    private func startVisibilityRefresh() {
+        guard refreshTask == nil else { return }
+        refreshTask = Task { [weak self] in
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 60_000_000_000)
+                guard !Task.isCancelled else { return }
+                self?.refreshSpecialCategories()
+            }
+        }
     }
 }

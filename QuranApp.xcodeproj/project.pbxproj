@@ -88,6 +88,19 @@
 		F82FA2D42FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */; };
 		F82FA2D52FC1DF9800E60E39 /* AdhkarReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */; };
 		F82FA2D62FC1DF9800E60E39 /* AdhkarModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2CB2FC1DF9800E60E39 /* AdhkarModels.swift */; };
+		FADC00012FC5A00000DC0001 /* MyDhikr.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00012FC5A00000DB0001 /* MyDhikr.swift */; };
+		FADC000B2FC5A00000DC000B /* DhikrAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */; };
+		FADC000C2FC5A00000DC000C /* DhikrCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000C2FC5A00000DB000C /* DhikrCondition.swift */; };
+		FADC000D2FC5A00000DC000D /* DhikrVisibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */; };
+		FADC00022FC5A00000DC0002 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00022FC5A00000DB0002 /* SectionHeader.swift */; };
+		FADC00032FC5A00000DC0003 /* AdhkarQuickCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */; };
+		FADC00042FC5A00000DC0004 /* SpecialCategoryBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */; };
+		FADC00052FC5A00000DC0005 /* AdhkarCategoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */; };
+		FADC00062FC5A00000DC0006 /* AllahNameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00062FC5A00000DB0006 /* AllahNameCard.swift */; };
+		FADC00072FC5A00000DC0007 /* NamePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00072FC5A00000DB0007 /* NamePageView.swift */; };
+		FADC00082FC5A00000DC0008 /* MyAdhkarCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */; };
+		FADC00092FC5A00000DC0009 /* MyAdhkarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */; };
+		FADC000A2FC5A00000DC000A /* TasbihCounterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */; };
 		F82FA2E02FC1DFA200E60E39 /* HadithModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F82FA2D72FC1DFA200E60E39 /* HadithModels.swift */; };
 		F843B1A62DF06337005F6CCC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F843B1A12DF06337005F6CCC /* Localizable.strings */; };
 		F843B1A72DF06337005F6CCC /* AppLocalizedKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = F843B1A42DF06337005F6CCC /* AppLocalizedKeys.swift */; };
@@ -256,6 +269,19 @@
 		F800B8A72DBF6C980035501A /* DeviceTokenManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTokenManager.swift; sourceTree = "<group>"; };
 		F808A68C98A9446AA043E310 /* SheikhListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhListView.swift; sourceTree = "<group>"; };
 		F82FA2CB2FC1DF9800E60E39 /* AdhkarModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarModels.swift; sourceTree = "<group>"; };
+		FADB00012FC5A00000DB0001 /* MyDhikr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDhikr.swift; sourceTree = "<group>"; };
+		FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrAudioService.swift; sourceTree = "<group>"; };
+		FADB000C2FC5A00000DB000C /* DhikrCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrCondition.swift; sourceTree = "<group>"; };
+		FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrVisibilityService.swift; sourceTree = "<group>"; };
+		FADB00022FC5A00000DB0002 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarQuickCard.swift; sourceTree = "<group>"; };
+		FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialCategoryBanner.swift; sourceTree = "<group>"; };
+		FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoryCard.swift; sourceTree = "<group>"; };
+		FADB00062FC5A00000DB0006 /* AllahNameCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNameCard.swift; sourceTree = "<group>"; };
+		FADB00072FC5A00000DB0007 /* NamePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamePageView.swift; sourceTree = "<group>"; };
+		FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarCard.swift; sourceTree = "<group>"; };
+		FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarViewModel.swift; sourceTree = "<group>"; };
+		FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihCounterViewModel.swift; sourceTree = "<group>"; };
 		F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoriesView.swift; sourceTree = "<group>"; };
 		F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoriesViewModel.swift; sourceTree = "<group>"; };
 		F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarReadingView.swift; sourceTree = "<group>"; };
@@ -754,18 +780,46 @@
 			path = Storage;
 			sourceTree = "<group>";
 		};
-		F82FA2CC2FC1DF9800E60E39 /* Model */ = {
+		F82FA2CC2FC1DF9800E60E39 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				F82FA2CB2FC1DF9800E60E39 /* AdhkarModels.swift */,
+				FADB00012FC5A00000DB0001 /* MyDhikr.swift */,
+				FADB000C2FC5A00000DB000C /* DhikrCondition.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		F82FA2D12FC1DF9800E60E39 /* Adhkar */ = {
 			isa = PBXGroup;
 			children = (
-				F82FA2CC2FC1DF9800E60E39 /* Model */,
+				FADA00012FC5A00000DA0001 /* Data */,
+				FADA00022FC5A00000DA0002 /* Presentation */,
+			);
+			path = Adhkar;
+			sourceTree = "<group>";
+		};
+		FADA00012FC5A00000DA0001 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CC2FC1DF9800E60E39 /* Models */,
+				FADA00102FC5A00000DA0010 /* Service */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		FADA00102FC5A00000DA0010 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */,
+				FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		FADA00022FC5A00000DA0002 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
 				F9BB00012F71800000BB0001 /* Categories */,
 				F9BB00022F71800000BB0002 /* Reading */,
 				F9BB00032F71800000BB0003 /* AllahNames */,
@@ -773,7 +827,7 @@
 				F9BB00052F71800000BB0005 /* Tasbih */,
 				F9BB00062F71800000BB0006 /* LovedOnes */,
 			);
-			path = Adhkar;
+			path = Presentation;
 			sourceTree = "<group>";
 		};
 		F82FA2D82FC1DFA200E60E39 /* Model */ = {
@@ -984,52 +1038,165 @@
 		F9BB00012F71800000BB0001 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */,
-				F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */,
+				FADA00032FC5A00000DA0003 /* View */,
+				FADA00052FC5A00000DA0005 /* ViewModel */,
 			);
 			path = Categories;
+			sourceTree = "<group>";
+		};
+		FADA00032FC5A00000DA0003 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */,
+				FADA00042FC5A00000DA0004 /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00042FC5A00000DA0004 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */,
+				FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */,
+				FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */,
+				FADB00022FC5A00000DB0002 /* SectionHeader.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FADA00052FC5A00000DA0005 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		F9BB00022F71800000BB0002 /* Reading */ = {
 			isa = PBXGroup;
 			children = (
-				F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */,
-				F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */,
+				FADA00062FC5A00000DA0006 /* View */,
+				FADA00072FC5A00000DA0007 /* ViewModel */,
 			);
 			path = Reading;
+			sourceTree = "<group>";
+		};
+		FADA00062FC5A00000DA0006 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00072FC5A00000DA0007 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		F9BB00032F71800000BB0003 /* AllahNames */ = {
 			isa = PBXGroup;
 			children = (
-				F9AA00002F71800000AA0001 /* AllahNamesView.swift */,
-				F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */,
+				FADA00082FC5A00000DA0008 /* View */,
 			);
 			path = AllahNames;
+			sourceTree = "<group>";
+		};
+		FADA00082FC5A00000DA0008 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00002F71800000AA0001 /* AllahNamesView.swift */,
+				F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */,
+				FADA00092FC5A00000DA0009 /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00092FC5A00000DA0009 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00062FC5A00000DB0006 /* AllahNameCard.swift */,
+				FADB00072FC5A00000DB0007 /* NamePageView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		F9BB00042F71800000BB0004 /* MyAdhkar */ = {
 			isa = PBXGroup;
 			children = (
-				F9AA00022F71800000AA0002 /* MyAdhkarView.swift */,
+				FADA000A2FC5A00000DA000A /* View */,
+				FADA000C2FC5A00000DA000C /* ViewModel */,
 			);
 			path = MyAdhkar;
+			sourceTree = "<group>";
+		};
+		FADA000A2FC5A00000DA000A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00022F71800000AA0002 /* MyAdhkarView.swift */,
+				FADA000B2FC5A00000DA000B /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA000B2FC5A00000DA000B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FADA000C2FC5A00000DA000C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		F9BB00052F71800000BB0005 /* Tasbih */ = {
 			isa = PBXGroup;
 			children = (
-				F9AA00072F71800000AA0007 /* TasbihCounterView.swift */,
+				FADA000D2FC5A00000DA000D /* View */,
+				FADA000E2FC5A00000DA000E /* ViewModel */,
 			);
 			path = Tasbih;
+			sourceTree = "<group>";
+		};
+		FADA000D2FC5A00000DA000D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00072F71800000AA0007 /* TasbihCounterView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA000E2FC5A00000DA000E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 		F9BB00062F71800000BB0006 /* LovedOnes */ = {
 			isa = PBXGroup;
 			children = (
-				F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */,
+				FADA000F2FC5A00000DA000F /* View */,
 			);
 			path = LovedOnes;
+			sourceTree = "<group>";
+		};
+		FADA000F2FC5A00000DA000F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		F9CC00112F71900000CC0011 /* Service */ = {
@@ -1282,6 +1449,19 @@
 				F82FA2D42FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift in Sources */,
 				F82FA2D52FC1DF9800E60E39 /* AdhkarReadingViewModel.swift in Sources */,
 				F82FA2D62FC1DF9800E60E39 /* AdhkarModels.swift in Sources */,
+				FADC00012FC5A00000DC0001 /* MyDhikr.swift in Sources */,
+				FADC000B2FC5A00000DC000B /* DhikrAudioService.swift in Sources */,
+				FADC000C2FC5A00000DC000C /* DhikrCondition.swift in Sources */,
+				FADC000D2FC5A00000DC000D /* DhikrVisibilityService.swift in Sources */,
+				FADC00022FC5A00000DC0002 /* SectionHeader.swift in Sources */,
+				FADC00032FC5A00000DC0003 /* AdhkarQuickCard.swift in Sources */,
+				FADC00042FC5A00000DC0004 /* SpecialCategoryBanner.swift in Sources */,
+				FADC00052FC5A00000DC0005 /* AdhkarCategoryCard.swift in Sources */,
+				FADC00062FC5A00000DC0006 /* AllahNameCard.swift in Sources */,
+				FADC00072FC5A00000DC0007 /* NamePageView.swift in Sources */,
+				FADC00082FC5A00000DC0008 /* MyAdhkarCard.swift in Sources */,
+				FADC00092FC5A00000DC0009 /* MyAdhkarViewModel.swift in Sources */,
+				FADC000A2FC5A00000DC000A /* TasbihCounterViewModel.swift in Sources */,
 				F9AA00012F71800000AA0001 /* AllahNamesView.swift in Sources */,
 				F9AA00102F71800000AA0010 /* AllahNameReadingView.swift in Sources */,
 				F8B854DD2FCB4BD7007666A5 /* DailyVerseService.swift in Sources */,

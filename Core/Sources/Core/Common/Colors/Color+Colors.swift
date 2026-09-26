@@ -113,3 +113,14 @@ public extension Color {
     static let hadithRed        = Color(hex: "E84D3D")
     static let hadithOrange     = Color(hex: "E67D21")
 }
+
+// Adhkar Reading
+public extension Color {
+
+    static let adhkarSurface            = Color(.adhkarSurface)
+    static let adhkarSurfaceTranslucent = Color(.adhkarSurfaceTranslucent)
+    static let adhkarHairline           = Color(.adhkarHairline)
+    static let adhkarRingTrack          = Color(.adhkarRingTrack)
+    static let adhkarShadow             = Color(.adhkarShadow)
+    static let adhkarWatermark          = Color(.adhkarWatermark)
+}

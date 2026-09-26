@@ -11,7 +11,6 @@ import Core
 struct AdhkarReadingView: View {
 
     @StateObject private var viewModel: AdhkarReadingViewModel
-    @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var localizationManager: LocalizationManager
 
     @State private var tapPulse: Bool = false
@@ -50,6 +49,7 @@ struct AdhkarReadingView: View {
 
                 VStack(spacing: 0) {
                     readingNavigationBar
+                    readingProgressBar
 
                     if viewModel.isComplete {
                         completionView
@@ -82,30 +82,42 @@ extension AdhkarReadingView {
 
             Spacer()
 
-            Text(AppLocalizedKeys.adhkar.value)
+            Text(displayTitle)
                 .customStyle(.adhkar(size: 22, bold: true), .primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
 
             Spacer()
 
-            HStack(spacing: 4) {
-                if viewModel.hasAudio {
-                    navIconButton(
-                        systemName: viewModel.isPlaying ? "speaker.slash" : "speaker.wave.2",
-                        isActive: viewModel.isPlaying,
-                        action: { viewModel.toggleAudio() }
-                    )
-                }
-                navIconButton(systemName: "bookmark", isActive: false, action: {})
-            }
+            navIconButton(systemName: "bookmark", isActive: false, action: {})
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .background(Color.background)
-        .overlay(alignment: .bottom) {
-            Rectangle()
-                .fill(ColorStyle.outlineVariant.color.opacity(0.15))
-                .frame(height: 0.5)
+    }
+
+    /// Reading progress for the whole category, sitting flush under the nav bar.
+    private var readingProgressBar: some View {
+        GeometryReader { geo in
+            ZStack(alignment: .leading) {
+                Rectangle()
+                    .fill(ColorStyle.outlineVariant.color.opacity(0.2))
+
+                Rectangle()
+                    .fill(progressGradient)
+                    .frame(width: geo.size.width * viewModel.overallProgress)
+                    .animation(.easeInOut(duration: 0.25), value: viewModel.overallProgress)
+            }
         }
+        .frame(height: 3)
+    }
+
+    private var progressGradient: LinearGradient {
+        LinearGradient(
+            colors: [ColorStyle.primary.color, ColorStyle.secondary.color],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
     }
 
     private func navIconButton(
@@ -129,133 +141,134 @@ extension AdhkarReadingView {
     private var dhikrScrollContent: some View {
         ScrollView(showsIndicators: false) {
             VStack(spacing: 0) {
-                categoryProgressHeader
-                    .padding(.horizontal, 24)
-                    .padding(.top, 20)
-                    .padding(.bottom, 28)
-
-                if let dhikr = viewModel.currentDhikr {
-                    dhikrContentCard(dhikr: dhikr)
-                        .id(viewModel.currentIndex)
-                        .transition(
-                            .asymmetric(
-                                insertion: .move(edge: slideEdge).combined(with: .opacity),
-                                removal: .move(edge: slideEdge == .trailing ? .leading : .trailing)
-                                    .combined(with: .opacity)
-                            )
+                dhikrContentCard
+                    .id(viewModel.currentIndex)
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: slideEdge).combined(with: .opacity),
+                            removal: .move(edge: slideEdge == .trailing ? .leading : .trailing)
+                                .combined(with: .opacity)
                         )
-                        .padding(.horizontal, 16)
-                }
+                    )
+                    .padding(.horizontal, 16)
+                    .padding(.top, 28)
 
                 Color.clear.frame(height: 160)
             }
         }
         .contentShape(Rectangle())
         .onTapGesture { handleAdvance() }
-        .gesture(swipeNavigationGesture)
-    }
-
-    private var categoryProgressHeader: some View {
-        HStack(alignment: .bottom, spacing: 0) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(AppLocalizedKeys.adhkar.value.uppercased())
-                    .customStyle(.adhkar(size: 10, bold: true), .outline)
-                    .kerning(2.4)
-
-                Text(displayTitle)
-                    .customStyle(.adhkar(size: 26), .onSurface)
-                    .lineLimit(2)
-            }
-
-            Spacer(minLength: 16)
-
-            VStack(alignment: .trailing, spacing: 6) {
-                Text(AppLocalizedKeys.progress.value.uppercased())
-                    .customStyle(.adhkar(size: 10, bold: true), .primary)
-                    .kerning(2.2)
-
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(en(viewModel.currentIndex + 1))
-                        .customStyle(.adhkar(size: 28), .onSurface)
-                        .monospacedDigit()
-                    Text("/ \(en(viewModel.category.adhkar.count))")
-                        .customStyle(.adhkar(size: 14), .outline)
-                        .monospacedDigit()
-                }
-            }
-        }
+        .simultaneousGesture(swipeNavigationGesture)
     }
 }
 
-// MARK: - Dhikr Content Card
+// MARK: - Dhikr Segments Content
 
 extension AdhkarReadingView {
 
-    private func dhikrContentCard(dhikr: Dhikr) -> some View {
-        let cardFill: Color = colorScheme == .dark
-            ? Color.surfaceContainerHigh
-            : Color.surfaceContainerLow
-        let borderColor: Color = colorScheme == .dark
-            ? Color.white.opacity(0.05)
-            : ColorStyle.primary.color.opacity(0.10)
-        let shadowColor: Color = colorScheme == .dark
-            ? Color.black.opacity(0.50)
-            : ColorStyle.primary.color.opacity(0.10)
+    private var dhikrSegmentsContent: some View {
+        let segments = viewModel.currentSegments
 
-        return VStack(spacing: 0) {
+        return VStack(spacing: 22) {
+            ForEach(segments.indices, id: \.self) { index in
+                segmentView(segments[index])
+            }
 
-            Text(quranAttributedText(dhikr.textAr))
-                .foregroundColor(ColorStyle.onSurface.color)
-                .multilineTextAlignment(.center)
-                .lineSpacing(20)
-                .lineLimit(nil)
-                .fixedSize(horizontal: false, vertical: true)
-                .environment(\.layoutDirection, .rightToLeft)
-                .frame(maxWidth: .infinity)
-                .padding(.bottom, 32)
+            if let repeatLabel = viewModel.repeatLabel, !repeatLabel.isEmpty {
+                segmentDivider
 
-            if let description = dhikr.description, !description.isEmpty {
-                Divider()
-                    .overlay(ColorStyle.outlineVariant.color.opacity(0.3))
-                    .padding(.bottom, 16)
-
-                Text(description)
-                    .customStyle(.adhkar(size: 15), .onSurfaceVariant)
-                    .multilineTextAlignment(isRightToLeft ? .trailing : .leading)
-                    .lineSpacing(7)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .frame(maxWidth: .infinity, alignment: isRightToLeft ? .trailing : .leading)
-                    .environment(\.layoutDirection, isRightToLeft ? .rightToLeft : .leftToRight)
+                arabicTextBlock(
+                    repeatLabel,
+                    style: .adhkar(size: 17),
+                    color: .onSurface,
+                    lineSpacing: 8
+                )
             }
         }
-        .padding(.horizontal, 28)
-        .padding(.vertical, 36)
         .frame(maxWidth: .infinity)
-        .overlay(alignment: .topTrailing) {
-            Image(systemName: viewModel.category.icon)
-                .font(.system(size: 120, weight: .thin))
-                .customForeground(.primary)
-                .opacity(colorScheme == .dark ? 0.09 : 0.07)
-                .offset(x: 10, y: 16)
-                .allowsHitTesting(false)
-        }
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(cardFill)
-                .shadow(
-                    color: shadowColor,
-                    radius: colorScheme == .dark ? 24 : 20,
-                    x: 0,
-                    y: colorScheme == .dark ? 10 : 6
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 24)
-                        .stroke(borderColor, lineWidth: 1)
-                )
-        )
-        .clipShape(RoundedRectangle(cornerRadius: 24))
     }
 
+    /// Athkar's segments, wrapped in Wird's own card chrome.
+    private var dhikrContentCard: some View {
+        dhikrSegmentsContent
+            .padding(.horizontal, 28)
+            .padding(.vertical, 36)
+            .frame(maxWidth: .infinity)
+            .overlay(alignment: .topTrailing) {
+                Image(systemName: viewModel.category.icon)
+                    .font(.system(size: 120, weight: .thin))
+                    .customForeground(.adhkarWatermark)
+                    .offset(x: 10, y: 16)
+                    .allowsHitTesting(false)
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 24)
+                    .fill(Color.adhkarSurface)
+                    .shadow(color: .adhkarShadow, radius: 22, x: 0, y: 8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.adhkarHairline, lineWidth: 1)
+                    )
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+    }
+
+    @ViewBuilder
+    private func segmentView(_ segment: DhikrSegment) -> some View {
+        switch segment.kind {
+        case .rule:
+            segmentDivider
+
+        case .quran:
+            if let text = segment.text, !text.isEmpty {
+                Text(quranAttributedText(text))
+                    .foregroundColor(ColorStyle.onSurface.color)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(20)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .environment(\.layoutDirection, .rightToLeft)
+                    .frame(maxWidth: .infinity)
+            }
+
+        case .intro:
+            if let text = segment.text, !text.isEmpty {
+                arabicTextBlock(text, style: .adhkar(size: 18), color: .secondary, lineSpacing: 10)
+            }
+
+        case .text:
+            if let text = segment.text, !text.isEmpty {
+                arabicTextBlock(text, style: .adhkar(size: 22), color: .onSurface, lineSpacing: 16)
+            }
+
+        case .note, .noteAlways:
+            if let text = segment.text, !text.isEmpty {
+                arabicTextBlock(text, style: .adhkar(size: 15), color: .secondary, lineSpacing: 7)
+            }
+        }
+    }
+
+    private var segmentDivider: some View {
+        Divider()
+            .overlay(ColorStyle.outlineVariant.color.opacity(0.3))
+    }
+
+    /// Centred, right-to-left block that keeps every newline in the source text.
+    private func arabicTextBlock(
+        _ text: String,
+        style: AppTextStyle,
+        color: ColorStyle,
+        lineSpacing: CGFloat
+    ) -> some View {
+        Text(text)
+            .customStyle(style, color)
+            .multilineTextAlignment(.center)
+            .lineSpacing(lineSpacing)
+            .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
+            .environment(\.layoutDirection, .rightToLeft)
+            .frame(maxWidth: .infinity)
+    }
 }
 
 // MARK: - Quran Text Attributed String
@@ -269,13 +282,17 @@ extension AdhkarReadingView {
             "٠":"0","١":"1","٢":"2","٣":"3","٤":"4",
             "٥":"5","٦":"6","٧":"7","٨":"8","٩":"9"
         ]
+        // Resolved through QuranFont so the real PostScript name is used —
+        // a raw file name silently falls back to the system font, which has
+        // no glyph for the ornamented ayah medallion.
+        let hafs = QuranFont.hafs.font(size: 30)
         var textBuf = ""
         var digitBuf = ""
 
         func flushText() {
             guard !textBuf.isEmpty else { return }
             var seg = AttributedString(textBuf)
-            seg.font = .custom("HafsSmart_08_fixed", size: 30)
+            seg.font = hafs
             result.append(seg)
             textBuf = ""
         }
@@ -283,14 +300,18 @@ extension AdhkarReadingView {
         func flushDigits() {
             guard !digitBuf.isEmpty else { return }
             let latin = String(digitBuf.map { digitMap[$0] ?? $0 })
-            if let num = Int(latin), num >= 1, num <= 286,
-               let scalar = Unicode.Scalar(0xE900 + num - 1) {
-                var seg = AttributedString(String(scalar))
-                seg.font = .custom("QuranNumbers", size: 28)
+            // HafsSmart carries the fully ornamented ayah medallion in its
+            // private-use area, the same way Athkar gets it from UthmanicHafs.
+            // QuranNumbers holds bare digits only and needs an ornament image
+            // composited behind it — that is the mushaf renderer's job, not this
+            // screen's, so using it here drew an unornamented number.
+            if let num = Int(latin), let glyph = QuranTextService.verseEndGlyph(for: num) {
+                var seg = AttributedString(glyph)
+                seg.font = hafs
                 result.append(seg)
             } else {
                 var seg = AttributedString(digitBuf)
-                seg.font = .custom("HafsSmart_08_fixed", size: 30)
+                seg.font = hafs
                 result.append(seg)
             }
             digitBuf = ""
@@ -316,24 +337,23 @@ extension AdhkarReadingView {
 extension AdhkarReadingView {
 
     private var bottomPanel: some View {
-        VStack(spacing: 10) {
-            if let dhikr = viewModel.currentDhikr, dhikr.count > 1 {
-                HStack(alignment: .lastTextBaseline, spacing: 3) {
-                    Text(en(viewModel.currentTapCount))
-                        .customStyle(.adhkar(size: 15, bold: true), .onSurface)
-                        .monospacedDigit()
-                    Text("/ \(en(dhikr.count))")
-                        .customStyle(.adhkar(size: 12), .outline)
-                        .monospacedDigit()
-                }
-                .animation(.easeOut(duration: 0.2), value: viewModel.currentTapCount)
-            }
+        VStack(spacing: 8) {
+            positionIndicator
 
             pillBar
         }
         .padding(.horizontal, 20)
         .padding(.bottom, 0)
         .ignoresSafeArea(.container, edges: .bottom)
+    }
+
+    /// Where the reader is inside the category — bottom-left in both languages.
+    private var positionIndicator: some View {
+        Text("\(en(viewModel.currentIndex + 1)) | \(en(viewModel.category.adhkar.count))")
+            .customStyle(.adhkar(size: 13), .outline)
+            .monospacedDigit()
+            .frame(maxWidth: .infinity, alignment: isRightToLeft ? .trailing : .leading)
+            .padding(.horizontal, 8)
     }
 
     private var pillBar: some View {
@@ -348,13 +368,6 @@ extension AdhkarReadingView {
             }
 
             Spacer()
-
-            if needsCount {
-                pillCircleButton(systemName: "arrow.counterclockwise") {
-                    viewModel.resetCurrentCount()
-                }
-                Spacer()
-            }
 
             if needsCount {
                 countRingButton
@@ -377,11 +390,8 @@ extension AdhkarReadingView {
                     .frame(width: 52, height: 52)
                     .background(
                         Circle()
-                            .fill(colorScheme == .dark ? Color.surfaceContainerHigh : Color.surfaceContainerLow)
-                            .overlay(Circle().stroke(
-                                colorScheme == .dark ? Color.white.opacity(0.05) : ColorStyle.primary.color.opacity(0.08),
-                                lineWidth: 1
-                            ))
+                            .fill(Color.adhkarSurface)
+                            .overlay(Circle().stroke(Color.adhkarHairline, lineWidth: 1))
                     )
             }
             .buttonStyle(.plain)
@@ -390,23 +400,9 @@ extension AdhkarReadingView {
         .padding(.vertical, 10)
         .background(
             Capsule()
-                .fill(
-                    colorScheme == .dark
-                        ? Color.surfaceContainerHigh.opacity(0.88)
-                        : Color.surfaceContainerLow.opacity(0.95)
-                )
-                .overlay(Capsule().stroke(
-                    colorScheme == .dark
-                        ? Color.white.opacity(0.06)
-                        : ColorStyle.primary.color.opacity(0.08),
-                    lineWidth: 1
-                ))
-                .shadow(
-                    color: colorScheme == .dark ? .black.opacity(0.4) : ColorStyle.primary.color.opacity(0.12),
-                    radius: colorScheme == .dark ? 24 : 16,
-                    x: 0,
-                    y: colorScheme == .dark ? 10 : 4
-                )
+                .fill(Color.adhkarSurfaceTranslucent)
+                .overlay(Capsule().stroke(Color.adhkarHairline, lineWidth: 1))
+                .shadow(color: .adhkarShadow, radius: 20, x: 0, y: 7)
         )
         .background(.ultraThinMaterial, in: Capsule())
     }
@@ -428,15 +424,9 @@ extension AdhkarReadingView {
                 .frame(width: 52, height: 52)
                 .background(
                     Circle()
-                        .fill(
-                            isActive
-                                ? ColorStyle.secondary.color.opacity(0.14)
-                                : (colorScheme == .dark ? Color.surfaceContainerHigh : Color.surfaceContainerLow)
-                        )
+                        .fill(isActive ? ColorStyle.secondary.color.opacity(0.14) : Color.adhkarSurface)
                         .overlay(Circle().stroke(
-                            isActive
-                                ? ColorStyle.secondary.color.opacity(0.3)
-                                : (colorScheme == .dark ? Color.white.opacity(0.05) : ColorStyle.primary.color.opacity(0.08)),
+                            isActive ? ColorStyle.secondary.color.opacity(0.3) : Color.adhkarHairline,
                             lineWidth: 1
                         ))
                 )
@@ -446,13 +436,13 @@ extension AdhkarReadingView {
     }
 
     private var countRingButton: some View {
-        Button(action: { handleAdvance() }) {
+        // Athkar counts down: the ring shows what is left, not what is done.
+        let remaining = max(0, (viewModel.currentDhikr?.count ?? 0) - viewModel.currentTapCount)
+
+        return Button(action: { handleAdvance() }) {
             ZStack {
                 Circle()
-                    .stroke(
-                        colorScheme == .dark ? Color.white.opacity(0.10) : ColorStyle.primary.color.opacity(0.12),
-                        lineWidth: 3
-                    )
+                    .stroke(Color.adhkarRingTrack, lineWidth: 3)
                     .frame(width: 64, height: 64)
 
                 Circle()
@@ -470,16 +460,14 @@ extension AdhkarReadingView {
                     .animation(.easeOut(duration: 0.2), value: viewModel.tapProgress)
 
                 Circle()
-                    .fill(colorScheme == .dark ? Color.surfaceContainerHigh : Color.surfaceContainerLow)
-                    .overlay(Circle().stroke(
-                        colorScheme == .dark ? Color.white.opacity(0.05) : ColorStyle.primary.color.opacity(0.08),
-                        lineWidth: 1
-                    ))
+                    .fill(Color.adhkarSurface)
+                    .overlay(Circle().stroke(Color.adhkarHairline, lineWidth: 1))
                     .frame(width: 56, height: 56)
 
-                Text(en(viewModel.currentTapCount))
+                Text(en(remaining))
                     .customStyle(.adhkar(size: 20, bold: true), .onSurface)
                     .monospacedDigit()
+                    .animation(.easeOut(duration: 0.2), value: remaining)
             }
         }
         .buttonStyle(.plain)
@@ -508,21 +496,26 @@ extension AdhkarReadingView {
     }
 
     private var swipeNavigationGesture: some Gesture {
-        DragGesture(minimumDistance: 15, coordinateSpace: .local)
+        DragGesture(minimumDistance: 20, coordinateSpace: .local)
             .onEnded { dragValue in
-                let threshold: CGFloat = 30
-                let swipedRight = dragValue.translation.width > threshold
-                let swipedLeft  = dragValue.translation.width < -threshold
+                let horizontal = dragValue.translation.width
+                let vertical = dragValue.translation.height
+                let threshold: CGFloat = 50
 
-                let isForwardSwipe  = isRightToLeft ? swipedRight : swipedLeft
-                let isBackwardSwipe = isRightToLeft ? swipedLeft  : swipedRight
+                // A mostly vertical drag belongs to the scroll view, not to navigation.
+                guard abs(horizontal) >= threshold, abs(horizontal) > abs(vertical) * 1.5 else { return }
 
-                if isForwardSwipe && viewModel.canGoNext {
+                let swipedRight = horizontal > 0
+                let isForwardSwipe = isRightToLeft ? swipedRight : !swipedRight
+
+                if isForwardSwipe {
+                    guard viewModel.canGoNext else { return }
                     slideEdge = .trailing
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                         viewModel.navigateToNext()
                     }
-                } else if isBackwardSwipe && viewModel.canGoPrevious {
+                } else {
+                    guard viewModel.canGoPrevious else { return }
                     slideEdge = .leading
                     withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                         viewModel.navigateToPrevious()

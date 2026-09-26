@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import AVFoundation
 import Core
 
 @MainActor
@@ -22,7 +21,8 @@ final class AdhkarReadingViewModel: MainViewModel {
 
     weak var coordinator: AdhkarCoordinating?
 
-    private var audioPlayer: AVAudioPlayer?
+    private let audioService = DhikrAudioService()
+    private var isAudioSessionActive: Bool = false
 
     private var sortedAdhkar: [Dhikr] {
         var remaining = category.adhkar
@@ -42,10 +42,27 @@ final class AdhkarReadingViewModel: MainViewModel {
     var canGoPrevious: Bool { currentIndex > 0 }
     var hasAudio: Bool { currentDhikr?.audio != nil }
 
+    /// One uniform contract for the view: a dhikr that ships `segments` is used as
+    /// authored, anything older is synthesised from `textAr` + `description`.
+    var currentSegments: [DhikrSegment] {
+        guard let dhikr = currentDhikr else { return [] }
+        if let segments = dhikr.segments, !segments.isEmpty { return segments }
+
+        var synthesised = [DhikrSegment(kind: .text, text: dhikr.textAr)]
+        if let description = dhikr.description, !description.isEmpty {
+            synthesised.append(DhikrSegment(kind: .note, text: description))
+        }
+        return synthesised
+    }
+
+    var repeatLabel: String? { currentDhikr?.repeatLabel }
+
+    /// Athkar fills the bar by position, not by work done, so the first dhikr
+    /// already shows a sliver instead of an empty track.
     var overallProgress: Double {
         let totalCount = sortedAdhkar.count
         guard totalCount > 0 else { return 0 }
-        return Double(currentIndex) / Double(totalCount)
+        return Double(currentIndex + 1) / Double(totalCount)
     }
 
     var tapProgress: Double {
@@ -61,6 +78,10 @@ final class AdhkarReadingViewModel: MainViewModel {
     init(coordinator: AdhkarCoordinating, category: DhikrCategory) {
         self.coordinator = coordinator
         self.category = category
+
+        audioService.onStateChange = { [weak self] playing in
+            self?.isPlaying = playing
+        }
     }
 
     func goBack() {
@@ -72,9 +93,6 @@ final class AdhkarReadingViewModel: MainViewModel {
         currentIndex = 0
         currentTapCount = 0
         isComplete = false
-        if hasAudio {
-            playCurrentDhikrAudio()
-        }
     }
 
     func onTap() {
@@ -87,24 +105,25 @@ final class AdhkarReadingViewModel: MainViewModel {
 
     func navigateToNext() {
         guard canGoNext else { return }
-        stopAudio()
+        audioService.stop()
         currentTapCount = 0
         currentIndex += 1
-        if hasAudio { playCurrentDhikrAudio() }
+        continueAudioSessionIfActive()
     }
 
     func navigateToPrevious() {
         guard canGoPrevious else { return }
-        stopAudio()
+        audioService.stop()
         currentTapCount = 0
         currentIndex -= 1
-        if hasAudio { playCurrentDhikrAudio() }
+        continueAudioSessionIfActive()
     }
 
     func toggleAudio() {
         if isPlaying {
             stopAudio()
         } else {
+            isAudioSessionActive = true
             playCurrentDhikrAudio()
         }
     }
@@ -125,57 +144,35 @@ final class AdhkarReadingViewModel: MainViewModel {
     }
 
     private func advanceToNextDhikr() {
-        stopAudio()
+        audioService.stop()
         currentTapCount = 0
         if currentIndex < sortedAdhkar.count - 1 {
             currentIndex += 1
-            if hasAudio { playCurrentDhikrAudio() }
+            continueAudioSessionIfActive()
         } else {
+            isAudioSessionActive = false
             isComplete = true
         }
     }
 
-    private func playCurrentDhikrAudio() {
-        guard let audioFile = currentDhikr?.audio,
-              let url = findAudioURL(for: audioFile) else { return }
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
-            try AVAudioSession.sharedInstance().setActive(true)
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer?.delegate = AudioPlayerDelegate(onFinish: { [weak self] in
-                Task { @MainActor in self?.isPlaying = false }
-            })
-            audioPlayer?.play()
-            isPlaying = true
-        } catch {
-            isPlaying = false
-        }
+    /// Carries an active listening session to the dhikr the user just moved to.
+    /// Nothing starts on its own — the session exists only after the play button.
+    private func continueAudioSessionIfActive() {
+        guard isAudioSessionActive else { return }
+        playCurrentDhikrAudio()
     }
 
-    private func findAudioURL(for filename: String) -> URL? {
-        let extensions = ["m4a", "mp3", "aac", "caf"]
-        for ext in extensions {
-            if let url = Bundle.main.url(forResource: filename, withExtension: ext) {
-                return url
-            }
-            if let url = Bundle.main.url(forResource: filename, withExtension: ext, subdirectory: "Audio") {
-                return url
-            }
-        }
-        return Bundle.main.url(forResource: filename, withExtension: nil)
+    private func playCurrentDhikrAudio() {
+        guard let dhikr = currentDhikr, let audioFile = dhikr.audio else { return }
+        audioService.play(resource: audioFile, repeats: audioRepeats(for: dhikr))
+    }
+
+    private func audioRepeats(for dhikr: Dhikr) -> Int {
+        dhikr.count
     }
 
     private func stopAudio() {
-        audioPlayer?.stop()
-        audioPlayer = nil
-        isPlaying = false
-    }
-}
-
-private final class AudioPlayerDelegate: NSObject, AVAudioPlayerDelegate {
-    private let onFinish: () -> Void
-    init(onFinish: @escaping () -> Void) { self.onFinish = onFinish }
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
-        onFinish()
+        isAudioSessionActive = false
+        audioService.stop()
     }
 }
