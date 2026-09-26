@@ -24,7 +24,7 @@ final class QuranGlyphRenderer {
 
     // MARK: - Glyphs
 
-    private static let numbersFontName = "QuranNumbers"
+    private static let numbersFontName = QuranFont.numbers.rawValue
     private static let numberBaseCodePoint = 0xE900
 
     private static let maxVerseNumber = 286

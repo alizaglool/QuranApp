@@ -141,7 +141,7 @@ struct QuranTextPageView: View {
         )
 
         return (Text(text) + Text("\u{00A0}") + Text(Image(uiImage: badgeImage)))
-            .font(.custom("KFGQPCHafsSmart-Regular", size: fontSize))
+            .font(QuranFont.hafs.font(size: fontSize))
             .lineSpacing(10)
             .multilineTextAlignment(.center)
             .foregroundColor(textColor)

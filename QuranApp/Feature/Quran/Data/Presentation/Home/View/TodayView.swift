@@ -119,7 +119,7 @@ struct TodayView: View {
         let glyph = QuranTextService.verseEndGlyph(for: verse.verse).map { " \($0)" } ?? ""
         return VStack(alignment: .trailing, spacing: 10) {
             Text(text + glyph)
-                .font(.custom("KFGQPCHafsSmart-Regular", size: 22))
+                .font(QuranFont.hafs.font(size: 22))
                 .lineSpacing(10)
                 .multilineTextAlignment(.trailing)
                 .frame(maxWidth: .infinity, alignment: .trailing)
