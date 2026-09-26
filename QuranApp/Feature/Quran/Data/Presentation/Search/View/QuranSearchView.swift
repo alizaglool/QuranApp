@@ -6,180 +6,242 @@
 import SwiftUI
 import Core
 
+/// Inline search for the Quran pager. Renders the search field in the position the
+/// pager's `topBar` occupies, with results in a translucent panel directly below, so
+/// the mushaf page is never unmounted and stays visible behind.
 struct QuranSearchView: View {
 
-    var onSelect: ((_ surah: Int, _ verse: Int) -> Void)? = nil
+    /// Owned by `QuranPagerView` so entering search can focus the field.
+    @FocusState.Binding var isFieldFocused: Bool
 
-    @Environment(\.dismiss) private var dismiss
+    /// The pager's own bar background, so the morph from `topBar` does not jump.
+    let barBackground: Color
+
+    let onSelect: (_ surah: Int, _ verse: Int) -> Void
+    let onCancel: () -> Void
+
     @ObservedObject private var localization = LocalizationManager.shared
 
     @State private var query: String = ""
     @State private var results: [QuranSearchResult] = []
     @State private var isSearching: Bool = false
+    /// The trimmed query `results` belong to. Lets "no results" appear only after a
+    /// search has actually completed, instead of flashing during the debounce.
+    @State private var searchedQuery: String = ""
 
-    private var layoutDirection: LayoutDirection {
-        localization.currentLanguage.direction
+    private var trimmedQuery: String {
+        query.trimmingCharacters(in: .whitespaces)
+    }
+
+    private var hasCompletedSearch: Bool {
+        !trimmedQuery.isEmpty && searchedQuery == trimmedQuery
     }
 
     var body: some View {
         VStack(spacing: 0) {
-            header
             searchBar
-            Divider()
-            resultsList
+            searchResultsPanel
+                .frame(maxHeight: .infinity)
         }
-        .background(Color.background)
-        .environment(\.layoutDirection, layoutDirection)
+        // Quran content is RTL regardless of app language — same pin as `topBar`.
+        .environment(\.layoutDirection, .rightToLeft)
         .task(id: query) {
-            guard query.trimmingCharacters(in: .whitespaces).count >= 2 else {
+            guard trimmedQuery.count >= 2 else {
                 results = []
+                searchedQuery = ""
                 isSearching = false
                 return
             }
-            isSearching = true
-            // Small debounce
+            // Debounce. `isSearching` is deliberately NOT set until after the sleep:
+            // setting it up front blanked the list and flashed a spinner on every
+            // keystroke. The previous results stay on screen until new ones arrive.
             try? await Task.sleep(nanoseconds: 250_000_000)
             guard !Task.isCancelled else { return }
-            let q = query
+            isSearching = true
+            let q = trimmedQuery
             let found = await Task.detached(priority: .userInitiated) {
                 QuranSearchService.shared.search(q)
             }.value
+            guard !Task.isCancelled else { return }
             results = found
+            searchedQuery = q
             isSearching = false
         }
-    }
-
-    // MARK: - Header
-
-    private var header: some View {
-        ZStack {
-            Text(AppLocalizedKeys.searchQuran.value)
-                .customStyle(.kitab(size: 17, bold: true), .onSurface)
-
-            HStack {
-                Spacer()
-                Button { dismiss() } label: {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundColor(.secondary)
-                        .frame(width: 30, height: 30)
-                        .background(Color.outlineVariant.opacity(0.5), in: Circle())
-                }
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
     }
 
     // MARK: - Search Bar
 
     private var searchBar: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(.secondary)
+        HStack(spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 17, weight: .medium))
+                    .foregroundColor(ColorStyle.onSurfaceVariant.color)
 
-            TextField(AppLocalizedKeys.searchSurahOrAyah.value, text: $query)
-                .customStyle(.kitab(size: 16), .onSurface)
-                .submitLabel(.search)
-                .environment(\.layoutDirection, .rightToLeft)
+                TextField(AppLocalizedKeys.searchSurahOrAyah.value, text: $query)
+                    .customStyle(.uthmanicNaskh(size: 17))
+                    .foregroundColor(ColorStyle.onSurface.color)
+                    .submitLabel(.search)
+                    .focused($isFieldFocused)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
 
-            if !query.isEmpty {
-                Button { query = "" } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(.secondary)
+                if !query.isEmpty {
+                    Button { query = "" } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 16))
+                            .foregroundColor(ColorStyle.onSurfaceVariant.color)
+                    }
+                    .accessibilityLabel(AppLocalizedKeys.cancel.value)
+                }
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 9)
+            .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 10))
+
+            Button(action: onCancel) {
+                Text(AppLocalizedKeys.cancel.value)
+                    .customStyle(.kitab(size: 16))
+                    // Design-system green, not `Color.quranGreen`: the file defining
+                    // that token is not in the target's Compile Sources, so it does
+                    // not exist at build time. This is the token every sibling view
+                    // in this folder uses, and unlike "Primary Color" it is
+                    // theme-aware.
+                    .foregroundColor(ColorStyle.primary.color)
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .safeAreaPadding(.horizontal)
+        .background(barBackground.opacity(0.95))
+    }
+
+    // MARK: - Results Panel
+
+    private var searchResultsPanel: some View {
+        VStack(spacing: 0) {
+            if trimmedQuery.count >= 2 {
+                header
+                if hasCompletedSearch && results.isEmpty {
+                    noResults
+                } else {
+                    resultsCard
                 }
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
-        .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 12))
-        .padding(.horizontal, 16)
-        .padding(.bottom, 10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        // One material layer for the whole panel — the mushaf page stays visible
+        // behind it. A second material on top of this reads muddy.
+        .background(.regularMaterial)
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        HStack {
+            if isSearching {
+                ProgressView()
+                    .controlSize(.small)
+            }
+
+            Spacer()
+
+            if !isSearching && !results.isEmpty {
+                Text(verbatim: "آيات (\(results.count.arabicNumerals))")
+                    .customStyle(.kitab(size: 15, bold: true))
+                    .foregroundColor(ColorStyle.onSurfaceVariant.color)
+                    .accessibilityAddTraits(.isHeader)
+                    .accessibilityValue(Text(verbatim: results.count.arabicNumerals))
+            }
+        }
+        .padding(.horizontal, 20)
+        .padding(.top, 14)
+        .padding(.bottom, 8)
     }
 
     // MARK: - Results
 
-    @ViewBuilder
-    private var resultsList: some View {
-        if query.trimmingCharacters(in: .whitespaces).count < 2 {
-            emptyPrompt
-        } else if isSearching {
-            Spacer()
-            ProgressView()
-            Spacer()
-        } else if results.isEmpty {
-            noResults
-        } else {
-            ScrollView {
-                LazyVStack(spacing: 8) {
-                    ForEach(results) { result in
-                        resultRow(result)
+    private var resultsCard: some View {
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                ForEach(Array(results.enumerated()), id: \.element.id) { index, result in
+                    resultRow(result)
+                    if index < results.count - 1 {
+                        Divider()
+                            .overlay(ColorStyle.outlineVariant.color.opacity(0.4))
+                            .padding(.horizontal, 14)
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 12)
             }
+            // Translucent, not opaque: an opaque card would hide the page exactly
+            // where the rows are, which is the whole point of the material panel.
+            .background(Color.surfaceContainerLow.opacity(0.35),
+                        in: RoundedRectangle(cornerRadius: 14))
+            .padding(.horizontal, 16)
+            .padding(.bottom, 16)
         }
-    }
-
-    private var emptyPrompt: some View {
-        VStack(spacing: 8) {
-            Spacer()
-            Image(systemName: "text.magnifyingglass")
-                .font(.system(size: 44))
-                .foregroundColor(.secondary.opacity(0.4))
-            Text(AppLocalizedKeys.searchSurahOrAyah.value)
-                .customStyle(.kitab(size: 15))
-                .foregroundColor(.secondary)
-            Spacer()
-        }
+        .scrollDismissesKeyboard(.interactively)
     }
 
     private var noResults: some View {
-        VStack(spacing: 8) {
+        VStack {
             Spacer()
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 40))
-                .foregroundColor(.secondary.opacity(0.4))
             Text(AppLocalizedKeys.noResults.value)
                 .customStyle(.kitab(size: 15))
-                .foregroundColor(.secondary)
+                .foregroundColor(ColorStyle.onSurfaceVariant.color)
             Spacer()
         }
+        .frame(maxWidth: .infinity)
     }
 
     private func resultRow(_ result: QuranSearchResult) -> some View {
         Button {
-            onSelect?(result.surahNumber, result.verseNumber)
+            onSelect(result.surahNumber, result.verseNumber)
         } label: {
-            VStack(alignment: .trailing, spacing: 6) {
-                // Surah name : verse number  •  page badge
+            VStack(alignment: .trailing, spacing: 7) {
                 HStack {
-                    Text("ص \(result.page)")
-                        .customStyle(.kitab(size: 12))
-                        .foregroundColor(ColorStyle.primary.color)
-                        .environment(\.layoutDirection, .leftToRight)
+                    Text(result.page.arabicNumerals)
+                        .customStyle(.kitab(size: 15, bold: true))
+                        .foregroundColor(Color.verseMarkerGold)
 
                     Spacer()
 
-                    Text("\(result.surahName): \(result.verseNumber)")
+                    Text(verbatim: "\(result.surahName): \(result.verseNumber.arabicNumerals)")
                         .customStyle(.kitab(size: 14, bold: true))
-                        .foregroundColor(ColorStyle.primary.color)
+                        .foregroundColor(ColorStyle.onSurfaceVariant.color)
                 }
 
-                // Verse text — truncated, right-aligned Arabic
-                Text(result.text)
-                    .customStyle(.kitab(size: 15))
-                    .foregroundColor(.primary.opacity(0.85))
+                Text(highlighted(result.text))
+                    .customStyle(.uthmanicNaskh(size: 17))
+                    .foregroundColor(ColorStyle.quranText.color)
                     .multilineTextAlignment(.trailing)
-                    .lineLimit(2)
+                    .lineLimit(3)
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .environment(\.layoutDirection, .rightToLeft)
             }
             .padding(.horizontal, 14)
-            .padding(.vertical, 12)
-            .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 12))
+            .padding(.vertical, 13)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(
+            "\(result.surahName) آية \(result.verseNumber.arabicNumerals)، صفحة \(result.page.arabicNumerals)"
+        )
+    }
+
+    // MARK: - Highlight
+
+    /// Colours every occurrence of the query inside the Uthmani verse text.
+    /// The ranges come from the normalized-to-original index map, because the
+    /// displayed string and the matched string are different strings.
+    private func highlighted(_ text: String) -> AttributedString {
+        var attributed = AttributedString(text)
+        for range in QuranSearchService.highlightRanges(in: text, query: trimmedQuery) {
+            guard
+                let lower = AttributedString.Index(range.lowerBound, within: attributed),
+                let upper = AttributedString.Index(range.upperBound, within: attributed)
+            else { continue }
+            attributed[lower ..< upper].foregroundColor = Color.searchMatch
+        }
+        return attributed
     }
 }

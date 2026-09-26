@@ -15,10 +15,24 @@ import Core
 
 final class QuranGlyphRenderer {
 
-    private static let hafsFontName = "KFGQPCHafsSmart-Regular"
-    private static let verseBaseCodePoint = 0xE95A
+    // MARK: - Geometry
 
-    // Images are 120×160 (portrait oval). Height drives sizing; width = height * 0.75.
+    static let verseMarkerHeightRatio: CGFloat = 0.58
+    private static let ornamentAspectRatio: CGFloat = 0.75
+    private static let numberSizeRatio: CGFloat = 0.95
+    private static let numberCenter = CGPoint(x: 0.496, y: 0.516)
+
+    // MARK: - Glyphs
+
+    private static let numbersFontName = "QuranNumbers"
+    private static let numberBaseCodePoint = 0xE900
+
+    private static let maxVerseNumber = 286
+
+    private static let ornamentCache = NSCache<NSString, UIImage>()
+
+    // MARK: - Drawing
+
     static func drawVerseNumber(
         _ verseNumber: Int,
         centeredAt point: CGPoint,
@@ -27,70 +41,108 @@ final class QuranGlyphRenderer {
         theme: Theme,
         in context: CGContext
     ) {
-        guard verseNumber >= 1, verseNumber <= 286 else { return }
+        let size = ornamentSize(lineHeight: lineHeight)
+        let rect = CGRect(x: point.x - size.width / 2,
+                          y: point.y - size.height / 2,
+                          width: size.width,
+                          height: size.height)
 
-        // 1 ─ Custom ornament image (replaces cream circle)
-        let markerH = lineHeight * 0.65
-        let markerW = markerH * 0.75
-        let markerRect = CGRect(
-            x: point.x - markerW / 2,
-            y: point.y - markerH / 2,
-            width: markerW,
-            height: markerH
-        )
-        let imageName = isDarkMode ? "newDarkVerseMarker"
-            : (theme == .tinted ? "newTintedVerseMarker" : "newClassicVerseMarker")
-        if let img = UIImage(named: imageName) {
-            UIGraphicsPushContext(context)
-            img.draw(in: markerRect)
-            UIGraphicsPopContext()
-        }
-
-        // 2 ─ Original glyph (KFGQPCHafsSmart ornament + number in one character)
-        let fontSize = lineHeight * 0.65
-        guard let font = UIFont(name: hafsFontName, size: fontSize) else { return }
-        let codePoint = verseBaseCodePoint + (verseNumber - 1)
-        guard let scalar = Unicode.Scalar(codePoint) else { return }
-        let text = String(scalar)
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: glyphColor(isDarkMode: isDarkMode)
-        ]
-        let size = (text as NSString).size(withAttributes: attributes)
-        let drawPoint = CGPoint(x: point.x - size.width / 2,
-                                y: point.y - size.height / 2)
         UIGraphicsPushContext(context)
-        (text as NSString).draw(at: drawPoint, withAttributes: attributes)
-        UIGraphicsPopContext()
+        defer { UIGraphicsPopContext() }
+        drawBadge(verseNumber, in: rect, isDarkMode: isDarkMode, theme: theme)
     }
 
-    private static func glyphColor(isDarkMode: Bool) -> UIColor {
-        isDarkMode ? UIColor.white.withAlphaComponent(0.6) : UIColor(Color.verseMarkerGold)
-    }
-
-    /// Returns a standalone UIImage of the verse-number badge.
-    /// Use this in flow-layout views (e.g. QuranTextPageView) where a CGContext
-    /// position is not available.
     static func verseMarkerImage(
         _ verseNumber: Int,
         lineHeight: CGFloat,
         isDarkMode: Bool,
         theme: Theme
     ) -> UIImage {
-        let markerH = lineHeight * 0.65
-        let markerW = markerH * 0.75
-        let size    = CGSize(width: markerW, height: markerH)
-        let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { ctx in
-            drawVerseNumber(
-                verseNumber,
-                centeredAt: CGPoint(x: size.width / 2, y: size.height / 2),
-                lineHeight: lineHeight,
-                isDarkMode: isDarkMode,
-                theme: theme,
-                in: ctx.cgContext
-            )
+        guard verseNumber >= 1, verseNumber <= maxVerseNumber else { return UIImage() }
+
+        let size = ornamentSize(lineHeight: lineHeight)
+        guard size.width > 0, size.height > 0 else { return UIImage() }
+
+        let badge = UIGraphicsImageRenderer(size: size).image { _ in
+            drawBadge(verseNumber,
+                      in: CGRect(origin: .zero, size: size),
+                      isDarkMode: isDarkMode,
+                      theme: theme)
         }
+        // Both call sites embed this in a tinted `Text` chain; keep the
+        // artwork's own colours instead of letting SwiftUI template it.
+        return badge.withRenderingMode(.alwaysOriginal)
+    }
+
+    // MARK: - Shared Rendering
+
+    private static func drawBadge(
+        _ verseNumber: Int,
+        in rect: CGRect,
+        isDarkMode: Bool,
+        theme: Theme
+    ) {
+        ornament(isDarkMode: isDarkMode, theme: theme)?.draw(in: rect)
+
+        guard let text = numberText(for: verseNumber),
+              let attributes = numberAttributes(ornamentHeight: rect.height,
+                                                isDarkMode: isDarkMode)
+        else { return }
+
+        let advance = text.size(withAttributes: attributes)
+        let centre = CGPoint(x: rect.minX + rect.width * numberCenter.x,
+                             y: rect.minY + rect.height * numberCenter.y)
+        text.draw(at: CGPoint(x: centre.x - advance.width / 2,
+                              y: centre.y - advance.height / 2),
+                  withAttributes: attributes)
+    }
+
+    private static func ornamentSize(lineHeight: CGFloat) -> CGSize {
+        let height = lineHeight * verseMarkerHeightRatio
+        return CGSize(width: height * ornamentAspectRatio, height: height)
+    }
+
+    // MARK: - Ornament
+
+    private static func ornament(isDarkMode: Bool, theme: Theme) -> UIImage? {
+        let name: String
+        switch theme {
+        case .classic: name = "newClassicVerseMarker"
+        case .tinted:  name = "newTintedVerseMarker"
+        }
+
+        let key = "\(name)-\(isDarkMode)" as NSString
+        if let cached = ornamentCache.object(forKey: key) { return cached }
+
+        let traits = UITraitCollection(userInterfaceStyle: isDarkMode ? .dark : .light)
+        guard let resolved = UIImage(named: name)?.imageAsset?.image(with: traits) else {
+            return nil
+        }
+        ornamentCache.setObject(resolved, forKey: key)
+        return resolved
+    }
+
+    // MARK: - Number
+
+    /// The number-only private-use character (U+E900 + n - 1).
+    private static func numberText(for verseNumber: Int) -> NSString? {
+        guard verseNumber >= 1, verseNumber <= maxVerseNumber else { return nil }
+        guard let scalar = Unicode.Scalar(numberBaseCodePoint + (verseNumber - 1)) else { return nil }
+        return String(scalar) as NSString
+    }
+
+    private static func numberAttributes(
+        ornamentHeight: CGFloat,
+        isDarkMode: Bool
+    ) -> [NSAttributedString.Key: Any]? {
+        guard let font = UIFont(name: numbersFontName,
+                               size: ornamentHeight * numberSizeRatio) else {
+            return nil
+        }
+        return [
+            .font: font,
+            .foregroundColor: isDarkMode ? UIColor.white : UIColor.black
+        ]
     }
 }
 
@@ -107,6 +159,7 @@ final class QuranPageOverlayView: UIView {
         backgroundColor = .clear
         isOpaque = false
         isUserInteractionEnabled = false
+        contentMode = .redraw
     }
     
     required init?(coder: NSCoder) { fatalError() }
@@ -153,17 +206,30 @@ struct QuranPageOverlay: UIViewRepresentable {
 
 // MARK: - QuranPageView
 
+/// The verse currently being recited, resolved by the pager.
+///
+/// Passed into `QuranPageView` as a plain value so AudioEngine's continuous
+/// ticks (`verseProgress`, `verseElapsed`) never invalidate a page body.
+struct PlayingVerse: Equatable {
+    let surahNumber: Int
+    let verseNumber: Int
+}
+
 struct QuranPageView: View {
     let pageNumber: Int
     @ObservedObject var viewModel: QuranViewModel
+
+    /// Nil when nothing is playing or loading on this page.
+    let playingVerse: PlayingVerse?
+
     @Environment(\.colorScheme) var colorScheme
 
     /// Observed so the page redraws bookmark badges whenever any bookmark
     /// is added, removed, or recolored from anywhere in the app.
     @ObservedObject private var storage = StorageManager.shared
-    @ObservedObject private var audio = AudioEngine.shared
 
     private let quranDB = QuranDatabase.shared
+    private let imageCache = QuranPageImageCache.shared
 
     private var isDarkMode: Bool { colorScheme == .dark }
     private var textColor: Color { isDarkMode ? .white : .black }
@@ -178,13 +244,12 @@ struct QuranPageView: View {
 
     /// Highlight rects for the currently playing verse on this page.
     private var playingHighlightRects: [VerseHighlightRect] {
-        guard audio.isPlaying || audio.isLoadingVerse else { return [] }
-        let allHighlights = quranDB.getAllHighlightsForPage(pageNumber)
+        guard let playingVerse else { return [] }
         let verses = quranDB.getVersesForPage(pageNumber)
-        guard let playingVerse = verses.first(where: {
-            $0.chapterNumber == audio.currentSurahNumber && $0.number == audio.currentVerseNumber
+        guard let match = verses.first(where: {
+            $0.chapterNumber == playingVerse.surahNumber && $0.number == playingVerse.verseNumber
         }) else { return [] }
-        return allHighlights.filter { $0.verseID == playingVerse.verseID }
+        return quranDB.getAllHighlightsForPage(pageNumber).filter { $0.verseID == match.verseID }
     }
 
     /// All bookmarks on this page joined with their verse positions and
@@ -269,6 +334,9 @@ struct QuranPageView: View {
 
                     verseMarkers(pageWidth: pageWidth, pageHeight: pageHeight)
                 }
+                .onAppear {
+                    imageCache.prefetchNeighbors(of: pageNumber, targetWidth: pageWidth)
+                }
                 .contentShape(Rectangle())
                 .overlay {
                     LongPressLocationView(
@@ -340,7 +408,7 @@ struct QuranPageView: View {
 
     @ViewBuilder
     private func lineImage(_ lineIndex: Int, width: CGFloat, height: CGFloat) -> some View {
-        if let uiImage = loadLineImage(page: pageNumber, line: lineIndex) {
+        if let uiImage = imageCache.lineImage(page: pageNumber, line: lineIndex, targetWidth: width) {
             Image(uiImage: uiImage)
                 .renderingMode(.template)
                 .resizable()
@@ -420,20 +488,6 @@ struct QuranPageView: View {
             .position(x: x + width / 2, y: y + lineHeight / 2)
     }
 
-    // MARK: - Image Loading
-
-    private func loadLineImage(page: Int, line: Int) -> UIImage? {
-        if let resourcePath = Bundle.main.resourcePath {
-            let path = "\(resourcePath)/\(page)/\(line).png"
-            if let image = UIImage(contentsOfFile: path) {
-                return image
-            }
-        }
-        if let path = Bundle.main.path(forResource: "\(line)", ofType: "png", inDirectory: "\(page)") {
-            return UIImage(contentsOfFile: path)
-        }
-        return nil
-    }
 }
 
 // MARK: - Ornamental Page Number Badge

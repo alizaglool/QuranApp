@@ -4,6 +4,8 @@
 <dict>
 	<key>YoutubeApiKey</key>
 	<string>$(YOUTUBE_API_KEY)</string>
+	<key>RemoteConfigBaseURL</key>
+	<string>$(REMOTE_CONFIG_BASE_URL)</string>
 	<key>NSAllowsArbitraryLoads</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

@@ -38,7 +38,13 @@ extension SheikhDetailView {
             navBar
             ScrollView(.vertical, showsIndicators: false) {
                 LazyVStack(pinnedViews: [.sectionHeaders]) {
-                    SheikhHeaderView(sheikh: viewModel.sheikh)
+                    SheikhHeaderView(
+                        sheikh: viewModel.sheikh,
+                        isDescriptionExpanded: viewModel.isDescriptionExpanded,
+                        descriptionToggleTitle: viewModel.descriptionToggleTitle,
+                        descriptionToggleHint: viewModel.descriptionToggleHint,
+                        onToggleDescription: viewModel.onToggleDescription
+                    )
                     Section {
                         tabContent
                     } header: {
@@ -143,13 +149,19 @@ extension SheikhDetailView {
                 ForEach(viewModel.playlists) { playlist in
                     PlaylistCardView(playlist: playlist)
                         .onTapGesture { viewModel.onPlaylistTapped(playlist) }
+                        .onAppear {
+                            if playlist.id == viewModel.playlists.last?.id { viewModel.loadMorePlaylists() }
+                        }
                 }
                 paginationTrigger(
                     isLoading: viewModel.isLoadingPlaylists,
-                    hasMore: viewModel.hasMorePlaylists,
+                    canResume: false,
+                    error: viewModel.playlistsError,
+                    retry: { viewModel.onRetryTapped(.playlists) },
                     loadMore: viewModel.loadMorePlaylists
                 )
-                if !viewModel.isLoadingPlaylists && viewModel.playlists.isEmpty {
+                if !viewModel.isLoadingPlaylists, viewModel.playlists.isEmpty,
+                   viewModel.playlistsError == nil, !viewModel.hasMorePlaylists {
                     emptyState(text: AppLocalizedKeys.emptyPlaylists.value)
                 }
             }
@@ -168,13 +180,20 @@ extension SheikhDetailView {
                 ForEach(viewModel.videos) { video in
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
+                        .onAppear {
+                            if video.id == viewModel.videos.last?.id { viewModel.loadMoreVideos() }
+                        }
                 }
                 paginationTrigger(
                     isLoading: viewModel.isLoadingVideos,
-                    hasMore: viewModel.hasMoreVideos,
-                    loadMore: viewModel.loadMoreVideos
+                    canResume: viewModel.canResumeVideos,
+                    error: viewModel.videosError,
+                    retry: { viewModel.onRetryTapped(.videos) },
+                    loadMore: { viewModel.onLoadMoreTapped(.videos) }
                 )
-                if !viewModel.isLoadingVideos && viewModel.videos.isEmpty {
+                if !viewModel.isLoadingVideos, viewModel.videos.isEmpty,
+                   viewModel.videosError == nil, !viewModel.hasMoreVideos,
+                   !viewModel.canResumeVideos {
                     emptyState(text: AppLocalizedKeys.emptyVideos.value)
                 }
             }
@@ -186,19 +205,28 @@ extension SheikhDetailView {
     // MARK: Shorts
 
     var shortsTab: some View {
-        VStack(spacing: 12) {
+        LazyVStack(spacing: 12) {
             if viewModel.isLoadingShorts && viewModel.shorts.isEmpty {
                 ForEach(0..<3, id: \.self) { _ in shortsRowShimmer }
             } else {
                 ForEach(Array(stride(from: 0, to: viewModel.shorts.count, by: 2)), id: \.self) { i in
                     shortsRow(at: i)
+                        .onAppear {
+                            // Rows are strided pairs, so the last one is the
+                            // first index with no pair beyond it.
+                            if i + 2 >= viewModel.shorts.count { viewModel.loadMoreShorts() }
+                        }
                 }
                 paginationTrigger(
                     isLoading: viewModel.isLoadingShorts,
-                    hasMore: viewModel.hasMoreShorts,
-                    loadMore: viewModel.loadMoreShorts
+                    canResume: viewModel.canResumeShorts,
+                    error: viewModel.shortsError,
+                    retry: { viewModel.onRetryTapped(.shorts) },
+                    loadMore: { viewModel.onLoadMoreTapped(.shorts) }
                 )
-                if !viewModel.isLoadingShorts && viewModel.shorts.isEmpty {
+                if !viewModel.isLoadingShorts, viewModel.shorts.isEmpty,
+                   viewModel.shortsError == nil, !viewModel.hasMoreShorts,
+                   !viewModel.canResumeShorts {
                     emptyState(text: AppLocalizedKeys.emptyShorts.value)
                 }
             }
@@ -235,13 +263,20 @@ extension SheikhDetailView {
                 ForEach(viewModel.podcasts) { video in
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
+                        .onAppear {
+                            if video.id == viewModel.podcasts.last?.id { viewModel.loadMorePodcasts() }
+                        }
                 }
                 paginationTrigger(
                     isLoading: viewModel.isLoadingPodcasts,
-                    hasMore: viewModel.hasMorePodcasts,
-                    loadMore: viewModel.loadMorePodcasts
+                    canResume: viewModel.canResumePodcasts,
+                    error: viewModel.podcastsError,
+                    retry: { viewModel.onRetryTapped(.podcasts) },
+                    loadMore: { viewModel.onLoadMoreTapped(.podcasts) }
                 )
-                if !viewModel.isLoadingPodcasts && viewModel.podcasts.isEmpty {
+                if !viewModel.isLoadingPodcasts, viewModel.podcasts.isEmpty,
+                   viewModel.podcastsError == nil, !viewModel.hasMorePodcasts,
+                   !viewModel.canResumePodcasts {
                     emptyState(text: AppLocalizedKeys.emptyPodcasts.value)
                 }
             }
@@ -260,13 +295,20 @@ extension SheikhDetailView {
                 ForEach(viewModel.liveVideos) { video in
                     VideoCardView(video: video)
                         .onTapGesture { viewModel.onVideoTapped(video) }
+                        .onAppear {
+                            if video.id == viewModel.liveVideos.last?.id { viewModel.loadMoreLive() }
+                        }
                 }
                 paginationTrigger(
                     isLoading: viewModel.isLoadingLive,
-                    hasMore: viewModel.hasMoreLive,
-                    loadMore: viewModel.loadMoreLive
+                    canResume: viewModel.canResumeLive,
+                    error: viewModel.liveError,
+                    retry: { viewModel.onRetryTapped(.live) },
+                    loadMore: { viewModel.onLoadMoreTapped(.live) }
                 )
-                if !viewModel.isLoadingLive && viewModel.liveVideos.isEmpty {
+                if !viewModel.isLoadingLive, viewModel.liveVideos.isEmpty,
+                   viewModel.liveError == nil, !viewModel.hasMoreLive,
+                   !viewModel.canResumeLive {
                     emptyState(text: AppLocalizedKeys.emptyLive.value)
                 }
             }
@@ -277,14 +319,59 @@ extension SheikhDetailView {
 
     // MARK: Shared Helpers
 
+    /// Paging itself rides on the last row's `onAppear`, never on a row of its
+    /// own: a trigger that is a sibling of the `ForEach` still exists when the
+    /// list is empty, sits at offset 0 where `LazyVStack` cannot defer it, and
+    /// fires with no user scrolling.
     @ViewBuilder
-    func paginationTrigger(isLoading: Bool, hasMore: Bool, loadMore: @escaping () -> Void) -> some View {
+    func paginationTrigger(
+        isLoading: Bool,
+        canResume: Bool,
+        error: String?,
+        retry: @escaping () -> Void,
+        loadMore: @escaping () -> Void
+    ) -> some View {
         if isLoading {
             ProgressView().padding()
-        } else if hasMore {
-            Color.clear.frame(height: 1)
-                .onAppear { loadMore() }
+        } else if let error {
+            // A failed page clears `hasMore`, so this row is the only way back.
+            errorState(message: error, retry: retry)
+        } else if canResume {
+            loadMoreState(loadMore: loadMore)
         }
+    }
+
+    /// The page held nothing for this bucket but its token is still live, so
+    /// the next page is offered by hand rather than walked automatically.
+    func loadMoreState(loadMore: @escaping () -> Void) -> some View {
+        Button(action: loadMore) {
+            Text(viewModel.loadMoreTitle)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(Color.hadithGold)
+        }
+        .accessibilityLabel(viewModel.loadMoreTitle)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 40)
+    }
+
+    func errorState(message: String, retry: @escaping () -> Void) -> some View {
+        VStack(spacing: 12) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 34))
+                .customForeground(.subtitle)
+            Text(message)
+                .customStyle(.bodySmall, .subtitle)
+                .multilineTextAlignment(.center)
+            Button(action: retry) {
+                Text(viewModel.retryTitle)
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color.hadithGold)
+            }
+            .accessibilityLabel(viewModel.retryTitle)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 24)
+        .padding(.top, 40)
     }
 
     func emptyState(text: String) -> some View {

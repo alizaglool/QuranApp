@@ -7,6 +7,10 @@ import Foundation
 
 public struct Sheikh: Identifiable, Codable, Equatable, Sendable {
     public let id: String
+    /// YouTube's "uploads" playlist for this channel — the only reliable way to
+    /// enumerate every video the channel published. `search.list` is relevance
+    /// backed and skips most uploads, so it must never be used for enumeration.
+    public let uploadsPlaylistId: String
     public let name: String
     public let thumbnailUrl: String
     public let bannerImageUrl: String
@@ -17,6 +21,7 @@ public struct Sheikh: Identifiable, Codable, Equatable, Sendable {
 
     public init(
         id: String,
+        uploadsPlaylistId: String = "",
         name: String,
         thumbnailUrl: String,
         bannerImageUrl: String = "",
@@ -26,6 +31,7 @@ public struct Sheikh: Identifiable, Codable, Equatable, Sendable {
         channelDescription: String
     ) {
         self.id = id
+        self.uploadsPlaylistId = uploadsPlaylistId
         self.name = name
         self.thumbnailUrl = thumbnailUrl
         self.bannerImageUrl = bannerImageUrl

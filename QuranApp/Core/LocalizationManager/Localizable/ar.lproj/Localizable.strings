@@ -244,6 +244,13 @@
 "emptyShorts" = "لا توجد مقاطع قصيرة";
 "emptyPodcasts" = "لا توجد بودكاست";
 "emptyLive" = "لا توجد بثوث مباشرة";
+"lessonsContentLoadError" = "تعذّر تحميل المحتوى، تحقق من الاتصال وأعد المحاولة.";
+"lessonsQuotaError" = "تم استنفاد حصة يوتيوب لليوم. حاول مرة أخرى لاحقًا.";
+"lessonsLoadMore" = "تحميل المزيد";
+"showMore" = "عرض المزيد";
+"showLess" = "عرض أقل";
+"showMoreHint" = "يعرض نبذة القناة كاملة";
+"showLessHint" = "يختصر نبذة القناة";
 "nowPlaying" = "يُشغَّل الآن";
 "lessonsInSeries" = "دروس هذه السلسلة";
 "playlistDownload" = "تنزيل";

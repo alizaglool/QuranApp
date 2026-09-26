@@ -9,13 +9,6 @@
 import SwiftUI
 import UIKit
 
-/// A transparent UIView overlay that captures both single taps and long
-/// presses on the Mushaf page. Using a UIView (instead of relying on
-/// SwiftUI gestures) lets us read the exact touch location for the long
-/// press — needed to map a touch to the right verse via the positioning DB.
-///
-/// Both gestures live on the same UIView, so there's no SwiftUI/UIKit
-/// gesture conflict that drops one or the other.
 struct LongPressLocationView: UIViewRepresentable {
     var minimumPressDuration: TimeInterval = 0.4
     var onLongPress: (CGPoint) -> Void
@@ -40,9 +33,6 @@ struct LongPressLocationView: UIViewRepresentable {
         )
         tap.cancelsTouchesInView = false
         tap.delegate = context.coordinator
-        // Don't fire a tap if the touch is on its way to becoming a long
-        // press — otherwise long-press selections would also toggle the
-        // overlay bars on the way through.
         tap.require(toFail: longPress)
         view.addGestureRecognizer(tap)
 

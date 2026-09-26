@@ -57,9 +57,13 @@ final class SheikhListViewModel: MainViewModel {
     private let pageSize = 20
 
     var displayedSheikhs: [Sheikh] {
-        var result = searchText.isEmpty ? sheikhs : allSheikhs.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText) ||
-            $0.channelHandle.localizedCaseInsensitiveContains(searchText)
+        var result = (searchText.isEmpty && selectedFilter == .all) ? sheikhs : allSheikhs
+
+        if !searchText.isEmpty {
+            result = result.filter {
+                $0.name.localizedCaseInsensitiveContains(searchText) ||
+                $0.channelHandle.localizedCaseInsensitiveContains(searchText)
+            }
         }
 
         if selectedFilter != .all {
@@ -97,8 +101,8 @@ extension SheikhListViewModel {
         errorMessage = nil
 
         do {
-            let ids = try await RemoteConfigService.shared.fetchChannelIds()
-            let fetched = try await BatchService.shared.fetchSheikhs(from: ids)
+            let channels = try await RemoteConfigService.shared.fetchChannels()
+            let fetched = try await BatchService.shared.fetchSheikhs(from: channels)
             allSheikhs = sorted(fetched, by: sortOption)
             displayedPage = 0
             sheikhs = nextPage()
@@ -128,6 +132,30 @@ extension SheikhListViewModel {
         Task { await loadInitialData() }
     }
 
+    /// Pull-to-refresh path. Deliberately does NOT clear `sheikhs` or set
+    /// `isLoading`: `mainContent` swaps to `loadingList` on that flag, and the
+    /// branch swap destroys the ScrollView the refresh control lives on, killing
+    /// the spinner mid-gesture. The system control owns the progress signalling
+    /// here, so the list stays mounted and updates in place.
+    func refresh() async {
+        RemoteConfigService.shared.invalidateCache()
+
+        do {
+            let channels = try await RemoteConfigService.shared.fetchChannels()
+            let fetched = try await BatchService.shared.fetchSheikhs(from: channels)
+            allSheikhs = sorted(fetched, by: sortOption)
+            displayedPage = 0
+            sheikhs = nextPage()
+            hasMorePages = sheikhs.count < allSheikhs.count
+            errorMessage = nil
+        } catch {
+            // A failed refresh keeps the list already on screen rather than
+            // replacing it with a full-screen error — the stale data is still
+            // valid and the user asked for an update, not a teardown.
+            print("❌ SheikhList refresh failed: \(error)")
+        }
+    }
+
     func updateSort(_ option: SheikhSortOption) {
         sortOption = option
         allSheikhs = sorted(allSheikhs, by: option)
@@ -145,7 +173,7 @@ extension SheikhListViewModel {
     private func nextPage() -> [Sheikh] {
         let start = displayedPage * pageSize
         let end = Swift.min(start + pageSize, allSheikhs.count)
-        guard start < allSheikhs.count else { return sheikhs }
+        guard start < allSheikhs.count else { return [] }
         displayedPage += 1
         return Array(allSheikhs[start..<end])
     }

@@ -18,7 +18,7 @@ final class YouTubeChannelService {
         let joinedIds = ids.joined(separator: ",")
         var components = URLComponents(string: "\(baseURL)/channels")!
         components.queryItems = [
-            .init(name: "part", value: "snippet,statistics,brandingSettings"),
+            .init(name: "part", value: "snippet,statistics,brandingSettings,contentDetails"),
             .init(name: "id", value: joinedIds),
             .init(name: "key", value: apiKey)
         ]
@@ -49,6 +49,7 @@ final class YouTubeChannelService {
 
             return Sheikh(
                 id: item.id,
+                uploadsPlaylistId: Self.uploadsPlaylistId(for: item),
                 name: snippet.title ?? "",
                 thumbnailUrl: thumbnail,
                 bannerImageUrl: banner,
@@ -58,6 +59,19 @@ final class YouTubeChannelService {
                 channelDescription: snippet.description ?? ""
             )
         }
+    }
+
+    // MARK: - Private
+
+    /// The uploads playlist normally arrives in `contentDetails.relatedPlaylists.uploads`.
+    /// When it is absent we derive it from the channel id: YouTube documents the
+    /// uploads playlist as the channel id with its `UC` prefix replaced by `UU`.
+    private static func uploadsPlaylistId(for item: YouTubeChannelItem) -> String {
+        if let uploads = item.contentDetails?.relatedPlaylists?.uploads, !uploads.isEmpty {
+            return uploads
+        }
+        guard item.id.hasPrefix("UC") else { return "" }
+        return "UU" + item.id.dropFirst(2)
     }
 }
 
@@ -72,6 +86,15 @@ private struct YouTubeChannelItem: Decodable {
     let snippet: Snippet?
     let statistics: Statistics?
     let brandingSettings: BrandingSettings?
+    let contentDetails: ContentDetails?
+
+    struct ContentDetails: Decodable {
+        let relatedPlaylists: RelatedPlaylists?
+
+        struct RelatedPlaylists: Decodable {
+            let uploads: String?
+        }
+    }
 
     struct Snippet: Decodable {
         let title: String?

@@ -85,6 +85,7 @@ extension SheikhListView {
             }
             .padding(.bottom, 32)
         }
+        .refreshable { await viewModel.refresh() }
     }
 
     var heroSection: some View {

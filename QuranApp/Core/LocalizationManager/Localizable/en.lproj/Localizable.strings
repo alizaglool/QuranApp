@@ -244,6 +244,13 @@
 "emptyShorts" = "No shorts available";
 "emptyPodcasts" = "No podcasts available";
 "emptyLive" = "No live streams available";
+"lessonsContentLoadError" = "Failed to load content. Check your connection and try again.";
+"lessonsQuotaError" = "Today's YouTube quota is used up. Please try again later.";
+"lessonsLoadMore" = "Load more";
+"showMore" = "Show more";
+"showLess" = "Show less";
+"showMoreHint" = "Shows the full channel description";
+"showLessHint" = "Collapses the channel description";
 "nowPlaying" = "NOW PLAYING";
 "lessonsInSeries" = "Lessons in this Series";
 "playlistDownload" = "Download";

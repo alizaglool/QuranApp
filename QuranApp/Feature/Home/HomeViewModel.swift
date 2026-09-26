@@ -193,8 +193,8 @@ extension HomeViewModel {
 
     private func loadFeaturedSheikhs() async {
         do {
-            let ids = try await RemoteConfigService.shared.fetchChannelIds()
-            let all = try await BatchService.shared.fetchSheikhs(from: ids)
+            let channels = try await RemoteConfigService.shared.fetchChannels()
+            let all = try await BatchService.shared.fetchSheikhs(from: channels)
             let sorted = all.sorted { $0.subscriberCount > $1.subscriberCount }
             featuredSheikhs = Array(sorted.prefix(5))
         } catch {}

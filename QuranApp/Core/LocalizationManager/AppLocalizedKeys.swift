@@ -176,6 +176,13 @@ enum AppLocalizedKeys: String {
     case emptyShorts
     case emptyPodcasts
     case emptyLive
+    case lessonsContentLoadError
+    case lessonsQuotaError
+    case lessonsLoadMore
+    case showMore
+    case showLess
+    case showMoreHint
+    case showLessHint
     case nowPlaying
     case lessonsInSeries
     case playlistDownload

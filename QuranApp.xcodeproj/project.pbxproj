@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F8C1A0122FD2000100AA0012 /* SheikhChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0112FD2000100AA0011 /* SheikhChannel.swift */; };
+		F8C1A0142FD2000100AA0014 /* sheikhs.json in Resources */ = {isa = PBXBuildFile; fileRef = F8C1A0132FD2000100AA0013 /* sheikhs.json */; };
 		050AD8AC179E44519F776CBB /* YouTubeContentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46820F970E49457098380691 /* YouTubeContentService.swift */; };
 		07EBA782308143BDA698CF93 /* SheikhHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A9558DC914E30AF50EB94 /* SheikhHeaderView.swift */; };
 		0AF062969D370A21F0C96E25 /* ReciterLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */; };
@@ -148,6 +150,7 @@
 		F8C118292FCE0ACF009143E2 /* QuranPageBars.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */; };
 		F8C1182B2FCE1342009143E2 /* QuranTafsirPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */; };
 		F8C15A3D2FD03D09009143E2 /* AppDirectionModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */; };
+		F8C1A0022FD1000100AA0002 /* QuranPageImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0012FD1000100AA0001 /* QuranPageImageCache.swift */; };
 		F8D9BC322FD13255008AEC8E /* DailyHadithService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */; };
 		F8F2DC132DC8F11D00001F76 /* CustomPickerItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */; };
 		F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */; };
@@ -172,6 +175,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F8C1A0112FD2000100AA0011 /* SheikhChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhChannel.swift; sourceTree = "<group>"; };
+		F8C1A0132FD2000100AA0013 /* sheikhs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sheikhs.json; sourceTree = "<group>"; };
 		143D1E8731428B60D2178F66 /* AudioEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhDetailViewModel.swift; sourceTree = "<group>"; };
 		2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCardView.swift; sourceTree = "<group>"; };
@@ -318,6 +323,7 @@
 		F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageBars.swift; sourceTree = "<group>"; };
 		F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTafsirPageView.swift; sourceTree = "<group>"; };
 		F8C15A3C2FD03D09009143E2 /* AppDirectionModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDirectionModifier.swift; sourceTree = "<group>"; };
+		F8C1A0012FD1000100AA0001 /* QuranPageImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageImageCache.swift; sourceTree = "<group>"; };
 		F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyHadithService.swift; sourceTree = "<group>"; };
 		F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerItems.swift; sourceTree = "<group>"; };
 		F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -438,6 +444,14 @@
 			path = PlaylistItems;
 			sourceTree = "<group>";
 		};
+		F8C1A0152FD2000100AA0015 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F8C1A0112FD2000100AA0011 /* SheikhChannel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		ADF9AF1F41C14A289D989254 /* Lessons */ = {
 			isa = PBXGroup;
 			children = (
@@ -445,6 +459,7 @@
 				1BBEB1607D2C4489B9DC40FE /* SheikhDetail */,
 				BF3C4E94D7AB4BA992DB9AA3 /* Player */,
 				72F0D373F616477A8E6D0C89 /* Services */,
+				F8C1A0152FD2000100AA0015 /* Models */,
 			);
 			path = Lessons;
 			sourceTree = "<group>";
@@ -917,6 +932,7 @@
 				F8B854DC2FCB4BD7007666A5 /* DailyVerseService.swift */,
 				F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */,
 				F8B854D82FCB460E007666A5 /* QuranTextService.swift */,
+				F8C1A0012FD1000100AA0001 /* QuranPageImageCache.swift */,
 				BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */,
 				F8B854D02FCAFD5A007666A5 /* TafsirService.swift */,
 				F8B854BE2FCA324E007666A5 /* TafsirDatabase.swift */,
@@ -954,6 +970,7 @@
 				C88166C82DB662BC00EDECB8 /* Assets.xcassets */,
 				F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */,
 				F8B854A82FC9BDB0007666A5 /* quran_text.json */,
+				F8C1A0132FD2000100AA0013 /* sheikhs.json */,
 				AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */,
 				F84DAA3C2FC8942000C86233 /* books_manifest.json */,
 				F45ABB2CFB4B4500B164A904 /* adhkar.json */,
@@ -1220,6 +1237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F8B854A92FC9BDB0007666A5 /* quran_text.json in Resources */,
+				F8C1A0142FD2000100AA0014 /* sheikhs.json in Resources */,
 				AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */,
 				F84DAA3D2FC8942000C86233 /* books_manifest.json in Resources */,
 				F88D4B902F760FB70025939D /* HafsSmart_08_fixed.ttf in Resources */,
@@ -1345,6 +1363,8 @@
 				F84DAA3B2FC893E500C86233 /* HadithDownloadManager.swift in Sources */,
 				C88166C02DB662BA00EDECB8 /* AppDelegate.swift in Sources */,
 				F8B854D92FCB460E007666A5 /* QuranTextService.swift in Sources */,
+				F8C1A0022FD1000100AA0002 /* QuranPageImageCache.swift in Sources */,
+				F8C1A0122FD2000100AA0012 /* SheikhChannel.swift in Sources */,
 				F88D4B962F7E8F760025939D /* AppSettings.swift in Sources */,
 				C88166C22DB662BA00EDECB8 /* SceneDelegate.swift in Sources */,
 				F88DD9132F75405A0025939D /* QuranViewModel.swift in Sources */,
