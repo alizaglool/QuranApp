@@ -55,6 +55,11 @@ public extension Color {
     
     static let error = Color(.error)
     static let error50 = Color(.error50)
+    /// Search-result match highlight. Light is byte-identical to `error` (#DC2626);
+    /// dark lifts to #FF6B6B because #DC2626 over a translucent panel on the dark
+    /// mushaf page measures 2.3:1 and fails AA. `Error` itself must keep its single
+    /// value — error toasts and validation states app-wide depend on it.
+    static let searchMatch = Color(.searchMatch)
     
     static let success = Color(.success100)
     static let success50 = Color(.success50)
@@ -107,4 +112,15 @@ public extension Color {
     static let hadithGreen      = Color(hex: "29AD61")
     static let hadithRed        = Color(hex: "E84D3D")
     static let hadithOrange     = Color(hex: "E67D21")
+}
+
+// Adhkar Reading
+public extension Color {
+
+    static let adhkarSurface            = Color(.adhkarSurface)
+    static let adhkarSurfaceTranslucent = Color(.adhkarSurfaceTranslucent)
+    static let adhkarHairline           = Color(.adhkarHairline)
+    static let adhkarRingTrack          = Color(.adhkarRingTrack)
+    static let adhkarShadow             = Color(.adhkarShadow)
+    static let adhkarWatermark          = Color(.adhkarWatermark)
 }

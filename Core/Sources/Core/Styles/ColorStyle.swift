@@ -78,6 +78,14 @@ public enum ColorStyle {
     case hadithGreen
     case hadithRed
     case hadithOrange
+
+    // Adhkar
+    case adhkarSurface
+    case adhkarSurfaceTranslucent
+    case adhkarHairline
+    case adhkarRingTrack
+    case adhkarShadow
+    case adhkarWatermark
     
     public var color: Color {
         switch self {
@@ -194,6 +202,14 @@ public enum ColorStyle {
         case .hadithGreen:      return .hadithGreen
         case .hadithRed:        return .hadithRed
         case .hadithOrange:     return .hadithOrange
+
+        // Adhkar
+        case .adhkarSurface:            return .adhkarSurface
+        case .adhkarSurfaceTranslucent: return .adhkarSurfaceTranslucent
+        case .adhkarHairline:           return .adhkarHairline
+        case .adhkarRingTrack:          return .adhkarRingTrack
+        case .adhkarShadow:             return .adhkarShadow
+        case .adhkarWatermark:          return .adhkarWatermark
         }
     }
     

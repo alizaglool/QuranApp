@@ -143,7 +143,7 @@ struct TafsirView: View {
         let glyph = QuranTextService.verseEndGlyph(for: current.verse).map { " \($0)" } ?? ""
         return VStack(alignment: .trailing, spacing: 10) {
             Text(text + glyph)
-                .font(.custom("KFGQPCHafsSmart-Regular", size: 22))
+                .font(QuranFont.hafs.font(size: 22))
                 .lineSpacing(10)
                 .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity, alignment: .leading)

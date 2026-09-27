@@ -61,6 +61,9 @@ fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
 
+# Secrets — never commit real keys
+QuranApp/Config/Secrets.xcconfig
+
 # Hadith database build artefacts
 populate_hadith_fields.py
 split_hadith_db.py

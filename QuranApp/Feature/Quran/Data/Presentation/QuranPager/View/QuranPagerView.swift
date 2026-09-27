@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Core
+import UIKit
 
 struct QuranPagerView: View {
     @StateObject private var viewModel: QuranViewModel
@@ -17,9 +18,12 @@ struct QuranPagerView: View {
     @State private var isTodaySheetPresenting = false
     @State private var isSurahListPresenting = false
     @State private var isPageSettingsPresenting = false
-    @State private var isSearchPresenting = false
+    @State private var isSearchActive = false
+    @FocusState private var isSearchFieldFocused: Bool
     @State private var overlayHideTask: Task<Void, Never>? = nil
     @State private var isMiniPlayerSheetOpen = false
+
+    @State private var playingVerse: PlayingVerse?
 
     private static let overlayAutoHideDelay: TimeInterval = 4
 
@@ -33,6 +37,18 @@ struct QuranPagerView: View {
 
     private var mushafDisplayType: MushafType {
         storage.getSettings()?.mushafDisplayType ?? .mushaf
+    }
+
+    // The mushaf line art is 1440x232px; 15 lines make a 1440x3480 page, so a
+    // page's true aspect is 1 : 2.4167. Measured across pages 2/50/300/537/604,
+    // glyph ink fills at most 66.8% of each PNG's height, so a page tolerates
+    // being squeezed to 74% of its true height before lines start to touch.
+    // Anything shorter scrolls instead of compressing.
+    private static let mushafPageAspect: CGFloat = 3480.0 / 1440.0
+    private static let minPageHeightRatio: CGFloat = 0.74
+
+    private func pageHeight(for size: CGSize) -> CGFloat {
+        max(size.height, size.width * Self.mushafPageAspect * Self.minPageHeightRatio)
     }
 
     init(startPage: Int? = nil, onBack: (() -> Void)? = nil) {
@@ -98,12 +114,6 @@ struct QuranPagerView: View {
             QuranPageSettingsSheet()
                 .presentationDragIndicator(.visible)
         }
-        .fullScreenCover(isPresented: $isSearchPresenting) {
-            QuranSearchView(onSelect: { surah, verse in
-                viewModel.goToVerse(surah: surah, verse: verse)
-                isSearchPresenting = false
-            })
-        }
         .onChange(of: viewModel.showOverlay) { _, showing in
             AudioEngine.shared.quranOverlayActive = showing
             if showing {
@@ -126,18 +136,28 @@ struct QuranPagerView: View {
                 }
             }
         }
-        .onReceive(AudioEngine.shared.$currentVerseNumber.dropFirst()) { _ in
+        // `@Published` emits from `willSet`, so `AudioEngine.shared.currentVerseNumber`
+        // still holds the PREVIOUS verse inside this closure. Use the emitted value.
+        // `currentSurahNumber` is safe to read: every write site assigns the surah
+        // before the verse, so it has already settled by the time this fires.
+        .onReceive(AudioEngine.shared.$currentVerseNumber.dropFirst()) { verse in
             viewModel.goToVerse(
                 surah: AudioEngine.shared.currentSurahNumber,
-                verse: AudioEngine.shared.currentVerseNumber
+                verse: verse
             )
         }
+        .onReceive(AudioEngine.shared.$isPlaying) { _ in refreshPlayingVerse() }
+        .onReceive(AudioEngine.shared.$isLoadingVerse) { _ in refreshPlayingVerse() }
+        .onReceive(AudioEngine.shared.$currentSurahNumber) { _ in refreshPlayingVerse() }
+        .onReceive(AudioEngine.shared.$currentVerseNumber) { verse in refreshPlayingVerse(verse: verse) }
         .onAppear {
             AudioEngine.shared.isQuranScreenActive = true
+            UIApplication.shared.isIdleTimerDisabled = true
         }
         .onDisappear {
             AudioEngine.shared.quranOverlayActive = false
             AudioEngine.shared.isQuranScreenActive = false
+            UIApplication.shared.isIdleTimerDisabled = false
         }
     }
 
@@ -149,6 +169,9 @@ struct QuranPagerView: View {
     }
 
     private func scheduleOverlayHide() {
+        // Inline search lives INSIDE the auto-hiding overlay, so the timer would
+        // delete the search field out from under the user mid-typing.
+        guard !isSearchActive else { return }
         guard !isMiniPlayerSheetOpen else { return }
         overlayHideTask?.cancel()
         overlayHideTask = Task { @MainActor in
@@ -164,6 +187,27 @@ struct QuranPagerView: View {
         overlayHideTask?.cancel()
         overlayHideTask = nil
     }
+
+    /// Recomputes the playing verse; assigns only on a real change so the
+    /// pager body is not invalidated by repeated identical values.
+    ///
+    /// `verse` carries the value `$currentVerseNumber` just emitted: `@Published`
+    /// emits from `willSet`, so the stored property is still one verse behind inside
+    /// that subscription and must not be read there.
+    ///
+    /// The other three subscriptions pass nothing and read the engine directly. That
+    /// is safe because every write site assigns `currentSurahNumber` before
+    /// `currentVerseNumber` (beginPlayback, promoteScheduledHandoffIfReady,
+    /// loadSavedProgress), so the pair is never observed
+    /// half-updated from the surah side.
+    private func refreshPlayingVerse(verse: Int? = nil) {
+        let engine = AudioEngine.shared
+        let resolved: PlayingVerse? = (engine.isPlaying || engine.isLoadingVerse)
+            ? PlayingVerse(surahNumber: engine.currentSurahNumber,
+                           verseNumber: verse ?? engine.currentVerseNumber)
+            : nil
+        if playingVerse != resolved { playingVerse = resolved }
+    }
 }
 
 // MARK: - Pagers
@@ -178,54 +222,75 @@ extension QuranPagerView {
         case .tafsir:
             QuranTafsirPageView(pageNumber: page, viewModel: viewModel)
         case .mushaf:
-            QuranPageView(pageNumber: page, viewModel: viewModel)
+            QuranPageView(pageNumber: page, viewModel: viewModel, playingVerse: playingVerse)
         }
     }
 
     private var horizontalPager: some View {
-        TabView(selection: $viewModel.currentPage) {
-            ForEach(1...viewModel.totalPages, id: \.self) { page in
-                pageContent(for: page)
-                    .tag(page)
+        GeometryReader { geo in
+            let height = pageHeight(for: geo.size)
+            TabView(selection: $viewModel.currentPage) {
+                ForEach(1...viewModel.totalPages, id: \.self) { page in
+                    scrollingPage(for: page, viewport: geo.size.height, pageHeight: height)
+                        .tag(page)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .onChange(of: viewModel.currentPage) { _, newPage in
+                viewModel.updatePageInfo(page: newPage)
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
         .ignoresSafeArea(edges: .horizontal)
-        .onChange(of: viewModel.currentPage) { _, newPage in
-            viewModel.updatePageInfo(page: newPage)
+    }
+
+    // A page that fits is rendered bare — no ScrollView, no nested gesture
+    // recognizer — so portrait behaviour is unchanged. Only a page too tall for
+    // the viewport gets one.
+    @ViewBuilder
+    private func scrollingPage(for page: Int, viewport: CGFloat, pageHeight: CGFloat) -> some View {
+        if pageHeight > viewport {
+            ScrollView(.vertical, showsIndicators: false) {
+                pageContent(for: page)
+                    .frame(height: pageHeight)
+            }
+        } else {
+            pageContent(for: page)
         }
     }
 
     private var verticalPager: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(spacing: 0) {
-                    ForEach(1...viewModel.totalPages, id: \.self) { page in
-                        pageContent(for: page)
-                            .frame(height: UIScreen.main.bounds.height)
-                            .id(page)
-                            .background(pageVisibilityBackground(page: page))
+        GeometryReader { geo in
+            let height = pageHeight(for: geo.size)
+            let viewport = geo.frame(in: .global)
+            ScrollViewReader { proxy in
+                ScrollView(.vertical, showsIndicators: false) {
+                    LazyVStack(spacing: 0) {
+                        ForEach(1...viewModel.totalPages, id: \.self) { page in
+                            pageContent(for: page)
+                                .frame(height: height)
+                                .id(page)
+                                .background(pageVisibilityBackground(page: page, viewport: viewport))
+                        }
                     }
                 }
-            }
-            .ignoresSafeArea(edges: .horizontal)
-            .onPreferenceChange(VisiblePageKey.self) { page in
-                guard let page, viewModel.currentPage != page else { return }
-                viewModel.updatePageInfo(page: page)
-            }
-            .onChange(of: viewModel.currentPage) { _, newPage in
-                proxy.scrollTo(newPage, anchor: .top)
+                .onPreferenceChange(VisiblePageKey.self) { page in
+                    guard let page, viewModel.currentPage != page else { return }
+                    viewModel.updatePageInfo(page: page)
+                }
+                .onChange(of: viewModel.currentPage) { _, newPage in
+                    proxy.scrollTo(newPage, anchor: .top)
+                }
             }
         }
+        .ignoresSafeArea(edges: .horizontal)
     }
 
-    private func pageVisibilityBackground(page: Int) -> some View {
+    private func pageVisibilityBackground(page: Int, viewport: CGRect) -> some View {
         GeometryReader { geo in
-            let frame = geo.frame(in: .global)
-            let screenH = UIScreen.main.bounds.height
+            let midY = geo.frame(in: .global).midY
             Color.clear.preference(
                 key: VisiblePageKey.self,
-                value: (frame.midY >= 0 && frame.midY <= screenH) ? page : nil
+                value: (midY >= viewport.minY && midY <= viewport.maxY) ? page : nil
             )
         }
     }
@@ -244,31 +309,62 @@ extension QuranPagerView {
 
     private var overlayContent: some View {
         VStack(spacing: 0) {
-            topBar
-            Spacer()
-            MiniPlayerView(
-                onPlayTapped: {
-                    if AudioEngine.shared.playSurahMode {
-                        AudioEngine.shared.playWholeSurah(surahNumber: viewModel.currentSurahNumber)
-                    } else {
-                        AudioEngine.shared.playFrom(
-                            surahNumber: viewModel.currentSurahNumber,
-                            verseNumber: viewModel.currentFirstVerseNumber
-                        )
+            if isSearchActive {
+                searchPanel
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+            } else {
+                topBar
+                    .transition(.opacity.combined(with: .move(edge: .top)))
+                Spacer()
+                MiniPlayerView(
+                    onPlayTapped: {
+                        if AudioEngine.shared.playSurahMode {
+                            AudioEngine.shared.playWholeSurah(surahNumber: viewModel.currentSurahNumber)
+                        } else {
+                            AudioEngine.shared.playFrom(
+                                surahNumber: viewModel.currentSurahNumber,
+                                verseNumber: viewModel.currentFirstVerseNumber
+                            )
+                        }
+                    },
+                    onSheetOpenChanged: { open in
+                        isMiniPlayerSheetOpen = open
                     }
-                },
-                onSheetOpenChanged: { open in
-                    isMiniPlayerSheetOpen = open
-                }
-            )
-            .environmentObject(AudioEngine.shared)
-            .padding(.horizontal, 16)
-            .padding(.bottom, 12)
-            bottomBar
+                )
+                .environmentObject(AudioEngine.shared)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 12)
+                bottomBar
+            }
         }
         .transition(.opacity)
         .simultaneousGesture(TapGesture().onEnded { scheduleOverlayHide() })
         .appDirection()
+    }
+
+    private var searchPanel: some View {
+        QuranSearchView(
+            isFieldFocused: $isSearchFieldFocused,
+            barBackground: backgroundColor,
+            onSelect: { surah, verse in
+                viewModel.clearSelection()
+                viewModel.goToVerse(surah: surah, verse: verse)
+                closeSearch()
+            },
+            onCancel: { closeSearch() }
+        )
+    }
+
+    private func openSearch() {
+        cancelOverlayHide()
+        withAnimation(.easeInOut(duration: 0.22)) { isSearchActive = true }
+        isSearchFieldFocused = true
+    }
+
+    private func closeSearch() {
+        isSearchFieldFocused = false
+        withAnimation(.easeInOut(duration: 0.22)) { isSearchActive = false }
+        scheduleOverlayHide()
     }
 
     // MARK: - Top Bar
@@ -301,11 +397,12 @@ extension QuranPagerView {
 
             Spacer()
             
-            Button(action: { isSearchPresenting = true }) {
+            Button(action: { openSearch() }) {
                 Image(systemName: "magnifyingglass")
                     .font(.system(size: 18, weight: .medium))
                     .foregroundColor(Color.playerControls)
             }
+            .accessibilityLabel(AppLocalizedKeys.searchQuran.value)
             
             Button(action: { isTodaySheetPresenting = true }) {
                 ZStack {
@@ -326,6 +423,10 @@ extension QuranPagerView {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
+        .safeAreaPadding(.horizontal)
+        // Mushaf reading order, not app language: back + menu hug the right edge,
+        // search + today hug the left, in ar and en alike.
+        .environment(\.layoutDirection, .rightToLeft)
         .background(backgroundColor.opacity(0.95))
     }
 
@@ -354,19 +455,22 @@ extension QuranPagerView {
                 let progress = viewModel.progressRatio
                 let trackWidth = geo.size.width
                 let capsuleWidth: CGFloat = 50
-                let usableWidth = trackWidth - capsuleWidth
-                let capsuleX = capsuleWidth / 2 + (progress * usableWidth)
+                let usableWidth = max(trackWidth - capsuleWidth, 1)
+                // Mushaf order: page 1 at the right edge, page 604 at the left.
+                // Expressed in raw left-origin coordinates and pinned LTR below,
+                // so the track reads right-to-left in ar and en alike.
+                let capsuleX = trackWidth - (capsuleWidth / 2 + progress * usableWidth)
 
                 ZStack {
                     RoundedRectangle(cornerRadius: 2)
                         .fill(ColorStyle.outlineVariant.color.opacity(0.3))
                         .frame(height: 4)
 
-                    HStack {
+                    HStack(spacing: 0) {
+                        Spacer(minLength: 0)
                         RoundedRectangle(cornerRadius: 2)
                             .fill(Color.playerControls)
                             .frame(width: trackWidth * progress, height: 4)
-                        Spacer(minLength: 0)
                     }
 
                     Text("\(viewModel.currentPage)")
@@ -382,13 +486,14 @@ extension QuranPagerView {
                 .gesture(
                     DragGesture(minimumDistance: 0)
                         .onChanged { value in
-                            let flippedX = trackWidth - value.location.x
-                            let ratio = flippedX / trackWidth
-                            let page = viewModel.pageFromDragRatio(ratio)
-                            viewModel.goToPage(page)
+                            let x = min(max(value.location.x, capsuleWidth / 2),
+                                        trackWidth - capsuleWidth / 2)
+                            let ratio = (trackWidth - capsuleWidth / 2 - x) / usableWidth
+                            viewModel.goToPage(viewModel.pageFromDragRatio(ratio))
                         }
                 )
             }
+            .environment(\.layoutDirection, .leftToRight)
             .frame(height: 30)
             .padding(.horizontal, 8)
 
@@ -400,7 +505,12 @@ extension QuranPagerView {
             .frame(width: 54)
         }
         .padding(.horizontal, 12)
+        .safeAreaPadding(.horizontal)
         .padding(.vertical, 10)
+        // Same mushaf order as topBar: last-visited on the right, settings on the
+        // left. The scrubber's own GeometryReader re-pins itself .leftToRight below
+        // and is unaffected.
+        .environment(\.layoutDirection, .rightToLeft)
         .background(backgroundColor.opacity(0.95))
         .overlay(
             Rectangle()

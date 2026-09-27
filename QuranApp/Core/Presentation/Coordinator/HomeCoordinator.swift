@@ -16,6 +16,7 @@ protocol HomeCoordinating: AnyObject {
     func coordinateToQuran(startPage: Int?)
     func coordinateToAdhkar()
     func coordinateToHadith()
+    func coordinateToLessons()
 }
 
 class HomeCoordinator: MainCoordinator, HomeCoordinating {
@@ -47,6 +48,10 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
 
     func coordinateToHadith() {
         tabBarController.selectedTabItem = TabBarItem.hadith
+    }
+
+    func coordinateToLessons() {
+        tabBarController.selectedTabItem = TabBarItem.lessons
     }
 
     func coordinateToQuran(startPage: Int? = nil) {

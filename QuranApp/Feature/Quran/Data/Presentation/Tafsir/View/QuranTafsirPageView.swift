@@ -13,7 +13,7 @@ struct QuranTafsirPageView: View {
     let pageNumber: Int
     @ObservedObject var viewModel: QuranViewModel
     @ObservedObject private var storage = StorageManager.shared
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme: ColorScheme
 
     @State private var tafsirTexts: [Int: String] = [:]
 
@@ -183,7 +183,7 @@ struct QuranTafsirPageView: View {
                 .frame(maxWidth: .infinity)
 
             Text(surahName)
-                .font(.custom("KFGQPCHafsSmart-Regular", size: 20))
+                .font(QuranFont.hafs.font(size: 20))
                 .foregroundColor(labelColor)
         }
         .padding(.horizontal, 4)
@@ -211,7 +211,7 @@ struct QuranTafsirPageView: View {
 
     private func bismillahLine(_ text: String) -> some View {
         Text(text)
-            .font(.custom("KFGQPCHafsSmart-Regular", size: 26))
+            .font(QuranFont.hafs.font(size: 26))
             .lineSpacing(10)
             .multilineTextAlignment(.center)
             .foregroundColor(textColor)
@@ -232,7 +232,7 @@ struct QuranTafsirPageView: View {
         )
 
         return (Text(text) + Text("\u{00A0}") + Text(Image(uiImage: badgeImage)))
-            .font(.custom("KFGQPCHafsSmart-Regular", size: fontSize))
+            .font(QuranFont.hafs.font(size: fontSize))
             .lineSpacing(10)
             .multilineTextAlignment(.center)
             .foregroundColor(textColor)
