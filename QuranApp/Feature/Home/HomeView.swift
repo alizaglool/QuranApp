@@ -10,7 +10,6 @@ import Core
 
 struct HomeView: View {
     @StateObject var viewModel: HomeViewModel
-    @Environment(\.colorScheme) var colorScheme
 
     init(coordinator: HomeCoordinating) {
         _viewModel = StateObject(wrappedValue: HomeViewModel(coordinator: coordinator))
@@ -31,18 +30,22 @@ extension HomeView {
         VStack(spacing: 0) {
             navBar
 
-            NoIndicatorsScrollView {
-                VStack(spacing: 24) {
-                    welcomeSection
-                    prayerTimesSection
-                    quickAccessGrid
-                    if viewModel.lastReadPage != nil {
-                        continueReadingCard
+            GeometryReader { geo in
+                NoIndicatorsScrollView {
+                    VStack(spacing: 24) {
+                        welcomeSection
+                        prayerTimesSection
+                        quickAccessGrid
+                        if viewModel.lastReadPage != nil {
+                            continueReadingCard
+                        }
+                        hadithOfTheDayCard
+                        featuredLessonsSection
                     }
-                    hadithOfTheDayCard
-                    featuredLessonsSection
+                    .frame(width: geo.size.width)
+                    .padding(.bottom, 32)
                 }
-                .padding(.bottom, 32)
+                .clipped()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -149,7 +152,6 @@ extension HomeView {
 
 struct PrayerTimeChip: View {
     let prayer: PrayerTimeItem
-    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         VStack(spacing: 6) {
@@ -179,7 +181,7 @@ struct PrayerTimeChip: View {
 
     private var activeBackground: Color {
         if prayer.isActive {
-            return colorScheme == .dark ? ColorStyle.secondary.color : ColorStyle.primary.color
+            return ColorStyle.brandActive.color
         }
         return Color.surfaceContainer
     }
@@ -228,14 +230,13 @@ extension HomeView {
 struct QuickAccessCard: View {
     let item: QuickAccessItem
     let action: () -> Void
-    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 12) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 8)
-                        .fill(ColorStyle.primary.color.opacity(colorScheme == .dark ? 0.1 : 0.05))
+                        .fill(ColorStyle.washPrimary.color)
                         .frame(width: 36, height: 36)
 
                     Image(systemName: item.icon)
@@ -251,11 +252,11 @@ struct QuickAccessCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
             .frame(height: 110)
-            .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+            .background(Color.cardSurface)
             .customCornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)
-                    .stroke(ColorStyle.outlineVariant.color.opacity(colorScheme == .dark ? 0.2 : 0.1), lineWidth: 1)
+                    .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
             )
         }
         .buttonStyle(.plain)
@@ -324,23 +325,12 @@ extension HomeView {
     }
 
     var resumeButton: some View {
-        Group {
-            if colorScheme == .dark {
-                Text(AppLocalizedKeys.resume.value)
-                    .customStyle(.kitab(size: 12, bold: true), .onSurface)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(ColorStyle.secondary.color)
-                    .customCornerRadius(10)
-            } else {
-                Text(AppLocalizedKeys.resume.value)
-                    .customStyle(.kitab(size: 12, bold: true), .primary)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.white)
-                    .customCornerRadius(10)
-            }
-        }
+        Text(AppLocalizedKeys.resume.value)
+            .customStyle(.kitab(size: 12, bold: true), .resumeLabel)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+            .background(Color.resumeSurface)
+            .customCornerRadius(10)
     }
 }
 
@@ -370,12 +360,21 @@ extension HomeView {
                     .fill(ColorStyle.outlineVariant.color.opacity(0.3))
                     .frame(height: 0.5)
 
+                // No `fixedSize()`: it ignores the proposed width in both axes, so
+                // this label forced its full single-line width on the card and took
+                // the whole page wider than the screen — 315pt of
+                // "THE FORTY HADITH OF SHAH WALIULLAH 7376" in a 273pt box, which is
+                // what let Home be dragged sideways. Priority keeps the label at its
+                // natural width whenever it fits and the hairlines take the rest;
+                // scaling covers the two long book names, truncation is the net.
                 Text(viewModel.hadithReference)
                     .customStyle(.kitab(size: 10, bold: true))
                     .foregroundColor(ColorStyle.onSurfaceVariant.color.opacity(0.6))
                     .tracking(1.5)
                     .lineLimit(1)
-                    .fixedSize()
+                    .minimumScaleFactor(0.8)
+                    .truncationMode(.tail)
+                    .layoutPriority(1)
 
                 Rectangle()
                     .fill(ColorStyle.outlineVariant.color.opacity(0.3))

@@ -11,7 +11,6 @@ import Core
 struct MyAdhkarCard: View {
     let dhikr: MyDhikr
     let index: Int
-    let colorScheme: ColorScheme
     let onDelete: () -> Void
     let onTap: () -> Void
 
@@ -20,7 +19,7 @@ struct MyAdhkarCard: View {
             HStack(alignment: .center, spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(ColorStyle.primary.color.opacity(colorScheme == .dark ? 0.15 : 0.08))
+                        .fill(ColorStyle.washPrimary.color)
                         .frame(width: 36, height: 36)
                     Text("\(index)")
                         .customStyle(.adhkar(size: 13, bold: true), .primary)
@@ -47,7 +46,7 @@ struct MyAdhkarCard: View {
                 }
             }
             .padding(14)
-            .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+            .background(Color.cardSurface)
             .cornerRadius(14)
             .overlay(
                 RoundedRectangle(cornerRadius: 14)

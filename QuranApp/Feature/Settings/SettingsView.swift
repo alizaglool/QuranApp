@@ -80,7 +80,7 @@ extension SettingsView {
                 Circle()
                     .fill(
                         LinearGradient(
-                            colors: [Color(hex: "#78C262"), Color(hex: "#5BAA49")],
+                            colors: [.avatarGradientStart, .avatarGradientEnd],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing
                         )

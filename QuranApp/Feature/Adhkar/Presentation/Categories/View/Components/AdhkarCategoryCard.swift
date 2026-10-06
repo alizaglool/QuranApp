@@ -10,7 +10,6 @@ import Core
 
 struct AdhkarCategoryCard: View {
     let category: DhikrCategory
-    @Environment(\.colorScheme) var colorScheme
     @EnvironmentObject private var localizationManager: LocalizationManager
 
     private var displayTitle: String {
@@ -21,7 +20,7 @@ struct AdhkarCategoryCard: View {
         VStack(alignment: .leading, spacing: 12) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(ColorStyle.primary.color.opacity(colorScheme == .dark ? 0.15 : 0.06))
+                    .fill(ColorStyle.washPrimary.color)
                     .frame(width: 40, height: 40)
                 Image(systemName: category.icon)
                     .font(.system(size: 18))
@@ -44,11 +43,11 @@ struct AdhkarCategoryCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .frame(minHeight: 130)
-        .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+        .background(Color.cardSurface)
         .customCornerRadius(16)
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(ColorStyle.outlineVariant.color.opacity(colorScheme == .dark ? 0.2 : 0.1), lineWidth: 1)
+                .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
         )
     }
 }

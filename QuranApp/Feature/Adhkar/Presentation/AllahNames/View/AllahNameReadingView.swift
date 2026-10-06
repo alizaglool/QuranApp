@@ -15,7 +15,6 @@ struct AllahNameReadingView: View {
 
     @State private var currentIndex: Int
     @EnvironmentObject private var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) private var colorScheme
 
     private var isRTL: Bool { localizationManager.currentLanguage == .Arabic }
     private var current: AllahName { names[currentIndex] }
@@ -77,7 +76,6 @@ extension AllahNameReadingView {
             ForEach(names.indices, id: \.self) { index in
                 NamePageView(
                     name: names[index],
-                    colorScheme: colorScheme,
                     isRTL: isRTL
                 )
                 .tag(index)
@@ -142,7 +140,7 @@ extension AllahNameReadingView {
 
             ZStack {
                 Circle()
-                    .fill(ColorStyle.secondary.color.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                    .fill(ColorStyle.washSecondary.color)
                     .frame(width: 44, height: 44)
                 Text(String(format: "%d", current.id))
                     .customStyle(.adhkar(size: 16, bold: true), .secondary)

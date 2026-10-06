@@ -14,7 +14,6 @@ struct HadithLibraryView: View {
     @ObservedObject private var downloadManager = HadithDownloadManager.shared
     // Kept for SwiftUI re-render subscription on language change
     @EnvironmentObject private var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) var colorScheme
     @FocusState private var searchFocused: Bool
 
     init(coordinator: HadithCoordinating) {
@@ -49,11 +48,7 @@ struct HadithLibraryView: View {
     }
 
     // MARK: – Subtle tinted surface for secondary cards
-    private var adaptiveCardBackground: Color {
-        colorScheme == .dark
-            ? Color.primaryColor.opacity(0.20)
-            : Color.primaryColor.opacity(0.07)
-    }
+    private var adaptiveCardBackground: Color { .hadithCardWash }
 }
 
 // MARK: - Main Content
@@ -302,7 +297,7 @@ extension HadithLibraryView {
             .padding(.big)
         }
         .overlay(alignment: .topTrailing) {
-            downloadButton(for: book, state: dlState, dark: true)
+            downloadButton(for: book, state: dlState, on: .alwaysDark)
                 .padding(.md)
         }
         .frame(height: 200)
@@ -316,12 +311,11 @@ extension HadithLibraryView {
     private func bookCard(_ book: HadithBook, iconIndex: Int) -> some View {
         let icons      = ["books.vertical.fill", "scroll.fill", "doc.richtext.fill", "book.pages.fill"]
         let icon       = icons[iconIndex % icons.count]
-        let isDark     = colorScheme == .dark
         let dlState    = downloadManager.state(for: book.id)
         let downloaded = dlState == .downloaded
-        let iconColor  = isDark ? Color.white.opacity(0.55)  : Color.primaryColor.opacity(0.70)
-        let titleColor = isDark ? Color.white                : Color.primaryColor
-        let metaColor  = isDark ? Color.white.opacity(0.35)  : Color.primaryColor.opacity(0.45)
+        let iconColor  = Color.hadithBookIcon
+        let titleColor = Color.hadithBookTitle
+        let metaColor  = Color.hadithBookMeta
 
         return VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .top) {
@@ -329,7 +323,7 @@ extension HadithLibraryView {
                     .font(.system(size: 20, weight: .medium))
                     .foregroundColor(iconColor)
                 Spacer()
-                downloadButton(for: book, state: dlState, dark: isDark)
+                downloadButton(for: book, state: dlState)
             }
             .padding(.bottom, .sm)
 
@@ -372,10 +366,12 @@ extension HadithLibraryView {
 extension HadithLibraryView {
 
     @ViewBuilder
-    private func downloadButton(for book: HadithBook, state: HadithDownloadState, dark: Bool) -> some View {
-        let stroke: Color = dark ? Color.white.opacity(0.35)       : Color.onSurface.opacity(0.30)
-        let bg: Color     = dark ? Color.white.opacity(0.10)       : Color.onSurface.opacity(0.06)
-        let icon: Color   = dark ? Color.white.opacity(0.80)       : Color.onSurface.opacity(0.70)
+    private func downloadButton(for book: HadithBook,
+                                state: HadithDownloadState,
+                                on surface: DownloadSurface = .adaptive) -> some View {
+        let stroke: Color = surface.stroke.color
+        let bg: Color     = surface.fill.color
+        let icon: Color   = surface.icon.color
 
         switch state {
         case .notDownloaded:
@@ -546,5 +542,37 @@ struct HadithSearchRow: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+    }
+}
+
+extension HadithLibraryView {
+
+    /// Surface a download button is drawn on. The featured card uses the brand
+    /// gradient, which is dark in both appearances, so its chrome is fixed white
+    /// rather than resolved from the colour scheme.
+    enum DownloadSurface {
+        case adaptive
+        case alwaysDark
+
+        var stroke: ColorStyle {
+            switch self {
+            case .adaptive:   return .downloadStroke
+            case .alwaysDark: return .downloadStrokeOnDark
+            }
+        }
+
+        var fill: ColorStyle {
+            switch self {
+            case .adaptive:   return .downloadSurface
+            case .alwaysDark: return .downloadSurfaceOnDark
+            }
+        }
+
+        var icon: ColorStyle {
+            switch self {
+            case .adaptive:   return .downloadIcon
+            case .alwaysDark: return .downloadIconOnDark
+            }
+        }
     }
 }

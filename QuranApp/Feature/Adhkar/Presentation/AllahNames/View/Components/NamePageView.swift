@@ -10,7 +10,6 @@ import Core
 
 struct NamePageView: View {
     let name: AllahName
-    let colorScheme: ColorScheme
     let isRTL: Bool
 
     var body: some View {

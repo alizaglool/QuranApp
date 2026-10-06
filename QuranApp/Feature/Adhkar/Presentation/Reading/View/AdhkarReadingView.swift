@@ -436,8 +436,10 @@ extension AdhkarReadingView {
     }
 
     private var countRingButton: some View {
-        // Athkar counts down: the ring shows what is left, not what is done.
-        let remaining = max(0, (viewModel.currentDhikr?.count ?? 0) - viewModel.currentTapCount)
+        // Deliberate deviation from Athkar, which counts down. Before the first
+        // tap the ring shows the target; from then on the tally climbs 1...count.
+        let total = viewModel.currentDhikr?.count ?? 0
+        let shown = viewModel.currentTapCount == 0 ? total : viewModel.currentTapCount
 
         return Button(action: { handleAdvance() }) {
             ZStack {
@@ -464,10 +466,10 @@ extension AdhkarReadingView {
                     .overlay(Circle().stroke(Color.adhkarHairline, lineWidth: 1))
                     .frame(width: 56, height: 56)
 
-                Text(en(remaining))
+                Text(en(shown))
                     .customStyle(.adhkar(size: 20, bold: true), .onSurface)
                     .monospacedDigit()
-                    .animation(.easeOut(duration: 0.2), value: remaining)
+                    .animation(.easeOut(duration: 0.2), value: shown)
             }
         }
         .buttonStyle(.plain)

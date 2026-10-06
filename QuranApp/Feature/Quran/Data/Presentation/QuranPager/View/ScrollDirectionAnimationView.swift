@@ -19,7 +19,7 @@ struct ScrollDirectionAnimationView: View {
         return false
     }
 
-    private let stroke = Color(red: 0.63, green: 0.48, blue: 0.33)
+    private let stroke = Color.mushafPreviewStroke
 
     var body: some View {
         GeometryReader { geo in

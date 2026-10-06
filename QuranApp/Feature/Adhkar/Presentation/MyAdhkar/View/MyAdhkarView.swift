@@ -15,7 +15,6 @@ struct MyAdhkarView: View {
     let coordinator: AdhkarCoordinating
     @StateObject private var viewModel = MyAdhkarViewModel()
     @EnvironmentObject var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) var colorScheme
 
     @State private var isAddPresenting = false
     @State private var newDhikrText = ""
@@ -140,7 +139,7 @@ extension MyAdhkarView {
 
                 LazyVStack(spacing: 12) {
                     ForEach(Array(viewModel.myAdhkar.enumerated()), id: \.element.id) { index, dhikr in
-                        MyAdhkarCard(dhikr: dhikr, index: index + 1, colorScheme: colorScheme) {
+                        MyAdhkarCard(dhikr: dhikr, index: index + 1) {
                             viewModel.delete(dhikr)
                         } onTap: {
                             viewModel.resetSession()

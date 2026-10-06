@@ -15,7 +15,6 @@ struct VerseActionSheet: View {
     let surahName: String
     let verseNumber: Int
     
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
 
     @ObservedObject private var localization = LocalizationManager.shared
@@ -86,7 +85,7 @@ struct VerseActionSheet: View {
         return TafsirBook.default
     }
 
-    private var textColor: Color { colorScheme == .dark ? .white : .black }
+    private var textColor: Color { .quranText }
 
     private var verseText: String {
         QuranTextService.shared.text(surah: surahNumber, verse: verseNumber) ?? ""

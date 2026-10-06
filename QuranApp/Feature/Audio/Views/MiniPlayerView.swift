@@ -304,9 +304,8 @@ struct MiniPlayerView: View {
 private struct AirPlayButton: UIViewRepresentable {
     func makeUIView(context: Context) -> AVRoutePickerView {
         let v = AVRoutePickerView()
-        let green = UIColor(red: 50/255, green: 116/255, blue: 64/255, alpha: 1)
-        v.tintColor = green
-        v.activeTintColor = green
+        v.tintColor = .playerControls
+        v.activeTintColor = .playerControls
         return v
     }
     func updateUIView(_ uiView: AVRoutePickerView, context: Context) {}

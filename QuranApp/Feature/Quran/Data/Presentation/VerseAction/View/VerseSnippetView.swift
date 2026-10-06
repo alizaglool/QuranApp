@@ -40,8 +40,6 @@ struct VerseSnippetView: View {
 
     private func snippetContent(_ d: SnippetData, firstLine: Int, lineCount: Int) -> some View {
         let aspect: CGFloat = 15.0 / (1.4 * CGFloat(lineCount))
-        let isDark = colorScheme == .dark
-        let textColor: Color = isDark ? .white : .black
 
         return Color.clear
             .aspectRatio(aspect, contentMode: .fit)
@@ -58,7 +56,7 @@ struct VerseSnippetView: View {
                                     rightVal: rect.rightVal,
                                     width: geo.size.width,
                                     height: lineH,
-                                    color: textColor
+                                    color: .quranText
                                 )
                             }
                         }
@@ -70,7 +68,7 @@ struct VerseSnippetView: View {
                                 markerCenterY: pos.markerCenterY,
                                 firstLine: firstLine,
                                 lineCount: lineCount,
-                                isDarkMode: isDark
+                                scheme: colorScheme
                             )
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
@@ -123,7 +121,7 @@ struct VerseMarkerSnippetOverlay: UIViewRepresentable {
     let markerCenterY: Float
     let firstLine: Int
     let lineCount: Int
-    let isDarkMode: Bool
+    let scheme: ColorScheme
     var theme: Theme = .classic
 
     func makeUIView(context: Context) -> VerseMarkerSnippetUIView {
@@ -137,7 +135,7 @@ struct VerseMarkerSnippetOverlay: UIViewRepresentable {
         view.markerCenterY = markerCenterY
         view.firstLine = firstLine
         view.lineCount = lineCount
-        view.isDarkMode = isDarkMode
+        view.scheme = scheme
         view.theme = theme
         view.setNeedsDisplay()
     }
@@ -152,7 +150,7 @@ final class VerseMarkerSnippetUIView: UIView {
     var markerCenterY: Float = 0
     var firstLine: Int = 0
     var lineCount: Int = 1
-    var isDarkMode: Bool = false
+    var scheme: ColorScheme = .light
     var theme: Theme = .classic
 
     override init(frame: CGRect) {
@@ -172,7 +170,7 @@ final class VerseMarkerSnippetUIView: UIView {
             verseNumber,
             centeredAt: CGPoint(x: x, y: y),
             lineHeight: lineH,
-            isDarkMode: isDarkMode,
+            scheme: scheme,
             theme: theme,
             in: ctx
         )

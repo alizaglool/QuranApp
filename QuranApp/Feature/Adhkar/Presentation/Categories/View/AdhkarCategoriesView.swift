@@ -78,6 +78,17 @@ extension AdhkarCategoriesView {
 
     private var specialSection: some View {
         VStack(alignment: .leading, spacing: 12) {
+            if let window = viewModel.activeProhibitedWindow {
+                Button { viewModel.selectProhibitedTimes() } label: {
+                    ProhibitedTimesBanner(
+                        title: viewModel.prohibitedCardTitle,
+                        subtitle: window.cardSubtitleAr
+                    )
+                }
+                .buttonStyle(.plain)
+                .padding(.horizontal, .big)
+            }
+
             ForEach(viewModel.specialCategories) { category in
                 Button { viewModel.selectCategory(category) } label: {
                     SpecialCategoryBanner(category: category)
@@ -102,7 +113,7 @@ extension AdhkarCategoriesView {
                 title: AppLocalizedKeys.allahNamesTitle.value,
                 subtitle: AppLocalizedKeys.allahNamesSubtitle.value,
                 icon: "star.fill",
-                color: ColorStyle.secondary.color
+                tint: .secondary
             ) {
                 viewModel.selectAllahNames()
             }
@@ -111,7 +122,7 @@ extension AdhkarCategoriesView {
                 title: AppLocalizedKeys.myAdhkarTitle.value,
                 subtitle: AppLocalizedKeys.myAdhkarSubtitle.value,
                 icon: "heart.fill",
-                color: ColorStyle.primary.color
+                tint: .primary
             ) {
                 viewModel.selectMyAdhkar()
             }

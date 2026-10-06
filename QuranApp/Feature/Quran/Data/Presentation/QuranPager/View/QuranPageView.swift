@@ -37,7 +37,7 @@ final class QuranGlyphRenderer {
         _ verseNumber: Int,
         centeredAt point: CGPoint,
         lineHeight: CGFloat,
-        isDarkMode: Bool,
+        scheme: ColorScheme,
         theme: Theme,
         in context: CGContext
     ) {
@@ -49,13 +49,13 @@ final class QuranGlyphRenderer {
 
         UIGraphicsPushContext(context)
         defer { UIGraphicsPopContext() }
-        drawBadge(verseNumber, in: rect, isDarkMode: isDarkMode, theme: theme)
+        drawBadge(verseNumber, in: rect, scheme: scheme, theme: theme)
     }
 
     static func verseMarkerImage(
         _ verseNumber: Int,
         lineHeight: CGFloat,
-        isDarkMode: Bool,
+        scheme: ColorScheme,
         theme: Theme
     ) -> UIImage {
         guard verseNumber >= 1, verseNumber <= maxVerseNumber else { return UIImage() }
@@ -66,7 +66,7 @@ final class QuranGlyphRenderer {
         let badge = UIGraphicsImageRenderer(size: size).image { _ in
             drawBadge(verseNumber,
                       in: CGRect(origin: .zero, size: size),
-                      isDarkMode: isDarkMode,
+                      scheme: scheme,
                       theme: theme)
         }
         // Both call sites embed this in a tinted `Text` chain; keep the
@@ -79,14 +79,14 @@ final class QuranGlyphRenderer {
     private static func drawBadge(
         _ verseNumber: Int,
         in rect: CGRect,
-        isDarkMode: Bool,
+        scheme: ColorScheme,
         theme: Theme
     ) {
-        ornament(isDarkMode: isDarkMode, theme: theme)?.draw(in: rect)
+        ornament(scheme: scheme, theme: theme)?.draw(in: rect)
 
         guard let text = numberText(for: verseNumber),
               let attributes = numberAttributes(ornamentHeight: rect.height,
-                                                isDarkMode: isDarkMode)
+                                                scheme: scheme)
         else { return }
 
         let advance = text.size(withAttributes: attributes)
@@ -104,17 +104,17 @@ final class QuranGlyphRenderer {
 
     // MARK: - Ornament
 
-    private static func ornament(isDarkMode: Bool, theme: Theme) -> UIImage? {
+    private static func ornament(scheme: ColorScheme, theme: Theme) -> UIImage? {
         let name: String
         switch theme {
         case .classic: name = "newClassicVerseMarker"
         case .tinted:  name = "newTintedVerseMarker"
         }
 
-        let key = "\(name)-\(isDarkMode)" as NSString
+        let key = "\(name)-\(scheme)" as NSString
         if let cached = ornamentCache.object(forKey: key) { return cached }
 
-        let traits = UITraitCollection(userInterfaceStyle: isDarkMode ? .dark : .light)
+        let traits = Self.traits(for: scheme)
         guard let resolved = UIImage(named: name)?.imageAsset?.image(with: traits) else {
             return nil
         }
@@ -133,7 +133,7 @@ final class QuranGlyphRenderer {
 
     private static func numberAttributes(
         ornamentHeight: CGFloat,
-        isDarkMode: Bool
+        scheme: ColorScheme
     ) -> [NSAttributedString.Key: Any]? {
         guard let font = UIFont(name: numbersFontName,
                                size: ornamentHeight * numberSizeRatio) else {
@@ -141,8 +141,16 @@ final class QuranGlyphRenderer {
         }
         return [
             .font: font,
-            .foregroundColor: isDarkMode ? UIColor.white : UIColor.black
+            .foregroundColor: UIColor.quranText.resolvedColor(with: traits(for: scheme))
         ]
+    }
+
+    /// A CoreGraphics bitmap context carries no trait environment, so a named
+    /// colour has to be resolved against an explicit trait collection here.
+    /// This is the only place the appearance survives as a value rather than
+    /// being resolved by the asset catalog.
+    private static func traits(for scheme: ColorScheme) -> UITraitCollection {
+        UITraitCollection(userInterfaceStyle: scheme == .dark ? .dark : .light)
     }
 }
 
@@ -151,7 +159,7 @@ final class QuranGlyphRenderer {
 final class QuranPageOverlayView: UIView {
     
     var verseMarkers: [VersePosition] = []
-    var isDarkMode: Bool = false
+    var scheme: ColorScheme = .light
     var theme: Theme = .classic
 
     override init(frame: CGRect) {
@@ -177,7 +185,7 @@ final class QuranPageOverlayView: UIView {
                 verse.number,
                 centeredAt: CGPoint(x: x, y: y),
                 lineHeight: lineHeight,
-                isDarkMode: isDarkMode,
+                scheme: scheme,
                 theme: theme,
                 in: ctx
             )
@@ -189,7 +197,7 @@ final class QuranPageOverlayView: UIView {
 
 struct QuranPageOverlay: UIViewRepresentable {
     let verseMarkers: [VersePosition]
-    let isDarkMode: Bool
+    let scheme: ColorScheme
     let theme: Theme
 
     func makeUIView(context: Context) -> QuranPageOverlayView {
@@ -198,7 +206,7 @@ struct QuranPageOverlay: UIViewRepresentable {
 
     func updateUIView(_ view: QuranPageOverlayView, context: Context) {
         view.verseMarkers = verseMarkers
-        view.isDarkMode = isDarkMode
+        view.scheme = scheme
         view.theme = theme
         view.setNeedsDisplay()
     }
@@ -230,9 +238,6 @@ struct QuranPageView: View {
 
     private let quranDB = QuranDatabase.shared
     private let imageCache = QuranPageImageCache.shared
-
-    private var isDarkMode: Bool { colorScheme == .dark }
-    private var textColor: Color { isDarkMode ? .white : .black }
 
     /// One bookmarked verse on this page, with everything we need to render
     /// its tinted highlight (per-line rects) and end-of-verse bookmark icon.
@@ -304,7 +309,7 @@ struct QuranPageView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            QuranPageHeaderBar(surahName: pageSurahName, firstVerse: firstVerseNumber, textColor: textColor)
+            QuranPageHeaderBar(surahName: pageSurahName, firstVerse: firstVerseNumber)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
 
@@ -368,7 +373,6 @@ struct QuranPageView: View {
 
             QuranPageFooterBar(
                 pageNumber: pageNumber,
-                isDarkMode: isDarkMode,
                 theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
@@ -413,7 +417,7 @@ struct QuranPageView: View {
                 .renderingMode(.template)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .foregroundColor(textColor)
+                .foregroundColor(.quranText)
                 .frame(width: width, height: height)
         } else {
             Color.clear
@@ -426,7 +430,7 @@ struct QuranPageView: View {
     private func verseMarkers(pageWidth: CGFloat, pageHeight: CGFloat) -> some View {
         QuranPageOverlay(
             verseMarkers: quranDB.getVersesForPage(pageNumber),
-            isDarkMode: isDarkMode,
+            scheme: colorScheme,
             theme: storage.getSettings()?.selectedTheme ?? .tinted
         )
         .frame(width: pageWidth, height: pageHeight)
@@ -494,18 +498,13 @@ struct QuranPageView: View {
 
 struct OrnamentalPageBadge: View {
     let text: String
-    let isDarkMode: Bool
     let theme: Theme
 
     private var markerImageName: String {
         theme == .tinted ? "newTintedPageMarker" : "newClassicPageMarker"
     }
 
-    private var labelColor: Color {
-        isDarkMode
-            ? Color.white.opacity(0.70)
-            : Color(red: 0.18, green: 0.13, blue: 0.08)
-    }
+    private var labelColor: Color { .pageBadgeLabel }
 
     var body: some View {
         ZStack {

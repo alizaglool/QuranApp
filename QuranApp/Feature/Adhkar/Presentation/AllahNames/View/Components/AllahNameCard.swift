@@ -10,7 +10,6 @@ import Core
 
 struct AllahNameCard: View {
     let name: AllahName
-    let colorScheme: ColorScheme
     let isRTL: Bool
 
     var body: some View {
@@ -52,11 +51,11 @@ struct AllahNameCard: View {
         .padding(.horizontal, 6)
         .background(
             RoundedRectangle(cornerRadius: 14)
-                .fill(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+                .fill(Color.cardSurface)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14)
-                .stroke(ColorStyle.outlineVariant.color.opacity(colorScheme == .dark ? 0.2 : 0.1), lineWidth: 1)
+                .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
         )
     }
 }

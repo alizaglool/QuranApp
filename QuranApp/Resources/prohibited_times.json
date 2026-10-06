@@ -1,0 +1,98 @@
+{
+  "titleAr": "أوقات النهي عن الصلاة",
+  "titleEn": "Forbidden Times of Prayer",
+  "introAr": "أربعة أوقات لا تُصلّى فيها النافلة، بترتيب اليوم",
+  "hadithAr": "لا صلاةَ بعد الصُّبح حتى ترتفع الشمس، ولا صلاةَ بعد العصر حتى تغيب الشمس",
+  "hadithSourceAr": "رواه البخاري",
+  "exemptionsTitleAr": "ما يُستثنى من النهي",
+  "exemptions": [
+    "الفرائض وقضاء الفوائت",
+    "صلاة الجنازة",
+    "تحية المسجد لمن دخله",
+    "سنة الوضوء",
+    "صلاة الكسوف والخسوف",
+    "صلاة الطواف بالمسجد الحرام"
+  ],
+  "windows": [
+    {
+      "id": "after_fajr",
+      "titleAr": "من طلوع الفجر إلى ارتفاع الشمس",
+      "subtitleAr": "حتى ترتفع قِيدَ رمح",
+      "cardSubtitleAr": "من بعد صلاة الفجر إلى بعد الشروق بثلث ساعة",
+      "bullets": [
+        "يُقدَّر بنحو اثنتي عشرة دقيقة بعد الشروق",
+        "والاحتياط جعله ربع ساعة أو عشرين دقيقة"
+      ],
+      "hadithAr": "إِذَا طَلَعَ حَاجِبُ الشَّمْسِ فَأَخِّرُوا الصَّلَاةَ حَتَّى تَرْتَفِعَ",
+      "hadithSourceAr": "متفق عليه",
+      "start": {
+        "anchor": "fajr",
+        "offsetMinutes": 0
+      },
+      "end": {
+        "anchor": "sunrise",
+        "offsetMinutes": 20
+      }
+    },
+    {
+      "id": "solar_noon",
+      "titleAr": "عند قيام الشمس في الظهيرة",
+      "subtitleAr": "حتى تزول عن كبد السماء",
+      "cardSubtitleAr": "عند قيام الشمس في الظهيرة حتى تزول",
+      "bullets": [
+        "وقت قصير قُبيل أذان الظهر",
+        "ينتهي بزوال الشمس عن وسط السماء، أي بدخول وقت الظهر"
+      ],
+      "hadithAr": null,
+      "hadithSourceAr": null,
+      "start": {
+        "anchor": "dhuhr",
+        "offsetMinutes": -10
+      },
+      "end": {
+        "anchor": "dhuhr",
+        "offsetMinutes": 0
+      }
+    },
+    {
+      "id": "after_asr",
+      "titleAr": "من صلاة العصر إلى غروب الشمس",
+      "subtitleAr": "بعد أداء العصر لا بعد دخول وقتها",
+      "cardSubtitleAr": "من بعد صلاة العصر إلى غروب الشمس",
+      "bullets": [
+        "يبدأ بأداء صلاة العصر، لا بدخول وقتها",
+        "فمن صلّى العصر مبكرًا بدأ النهي عنده من حينها"
+      ],
+      "hadithAr": "نَهَى عَنِ الصَّلَاةِ بَعْدَ الصُّبْحِ حَتَّى تَشْرُقَ الشَّمْسُ، وَبَعْدَ الْعَصْرِ حَتَّى تَغْرُبَ",
+      "hadithSourceAr": "رواه البخاري",
+      "start": {
+        "anchor": "asr",
+        "offsetMinutes": 0
+      },
+      "end": {
+        "anchor": "sunset",
+        "offsetMinutes": -10
+      }
+    },
+    {
+      "id": "before_sunset",
+      "titleAr": "عند شروع الشمس في الغروب",
+      "subtitleAr": "حتى يتم غروبها",
+      "cardSubtitleAr": "عند شروع الشمس في الغروب حتى تغيب",
+      "bullets": [
+        "يبدأ حين يميل قرص الشمس إلى الغروب",
+        "ينتهي بتمام غروبها ودخول وقت المغرب"
+      ],
+      "hadithAr": null,
+      "hadithSourceAr": null,
+      "start": {
+        "anchor": "sunset",
+        "offsetMinutes": -10
+      },
+      "end": {
+        "anchor": "sunset",
+        "offsetMinutes": 0
+      }
+    }
+  ]
+}

@@ -13,7 +13,6 @@ struct LovedOnesDhikrView: View {
     let coordinator: AdhkarCoordinating
     let category: DhikrCategory
     @EnvironmentObject var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) var colorScheme
 
     @State private var personName: String = ""
     @FocusState private var isNameFocused: Bool
@@ -77,7 +76,7 @@ extension LovedOnesDhikrView {
             HStack(spacing: 12) {
                 ZStack {
                     Circle()
-                        .fill(ColorStyle.secondary.color.opacity(colorScheme == .dark ? 0.2 : 0.1))
+                        .fill(ColorStyle.washSecondary.color)
                         .frame(width: 36, height: 36)
                     Image(systemName: "person.fill")
                         .font(.system(size: 15))
@@ -100,7 +99,7 @@ extension LovedOnesDhikrView {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+            .background(Color.cardSurface)
             .cornerRadius(14)
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
@@ -168,7 +167,7 @@ extension LovedOnesDhikrView {
         .frame(maxWidth: .infinity)
         .background(
             RoundedRectangle(cornerRadius: 18)
-                .fill(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+                .fill(Color.cardSurface)
         )
         .overlay(
             RoundedRectangle(cornerRadius: 18)

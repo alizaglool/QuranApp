@@ -12,7 +12,6 @@ import UIKit
 struct QuranPagerView: View {
     @StateObject private var viewModel: QuranViewModel
     @ObservedObject private var storage = StorageManager.shared
-    @Environment(\.colorScheme) var colorScheme
 
     let onBack: (() -> Void)?
     @State private var isTodaySheetPresenting = false

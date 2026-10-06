@@ -68,7 +68,7 @@ struct ShortsPlayerView: View {
                         .font(.system(size: 16, weight: .bold))
                         .foregroundColor(.white)
                         .frame(width: 52, height: 52)
-                        .background(Color(white: 0.28).opacity(0.9))
+                        .background(Color.shortsPillSurface)
                         .clipShape(Circle())
                 }
                 .padding(.trailing, 16)
@@ -246,11 +246,11 @@ private struct ShortPlayerItem: View {
         HStack {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(white: 0.15))
+                    .fill(Color.shortsChipSurface)
                     .frame(width: 36, height: 36)
                 Image(systemName: "clock.fill")
                     .font(.system(size: 18))
-                    .foregroundColor(Color(red: 0.95, green: 0.82, blue: 0.2))
+                    .foregroundColor(.shortsAccent)
             }
 
             Spacer()

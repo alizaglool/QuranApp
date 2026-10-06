@@ -13,7 +13,6 @@ import Core
 struct TasbihCounterView: View {
 
     @StateObject private var viewModel: TasbihCounterViewModel
-    @Environment(\.colorScheme) private var colorScheme
     @State private var tapPulse: Bool = false
 
     init(coordinator: AdhkarCoordinating, category: DhikrCategory) {
@@ -118,7 +117,7 @@ extension TasbihCounterView {
         .padding(.vertical, 20)
         .background(
             RoundedRectangle(cornerRadius: 18)
-                .fill(colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+                .fill(Color.cardSurface)
                 .overlay(
                     RoundedRectangle(cornerRadius: 18)
                         .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
@@ -129,12 +128,7 @@ extension TasbihCounterView {
     private var counterRing: some View {
         ZStack {
             Circle()
-                .stroke(
-                    colorScheme == .dark
-                        ? Color.white.opacity(0.06)
-                        : ColorStyle.primary.color.opacity(0.08),
-                    lineWidth: 10
-                )
+                .stroke(Color.adhkarRingTrack, lineWidth: 10)
                 .frame(width: 168, height: 168)
 
             Circle()
@@ -155,7 +149,7 @@ extension TasbihCounterView {
                 .fill(
                     viewModel.justCompleted
                         ? ColorStyle.secondary.color.opacity(0.15)
-                        : (colorScheme == .dark ? Color.surfaceContainerLow : Color.surfaceContainerLowest)
+                        : Color.cardSurface
                 )
                 .frame(width: 144, height: 144)
                 .animation(.easeOut(duration: 0.25), value: viewModel.justCompleted)

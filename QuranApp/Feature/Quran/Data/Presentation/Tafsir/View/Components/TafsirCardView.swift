@@ -9,10 +9,9 @@ import Core
 struct TafsirCardView: View {
 
     let tafsir: String?
-    let isDarkMode: Bool
     var isRTL: Bool = true
 
-    private var textColor: Color { isDarkMode ? .white : .black }
+    private var textColor: Color { .quranText }
 
     var body: some View {
         Group {
@@ -40,7 +39,7 @@ struct TafsirCardView: View {
             }
         }
         .background(
-            isDarkMode ? Color.surfaceContainerHigh : Color.surfaceContainerLow,
+            Color.surfaceRaised,
             in: RoundedRectangle(cornerRadius: 12, style: .continuous)
         )
         .environment(\.layoutDirection, isRTL ? .rightToLeft : .leftToRight)

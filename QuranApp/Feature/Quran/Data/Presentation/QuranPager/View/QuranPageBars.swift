@@ -14,17 +14,16 @@ struct QuranPageHeaderBar: View {
 
     let surahName: String
     let firstVerse: Int
-    let textColor: Color
 
     var body: some View {
         HStack {
             Text(verbatim: "آية \(firstVerse.arabicNumerals)")
                 .customStyle(.kitab(size: 17))
-                .foregroundColor(textColor.opacity(0.55))
+                .foregroundColor(Color.mushafBarLabel)
             Spacer()
             Text(surahName)
                 .customStyle(.kitab(size: 17))
-                .foregroundColor(textColor.opacity(0.55))
+                .foregroundColor(Color.mushafBarLabel)
         }
         .padding(.horizontal, 16)
         .allowsHitTesting(false)
@@ -39,7 +38,6 @@ struct QuranPageHeaderBar: View {
 struct QuranPageFooterBar: View {
 
     let pageNumber: Int
-    let isDarkMode: Bool
     let theme: Theme
 
     private var isRightPage: Bool { pageNumber % 2 != 0 }
@@ -60,7 +58,6 @@ struct QuranPageFooterBar: View {
     private var badge: some View {
         OrnamentalPageBadge(
             text: pageNumber.arabicNumerals,
-            isDarkMode: isDarkMode,
             theme: theme
         )
     }

@@ -14,6 +14,7 @@ protocol AdhkarCoordinating: AnyObject {
     func coordinateToAllahNames(names: [AllahName])
     func coordinateToAllahNameDetail(names: [AllahName], startIndex: Int)
     func coordinateToMyAdhkar()
+    func coordinateToProhibitedTimes()
     func coordinateBack()
 }
 
@@ -84,6 +85,16 @@ class AdhkarCoordinator: MainCoordinator, AdhkarCoordinating {
     func coordinateToMyAdhkar() {
         let manager = LocalizationManager.shared
         let view = MyAdhkarView(coordinator: self)
+            .environmentObject(manager)
+            .environment(\.layoutDirection, manager.currentLanguage.direction)
+        let vc = UIHostingController(rootView: view)
+        vc.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(vc, animated: true)
+    }
+
+    func coordinateToProhibitedTimes() {
+        let manager = LocalizationManager.shared
+        let view = ProhibitedTimesView(coordinator: self)
             .environmentObject(manager)
             .environment(\.layoutDirection, manager.currentLanguage.direction)
         let vc = UIHostingController(rootView: view)

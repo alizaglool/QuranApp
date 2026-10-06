@@ -19,8 +19,6 @@ struct QuranTafsirPageView: View {
 
     private let quranDB = QuranDatabase.shared
 
-    private var isDarkMode: Bool { colorScheme == .dark }
-    private var textColor: Color { isDarkMode ? .white : .black }
 
     private var bookId: String {
         if case .tafsir(let id) = storage.getSettings()?.mushafDisplayType {
@@ -138,7 +136,6 @@ struct QuranTafsirPageView: View {
 
             QuranPageFooterBar(
                 pageNumber: pageNumber,
-                isDarkMode: isDarkMode,
                 theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
@@ -155,11 +152,11 @@ struct QuranTafsirPageView: View {
         HStack {
             Text(verbatim: "الجزء \(pageJuz.arabicNumerals)")
                 .customStyle(.kitab(size: 17))
-                .foregroundColor(textColor.opacity(0.55))
+                .foregroundColor(Color.mushafBarLabel)
             Spacer()
             Text(pageSurahName)
                 .customStyle(.kitab(size: 17))
-                .foregroundColor(textColor.opacity(0.55))
+                .foregroundColor(Color.mushafBarLabel)
         }
         .padding(.horizontal, 16)
         .allowsHitTesting(false)
@@ -172,9 +169,7 @@ struct QuranTafsirPageView: View {
     private func chapterHeaderBanner(surahName: String) -> some View {
         let isTinted = storage.getSettings()?.selectedTheme == .tinted
         let imageName = isTinted ? "newClassicChapterHeader" : "tintedChapterHeader"
-        let labelColor: Color = isDarkMode
-            ? .white.opacity(0.85)
-            : Color(red: 0.18, green: 0.13, blue: 0.08)
+        let labelColor: Color = .chapterHeaderLabel
 
         ZStack {
             Image(imageName)
@@ -214,7 +209,7 @@ struct QuranTafsirPageView: View {
             .font(QuranFont.hafs.font(size: 26))
             .lineSpacing(10)
             .multilineTextAlignment(.center)
-            .foregroundColor(textColor)
+            .foregroundColor(.quranText)
             .frame(maxWidth: .infinity, alignment: .center)
             .environment(\.layoutDirection, .rightToLeft)
     }
@@ -227,7 +222,7 @@ struct QuranTafsirPageView: View {
         let badgeImage = QuranGlyphRenderer.verseMarkerImage(
             entry.verseNumber,
             lineHeight: fontSize * 1.8,
-            isDarkMode: isDarkMode,
+            scheme: colorScheme,
             theme: theme
         )
 
@@ -235,7 +230,7 @@ struct QuranTafsirPageView: View {
             .font(QuranFont.hafs.font(size: fontSize))
             .lineSpacing(10)
             .multilineTextAlignment(.center)
-            .foregroundColor(textColor)
+            .foregroundColor(.quranText)
             .frame(maxWidth: .infinity, alignment: .center)
             .environment(\.layoutDirection, .rightToLeft)
             .contentShape(Rectangle())
@@ -258,7 +253,7 @@ struct QuranTafsirPageView: View {
     }
 
     private func tafsirCard(verseID: Int) -> some View {
-        TafsirCardView(tafsir: tafsirTexts[verseID], isDarkMode: isDarkMode, isRTL: isBookRTL)
+        TafsirCardView(tafsir: tafsirTexts[verseID], isRTL: isBookRTL)
     }
 
     // MARK: - Async Tafsir Load

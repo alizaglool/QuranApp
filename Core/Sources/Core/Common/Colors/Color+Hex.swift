@@ -26,11 +26,7 @@ public extension Color {
         self.init(UIColor(hex: hex))
     }
 
-    init(lightHex: String, darkHex: String) {
-        self.init(UIColor { tc in
-            tc.userInterfaceStyle == .dark
-                ? UIColor(hex: darkHex)
-                : UIColor(hex: lightHex)
-        })
-    }
+    // `init(lightHex:darkHex:)` used to declare two-appearance colours in code.
+    // Every colour now lives in the asset catalog, so it is gone; `init(hex:)`
+    // stays for genuinely data-driven colours such as `HadithBook.colorHex`.
 }

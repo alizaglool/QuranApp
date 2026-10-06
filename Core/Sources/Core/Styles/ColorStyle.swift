@@ -87,6 +87,23 @@ public enum ColorStyle {
     case adhkarShadow
     case adhkarWatermark
     
+    // Shared Tokens
+    case cardBorder
+    case washPrimary
+    case washSecondary
+    case washSecondaryCard
+    case washSecondarySubtle
+    case brandActive
+    case resumeLabel
+
+    // Hadith Library
+    case downloadStroke
+    case downloadSurface
+    case downloadIcon
+    case downloadStrokeOnDark
+    case downloadSurfaceOnDark
+    case downloadIconOnDark
+    
     public var color: Color {
         switch self {
         // Primary
@@ -210,6 +227,23 @@ public enum ColorStyle {
         case .adhkarRingTrack:          return .adhkarRingTrack
         case .adhkarShadow:             return .adhkarShadow
         case .adhkarWatermark:          return .adhkarWatermark
+
+        // Shared Tokens
+        case .cardBorder:          return .cardBorder
+        case .washPrimary:         return .washPrimary
+        case .washSecondary:       return .washSecondary
+        case .washSecondaryCard:   return .washSecondaryCard
+        case .washSecondarySubtle: return .washSecondarySubtle
+        case .brandActive:         return .brandActive
+        case .resumeLabel:         return .resumeLabel
+
+        // Hadith Library
+        case .downloadStroke:  return .downloadStroke
+        case .downloadSurface: return .downloadSurface
+        case .downloadIcon:    return .downloadIcon
+        case .downloadStrokeOnDark:  return .downloadStrokeOnDark
+        case .downloadSurfaceOnDark: return .downloadSurfaceOnDark
+        case .downloadIconOnDark:    return .downloadIconOnDark
         }
     }
     

@@ -17,8 +17,6 @@ struct QuranTextPageView: View {
 
     private let quranDB = QuranDatabase.shared
 
-    private var isDarkMode: Bool { colorScheme == .dark }
-    private var textColor: Color { isDarkMode ? .white : .black }
 
     private var pageSurahName: String {
         let surahNumber = quranDB.getSurahsForPage(pageNumber).first?.id
@@ -78,7 +76,7 @@ struct QuranTextPageView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            QuranPageHeaderBar(surahName: pageSurahName, firstVerse: firstVerseNumber, textColor: textColor)
+            QuranPageHeaderBar(surahName: pageSurahName, firstVerse: firstVerseNumber)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
 
@@ -107,7 +105,6 @@ struct QuranTextPageView: View {
 
             QuranPageFooterBar(
                 pageNumber: pageNumber,
-                isDarkMode: isDarkMode,
                 theme: storage.getSettings()?.selectedTheme ?? .tinted
             )
             .padding(.bottom, 8)
@@ -136,7 +133,7 @@ struct QuranTextPageView: View {
         let badgeImage = QuranGlyphRenderer.verseMarkerImage(
             entry.verseNumber,
             lineHeight: fontSize * 1.8,
-            isDarkMode: isDarkMode,
+            scheme: colorScheme,
             theme: theme
         )
 
@@ -144,7 +141,7 @@ struct QuranTextPageView: View {
             .font(QuranFont.hafs.font(size: fontSize))
             .lineSpacing(10)
             .multilineTextAlignment(.center)
-            .foregroundColor(textColor)
+            .foregroundColor(.quranText)
             .frame(maxWidth: .infinity, alignment: .center)
             .environment(\.layoutDirection, .rightToLeft)
             .contentShape(Rectangle())

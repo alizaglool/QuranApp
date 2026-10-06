@@ -13,7 +13,6 @@ struct AllahNamesView: View {
     let coordinator: AdhkarCoordinating
     let names: [AllahName]
     @EnvironmentObject var localizationManager: LocalizationManager
-    @Environment(\.colorScheme) var colorScheme
 
     private var isRTL: Bool { localizationManager.currentLanguage == .Arabic }
 
@@ -84,7 +83,7 @@ extension AllahNamesView {
                 Button {
                     coordinator.coordinateToAllahNameDetail(names: names, startIndex: index)
                 } label: {
-                    AllahNameCard(name: names[index], colorScheme: colorScheme, isRTL: isRTL)
+                    AllahNameCard(name: names[index], isRTL: isRTL)
                 }
                 .buttonStyle(.plain)
             }

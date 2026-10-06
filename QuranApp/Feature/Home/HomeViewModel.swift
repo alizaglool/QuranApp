@@ -222,6 +222,10 @@ extension HomeViewModel {
         coordinator.coordinateToLessons()
     }
 
+    func onSheikhTapped(_ sheikh: Sheikh) {
+        coordinator.coordinateToSheikhDetail(sheikh: sheikh)
+    }
+
     func onResumeTapped() {
         coordinator.coordinateToQuran(startPage: lastReadPage)
     }
