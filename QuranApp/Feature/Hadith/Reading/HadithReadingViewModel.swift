@@ -20,6 +20,7 @@ final class HadithReadingViewModel: MainViewModel {
     @Published var hadiths: [HadithEntry]
     let book: HadithBook
     let chapters: [HadithChapter]
+    let highlight: HadithSearchQuery?
     var isTabBarVisible: Bool { false }
 
     weak var coordinator: HadithCoordinating?
@@ -44,11 +45,13 @@ final class HadithReadingViewModel: MainViewModel {
     var canGoPrevious: Bool { currentIndex > 0 }
 
     init(coordinator: HadithCoordinating, hadiths: [HadithEntry], startIndex: Int,
-         book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter]) {
+         book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter],
+         highlight: HadithSearchQuery? = nil) {
         self.coordinator = coordinator
         self.hadiths = hadiths
         self.book = book
         self.chapters = chapters
+        self.highlight = highlight
         self.currentIndex = min(startIndex, max(0, hadiths.count - 1))
     }
 

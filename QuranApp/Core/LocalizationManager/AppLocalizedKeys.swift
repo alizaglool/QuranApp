@@ -68,6 +68,14 @@ enum AppLocalizedKeys: String {
     case theAuthenticTraditions
     case exploringLegacy
     case searchNarrations
+    case searchKeepTyping
+    case searchResultsCount
+    case searchResultsCountApprox
+    case searchBookCount
+    case searchBookCountApprox
+    case searchSeeAllInBook
+    case searchBooksNotInstalled
+    case searchDownloadToInclude
     case propheticNarration
     case authenticCollection
     case resumeReading

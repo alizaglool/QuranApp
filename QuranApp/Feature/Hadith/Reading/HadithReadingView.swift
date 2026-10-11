@@ -27,10 +27,11 @@ struct HadithReadingView: View {
     @State private var isShareSheetPresenting = false
 
     init(coordinator: HadithCoordinating, hadiths: [HadithEntry], startIndex: Int,
-         book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter]) {
+         book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter],
+         highlight: HadithSearchQuery? = nil) {
         _viewModel = StateObject(wrappedValue: HadithReadingViewModel(
             coordinator: coordinator, hadiths: hadiths, startIndex: startIndex,
-            book: book, chapter: chapter, chapters: chapters))
+            book: book, chapter: chapter, chapters: chapters, highlight: highlight))
     }
 
     var body: some View {
@@ -134,7 +135,8 @@ struct HadithReadingView: View {
             set: { viewModel.currentIndex = $0 }
         )) {
             ForEach(viewModel.hadiths.indices, id: \.self) { idx in
-                HadithPageContent(hadith: viewModel.hadiths[idx])
+                HadithPageContent(hadith: viewModel.hadiths[idx],
+                                  highlight: viewModel.highlight)
                     .tag(idx)
             }
         }
@@ -238,6 +240,7 @@ struct HadithReadingView: View {
 struct HadithPageContent: View {
 
     let hadith: HadithEntry
+    var highlight: HadithSearchQuery? = nil
     @State private var expanded: [String: Bool] = [:]
 
     var body: some View {
@@ -287,7 +290,7 @@ struct HadithPageContent: View {
                 .padding(.top, .md)
                 .padding(.trailing, .md)
 
-                Text(hadith.arabicText)
+                Text(HadithHighlightedText.make(hadith.arabicText, matching: highlight))
                     .customStyle(.quranPageFixed(size: 22), .hadithArabicText)
                     .multilineTextAlignment(.center)
                     .lineSpacing(14)

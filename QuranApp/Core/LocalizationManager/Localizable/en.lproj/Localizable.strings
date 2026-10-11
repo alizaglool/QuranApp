@@ -118,6 +118,18 @@
 "hadithIndexTitle" = "Index";
 "goToHadith" = "Go to";
 "tableOfContents" = "Table of Contents";
+"hadithDownloadStorageError" = "Not enough space to save this book. Free up some storage and try again.";
+"hadithDownloadCorruptError" = "The download didn't finish correctly. Please try again.";
+
+// MARK: - Hadith Search
+"searchKeepTyping" = "Type at least two letters to search";
+"searchResultsCount" = "%1$d results across %2$d books";
+"searchResultsCountApprox" = "Over %1$d results across %2$d books";
+"searchBookCount" = "%d results";
+"searchBookCountApprox" = "Over %d results";
+"searchSeeAllInBook" = "Show %d more";
+"searchBooksNotInstalled" = "%d books not downloaded";
+"searchDownloadToInclude" = "Download them to include their narrations in search";
 
 // MARK: - Quran Page Settings Sheet
 "pageSettings" = "Page Settings";

@@ -11,8 +11,17 @@ import SwiftUI
 
 protocol HadithCoordinating: AnyObject {
     func coordinateToChapters(book: HadithBook)
-    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter])
+    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter], highlight: HadithSearchQuery?)
     func coordinateBack()
+}
+
+extension HadithCoordinating {
+
+    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook,
+                             chapter: HadithChapter, chapters: [HadithChapter]) {
+        coordinateToReading(hadiths: hadiths, startIndex: startIndex, book: book,
+                            chapter: chapter, chapters: chapters, highlight: nil)
+    }
 }
 
 class HadithCoordinator: MainCoordinator, HadithCoordinating {
@@ -40,7 +49,7 @@ class HadithCoordinator: MainCoordinator, HadithCoordinating {
         navigationController.pushViewController(vc, animated: true)
     }
 
-    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter]) {
+    func coordinateToReading(hadiths: [HadithEntry], startIndex: Int, book: HadithBook, chapter: HadithChapter, chapters: [HadithChapter], highlight: HadithSearchQuery?) {
         let manager = LocalizationManager.shared
         let view = HadithReadingView(
             coordinator: self,
@@ -48,7 +57,8 @@ class HadithCoordinator: MainCoordinator, HadithCoordinating {
             startIndex: startIndex,
             book: book,
             chapter: chapter,
-            chapters: chapters
+            chapters: chapters,
+            highlight: highlight
         )
         .environmentObject(manager)
         .environment(\.layoutDirection, manager.currentLanguage.direction)

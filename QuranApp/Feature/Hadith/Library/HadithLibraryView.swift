@@ -60,7 +60,7 @@ extension HadithLibraryView {
             navigationBar
             if viewModel.isSearching {
                 searchBarView.padding(.bottom, .xSm)
-                searchResultsList
+                HadithSearchResultsView(viewModel: viewModel)
             } else {
                 NoIndicatorsScrollView {
                     VStack(alignment: .leading, spacing: 0) {
@@ -461,87 +461,6 @@ extension HadithLibraryView {
                 .strokeBorder(Color.outlineVariant.opacity(0.18), lineWidth: 1)
         )
         .padding(.horizontal, .big)
-    }
-}
-
-// MARK: - Search Results
-
-extension HadithLibraryView {
-
-    private var searchResultsList: some View {
-        Group {
-            if viewModel.searchResults.isEmpty {
-                emptySearchState
-            } else {
-                NoIndicatorsScrollView {
-                    LazyVStack(spacing: 0) {
-                        ForEach(viewModel.searchResults) { result in
-                            HadithSearchRow(result: result) {
-                                viewModel.selectSearchResult(result)
-                            }
-                            Divider().padding(.leading, .big)
-                        }
-                    }
-                    .padding(.bottom, .xxxBig)
-                }
-            }
-        }
-    }
-
-    private var emptySearchState: some View {
-        VStack(spacing: .sm) {
-            Spacer()
-            Image(systemName: "magnifyingglass")
-                .font(.system(size: 36))
-                .customForeground(.onSurfaceVariant)
-            Text(AppLocalizedKeys.noResults.value)
-                .customStyle(.bodySmall, .onSurfaceVariant)
-            Spacer()
-        }
-    }
-}
-
-// MARK: - Search Row
-
-struct HadithSearchRow: View {
-    let result: HadithSearchResult
-    let action: () -> Void
-
-    private var accentColor: Color { Color(hex: result.book.colorHex) }
-
-    var body: some View {
-        Button(action: action) {
-            HStack(alignment: .top, spacing: .sm) {
-                RoundedRectangle(cornerRadius: .cornerXxSm)
-                    .fill(accentColor.opacity(0.15))
-                    .frame(width: 4)
-                    .padding(.vertical, .xxSm)
-
-                VStack(alignment: .leading, spacing: .xSm) {
-                    HStack {
-                        Text(result.book.title)
-                            .customStyle(.caption2)
-                            .foregroundColor(accentColor)
-                            .lineLimit(1)
-                        Spacer()
-                        Text(String(format: "%d", result.hadith.number))
-                            .customStyle(.caption2, .onSurfaceVariant)
-                    }
-                    Text(result.hadith.arabicText)
-                        .customStyle(.adhkar(size: 14, bold: true), .onSurface)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.trailing)
-                        .environment(\.layoutDirection, .rightToLeft)
-                    Text(result.hadith.translation)
-                        .customStyle(.caption1, .onSurfaceVariant)
-                        .lineLimit(2)
-                }
-            }
-            .padding(.horizontal, .big)
-            .padding(.vertical, .sm)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
     }
 }
 
