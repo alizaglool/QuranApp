@@ -25,6 +25,7 @@ final class QuranViewModel: MainViewModel {
     @Published var selectedVerseSurahName: String = ""
     @Published var selectedVerseSurahNumber: Int = 0
     @Published var selectedVerseNumber: Int = 0
+    @Published var pendingScrollVerseID: Int? = nil
 
     var isTabBarVisible: Bool { false }
     
@@ -92,8 +93,26 @@ final class QuranViewModel: MainViewModel {
     }
 
     func goToVerse(surah: Int, verse: Int) {
-        let page = quranDB.getPage(forSurah: surah, verse: verse)
-        goToPage(page)
+        guard let info = quranDB.getVerseInfo(surahNumber: surah, verseNumber: verse) else { return }
+        goToPage(info.page)
+    }
+
+    func goToSearchResult(surah: Int, verse: Int) {
+        guard let info = quranDB.getVerseInfo(surahNumber: surah, verseNumber: verse) else { return }
+        goToPage(info.page)
+        withAnimation(.easeOut(duration: 0.25)) {
+            highlightVerse(verseID: info.verseID, surahNumber: surah, verseNumber: verse, page: info.page)
+        }
+    }
+
+    private func highlightVerse(verseID: Int, surahNumber: Int, verseNumber: Int, page: Int) {
+        selectedVerseID = verseID
+        selectedPage = page
+        highlightRects = quranDB.getHighlights(forVerse: verseID)
+        selectedVerseSurahName = quranDB.getSurahsForPage(page).first(where: { $0.id == surahNumber })?.arabicTitle ?? ""
+        selectedVerseSurahNumber = surahNumber
+        selectedVerseNumber = verseNumber
+        pendingScrollVerseID = verseID
     }
     
     func swapLastVisitedPage() {
@@ -166,6 +185,7 @@ final class QuranViewModel: MainViewModel {
         selectedVerseID = nil
         selectedPage = nil
         highlightRects = []
+        pendingScrollVerseID = nil
     }
     
     func clearTemporaryHighlight() {

@@ -346,8 +346,7 @@ extension QuranPagerView {
             isFieldFocused: $isSearchFieldFocused,
             barBackground: backgroundColor,
             onSelect: { surah, verse in
-                viewModel.clearSelection()
-                viewModel.goToVerse(surah: surah, verse: verse)
+                viewModel.goToSearchResult(surah: surah, verse: verse)
                 closeSearch()
             },
             onCancel: { closeSearch() }

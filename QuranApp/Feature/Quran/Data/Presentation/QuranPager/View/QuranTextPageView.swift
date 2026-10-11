@@ -80,26 +80,48 @@ struct QuranTextPageView: View {
                 .padding(.top, 8)
                 .padding(.bottom, 4)
 
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .center, spacing: 20) {
-                    ForEach(verseEntries) { entry in
-                        if entry.showHeader {
-                            chapterHeaderImage
-                                .padding(.bottom, 4)
+            ScrollViewReader { proxy in
+                ScrollView(showsIndicators: false) {
+                    VStack(alignment: .center, spacing: 20) {
+                        ForEach(verseEntries) { entry in
+                            if entry.showHeader {
+                                chapterHeaderImage
+                                    .padding(.bottom, 4)
+                            }
+                            verseText(entry.text, entry: entry)
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 16)
+                                .background {
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .fill(Color.surfaceContainerLow)
+                                        .overlay {
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .fill(ColorStyle.primary.color.opacity(isSelected(entry) ? 0.15 : 0))
+                                        }
+                                }
+                                .id(entry.id)
                         }
-                        verseText(entry.text, entry: entry)
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 16)
-                            .background(Color.surfaceContainerLow, in: RoundedRectangle(cornerRadius: 16))
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onTapGesture {
+                    if hasVisibleHighlight {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            viewModel.clearSelection()
+                        }
+                    } else {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            viewModel.toggleOverlay()
+                        }
                     }
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 16)
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .onTapGesture {
-                withAnimation(.easeInOut(duration: 0.25)) {
-                    viewModel.toggleOverlay()
+                .onAppear {
+                    scrollToPendingVerse(proxy)
+                }
+                .onChange(of: viewModel.pendingScrollVerseID) { _, _ in
+                    scrollToPendingVerse(proxy)
                 }
             }
 
@@ -110,6 +132,28 @@ struct QuranTextPageView: View {
             .padding(.bottom, 8)
         }
         .ignoresSafeArea(edges: .horizontal)
+    }
+
+    // MARK: - Selection
+
+    private var hasVisibleHighlight: Bool {
+        viewModel.selectedPage == pageNumber && viewModel.selectedVerseID != nil
+    }
+
+    private func isSelected(_ entry: VerseEntry) -> Bool {
+        viewModel.selectedPage == pageNumber && viewModel.selectedVerseID == entry.id
+    }
+
+    private func scrollToPendingVerse(_ proxy: ScrollViewProxy) {
+        guard let verseID = viewModel.pendingScrollVerseID,
+              viewModel.selectedPage == pageNumber,
+              verseEntries.contains(where: { $0.id == verseID })
+        else { return }
+
+        withAnimation(.easeInOut(duration: 0.3)) {
+            proxy.scrollTo(verseID, anchor: .center)
+        }
+        viewModel.pendingScrollVerseID = nil
     }
 
     // MARK: - Chapter Header Image
