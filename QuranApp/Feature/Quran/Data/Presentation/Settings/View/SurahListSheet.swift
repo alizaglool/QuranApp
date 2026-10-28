@@ -16,7 +16,10 @@ struct SurahListSheet: View {
     let onSelectSurah: (Int) -> Void
     let onSelectPage: ((Int) -> Void)?
 
-    @State private var selectedTab = 0   // 0 = السور, 1 = الأرباع
+    @State private var selectedTab = 0
+    @State private var storedBookmarks: [QuranBookmark] = []
+
+    @ObservedObject private var storage = StorageManager.shared
 
     private let db = QuranDatabase.shared
     private let surahsByJuz: [(juz: Int, surahs: [SurahInfo])]
@@ -92,12 +95,17 @@ struct SurahListSheet: View {
             ScrollViewReader { proxy in
                 // LTR: sidebar on physical LEFT, content on physical RIGHT
                 HStack(spacing: 0) {
-                    juzSidebar(proxy: proxy)
+                    if selectedTab != bookmarksTabIndex {
+                        juzSidebar(proxy: proxy)
+                    }
 
-                    if selectedTab == 0 {
+                    switch selectedTab {
+                    case surahsTabIndex:
                         surahListContent(proxy: proxy)
-                    } else {
+                    case quartersTabIndex:
                         quartersContent(proxy: proxy)
+                    default:
+                        bookmarksContent
                     }
                 }
                 .environment(\.layoutDirection, .leftToRight)
@@ -105,7 +113,15 @@ struct SurahListSheet: View {
         }
         .background(Color.background.ignoresSafeArea())
         .appDirection()
+        .onAppear { reloadStoredBookmarks() }
+        .onChange(of: storage.bookmarksRevision) { _, _ in reloadStoredBookmarks() }
     }
+
+    // MARK: - Tab Indices
+
+    private var surahsTabIndex: Int { 0 }
+    private var quartersTabIndex: Int { 1 }
+    private var bookmarksTabIndex: Int { 2 }
 
     // MARK: - Grab Handle
 
@@ -123,7 +139,7 @@ struct SurahListSheet: View {
     private var header: some View {
         HStack(spacing: 12) {
             Button(action: { dismiss() }) {
-                Image(systemName: "chevron.left")
+                Image(systemName: "chevron.backward")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.secondary)
                     .frame(width: 32, height: 32)
@@ -146,8 +162,9 @@ struct SurahListSheet: View {
 
     private var segmentedControl: some View {
         HStack(spacing: 0) {
-            segTab(title: AppLocalizedKeys.surahs.value, index: 0)
-            segTab(title: AppLocalizedKeys.quarters.value, index: 1)
+            segTab(title: AppLocalizedKeys.surahs.value, index: surahsTabIndex)
+            segTab(title: AppLocalizedKeys.quarters.value, index: quartersTabIndex)
+            segTab(title: AppLocalizedKeys.bookmarks.value, index: bookmarksTabIndex)
         }
         .background(
             RoundedRectangle(cornerRadius: 10)
@@ -162,7 +179,7 @@ struct SurahListSheet: View {
             Text(title)
                 .customStyle(.kitab(size: 14))
                 .foregroundColor(selectedTab == index ? .primary : .secondary)
-                .frame(width: 90, height: 36)
+                .frame(width: 76, height: 36)
                 .background(
                     Group {
                         if selectedTab == index {
@@ -367,6 +384,114 @@ struct SurahListSheet: View {
             context.fill(path, with: .color(Color.secondary.opacity(0.6)))
         }
         .frame(width: 20, height: 20)
+    }
+
+    // MARK: - Bookmarks Content (الفواصل tab) — RTL rows
+
+    private var bookmarksContent: some View {
+        Group {
+            if storedBookmarks.isEmpty {
+                bookmarksEmptyState
+            } else {
+                ScrollView {
+                    LazyVStack(spacing: 0) {
+                        ForEach(storedBookmarks) { bookmark in
+                            VStack(spacing: 0) {
+                                bookmarkRow(bookmark)
+                                Divider().opacity(0.15)
+                            }
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                onSelectPage?(bookmark.page)
+                                dismiss()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .environment(\.layoutDirection, .rightToLeft)
+    }
+
+    private var bookmarksEmptyState: some View {
+        VStack(spacing: 12) {
+            Image(systemName: "bookmark")
+                .font(.system(size: 40, weight: .light))
+                .foregroundColor(.secondary.opacity(0.5))
+
+            Text(AppLocalizedKeys.noBookmarksYet.value)
+                .customStyle(.kitab(size: 15))
+                .foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, 32)
+    }
+
+    private func bookmarkRow(_ bookmark: QuranBookmark) -> some View {
+        HStack(spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(bookmarkTint(for: bookmark.color).opacity(0.18))
+                    .frame(width: 40, height: 40)
+                Image(systemName: "bookmark.fill")
+                    .font(.system(size: 15))
+                    .foregroundColor(bookmarkTint(for: bookmark.color))
+            }
+
+            VStack(alignment: .leading, spacing: 3) {
+                Text(bookmark.surahName)
+                    .customStyle(.kitab(size: 19, bold: true), .onSurface)
+
+                Text(bookmarkSubtitle(for: bookmark))
+                    .customStyle(.kitab(size: 12))
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Button {
+                deleteBookmark(bookmark)
+            } label: {
+                Image(systemName: "trash")
+                    .font(.system(size: 14))
+                    .foregroundColor(.secondary)
+                    .frame(width: 32, height: 32)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+    }
+
+    private func bookmarkSubtitle(for bookmark: QuranBookmark) -> String {
+        var parts = ["\(AppLocalizedKeys.pagePrefix.value) \(arabicIndic(bookmark.page))"]
+        if let ayahNumber = bookmark.ayahNumber {
+            parts.append("\(AppLocalizedKeys.ayahPrefix.value) \(arabicIndic(ayahNumber))")
+        }
+        return parts.joined(separator: " - ")
+    }
+
+    private func bookmarkTint(for colorKey: String?) -> Color {
+        switch colorKey {
+        case BookmarkColor.yellow.rawValue: return .yellow
+        case BookmarkColor.green.rawValue:  return .green
+        case BookmarkColor.blue.rawValue:   return .blue
+        case BookmarkColor.purple.rawValue: return .purple
+        case BookmarkColor.cyan.rawValue:   return .cyan
+        case BookmarkColor.orange.rawValue: return .orange
+        default:                            return .red
+        }
+    }
+
+    private func reloadStoredBookmarks() {
+        storedBookmarks = storage.getAllBookmarks()
+    }
+
+    private func deleteBookmark(_ bookmark: QuranBookmark) {
+        storedBookmarks.removeAll { $0.persistentModelID == bookmark.persistentModelID }
+        storage.removeBookmark(bookmark)
     }
 
     // MARK: - Helpers

@@ -66,6 +66,8 @@ final class QuranViewModel: MainViewModel {
             progress.lastSurahNumber = self.currentSurahNumber
             progress.lastReadDate = Date()
         }
+
+        WorshipTrackerStore.shared.markCompleted(.quranReading)
     }
     
     func toggleOverlay() {

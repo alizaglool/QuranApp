@@ -39,17 +39,32 @@ enum RepeatMode: String, CaseIterable {
     }
 }
 
+// MARK: - AudioEngineRole
+
+enum AudioEngineRole {
+    case quran
+    case library
+}
+
 // MARK: - AudioEngine
 
 @MainActor
 final class AudioEngine: NSObject, ObservableObject {
 
-    static let shared = AudioEngine()
+    static let shared = AudioEngine(role: .quran)
+    static let library = AudioEngine(role: .library)
+
+    /// The instance the lock screen and the remote command centre currently speak for.
+    static var focusedEngine: AudioEngine {
+        library.hasActiveVerse ? library : shared
+    }
+
+    let role: AudioEngineRole
 
     @Published var isPlaying: Bool = false
     @Published var currentSurahNumber: Int = 1
     @Published var currentVerseNumber: Int = 1
-    @Published var currentReciter: ReciterInfo = ReciterLibrary.all[0]
+    @Published var currentReciter: ReciterInfo = ReciterLibrary.defaultReciter
     @Published var playbackSpeed: Float = 1.0
     @Published var repeatMode: RepeatMode = .off
     @Published var verseProgress: Double = 0.0
@@ -79,6 +94,13 @@ final class AudioEngine: NSObject, ObservableObject {
     /// regardless of whether the overlay is currently visible.
     @Published var isQuranScreenActive: Bool = false
     @Published var playToMode: PlayToMode = .continuous
+
+    // MARK: - Radio Bridge
+
+    @Published var radioActive: Bool = false
+    var radioRemotePlay: (() -> Void)? = nil
+    var radioRemotePause: (() -> Void)? = nil
+    var radioStop: (() -> Void)? = nil
 
     private var currentVerseIteration: Int = 0
     private var currentRangeIteration: Int = 0
@@ -120,11 +142,18 @@ final class AudioEngine: NSObject, ObservableObject {
         let reciter: String
     }
 
-    override private init() {
+    private static let libraryReciterKey = "library.reciterSlug"
+
+    private init(role: AudioEngineRole) {
+        self.role = role
         super.init()
         loadSavedProgress()
-        setupRemoteCommands()
-        setupNotificationObservers()
+        // Only one instance may own the remote command centre and the session
+        // notifications; its handlers route to whichever engine is audible.
+        if role == .quran {
+            setupRemoteCommands()
+            setupNotificationObservers()
+        }
     }
 
     // MARK: - Playback
@@ -160,6 +189,10 @@ final class AudioEngine: NSObject, ObservableObject {
     }
 
     func pause() {
+        if radioActive {
+            radioRemotePause?()
+            return
+        }
         cancelScheduledHandoff()
         downloadTask?.cancel()
         downloadTask = nil
@@ -174,7 +207,11 @@ final class AudioEngine: NSObject, ObservableObject {
     func resume() {
         cancelScheduledHandoff()
         guard let player = audioPlayer else {
-            loadAndPlay()
+            if radioActive {
+                radioRemotePlay?()
+            } else {
+                loadAndPlay()
+            }
             return
         }
         do {
@@ -188,6 +225,10 @@ final class AudioEngine: NSObject, ObservableObject {
     }
 
     func stop() {
+        stop(clearingNowPlaying: true)
+    }
+
+    private func stop(clearingNowPlaying: Bool) {
         pendingVerseAfterBismillah = nil
         playToMode = .continuous
         cancelScheduledHandoff()
@@ -206,8 +247,10 @@ final class AudioEngine: NSObject, ObservableObject {
         currentVerseIteration = 0
         currentRangeIteration = 0
         stopProgressTimer()
-        deactivateAudioSession()
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        if !radioActive && clearingNowPlaying {
+            deactivateAudioSession()
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        }
     }
 
     func nextVerse() {
@@ -250,7 +293,9 @@ final class AudioEngine: NSObject, ObservableObject {
         cancelScheduledHandoff()
         playbackSpeed = speed
         audioPlayer?.rate = speed
-        storage.updateAudioProgress { $0.playbackSpeed = speed }
+        if role == .quran {
+            storage.updateAudioProgress { $0.playbackSpeed = speed }
+        }
         updateNowPlayingElapsed()
     }
 
@@ -272,7 +317,9 @@ final class AudioEngine: NSObject, ObservableObject {
             repeatToSurah   = currentSurahNumber
             repeatToVerse   = total
         }
-        storage.updateAudioProgress { $0.repeatMode = mode.rawValue }
+        if role == .quran {
+            storage.updateAudioProgress { $0.repeatMode = mode.rawValue }
+        }
         // A pinned handoff was scheduled under the old repeat rule; it would play the
         // wrong verse. Drop it and let the normal path re-arm.
         cancelScheduledHandoff()
@@ -312,7 +359,11 @@ final class AudioEngine: NSObject, ObservableObject {
         let s = currentSurahNumber
         let v = currentVerseNumber
         currentReciter = reciter
-        storage.updateAudioProgress { $0.reciterSlug = reciter.id }
+        if role == .quran {
+            storage.updateAudioProgress { $0.reciterSlug = reciter.id }
+        } else {
+            persistLibraryReciter()
+        }
         // Anything warmed or already decoded belongs to the previous voice.
         cancelScheduledHandoff()
         cancelPrefetch()
@@ -344,7 +395,18 @@ final class AudioEngine: NSObject, ObservableObject {
 
     // MARK: - Internal load
 
+    /// The two engines share one audio session and one lock screen, so only one of
+    /// them may be audible. The other is silenced without tearing down the session
+    /// that is about to be re-activated.
+    private func stopCounterpart() {
+        let other = role == .quran ? AudioEngine.library : AudioEngine.shared
+        guard other.hasActiveVerse else { return }
+        other.stop(clearingNowPlaying: false)
+    }
+
     private func beginPlayback(surah: Int, verse: Int) {
+        radioStop?()
+        stopCounterpart()
         currentSurahNumber = surah
         currentVerseNumber = verse
         // Play Bismillah (verse 0) before verse 1 for surahs 2-114 except At-Tawbah (9)
@@ -740,6 +802,10 @@ final class AudioEngine: NSObject, ObservableObject {
     }
 
     private func persistCurrentPosition() {
+        guard role == .quran else {
+            persistLibraryReciter()
+            return
+        }
         let surah   = currentSurahNumber
         let verse   = currentVerseNumber
         let slug    = currentReciter.id
@@ -770,7 +836,23 @@ final class AudioEngine: NSObject, ObservableObject {
         }
     }
 
+    private func persistLibraryReciter() {
+        UserDefaults.standard.set(currentReciter.id, forKey: Self.libraryReciterKey)
+    }
+
+    private func loadLibraryReciter() {
+        guard
+            let slug = UserDefaults.standard.string(forKey: Self.libraryReciterKey),
+            let reciter = ReciterLibrary.reciter(for: slug)
+        else { return }
+        currentReciter = reciter
+    }
+
     private func loadSavedProgress() {
+        guard role == .quran else {
+            loadLibraryReciter()
+            return
+        }
         guard let saved = storage.getAudioProgress() else { return }
         currentSurahNumber  = saved.surahNumber
         currentVerseNumber  = saved.verseNumber
@@ -813,31 +895,32 @@ final class AudioEngine: NSObject, ObservableObject {
     private func setupRemoteCommands() {
         let center = MPRemoteCommandCenter.shared()
 
-        center.playCommand.addTarget { [weak self] _ in
-            Task { @MainActor [weak self] in self?.resume() }
+        center.playCommand.addTarget { _ in
+            Task { @MainActor in AudioEngine.focusedEngine.resume() }
             return .success
         }
-        center.pauseCommand.addTarget { [weak self] _ in
-            Task { @MainActor [weak self] in self?.pause() }
+        center.pauseCommand.addTarget { _ in
+            Task { @MainActor in AudioEngine.focusedEngine.pause() }
             return .success
         }
-        center.nextTrackCommand.addTarget { [weak self] _ in
-            Task { @MainActor [weak self] in self?.nextVerse() }
+        center.nextTrackCommand.addTarget { _ in
+            Task { @MainActor in AudioEngine.focusedEngine.nextVerse() }
             return .success
         }
-        center.previousTrackCommand.addTarget { [weak self] _ in
-            Task { @MainActor [weak self] in self?.previousVerse() }
+        center.previousTrackCommand.addTarget { _ in
+            Task { @MainActor in AudioEngine.focusedEngine.previousVerse() }
             return .success
         }
         center.changePlaybackRateCommand.supportedPlaybackRates = [0.5, 0.75, 1.0, 1.25, 1.5, 2.0]
-        center.changePlaybackRateCommand.addTarget { [weak self] event in
+        center.changePlaybackRateCommand.addTarget { event in
             guard let e = event as? MPChangePlaybackRateCommandEvent else { return .commandFailed }
-            Task { @MainActor [weak self] in self?.setSpeed(Float(e.playbackRate)) }
+            Task { @MainActor in AudioEngine.focusedEngine.setSpeed(Float(e.playbackRate)) }
             return .success
         }
     }
 
     private func updateNowPlayingInfo() {
+        guard AudioEngine.focusedEngine === self else { return }
         var info: [String: Any] = [:]
         info[MPMediaItemPropertyTitle]            = currentSurahArabicName
         info[MPMediaItemPropertyAlbumTitle]       = "آية \(currentVerseNumber)"

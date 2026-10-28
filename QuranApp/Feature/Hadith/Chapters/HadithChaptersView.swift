@@ -24,10 +24,6 @@ struct HadithChaptersView: View {
         MainView(viewModel: viewModel) {
             mainContent
         }
-        .onAppear {
-            viewModel.onAppear()
-            hideTabBar()
-        }
         .navigationBarHidden(true)
     }
 
@@ -57,7 +53,7 @@ extension HadithChaptersView {
     private var navigationBar: some View {
         HStack(spacing: .sm) {
             Button(action: { viewModel.goBack() }) {
-                Image(systemName: "arrow.left")
+                Image(systemName: "arrow.backward")
                     .font(.system(size: 16, weight: .medium))
                     .customForeground(.onSurface)
                     .frame(width: 36, height: 36)
@@ -137,7 +133,7 @@ struct HadithChapterRow: View {
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                Image(systemName: "chevron.right")
+                Image(systemName: "chevron.forward")
                     .font(.system(size: 12))
                     .customForeground(.onSurfaceVariant)
             }

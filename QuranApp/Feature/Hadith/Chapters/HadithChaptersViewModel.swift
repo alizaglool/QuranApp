@@ -14,7 +14,7 @@ final class HadithChaptersViewModel: MainViewModel {
     @Published var chapters: [HadithChapter] = []
 
     let book: HadithBook
-    var isTabBarVisible: Bool { true }
+    var isTabBarVisible: Bool { false }
 
     weak var coordinator: HadithCoordinating?
     private let service = HadithDatabaseService.shared

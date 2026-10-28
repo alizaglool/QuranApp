@@ -61,6 +61,7 @@ final class TasbihCounterViewModel: ObservableObject {
             currentIndex += 1
         } else {
             isComplete = true
+            WorshipTrackerStore.shared.markCompleted(.tasbih)
         }
     }
 

@@ -5,46 +5,80 @@
 
 import Foundation
 
-struct ReciterInfo: Identifiable, Hashable {
+struct ReciterInfo: Identifiable, Hashable, Codable {
     let id: String
     let arabicName: String
     let englishName: String
     let bitrateKbps: Int
+    let sizeMB: Int
+    let mp3quranId: Int?
+    let radioIds: [Int]
+    let imageURL: String?
 
-    // Estimated total download size (6236 verses × avg file size)
-    var estimatedSizeMB: Int {
-        switch bitrateKbps {
-        case 192: return 450
-        case 128: return 320
-        default:  return 300
-        }
-    }
+    var estimatedSizeMB: Int { sizeMB }
 }
 
 enum ReciterLibrary {
-    static let all: [ReciterInfo] = [
-        ReciterInfo(id: "Alafasy_128kbps",                     arabicName: "مشاري العفاسي",         englishName: "Mishary Alafasy",          bitrateKbps: 128),
-        ReciterInfo(id: "Abdurrahmaan_As-Sudais_192kbps",      arabicName: "عبدالرحمن السديس",      englishName: "Abdurrahmaan As-Sudais",   bitrateKbps: 192),
-        ReciterInfo(id: "Saood_ash-Shuraym_128kbps",           arabicName: "سعود الشريم",           englishName: "Saood ash-Shuraym",        bitrateKbps: 128),
-        ReciterInfo(id: "Maher_AlMuaiqly_64kbps",              arabicName: "ماهر المعيقلي",         englishName: "Maher Al-Muaiqly",         bitrateKbps: 64),
-        ReciterInfo(id: "Yasser_Ad-Dussary_128kbps",           arabicName: "ياسر الدوسري",          englishName: "Yasser Ad-Dussary",        bitrateKbps: 128),
-        ReciterInfo(id: "Nasser_Alqatami_128kbps",             arabicName: "ناصر القطامي",          englishName: "Nasser Al-Qatami",         bitrateKbps: 128),
-        ReciterInfo(id: "Muhammad_Jibreel_128kbps",            arabicName: "محمد جبريل",            englishName: "Muhammad Jibreel",         bitrateKbps: 128),
-        ReciterInfo(id: "Abu_Bakr_Ash-Shaatree_128kbps",       arabicName: "أبو بكر الشاطري",       englishName: "Abu Bakr Ash-Shaatree",    bitrateKbps: 128),
-        ReciterInfo(id: "Abdul_Basit_Murattal_192kbps",        arabicName: "عبد الباسط عبد الصمد",  englishName: "Abdul Basit (Murattal)",   bitrateKbps: 192),
-        ReciterInfo(id: "Husary_128kbps",                      arabicName: "محمود خليل الحصري",     englishName: "Mahmoud Khalil Al-Husary", bitrateKbps: 128),
-        ReciterInfo(id: "Minshawy_Murattal_128kbps",           arabicName: "محمد صديق المنشاوي",    englishName: "Al-Minshawi (Murattal)",   bitrateKbps: 128),
-        ReciterInfo(id: "Hani_Rifai_192kbps",                  arabicName: "هاني الرفاعي",          englishName: "Hani Rifai",               bitrateKbps: 192),
-        ReciterInfo(id: "Abdullah_Basfar_192kbps",             arabicName: "عبدالله بصفر",          englishName: "Abdullah Basfar",          bitrateKbps: 192),
-        ReciterInfo(id: "ahmed_ibn_ali_al_ajamy_128kbps",      arabicName: "أحمد العجمي",           englishName: "Ahmad Al-Ajamy",           bitrateKbps: 128),
-        ReciterInfo(id: "Ibrahim_Akhdar_32kbps",               arabicName: "إبراهيم الأخضر",        englishName: "Ibrahim Al-Akhdar",        bitrateKbps: 32),
-        ReciterInfo(id: "Hudhaify_128kbps",                    arabicName: "علي الحذيفي",           englishName: "Ali Al-Huthaifi",          bitrateKbps: 128),
-        ReciterInfo(id: "Sahl_Yassin_128kbps",                 arabicName: "سهل ياسين",             englishName: "Sahl Yassin",              bitrateKbps: 128),
-    ]
+
+    // MARK: - Catalog
+
+    static var all: [ReciterInfo] {
+        catalogLock.lock()
+        if let resolved {
+            catalogLock.unlock()
+            return resolved
+        }
+        catalogLock.unlock()
+
+        let loaded = ReciterCatalogService.shared.currentReciters()
+        let seeded = loaded.isEmpty ? [defaultReciter] : loaded
+
+        catalogLock.lock()
+        defer { catalogLock.unlock() }
+        if resolved == nil { resolved = seeded }
+        return resolved ?? seeded
+    }
+
+    static var featured: [FeaturedReciter] {
+        ReciterCatalogService.shared.currentFeatured()
+    }
 
     static func reciter(for slug: String) -> ReciterInfo? {
         all.first { $0.id == slug }
     }
+
+    @discardableResult
+    static func refreshFromRemote() async -> [ReciterInfo] {
+        guard
+            let fresh = try? await ReciterCatalogService.shared.refresh(),
+            !fresh.isEmpty
+        else { return all }
+
+        catalogLock.lock()
+        resolved = fresh
+        catalogLock.unlock()
+        return fresh
+    }
+
+    static func warmUp() {
+        DispatchQueue.global(qos: .utility).async { _ = all }
+    }
+
+    // MARK: - Storage
+
+    private static let catalogLock = NSLock()
+    private static var resolved: [ReciterInfo]?
+
+    static let defaultReciter = ReciterInfo(
+        id: "Alafasy_128kbps",
+        arabicName: "مشاري العفاسي",
+        englishName: "Mishary Alafasy",
+        bitrateKbps: 128,
+        sizeMB: 1667,
+        mp3quranId: 123,
+        radioIds: [79],
+        imageURL: nil
+    )
 
     static func everyAyahURL(reciter: String, surah: Int, verse: Int) -> URL {
         let s = String(format: "%03d", surah)

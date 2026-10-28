@@ -190,35 +190,20 @@ final class StorageManager: ObservableObject {
         ayahNumber: Int?,
         color: String
     ) -> String? {
-        // Case 1 — bookmark already on THIS verse. Toggle / recolor in place.
-        if let existing = getBookmark(page: page, ayahNumber: ayahNumber) {
-            if existing.color == color {
-                context.delete(existing)
+        if let existingBookmarkOnThisVerse = getBookmark(page: page, ayahNumber: ayahNumber) {
+            if existingBookmarkOnThisVerse.color == color {
+                context.delete(existingBookmarkOnThisVerse)
                 try? context.save()
                 bookmarksRevision &+= 1
                 return nil
             } else {
-                existing.color = color
+                existingBookmarkOnThisVerse.color = color
                 try? context.save()
                 bookmarksRevision &+= 1
                 return color
             }
         }
 
-        // Case 2 — bookmark on a DIFFERENT verse (or no bookmark at all).
-        // Enforce "only one bookmark globally" by deleting every existing
-        // bookmark before inserting the new one. This is what makes the
-        // previous highlight on another page disappear automatically.
-        let allDescriptor = FetchDescriptor<QuranBookmark>()
-        let existingBookmarks = (try? context.fetch(allDescriptor)) ?? []
-        for bm in existingBookmarks {
-            context.delete(bm)
-        }
-        if !existingBookmarks.isEmpty {
-            try? context.save()
-        }
-
-        // addBookmark already bumps bookmarksRevision and saves.
         addBookmark(
             page: page,
             surahNumber: surahNumber,

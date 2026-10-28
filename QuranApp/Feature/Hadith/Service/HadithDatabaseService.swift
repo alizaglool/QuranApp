@@ -34,6 +34,7 @@ final class HadithDatabaseService {
     private var capabilities: [Int: BookCapabilities] = [:]
     private let lock = NSLock()
     private let manifestService: HadithManifestService
+    private let metaService = HadithMetaService.shared
 
     init(manifestService: HadithManifestService = .shared) {
         self.manifestService = manifestService
@@ -53,7 +54,7 @@ final class HadithDatabaseService {
             return """
                 AutoID, BookID, ParentID, Text, HadethNumbers, SharhText,
                 FolderNum, PageNum, HadethType, BriefText, TabweebPath, RawyAlaa,
-                \(tail)
+                \(tail), HadethID
                 """
         }
     }
@@ -234,10 +235,33 @@ final class HadithDatabaseService {
     /// never needs it, and three extra joins per page turn would be paid by
     /// everyone to serve the few who open the detail sheet.
     func fetchDetail(for entry: HadithEntry) -> HadithDetail {
-        HadithDetail(entry: entry,
-                     rulings: fetchRulings(bookId: entry.bookId, autoId: entry.id),
-                     takhrij: fetchTakhrij(bookId: entry.bookId, autoId: entry.id),
-                     ghareeb: fetchGhareeb(bookId: entry.bookId, references: entry.markup.ghareebWords))
+        let nodeIDs = fetchSubjectNodeIDs(bookId: entry.bookId, hadethID: entry.hadethID)
+
+        return HadithDetail(
+            entry: entry,
+            rulings: fetchRulings(bookId: entry.bookId, autoId: entry.id),
+            takhrij: fetchTakhrij(bookId: entry.bookId, autoId: entry.id),
+            ghareeb: fetchGhareeb(bookId: entry.bookId, references: entry.markup.ghareebWords),
+            notes: metaService.notes(for: entry.markup.notes),
+            subjects: metaService.subjectPaths(nodeIDs: nodeIDs)
+        )
+    }
+
+    func fetchSubjectNodeIDs(bookId: Int, hadethID: Int) -> [Int] {
+        guard hadethID > 0 else { return [] }
+
+        let sql = """
+            SELECT NodeID
+            FROM HadethsSubjects
+            WHERE HadethID = ? AND BookID = ?
+            ORDER BY AutoID
+            """
+        return rows(db: openDB(for: bookId), sql, bind: { stmt in
+            sqlite3_bind_int(stmt, 1, Int32(hadethID))
+            sqlite3_bind_int(stmt, 2, Int32(bookId))
+        }) { stmt in
+            Int(sqlite3_column_int(stmt, 0))
+        }
     }
 
     func fetchRulings(bookId: Int, autoId: Int) -> [HadithRuling] {
@@ -260,7 +284,7 @@ final class HadithDatabaseService {
     /// A single hadith can be cited forty times in one collection, so the flat
     /// rows are collapsed into "صحيح البخاري · ٥٢١، ٥٤١، ٥٤٤" rather than
     /// forty near-identical lines.
-    func fetchTakhrij(bookId: Int, autoId: Int) -> [HadithTakhrijGroup] {
+    func fetchTakhrij(bookId: Int, autoId: Int) -> [HadithTakhrijSection] {
         let sql = """
             SELECT TakhrigAutoID, TakhregBookID, TakhregBookName,
                    TakhregHadethNumber, TakhregType
@@ -273,17 +297,37 @@ final class HadithDatabaseService {
                                bookId: Int(sqlite3_column_int(stmt, 1)),
                                bookName: col(stmt, 2),
                                hadithNumber: col(stmt, 3),
-                               kind: Int(sqlite3_column_int(stmt, 4)))
+                               relation: .make(Int(sqlite3_column_int(stmt, 4))))
         }
 
+        var order: [HadithTakhrijRelation] = []
+        var sections: [HadithTakhrijRelation: [HadithTakhrijGroup]] = [:]
+
+        for relation in entries.map(\.relation) where sections[relation] == nil {
+            order.append(relation)
+            sections[relation] = groups(in: entries, relation: relation, bookId: bookId)
+        }
+
+        return order
+            .sorted { $0.sortOrder < $1.sortOrder }
+            .compactMap { relation in
+                guard let groups = sections[relation], !groups.isEmpty else { return nil }
+                return HadithTakhrijSection(relation: relation, groups: groups)
+            }
+    }
+
+    private func groups(in entries: [HadithTakhrijEntry],
+                        relation: HadithTakhrijRelation,
+                        bookId: Int) -> [HadithTakhrijGroup] {
         var order: [Int] = []
         var grouped: [Int: (name: String, numbers: [String])] = [:]
-        for entry in entries where !entry.hadithNumber.isEmpty {
+
+        for entry in entries where entry.relation == relation && !entry.hadithNumber.isEmpty {
             if grouped[entry.bookId] == nil {
                 order.append(entry.bookId)
                 grouped[entry.bookId] = (entry.bookName, [])
             }
-            // The same number can be listed under more than one type, and the
+            // The same number can be listed twice under one type, and the
             // reader has no use for seeing it twice.
             if grouped[entry.bookId]?.numbers.contains(entry.hadithNumber) == false {
                 grouped[entry.bookId]?.numbers.append(entry.hadithNumber)
@@ -567,6 +611,7 @@ final class HadithDatabaseService {
         entry.brief = col(stmt, 9)
         entry.breadcrumb = col(stmt, 10)
         entry.markup = markup
+        entry.hadethID = Int(sqlite3_column_int(stmt, 14))
         return entry
     }
 

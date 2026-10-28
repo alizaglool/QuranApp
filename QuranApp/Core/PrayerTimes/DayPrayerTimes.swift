@@ -30,14 +30,11 @@ struct DayPrayerTimes: Codable, Equatable {
     /// value is normally smaller than `isha`.
     let lastThird: Int
 
-    /// The zone every anchor above is expressed in — `"Asia/Riyadh"` for the
-    /// pinned city. Optional so a cache written before this field existed still
-    /// decodes; `nil` falls back to `fallbackTimeZoneIdentifier`.
     let timeZoneIdentifier: String?
 
-    /// The pinned city's zone. Used when a payload omits `meta`: the anchors are
-    /// Riyadh's either way, so reading them on the device's clock would gate
-    /// hours out for a user sitting anywhere else.
+    let calculationMethodId: Int?
+    let calculationMethodName: String?
+
     static let fallbackTimeZoneIdentifier = "Asia/Riyadh"
 }
 
@@ -45,14 +42,17 @@ struct DayPrayerTimes: Codable, Equatable {
 
 extension DayPrayerTimes {
 
-    /// The calendar the anchors live on. Prayer times arrive on the city's own
-    /// clock, so a user sitting in another zone is still measured against
-    /// Riyadh's minutes rather than their own.
     var calendar: Calendar { DayPrayerTimes.calendar(for: timeZoneIdentifier) }
+
+    var duha: Int { sunrise + (dhuhr - sunrise) / 4 }
 
     /// Minutes since midnight measured in *this day's* zone.
     func minutes(at date: Date) -> Int {
         DayPrayerTimes.minutesSinceMidnight(of: date, calendar: calendar)
+    }
+
+    func seconds(at date: Date) -> Int {
+        DayPrayerTimes.secondsSinceMidnight(of: date, calendar: calendar)
     }
 
     static func calendar(for timeZoneIdentifier: String?) -> Calendar {
@@ -84,6 +84,11 @@ extension DayPrayerTimes {
     static func minutesSinceMidnight(of date: Date, calendar: Calendar) -> Int {
         let components = calendar.dateComponents([.hour, .minute], from: date)
         return (components.hour ?? 0) * 60 + (components.minute ?? 0)
+    }
+
+    static func secondsSinceMidnight(of date: Date, calendar: Calendar) -> Int {
+        let components = calendar.dateComponents([.hour, .minute, .second], from: date)
+        return (components.hour ?? 0) * 3600 + (components.minute ?? 0) * 60 + (components.second ?? 0)
     }
 }
 
@@ -119,6 +124,8 @@ extension DayPrayerTimes {
         self.isha = isha
         self.midnight = midnight
         self.lastThird = lastThird
+        self.calculationMethodId = response.meta?.method?.id
+        self.calculationMethodName = response.meta?.method?.name
     }
 
     /// Aladhan returns `"HH:mm"`. Some payloads append a zone, `"04:26 (AST)"`,

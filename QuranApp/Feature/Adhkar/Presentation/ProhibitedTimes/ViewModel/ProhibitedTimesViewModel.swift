@@ -58,7 +58,7 @@ final class ProhibitedTimesViewModel: ObservableObject {
 
     func onAppear() {
         if content == nil { content = ProhibitedTimesContent.bundled }
-        store.load()
+        store.loadTodayForSelectedLocation()
         observeStore()
         refreshActiveWindow()
         startRefresh()
@@ -84,7 +84,7 @@ final class ProhibitedTimesViewModel: ObservableObject {
             .publisher(for: UIApplication.willEnterForegroundNotification)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.store.load()
+                self?.store.loadTodayForSelectedLocation()
                 self?.refreshActiveWindow()
             }
             .store(in: &cancellables)
@@ -112,7 +112,7 @@ final class ProhibitedTimesViewModel: ObservableObject {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 60_000_000_000)
                 guard !Task.isCancelled, let self else { return }
-                self.store.load()
+                self.store.loadTodayForSelectedLocation()
                 self.refreshActiveWindow()
             }
         }

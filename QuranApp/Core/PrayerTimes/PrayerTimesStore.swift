@@ -22,10 +22,12 @@ final class PrayerTimesStore: ObservableObject {
     /// treat `nil` as "no gate can open" so a card never shows at the wrong hour.
     @Published private(set) var today: DayPrayerTimes?
 
+    private static let storageKey = "prayer_times_day_v3"
     private let service = QuranService.shared
+    private let locationStore = SelectedLocationStore.shared
     private let defaults = UserDefaults.standard
-    private let storageKey = "prayer_times_day_v1"
     private var refreshTask: Task<Void, Never>?
+    private var cachedLocationIdentifier: String?
 
     /// Anchors drift a minute or two a day, so yesterday's cache is a better
     /// gate than none. Last month's is not: a device that never reaches the
@@ -33,32 +35,50 @@ final class PrayerTimesStore: ObservableObject {
     private let maxCacheAgeInDays = 3
 
     private init() {
-        today = cached()
+        let restored = restoredCacheEntry()
+        today = restored?.times
+        cachedLocationIdentifier = restored?.locationIdentifier
     }
 
-    /// Serves the cache when it already covers today, otherwise refreshes once.
-    /// Safe to call on every `onAppear`.
-    func load(city: String = "Riyadh", country: String = "SA") {
+    /// Serves the cache when it already covers today at the selected location,
+    /// otherwise refreshes once. Safe to call on every `onAppear`.
+    func loadTodayForSelectedLocation() {
+        let location = locationStore.selectedLocation
+
         // Measured on the anchors' own clock once we have them, so the day
-        // rolls over at Riyadh midnight rather than the device's.
-        let key = DayPrayerTimes.dayKey(for: Date(), calendar: today?.calendar ?? DayPrayerTimes.calendar(for: nil))
-        guard today?.dayKey != key else { return }
+        // rolls over at the selected location's midnight, not the device's.
+        let calendar = today?.calendar ?? DayPrayerTimes.calendar(for: location.timeZoneIdentifier)
+        let dayKey = DayPrayerTimes.dayKey(for: Date(), calendar: calendar)
+
+        let isCacheCurrent = today?.dayKey == dayKey
+            && cachedLocationIdentifier == location.prayerTimesCacheIdentifier
+        guard !isCacheCurrent else { return }
         guard refreshTask == nil else { return }
 
         refreshTask = Task { [weak self] in
-            await self?.refresh(city: city, country: country)
+            await self?.refresh(for: location)
             self?.refreshTask = nil
         }
     }
 
+    /// Drops the cached day so the next load fetches the newly selected
+    /// location instead of serving the previous city's anchors until midnight.
+    func reloadAfterSelectedLocationChange() {
+        refreshTask?.cancel()
+        refreshTask = nil
+        clearCacheEntry()
+        loadTodayForSelectedLocation()
+    }
+
     // MARK: - Private
 
-    private func refresh(city: String, country: String) async {
+    private func refresh(for location: SelectedLocation) async {
         do {
-            let data = try await service.fetchPrayerTimes(city: city, country: country)
+            let data = try await service.fetchPrayerTimes(latitude: location.latitude,
+                                                          longitude: location.longitude)
             // Stamped with the payload's own zone. On a cold launch the day key
             // is the only freshness signal there is, and the device zone would
-            // file the Riyadh anchors under the wrong calendar day.
+            // file the fetched anchors under the wrong calendar day.
             let calendar = DayPrayerTimes.calendar(for: data.meta?.timezone)
             let dayKey = DayPrayerTimes.dayKey(for: Date(), calendar: calendar)
             guard let parsed = DayPrayerTimes(response: data, dayKey: dayKey) else {
@@ -66,7 +86,8 @@ final class PrayerTimesStore: ObservableObject {
                 return
             }
             today = parsed
-            persist(parsed)
+            cachedLocationIdentifier = location.prayerTimesCacheIdentifier
+            persist(parsed, locationIdentifier: location.prayerTimesCacheIdentifier)
         } catch {
             // Yesterday's cache is kept deliberately. Anchors move by a minute
             // or two a day, so a stale day is a far better gate than no gate.
@@ -74,31 +95,37 @@ final class PrayerTimesStore: ObservableObject {
             // honest answer — a card at the wrong hour is worse than no card.
             print("❌ Prayer times store: \(error)")
             if let current = today, !isFresh(current) {
-                today = nil
-                defaults.removeObject(forKey: storageKey)
+                clearCacheEntry()
             }
         }
     }
 
-    private func persist(_ times: DayPrayerTimes) {
-        guard let encoded = try? JSONEncoder().encode(times) else { return }
-        defaults.set(encoded, forKey: storageKey)
+    private func persist(_ times: DayPrayerTimes, locationIdentifier: String) {
+        let entry = CachedPrayerTimesEntry(locationIdentifier: locationIdentifier, times: times)
+        guard let encoded = try? JSONEncoder().encode(entry) else { return }
+        defaults.set(encoded, forKey: PrayerTimesStore.storageKey)
     }
 
-    private func cached() -> DayPrayerTimes? {
-        guard let data = defaults.data(forKey: storageKey),
-              let decoded = try? JSONDecoder().decode(DayPrayerTimes.self, from: data)
+    private func clearCacheEntry() {
+        today = nil
+        cachedLocationIdentifier = nil
+        defaults.removeObject(forKey: PrayerTimesStore.storageKey)
+    }
+
+    private func restoredCacheEntry() -> CachedPrayerTimesEntry? {
+        guard let data = defaults.data(forKey: PrayerTimesStore.storageKey),
+              let decoded = try? JSONDecoder().decode(CachedPrayerTimesEntry.self, from: data)
         else { return nil }
         // A blob written before the zone was recorded would keep being read on
         // the device clock for the rest of the day. Dropping it costs one fetch
         // and makes the zone fix take hold on the first launch after the update.
-        guard decoded.timeZoneIdentifier != nil else { return nil }
-        guard isFresh(decoded) else { return nil }
+        guard decoded.times.timeZoneIdentifier != nil else { return nil }
+        guard isFresh(decoded.times) else { return nil }
         return decoded
     }
 
     /// Measured on the anchors' own calendar, so a user in another zone neither
-    /// ages the Riyadh cache a day early nor keeps it a day too long. A day key
+    /// ages the cached day early nor keeps it a day too long. A day key
     /// in the future — the device clock moved back — also reads as stale.
     private func isFresh(_ times: DayPrayerTimes) -> Bool {
         let calendar = times.calendar
@@ -109,4 +136,12 @@ final class PrayerTimesStore: ObservableObject {
         else { return false }
         return (0...maxCacheAgeInDays).contains(age)
     }
+}
+
+
+/// Pairs a cached day with the location it was fetched for, so switching city
+/// cannot keep serving the previous city's anchors until the next calendar day.
+private struct CachedPrayerTimesEntry: Codable {
+    let locationIdentifier: String
+    let times: DayPrayerTimes
 }

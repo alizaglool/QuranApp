@@ -14,11 +14,13 @@ struct QuranPagerView: View {
     @ObservedObject private var storage = StorageManager.shared
 
     let onBack: (() -> Void)?
+    let openSearchOnAppear: Bool
     @State private var isTodaySheetPresenting = false
     @State private var isSurahListPresenting = false
     @State private var isPageSettingsPresenting = false
     @State private var isSearchActive = false
     @FocusState private var isSearchFieldFocused: Bool
+    @State private var didApplyInitialSearch = false
     @State private var overlayHideTask: Task<Void, Never>? = nil
     @State private var isMiniPlayerSheetOpen = false
 
@@ -50,9 +52,11 @@ struct QuranPagerView: View {
         max(size.height, size.width * Self.mushafPageAspect * Self.minPageHeightRatio)
     }
 
-    init(startPage: Int? = nil, onBack: (() -> Void)? = nil) {
+    init(startPage: Int? = nil, openSearchOnAppear: Bool = false, onBack: (() -> Void)? = nil) {
         let vm = QuranViewModel(startPage: startPage)
         _viewModel = StateObject(wrappedValue: vm)
+        self.openSearchOnAppear = openSearchOnAppear
+        _isSearchActive = State(initialValue: openSearchOnAppear)
         self.onBack = onBack
     }
 
@@ -152,6 +156,7 @@ struct QuranPagerView: View {
         .onAppear {
             AudioEngine.shared.isQuranScreenActive = true
             UIApplication.shared.isIdleTimerDisabled = true
+            applyInitialSearchIfNeeded()
         }
         .onDisappear {
             AudioEngine.shared.quranOverlayActive = false
@@ -363,6 +368,17 @@ extension QuranPagerView {
         isSearchFieldFocused = false
         withAnimation(.easeInOut(duration: 0.22)) { isSearchActive = false }
         scheduleOverlayHide()
+    }
+
+    // MARK: - Search On Open
+
+    private func applyInitialSearchIfNeeded() {
+        guard openSearchOnAppear, !didApplyInitialSearch else { return }
+        didApplyInitialSearch = true
+        viewModel.showOverlay = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+            isSearchFieldFocused = true
+        }
     }
 
     // MARK: - Top Bar

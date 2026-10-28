@@ -6,6 +6,8 @@
 	<string>$(YOUTUBE_API_KEY)</string>
 	<key>RemoteConfigBaseURL</key>
 	<string>$(REMOTE_CONFIG_BASE_URL)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>يُستخدم موقعك لحساب مواقيت الصلاة واتجاه القبلة بدقة.</string>
 	<key>NSAllowsArbitraryLoads</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

@@ -17,6 +17,7 @@ final class AdhkarReadingViewModel: MainViewModel {
     @Published var isPlaying: Bool = false
 
     let category: DhikrCategory
+    let orderedAdhkar: [Dhikr]
     var isTabBarVisible: Bool { false }
 
     weak var coordinator: AdhkarCoordinating?
@@ -24,7 +25,7 @@ final class AdhkarReadingViewModel: MainViewModel {
     private let audioService = DhikrAudioService()
     private var isAudioSessionActive: Bool = false
 
-    private var sortedAdhkar: [Dhikr] {
+    private static func adhkarInReadingOrder(for category: DhikrCategory) -> [Dhikr] {
         var remaining = category.adhkar
         let ayatKursi = remaining.filter { $0.title?.contains("آية الكرسي") == true }
         remaining.removeAll { $0.title?.contains("آية الكرسي") == true }
@@ -34,18 +35,16 @@ final class AdhkarReadingViewModel: MainViewModel {
     }
 
     var currentDhikr: Dhikr? {
-        guard currentIndex < sortedAdhkar.count else { return nil }
-        return sortedAdhkar[currentIndex]
+        guard currentIndex < orderedAdhkar.count else { return nil }
+        return orderedAdhkar[currentIndex]
     }
 
-    var canGoNext: Bool { currentIndex < sortedAdhkar.count - 1 }
-    var canGoPrevious: Bool { currentIndex > 0 }
+    var canGoNext: Bool { currentIndex < orderedAdhkar.count - 1 }
     var hasAudio: Bool { currentDhikr?.audio != nil }
 
     /// One uniform contract for the view: a dhikr that ships `segments` is used as
     /// authored, anything older is synthesised from `textAr` + `description`.
-    var currentSegments: [DhikrSegment] {
-        guard let dhikr = currentDhikr else { return [] }
+    func displaySegments(for dhikr: Dhikr) -> [DhikrSegment] {
         if let segments = dhikr.segments, !segments.isEmpty { return segments }
 
         var synthesised = [DhikrSegment(kind: .text, text: dhikr.textAr)]
@@ -55,12 +54,10 @@ final class AdhkarReadingViewModel: MainViewModel {
         return synthesised
     }
 
-    var repeatLabel: String? { currentDhikr?.repeatLabel }
-
     /// Athkar fills the bar by position, not by work done, so the first dhikr
     /// already shows a sliver instead of an empty track.
     var overallProgress: Double {
-        let totalCount = sortedAdhkar.count
+        let totalCount = orderedAdhkar.count
         guard totalCount > 0 else { return 0 }
         return Double(currentIndex + 1) / Double(totalCount)
     }
@@ -70,14 +67,10 @@ final class AdhkarReadingViewModel: MainViewModel {
         return Double(currentTapCount) / Double(dhikr.count)
     }
 
-    var willAdvanceOnNextTap: Bool {
-        guard let dhikr = currentDhikr else { return false }
-        return (currentTapCount + 1 >= dhikr.count) && canGoNext
-    }
-
     init(coordinator: AdhkarCoordinating, category: DhikrCategory) {
         self.coordinator = coordinator
         self.category = category
+        self.orderedAdhkar = Self.adhkarInReadingOrder(for: category)
 
         audioService.onStateChange = { [weak self] playing in
             self?.isPlaying = playing
@@ -103,19 +96,11 @@ final class AdhkarReadingViewModel: MainViewModel {
         }
     }
 
-    func navigateToNext() {
-        guard canGoNext else { return }
+    func navigateToIndex(_ index: Int) {
+        guard index != currentIndex, orderedAdhkar.indices.contains(index) else { return }
         audioService.stop()
         currentTapCount = 0
-        currentIndex += 1
-        continueAudioSessionIfActive()
-    }
-
-    func navigateToPrevious() {
-        guard canGoPrevious else { return }
-        audioService.stop()
-        currentTapCount = 0
-        currentIndex -= 1
+        currentIndex = index
         continueAudioSessionIfActive()
     }
 
@@ -144,14 +129,14 @@ final class AdhkarReadingViewModel: MainViewModel {
     }
 
     private func advanceToNextDhikr() {
-        audioService.stop()
-        currentTapCount = 0
-        if currentIndex < sortedAdhkar.count - 1 {
-            currentIndex += 1
-            continueAudioSessionIfActive()
+        if canGoNext {
+            navigateToIndex(currentIndex + 1)
         } else {
+            audioService.stop()
+            currentTapCount = 0
             isAudioSessionActive = false
             isComplete = true
+            WorshipTrackerStore.shared.markCompleted(adhkarCategoryIdentifier: category.id)
         }
     }
 

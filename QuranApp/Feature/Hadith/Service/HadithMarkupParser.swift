@@ -48,8 +48,9 @@ enum HadithMarkupParser {
         var source = raw
         let ruling = extractRuling(from: &source)
         guard !source.isEmpty else { return HadithMarkup(text: "", spans: [], narrators: [],
-                                                         ghareebWords: [], numbers: [], isnadText: "",
-                                                         volume: 0, pageNo: 0, ruling: ruling) }
+                                                         ghareebWords: [], numbers: [], notes: [],
+                                                         isnadText: "", volume: 0, pageNo: 0,
+                                                         ruling: ruling) }
         var lexer = Lexer(source: Array(source))
         lexer.run()
         return lexer.result(ruling: ruling)
@@ -189,11 +190,12 @@ private struct Lexer {
         var narrators: [HadithNarratorRef] = []
         var ghareeb: [HadithGhareebRef] = []
         var numbers: [Int] = []
+        var notes: [HadithNoteRef] = []
         var chain: [String] = []
 
         let markup = HadithMarkup(text: text, spans: spans, narrators: [], ghareebWords: [],
-                                  numbers: [], isnadText: "", volume: volume, pageNo: pageNo,
-                                  ruling: ruling)
+                                  numbers: [], notes: [], isnadText: "",
+                                  volume: volume, pageNo: pageNo, ruling: ruling)
 
         for span in spans {
             switch span.kind {
@@ -204,6 +206,8 @@ private struct Lexer {
                 ghareeb.append(HadithGhareebRef(wordID: wordID, word: markup.substring(of: span)))
             case let .number(value):
                 numbers.append(value)
+            case let .note(noteID):
+                notes.append(HadithNoteRef(noteID: noteID, offset: span.range.lowerBound))
             case .isnad:
                 chain.append(markup.substring(of: span))
             case .matn, .quranQuote:
@@ -212,7 +216,8 @@ private struct Lexer {
         }
 
         return HadithMarkup(text: text, spans: spans, narrators: narrators, ghareebWords: ghareeb,
-                            numbers: numbers, isnadText: chain.joined(separator: " "),
+                            numbers: numbers, notes: notes,
+                            isnadText: chain.joined(separator: " "),
                             volume: volume, pageNo: pageNo, ruling: ruling)
     }
 
@@ -380,6 +385,13 @@ private struct Lexer {
 
     private mutating func closeContent(_ tag: Int, _ openTag: OpenTag) {
         open[tag] = nil
+
+        if tag == Tag.reference {
+            let anchor = anchorBefore(openTag.start)
+            addSpan(.note(noteID: openTag.ref), anchor..<anchor)
+            return
+        }
+
         guard let range = tightRange(openTag.start, out.count) else { return }
         switch tag {
         case Tag.narrator, Tag.narratorAlt:
@@ -389,8 +401,14 @@ private struct Lexer {
         case Tag.quran, Tag.quranPlain:
             addSpan(.quranQuote, range)
         default:
-            break   // `/66` points into a table the release strips: keep the text, drop the link.
+            break
         }
+    }
+
+    private func anchorBefore(_ offset: Int) -> Int {
+        var anchor = min(max(0, offset), out.count)
+        while anchor > 0, out[anchor - 1] == " " || out[anchor - 1] == "\n" { anchor -= 1 }
+        return anchor
     }
 
     private mutating func closeNumber() {
@@ -432,7 +450,8 @@ private struct Lexer {
         let limit = out.count
         spans = spans.compactMap { span -> HadithSpan? in
             guard span.range.lowerBound <= limit else { return nil }
-            if case .number = span.kind {
+
+            guard !span.range.isEmpty else {
                 return HadithSpan(id: span.id, kind: span.kind,
                                   range: span.range.lowerBound..<span.range.lowerBound)
             }

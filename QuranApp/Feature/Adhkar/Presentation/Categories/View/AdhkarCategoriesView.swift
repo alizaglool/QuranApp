@@ -162,17 +162,30 @@ extension AdhkarCategoriesView {
 
     private var moreSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            LazyVGrid(
-                columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)],
-                spacing: 12
-            ) {
-                ForEach(viewModel.moreCategories) { category in
+            SectionHeader(title: AppLocalizedKeys.moreAdhkar.value)
+                .padding(.horizontal, .big)
+
+            VStack(spacing: 0) {
+                ForEach(Array(viewModel.moreCategories.enumerated()), id: \.element.id) { index, category in
                     Button { viewModel.selectCategory(category) } label: {
-                        AdhkarCategoryCard(category: category)
+                        AdhkarCategoryRow(category: category)
                     }
                     .buttonStyle(.plain)
+
+                    if index < viewModel.moreCategories.count - 1 {
+                        Rectangle()
+                            .fill(ColorStyle.outlineVariant.color)
+                            .frame(height: 1)
+                            .padding(.leading, 68)
+                    }
                 }
             }
+            .background(Color.cardSurface)
+            .customCornerRadius(16)
+            .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                    .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
+            )
             .padding(.horizontal, .big)
         }
     }

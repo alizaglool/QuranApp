@@ -24,6 +24,31 @@ struct HadithRuling: Identifiable, Hashable {
 
 // MARK: - Takhrij
 
+enum HadithTakhrijRelation: Hashable {
+    case sameBook
+    case corroboration
+    case witness
+    case unspecified(Int)
+
+    static func make(_ code: Int) -> HadithTakhrijRelation {
+        switch code {
+        case 1: return .corroboration
+        case 2: return .sameBook
+        case 3: return .witness
+        default: return .unspecified(code)
+        }
+    }
+
+    var sortOrder: Int {
+        switch self {
+        case .sameBook: return 0
+        case .corroboration: return 1
+        case .witness: return 2
+        case .unspecified(let code): return 3 + code
+        }
+    }
+}
+
 /// One place the same report appears, from the `Takhrig` table.
 struct HadithTakhrijEntry: Identifiable, Hashable {
     let id: Int
@@ -32,10 +57,7 @@ struct HadithTakhrijEntry: Identifiable, Hashable {
     let bookId: Int
     let bookName: String
     let hadithNumber: String
-    /// The corpus' own classification code. It is kept as the raw value because
-    /// the corpus ships no legend for it; grouping and sorting use it, nothing
-    /// is shown to the reader that claims to know what it means.
-    let kind: Int
+    let relation: HadithTakhrijRelation
 }
 
 /// Every place one report appears in a single other book.
@@ -53,6 +75,44 @@ struct HadithTakhrijGroup: Identifiable, Hashable {
     var id: Int { bookId }
 
     var numbersLabel: String { numbers.joined(separator: "، ") }
+}
+
+struct HadithTakhrijSection: Identifiable, Hashable {
+    let relation: HadithTakhrijRelation
+    let groups: [HadithTakhrijGroup]
+
+    var id: Int { relation.sortOrder }
+
+    var count: Int { groups.reduce(0) { $0 + $1.numbers.count } }
+}
+
+struct HadithNote: Identifiable, Hashable {
+    let id: Int
+    let text: String
+    let offset: Int
+}
+
+struct HadithSubjectPath: Identifiable, Hashable {
+    let id: Int
+    let segments: [String]
+
+    var label: String { segments.joined(separator: " › ") }
+
+    var leaf: String { segments.last ?? "" }
+}
+
+struct HadithLabeledValue: Identifiable, Hashable {
+    let id: String
+    let label: String
+    let value: String
+    let isRTL: Bool
+
+    init(id: String, label: String, value: String, isRTL: Bool = true) {
+        self.id = id
+        self.label = label
+        self.value = value
+        self.isRTL = isRTL
+    }
 }
 
 // MARK: - Rare words
@@ -142,16 +202,23 @@ struct HadithNarratorProfile: Identifiable, Hashable {
 struct HadithDetail: Hashable {
     let entry: HadithEntry
     let rulings: [HadithRuling]
-    let takhrij: [HadithTakhrijGroup]
+    let takhrij: [HadithTakhrijSection]
     let ghareeb: [HadithGhareebMeaning]
+    let notes: [HadithNote]
+    let subjects: [HadithSubjectPath]
 
     static func bare(_ entry: HadithEntry) -> HadithDetail {
-        HadithDetail(entry: entry, rulings: [], takhrij: [], ghareeb: [])
+        HadithDetail(entry: entry, rulings: [], takhrij: [], ghareeb: [], notes: [], subjects: [])
     }
 
-    /// True when there is nothing to show under the body.
-    var isBare: Bool { rulings.isEmpty && takhrij.isEmpty && ghareeb.isEmpty }
+    var isBare: Bool {
+        rulings.isEmpty && takhrij.isEmpty && ghareeb.isEmpty
+            && notes.isEmpty && subjects.isEmpty
+    }
 
-    /// Every reference, less the ones pointing back into the same book.
-    var crossReferences: [HadithTakhrijGroup] { takhrij.filter { !$0.isSameBook } }
+    var takhrijCount: Int { takhrij.reduce(0) { $0 + $1.count } }
+
+    var crossReferences: [HadithTakhrijGroup] {
+        takhrij.filter { $0.relation != .sameBook }.flatMap(\.groups)
+    }
 }

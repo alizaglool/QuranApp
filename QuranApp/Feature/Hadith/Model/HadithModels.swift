@@ -162,6 +162,7 @@ struct HadithEntry: Identifiable, Hashable {
     /// words, the Qur'an quotations and the inline numbers, each as a range
     /// over `arabicText`.
     var markup: HadithMarkup = .empty
+    var hadethID: Int = 0
 
     var hasTranslation: Bool { !translation.isEmpty }
     var hasCommentary: Bool  { !commentary.isEmpty }

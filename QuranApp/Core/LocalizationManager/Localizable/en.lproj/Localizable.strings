@@ -39,6 +39,7 @@
 "myAdhkarTitle" = "My Adhkar";
 "myAdhkarSubtitle" = "Your Personal Adhkar";
 "dailyAdhkar" = "Daily Adhkar";
+"moreAdhkar" = "More Duas & Adhkar";
 "adhkarCount" = "%d Adhkar";
 "tapToCount" = "Tap";
 "remaining" = "Remaining";
@@ -57,6 +58,9 @@
 "maghrib" = "MAGHRIB";
 "isha" = "ISHA";
 "seeAll" = "See All";
+"hadithSectionNineBooks" = "The Nine Books";
+"hadithSectionOtherCollections" = "Other Collections";
+"hadithChapterCount" = "%d Books";
 
 "edit" = "Edit";
 "bookmarks" = "Bookmarks";
@@ -182,7 +186,9 @@
 "surahs" = "Surahs";
 "quarters" = "Quarters";
 "pagePrefix" = "Page";
+"ayahPrefix" = "Ayah";
 "versesCount" = "%@ verses";
+"noBookmarksYet" = "No bookmarks yet";
 
 // Juz names
 "juz1"  = "Juz 1";
@@ -244,6 +250,7 @@
 "lessonsCount" = "Lessons";
 "retryAction" = "Retry";
 "lessonsLoadError" = "Failed to load sheikhs. Check your connection and try again.";
+"recitersLoadError" = "Failed to load reciters. Check your connection and try again.";
 "emptySpecialty" = "No sheikhs found for this specialty";
 
 "detailTabPlaylists" = "Playlists";
@@ -270,3 +277,265 @@
 "playlistNotes" = "Notes";
 "relatedLessons" = "Related Lessons";
 "originalSound" = "Original Sound";
+
+// MARK: - Radio
+"radio" = "Radio";
+"radioTitle" = "Quran Radio";
+"radioSubtitle" = "Live stations and your offline recitations";
+"radioLive" = "LIVE";
+"radioOffline" = "No internet connection";
+"radioOfflineMessage" = "Live stations need a connection. Your downloads still play offline.";
+"radioTimedOut" = "The station took too long to respond";
+"radioStreamFailed" = "This station could not be played";
+"downloadRecitersAction" = "Download Reciters";
+
+// MARK: - Recitations
+"recitationsSubtitle" = "Pick a reciter, then a surah";
+"featuredReciters" = "Featured Reciters";
+
+"currentVerse" = "Verse %@";
+
+// MARK: - Radio Sections
+"radioSectionLive" = "Live Channels";
+"radioSectionStations" = "Stations";
+"radioSectionDownloaded" = "Downloaded";
+"radioNeedsConnection" = "Needs a connection";
+
+// MARK: - Home Hero
+"homeHeroTitle" = "Wird";
+"homeSearchAction" = "Search";
+"homeLocation" = "Riyadh, SA";
+"homeLocationAccessibility" = "Showing times for %@";
+"locationLabelFormat" = "%1$@, %2$@";
+"homeHeroDhikr" = "The best way to begin is remembering Allah 🌅";
+
+// MARK: - Home Next Prayer
+"nextPrayerLabel" = "NEXT PRAYER";
+"leftUntilPrayer" = "Left until %@";
+"hourUnitShort" = "H";
+"minuteUnitShort" = "M";
+"prayerTimesUnavailable" = "Prayer times unavailable";
+"tryAgainAction" = "Try Again";
+
+// MARK: - Home Reading Card
+"readingStartTitle" = "Make the Quran the spring of your heart";
+"readingStartSubtitle" = "Begin today, even with a single verse";
+"readingStartAction" = "Start reading";
+"readingContinueAction" = "Continue reading";
+"readingStoppedAt" = "You stopped at %@";
+"readingQuranPercent" = "%@%% of the Quran";
+
+// MARK: - Home Date
+"homeGregorianFormat" = "EEEE, d MMMM";
+"homeHijriFormat" = "d MMMM yyyy";
+"hijriEraSuffix" = "AH";
+
+// MARK: - Home Today
+"homeTodayTitle" = "Today";
+"homeTodayPrayersLabel" = "Prayers";
+"homeTodayQuranLabel" = "Quran";
+"prayersCompletedFormat" = "%1$d of %2$d";
+"markPrayedAccessibility" = "Mark %@ as prayed";
+"markNotPrayedAccessibility" = "Mark %@ as not prayed";
+
+// MARK: - Home Athkar Now
+"homeNowBadge" = "Now";
+"homeAthkarNowSubtitle" = "It is time — open your athkar";
+"athkarMorningTitle" = "Morning Athkar";
+"athkarEveningTitle" = "Evening Athkar";
+"athkarAfterIshaTitle" = "Athkar After Isha";
+"athkarLastThirdTitle" = "Last Third of the Night";
+
+// MARK: - Worship Tracker
+"worshipTracker" = "Worship Tracker";
+"worshipHomeTile" = "Worship";
+"worshipYesterday" = "Yesterday";
+"worshipCurrentStreak" = "Current streak";
+"worshipBestStreak" = "Best";
+"worshipStreaksByCategory" = "Consistency by section";
+"worshipLastSevenDays" = "Last 7 days";
+"worshipYearOverview" = "Year overview";
+"worshipTapHint" = "Tap any act to mark it done.";
+"worshipNotOpenYet" = "Opens at its due time";
+"worshipDisclaimerTitle" = "A note";
+"worshipDisclaimerBody" = "Tracking is an organising aid that helps you keep to the obligations and the sunan. It is not an act of worship in itself, nor a sunnah of the Prophet صلى الله عليه وسلم. Keep it between you and Allah — not to collect scores, and not to show off.";
+"worshipUpdateYesterday" = "Update yesterday";
+"worshipBackToToday" = "Back to today";
+"worshipDaysUnit" = "days";
+"worshipPrayers" = "Prayers";
+"worshipAthkar" = "Athkar";
+"worshipQuran" = "Quran";
+"worshipTasbih" = "Tasbih";
+"worshipQuranReading" = "Quran reading";
+
+// MARK: - Settings
+"settingsSectionQuran" = "Quran & Recitation";
+"settingsSectionWorship" = "Worship";
+"settingsSectionGeneral" = "General";
+"settingsSectionMore" = "More";
+"settingsQuranPageSubtitle" = "Mushaf, scrolling, theme";
+"settingsWorshipSubtitle" = "Track your prayers, athkar and reading";
+"settingsDownloadsEmpty" = "No recitations downloaded";
+"settingsDownloadsUsedFormat" = "%@ used";
+"settingsLanguageTitle" = "Language";
+"settingsLanguageArabic" = "العربية";
+"settingsLanguageEnglish" = "English";
+"settingsAboutTitle" = "About";
+"settingsAboutVersionFormat" = "Version %@";
+"settingsAppTagline" = "Your daily Islamic companion";
+"settingsAboutBody" = "Wird is a Quran, athkar and hadith companion, built to stay with you through the day.";
+
+// MARK: - Prayer Times
+"sunrise" = "SUNRISE";
+"prayerTimesTitle" = "Prayer Times";
+"prayerTimesSubtitle" = "Today's timings";
+"prayerTimesScheduleTitle" = "Prayer schedule";
+
+// MARK: - Location Picker
+"locationPickerTitle" = "Location";
+"locationCurrentSection" = "Current location";
+"locationResultsSection" = "Search results";
+"locationUseDevice" = "Use my current location";
+"locationSearchPlaceholder" = "Search for a city";
+"locationNoResults" = "No matching cities";
+"locationPermissionDenied" = "Location access is off. Turn it on in Settings to detect your city automatically.";
+"locationOpenSettings" = "Open Settings";
+"locationChangeAction" = "Change location";
+"locationAutomaticBadge" = "Detected automatically";
+
+/* Qibla */
+"qiblaTitle" = "QIBLA DIRECTION";
+"qiblaDegreesFormat" = "%d°";
+"qiblaAlignHint" = "Turn your device until the needle locks";
+"qiblaAligned" = "You are facing the Qibla";
+"qiblaUnavailable" = "Compass unavailable on this device";
+"qiblaCardinals" = "N,E,S,W";
+
+/* Qibla Guidance */
+"qiblaDistanceFormat" = "%@ km to Kaaba";
+"qiblaElevationFormat" = "%@ m above sea level";
+"qiblaTurnRight" = "Turn right";
+"qiblaTurnLeft" = "Turn left";
+
+/* Prayer Times Extra Anchors */
+"prayerTimesGregorianFormat" = "d MMMM yyyy";
+"prayerTimesOtherTimes" = "Additional Times";
+"duha" = "Duha";
+"islamicMidnight" = "Midnight";
+"lastThirdOfNight" = "Last third of the night";
+
+/* Clock Suffixes */
+"clockMorningSuffix" = "AM";
+"clockEveningSuffix" = "PM";
+
+/* Prayer Calculation Methods */
+"prayerMethodShiaIthnaAshari" = "Leva Institute, Qum";
+"prayerMethodKarachi" = "University of Islamic Sciences, Karachi";
+"prayerMethodNorthAmerica" = "Islamic Society of North America";
+"prayerMethodMuslimWorldLeague" = "Muslim World League";
+"prayerMethodUmmAlQura" = "Umm Al-Qura University, Makkah";
+"prayerMethodEgypt" = "Egyptian General Authority of Survey";
+"prayerMethodTehran" = "University of Tehran, Geophysics";
+"prayerMethodGulfRegion" = "Gulf Region";
+"prayerMethodKuwait" = "Kuwait";
+"prayerMethodQatar" = "Qatar";
+"prayerMethodSingapore" = "Islamic Religious Council of Singapore";
+"prayerMethodFrance" = "Islamic Union of France";
+"prayerMethodTurkey" = "Diyanet İşleri Başkanlığı, Turkey";
+"prayerMethodRussia" = "Spiritual Administration of Muslims of Russia";
+"prayerMethodMoonsightingCommittee" = "Moonsighting Committee Worldwide";
+"prayerMethodDubai" = "Dubai";
+"prayerMethodMalaysia" = "JAKIM, Malaysia";
+"prayerMethodTunisia" = "Tunisia";
+"prayerMethodAlgeria" = "Algeria";
+"prayerMethodIndonesia" = "Ministry of Religious Affairs, Indonesia";
+"prayerMethodMorocco" = "Morocco";
+"prayerMethodLisbon" = "Islamic Community of Lisbon";
+"prayerMethodJordan" = "Ministry of Awqaf, Jordan";
+"prayerMethodCustom" = "Custom settings";
+
+// MARK: - Hadith Details
+"hadithTabRulings" = "Rulings";
+"hadithTabGhareeb" = "Rare Words";
+"hadithTabNotes" = "Notes";
+"hadithTabSubjects" = "Topics";
+"hadithTabTranslation" = "Translation";
+"hadithTabInfo" = "Details";
+"hadithTakhrijSameBook" = "In this book";
+"hadithTakhrijCorroborations" = "Corroborations";
+"hadithTakhrijWitnesses" = "Witnesses";
+"hadithTakhrijOther" = "Other references";
+"hadithNarratorLayer" = "Layer";
+"hadithNarratorKunya" = "Kunya";
+"hadithNarratorLineage" = "Lineage";
+"hadithNarratorEpithet" = "Epithet";
+"hadithNarratorKnownAs" = "Known as";
+"hadithNarratorGeneration" = "Generation";
+"hadithNarratorCountry" = "Region";
+"hadithNarratorLifespan" = "Born – Died";
+"hadithNarratorBirthPlace" = "Place of birth";
+"hadithNarratorDeathPlace" = "Place of death";
+"hadithNarratorIbnHajar" = "Ibn Hajar's verdict";
+"hadithNarratorVerdictsSummary" = "Summary of verdicts";
+"hadithNarratorVerdicts" = "Scholars' verdicts";
+"hadithNarratorSources" = "Sources";
+"hadithNarratorNotes" = "Notes";
+"hadithNarratorUnknown" = "No biography is recorded for this narrator";
+"hadithSource" = "Source";
+"hadithInfoCitation" = "Reference";
+"hadithInfoKind" = "Type";
+"hadithInfoBrief" = "Summary";
+"hadithInfoChapter" = "Chapter";
+"hadithInfoNarratedBy" = "Narrated by";
+"hadithGhareebWord" = "Word meaning";
+"hadithNoteTitle" = "Footnote";
+"hadithDetailsEmpty" = "No further detail is recorded for this hadith";
+
+"athkarHubDailyTitle" = "Daily athkar";
+"athkarHubDailySubtitle" = "Morning, evening and sleep";
+"athkarHubCountTitle" = "Read and count";
+"athkarHubCountSubtitle" = "Repeat and keep your tally";
+"athkarHubDuaaTitle" = "Duaa collections";
+"athkarHubDuaaSubtitle" = "Duaa from the Quran and the Sunnah";
+"athkarDownloadAll" = "Download all (%d)";
+"athkarDuaaCount" = "%d Duaa";
+
+"athkarReaderPosition" = "DHIKR %d";
+"athkarReaderProgress" = "%d of %d done";
+"athkarReaderTimes" = "%d times";
+"athkarReaderTapHint" = "Tap the circle to count";
+"athkarReaderDoneHint" = "Done — tap to go to the next";
+"athkarReaderMeaning" = "Meaning";
+"athkarReaderPronunciation" = "Pronunciation";
+"athkarReaderSource" = "Virtue & source";
+"athkarReaderAddFavorite" = "Add to favorites";
+"athkarReaderRemoveFavorite" = "Remove from favorites";
+"athkarReaderCopy" = "Copy";
+"athkarReaderReadAgain" = "Read again";
+"athkarReaderCompletedTitle" = "%@ complete";
+"athkarCopied" = "Copied";
+"athkarAudioFailed" = "Couldn't play the recitation.";
+"athkarSettingsTitle" = "Reading settings";
+"athkarSettingsTextSize" = "Text size";
+"athkarSettingsSizeValue" = "%d%%";
+"athkarSettingsShowTranslation" = "Show translation";
+"athkarSettingsStartOver" = "Start over";
+
+"liveStreamTitle" = "Live stream";
+
+"storageCategoryRecitations" = "Recitations";
+"storageCategoryHadith" = "Hadith books";
+"storageCategoryAthkar" = "Athkar";
+"storageCategoryTafsir" = "Tafsir";
+"storageFilterAll" = "All";
+"storageTotalUsed" = "Downloaded content";
+"storageScanning" = "Calculating storage…";
+"storageEmptyTitle" = "Nothing downloaded";
+"storageEmptyMessage" = "Download a recitation, a hadith book or an athkar pack to read and listen offline.";
+"storageShowMore" = "Show more";
+"storageShowLess" = "Show less";
+"storageDeleteAll" = "Delete all";
+"storageDeleteTitle" = "Delete content";
+"storageDeleteMessageFormat" = "“%@” will be removed from this device. You can download it again any time.";
+"storageDeleteAllTitle" = "Delete all content";
+"storageDeleteAllMessageFormat" = "Everything downloaded for “%@” will be removed from this device.";

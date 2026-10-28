@@ -254,7 +254,7 @@ struct TafsirView: View {
 
     private var bottomBar: some View {
         HStack(spacing: 0) {
-            navButton(icon: "chevron.right", enabled: currentIndex > 0) {
+            navButton(icon: "chevron.backward", enabled: currentIndex > 0) {
                 withAnimation(.easeInOut(duration: 0.18)) { currentIndex -= 1 }
             }
 
@@ -262,7 +262,7 @@ struct TafsirView: View {
                 .customStyle(.kitab(size: 15), .onSurface)
                 .frame(maxWidth: .infinity)
 
-            navButton(icon: "chevron.left", enabled: currentIndex < verses.count - 1) {
+            navButton(icon: "chevron.forward", enabled: currentIndex < verses.count - 1) {
                 withAnimation(.easeInOut(duration: 0.18)) { currentIndex += 1 }
             }
 

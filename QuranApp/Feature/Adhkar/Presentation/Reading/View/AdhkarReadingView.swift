@@ -14,7 +14,6 @@ struct AdhkarReadingView: View {
     @EnvironmentObject private var localizationManager: LocalizationManager
 
     @State private var tapPulse: Bool = false
-    @State private var slideEdge: Edge = .trailing
     @State private var isBookmarked: Bool = false
 
     init(coordinator: AdhkarCoordinating, category: DhikrCategory) {
@@ -54,7 +53,7 @@ struct AdhkarReadingView: View {
                     if viewModel.isComplete {
                         completionView
                     } else {
-                        dhikrScrollContent
+                        dhikrPager
                     }
                 }
 
@@ -134,31 +133,37 @@ extension AdhkarReadingView {
     }
 }
 
-// MARK: - Main Scroll Content
+// MARK: - Horizontal Pager
 
 extension AdhkarReadingView {
 
-    private var dhikrScrollContent: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 0) {
-                dhikrContentCard
-                    .id(viewModel.currentIndex)
-                    .transition(
-                        .asymmetric(
-                            insertion: .move(edge: slideEdge).combined(with: .opacity),
-                            removal: .move(edge: slideEdge == .trailing ? .leading : .trailing)
-                                .combined(with: .opacity)
-                        )
-                    )
-                    .padding(.horizontal, 16)
-                    .padding(.top, 28)
-
-                Color.clear.frame(height: 160)
+    private var dhikrPager: some View {
+        TabView(selection: pagerSelection) {
+            ForEach(viewModel.orderedAdhkar.indices, id: \.self) { index in
+                dhikrPage(for: viewModel.orderedAdhkar[index])
+                    .tag(index)
             }
         }
+        .tabViewStyle(.page(indexDisplayMode: .never))
+    }
+
+    private var pagerSelection: Binding<Int> {
+        Binding(
+            get: { viewModel.currentIndex },
+            set: { viewModel.navigateToIndex($0) }
+        )
+    }
+
+    private func dhikrPage(for dhikr: Dhikr) -> some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            dhikrContentCard(for: dhikr)
+                .padding(.horizontal, 16)
+                .padding(.top, 24)
+                .padding(.bottom, 150)
+        }
+        .scrollBounceBehavior(.basedOnSize)
         .contentShape(Rectangle())
         .onTapGesture { handleAdvance() }
-        .simultaneousGesture(swipeNavigationGesture)
     }
 }
 
@@ -166,22 +171,22 @@ extension AdhkarReadingView {
 
 extension AdhkarReadingView {
 
-    private var dhikrSegmentsContent: some View {
-        let segments = viewModel.currentSegments
+    private func dhikrSegments(for dhikr: Dhikr) -> some View {
+        let segments = viewModel.displaySegments(for: dhikr)
 
-        return VStack(spacing: 22) {
+        return VStack(spacing: 18) {
             ForEach(segments.indices, id: \.self) { index in
                 segmentView(segments[index])
             }
 
-            if let repeatLabel = viewModel.repeatLabel, !repeatLabel.isEmpty {
+            if let repeatLabel = dhikr.repeatLabel, !repeatLabel.isEmpty {
                 segmentDivider
 
                 arabicTextBlock(
                     repeatLabel,
                     style: .adhkar(size: 17),
                     color: .onSurface,
-                    lineSpacing: 8
+                    lineSpacing: 6
                 )
             }
         }
@@ -189,10 +194,10 @@ extension AdhkarReadingView {
     }
 
     /// Athkar's segments, wrapped in Wird's own card chrome.
-    private var dhikrContentCard: some View {
-        dhikrSegmentsContent
+    private func dhikrContentCard(for dhikr: Dhikr) -> some View {
+        dhikrSegments(for: dhikr)
             .padding(.horizontal, 28)
-            .padding(.vertical, 36)
+            .padding(.vertical, 28)
             .frame(maxWidth: .infinity)
             .overlay(alignment: .topTrailing) {
                 Image(systemName: viewModel.category.icon)
@@ -223,27 +228,27 @@ extension AdhkarReadingView {
             if let text = segment.text, !text.isEmpty {
                 Text(quranAttributedText(text))
                     .foregroundColor(ColorStyle.onSurface.color)
-                    .multilineTextAlignment(.center)
-                    .lineSpacing(20)
+                    .multilineTextAlignment(.leading)
+                    .lineSpacing(12)
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .environment(\.layoutDirection, .rightToLeft)
-                    .frame(maxWidth: .infinity)
             }
 
         case .intro:
             if let text = segment.text, !text.isEmpty {
-                arabicTextBlock(text, style: .adhkar(size: 18), color: .secondary, lineSpacing: 10)
+                arabicTextBlock(text, style: .adhkar(size: 18), color: .secondary, lineSpacing: 7)
             }
 
         case .text:
             if let text = segment.text, !text.isEmpty {
-                arabicTextBlock(text, style: .adhkar(size: 22), color: .onSurface, lineSpacing: 16)
+                arabicTextBlock(text, style: .adhkar(size: 22), color: .onSurface, lineSpacing: 10)
             }
 
         case .note, .noteAlways:
             if let text = segment.text, !text.isEmpty {
-                arabicTextBlock(text, style: .adhkar(size: 15), color: .secondary, lineSpacing: 7)
+                arabicTextBlock(text, style: .adhkar(size: 15), color: .secondary, lineSpacing: 5)
             }
         }
     }
@@ -253,7 +258,6 @@ extension AdhkarReadingView {
             .overlay(ColorStyle.outlineVariant.color.opacity(0.3))
     }
 
-    /// Centred, right-to-left block that keeps every newline in the source text.
     private func arabicTextBlock(
         _ text: String,
         style: AppTextStyle,
@@ -262,12 +266,12 @@ extension AdhkarReadingView {
     ) -> some View {
         Text(text)
             .customStyle(style, color)
-            .multilineTextAlignment(.center)
+            .multilineTextAlignment(.leading)
             .lineSpacing(lineSpacing)
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
             .environment(\.layoutDirection, .rightToLeft)
-            .frame(maxWidth: .infinity)
     }
 }
 
@@ -349,7 +353,7 @@ extension AdhkarReadingView {
 
     /// Where the reader is inside the category — bottom-left in both languages.
     private var positionIndicator: some View {
-        Text("\(en(viewModel.currentIndex + 1)) | \(en(viewModel.category.adhkar.count))")
+        Text("\(en(viewModel.currentIndex + 1)) | \(en(viewModel.orderedAdhkar.count))")
             .customStyle(.adhkar(size: 13), .outline)
             .monospacedDigit()
             .frame(maxWidth: .infinity, alignment: isRightToLeft ? .trailing : .leading)
@@ -489,41 +493,9 @@ extension AdhkarReadingView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             tapPulse = false
         }
-        if viewModel.willAdvanceOnNextTap {
-            slideEdge = .trailing
-        }
         withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
             viewModel.onTap()
         }
-    }
-
-    private var swipeNavigationGesture: some Gesture {
-        DragGesture(minimumDistance: 20, coordinateSpace: .local)
-            .onEnded { dragValue in
-                let horizontal = dragValue.translation.width
-                let vertical = dragValue.translation.height
-                let threshold: CGFloat = 50
-
-                // A mostly vertical drag belongs to the scroll view, not to navigation.
-                guard abs(horizontal) >= threshold, abs(horizontal) > abs(vertical) * 1.5 else { return }
-
-                let swipedRight = horizontal > 0
-                let isForwardSwipe = isRightToLeft ? swipedRight : !swipedRight
-
-                if isForwardSwipe {
-                    guard viewModel.canGoNext else { return }
-                    slideEdge = .trailing
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                        viewModel.navigateToNext()
-                    }
-                } else {
-                    guard viewModel.canGoPrevious else { return }
-                    slideEdge = .leading
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
-                        viewModel.navigateToPrevious()
-                    }
-                }
-            }
     }
 }
 

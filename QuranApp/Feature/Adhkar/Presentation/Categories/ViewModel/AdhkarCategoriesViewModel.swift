@@ -70,7 +70,7 @@ final class AdhkarCategoriesViewModel: MainViewModel {
             loadAllahNames()
             loadProhibitedTimes()
         }
-        prayerTimesStore.load()
+        prayerTimesStore.loadTodayForSelectedLocation()
         observePrayerTimes()
         refreshSpecialCategories()
         startVisibilityRefresh()
@@ -116,7 +116,7 @@ final class AdhkarCategoriesViewModel: MainViewModel {
             .publisher(for: UIApplication.willEnterForegroundNotification)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.prayerTimesStore.load()
+                self?.prayerTimesStore.loadTodayForSelectedLocation()
                 self?.refreshSpecialCategories()
             }
             .store(in: &cancellables)
@@ -158,7 +158,7 @@ final class AdhkarCategoriesViewModel: MainViewModel {
                 // Also rolls the day over: `load()` no-ops until the date key
                 // moves, so a session left open past local midnight picks up
                 // tomorrow's anchors instead of gating on yesterday's.
-                self.prayerTimesStore.load()
+                self.prayerTimesStore.loadTodayForSelectedLocation()
                 self.refreshSpecialCategories()
             }
         }

@@ -24,6 +24,12 @@ struct PrayerTimesData: Codable {
 
 struct PrayerMeta: Codable {
     let timezone: String
+    let method: PrayerCalculationMethodPayload?
+}
+
+struct PrayerCalculationMethodPayload: Codable {
+    let id: Int
+    let name: String
 }
 
 /// Aladhan returns plain `"HH:mm"` strings. Property names match the payload's

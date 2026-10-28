@@ -8,16 +8,14 @@ import Core
 
 // MARK: - QuranPageHeaderBar
 
-/// Top bar shared by QuranPageView and QuranTextPageView.
-/// Shows the surah name on the right and the first verse number on the left (RTL layout).
 struct QuranPageHeaderBar: View {
 
     let surahName: String
-    let firstVerse: Int
+    let juzNumber: Int
 
     var body: some View {
         HStack {
-            Text(verbatim: "آية \(firstVerse.arabicNumerals)")
+            Text(verbatim: "\(AppLocalizedKeys.juz.value) \(juzNumber.arabicNumerals)")
                 .customStyle(.kitab(size: 17))
                 .foregroundColor(Color.mushafBarLabel)
             Spacer()

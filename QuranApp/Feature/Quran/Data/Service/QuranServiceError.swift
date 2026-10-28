@@ -97,14 +97,15 @@ final class QuranService {
     
     // MARK: - Fetch Prayer Times
 
-    func fetchPrayerTimes(city: String = "Riyadh", country: String = "SA") async throws -> PrayerTimesData {
-        let urlString = "https://api.aladhan.com/v1/timingsByCity?city=\(city)&country=\(country)"
+    func fetchPrayerTimes(latitude: Double, longitude: Double) async throws -> PrayerTimesData {
+        let dayTimestamp = Int(Date().timeIntervalSince1970)
+        let urlString = "https://api.aladhan.com/v1/timings/\(dayTimestamp)?latitude=\(latitude)&longitude=\(longitude)"
         let url = try buildURL(urlString)
         let data = try await fetchData(from: url)
-        
+
         do {
             let response = try decoder.decode(PrayerTimesAPIResponse.self, from: data)
-            print("🕌 Fetched prayer times for \(city)")
+            print("🕌 Fetched prayer times for \(latitude), \(longitude)")
             return response.data
         } catch {
             throw QuranServiceError.decodingError(error)

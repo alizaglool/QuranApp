@@ -25,9 +25,8 @@ struct QuranTextPageView: View {
         return ReciterLibrary.surahArabicNames[number] ?? ""
     }
 
-    private var firstVerseNumber: Int {
-        quranDB.getVersesForPage(pageNumber)
-            .min(by: { $0.markerLine < $1.markerLine })?.number ?? 1
+    private var pageJuzNumber: Int {
+        quranDB.getJuz(forPage: pageNumber)
     }
 
     // MARK: - Data
@@ -76,7 +75,7 @@ struct QuranTextPageView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            QuranPageHeaderBar(surahName: pageSurahName, firstVerse: firstVerseNumber)
+            QuranPageHeaderBar(surahName: pageSurahName, juzNumber: pageJuzNumber)
                 .padding(.top, 8)
                 .padding(.bottom, 4)
 

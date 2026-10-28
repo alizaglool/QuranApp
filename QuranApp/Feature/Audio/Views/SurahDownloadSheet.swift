@@ -13,7 +13,6 @@ struct SurahDownloadSheet: View {
     @ObservedObject private var downloads = DownloadManager.shared
     @Environment(\.dismiss) private var dismiss
     @State private var juzGroups: [(juz: Int, name: String, surahs: [SurahRow])] = []
-    @State private var refreshID = UUID()
 
     private let quranDB = QuranDatabase.shared
 
@@ -34,9 +33,10 @@ struct SurahDownloadSheet: View {
         }
         .background(Color.background)
         .appDirection()
-        .onAppear { buildGroups() }
-        .onChange(of: downloads.activeDownloads.count) { _, _ in refreshID = UUID() }
-        .onChange(of: downloads.deleteTick) { _, _ in refreshID = UUID() }
+        .onAppear {
+            buildGroups()
+            downloads.prepare(reciterSlug: reciter.id)
+        }
     }
 
     // MARK: - Grab Handle
@@ -131,7 +131,7 @@ struct SurahDownloadSheet: View {
                     .customStyle(.kitab(size: 17, bold: true), .onSurface)
             }
 
-            VStack(spacing: 0) {
+            LazyVStack(spacing: 0) {
                 ForEach(Array(group.surahs.enumerated()), id: \.element.id) { idx, surah in
                     surahRow(surah)
                     if idx < group.surahs.count - 1 {
@@ -173,7 +173,6 @@ struct SurahDownloadSheet: View {
             // Surah name — right
             Text("\(arabicIndic(surah.id)). \(surah.arabicName)")
                 .customStyle(.kitab(size: 16), .onSurface)
-                .id(refreshID)
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 10)

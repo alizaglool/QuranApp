@@ -18,5 +18,7 @@ extension TabBarItem {
     
     static var lessons: TabBarItem? = nil
 
+    static var radio: TabBarItem? = nil
+
     static var settings: TabBarItem? = nil
 }

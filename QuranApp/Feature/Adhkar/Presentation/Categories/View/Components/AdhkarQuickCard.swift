@@ -41,7 +41,7 @@ struct AdhkarQuickCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
-            .frame(minHeight: 130)
+            .frame(minHeight: 112)
             .background(Color.cardSurface)
             .customCornerRadius(16)
             .overlay(

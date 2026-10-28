@@ -9,43 +9,61 @@ import SDWebImageSwiftUI
 
 // MARK: - Section
 
-extension HomeView {
+struct HomeFeaturedLessonsSection: View {
 
-    var featuredLessonsSection: some View {
+    @ObservedObject var viewModel: HomeViewModel
+
+    var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                Text(AppLocalizedKeys.featuredLessons.value)
-                    .customStyle(.heading3, .onSurface)
+            sectionHeader
 
-                Spacer()
+            if viewModel.featuredSheikhsLoading {
+                FeaturedSheikhSkeletonRow()
+            } else if viewModel.featuredSheikhs.isEmpty {
+                HomeFeaturedEmptyRow(message: viewModel.featuredLessonsErrorTitle,
+                                     retryTitle: viewModel.retryTitle,
+                                     onRetry: { viewModel.onRetryFeaturedSheikhs() })
+                    .padding(.horizontal, .big)
+            } else {
+                lessonsRow
+            }
+        }
+    }
+}
 
-                Button(AppLocalizedKeys.seeAll.value) {
-                    viewModel.onSeeAllLessonsTapped()
+// MARK: - Layout
+
+private extension HomeFeaturedLessonsSection {
+
+    var sectionHeader: some View {
+        HStack {
+            Text(viewModel.featuredLessonsTitle)
+                .customStyle(.heading3, .onSurface)
+
+            Spacer()
+
+            Button(viewModel.seeAllTitle) {
+                viewModel.onSeeAllLessonsTapped()
+            }
+            .customStyle(.kitab(size: 12, bold: true), .secondary)
+            .tracking(viewModel.seeAllTracking)
+        }
+        .padding(.horizontal, .big)
+    }
+
+    var lessonsRow: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(viewModel.featuredSheikhs) { sheikh in
+                    Button {
+                        viewModel.onSheikhTapped(sheikh)
+                    } label: {
+                        FeaturedSheikhCard(sheikh: sheikh)
+                    }
+                    .buttonStyle(.plain)
                 }
-                .customStyle(.kitab(size: 12, bold: true), .secondary)
-                .tracking(1)
             }
             .padding(.horizontal, .big)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    if viewModel.featuredSheikhs.isEmpty {
-                        ForEach(0..<5, id: \.self) { _ in
-                            FeaturedSheikhCardSkeleton()
-                        }
-                    } else {
-                        ForEach(viewModel.featuredSheikhs) { sheikh in
-                            Button {
-                                viewModel.onSeeAllLessonsTapped()
-                            } label: {
-                                FeaturedSheikhCard(sheikh: sheikh)
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                }
-                .padding(.horizontal, .big)
-            }
         }
     }
 }
@@ -105,5 +123,62 @@ struct FeaturedSheikhCardSkeleton: View {
                 pulse = true
             }
         }
+    }
+}
+
+// MARK: - Skeleton Row
+
+struct FeaturedSheikhSkeletonRow: View {
+
+    private static let placeholderCount = 5
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 16) {
+                ForEach(0..<Self.placeholderCount, id: \.self) { _ in
+                    FeaturedSheikhCardSkeleton()
+                }
+            }
+            .padding(.horizontal, .big)
+        }
+    }
+}
+
+// MARK: - Empty Row
+
+struct HomeFeaturedEmptyRow: View {
+
+    let message: String
+    let retryTitle: String
+    let onRetry: () -> Void
+
+    var body: some View {
+        HStack(spacing: .sm) {
+            Image(systemName: "wifi.exclamationmark")
+                .font(.system(size: 20))
+                .customForeground(.onSurfaceVariant)
+
+            Text(message)
+                .customStyle(.bodySmall, .onSurfaceVariant)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Spacer(minLength: .xSm)
+
+            Button(action: onRetry) {
+                Text(retryTitle)
+                    .customStyle(.buttonText, .primary)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.big)
+        .background(
+            RoundedRectangle(cornerRadius: .cornerXxl)
+                .fill(Color.cardSurface)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: .cornerXxl)
+                .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
+        )
     }
 }

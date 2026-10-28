@@ -27,167 +27,127 @@ struct HomeView: View {
 extension HomeView {
 
     var mainContent: some View {
-        VStack(spacing: 0) {
-            navBar
-
-            GeometryReader { geo in
-                NoIndicatorsScrollView {
-                    VStack(spacing: 24) {
-                        welcomeSection
-                        prayerTimesSection
-                        quickAccessGrid
-                        if viewModel.lastReadPage != nil {
-                            continueReadingCard
-                        }
-                        hadithOfTheDayCard
-                        featuredLessonsSection
-                    }
-                    .frame(width: geo.size.width)
-                    .padding(.bottom, 32)
+        GeometryReader { geo in
+            NoIndicatorsScrollView {
+                VStack(spacing: 16) {
+                    HomePrayerDomeHeader(viewModel: viewModel, topInset: windowTopInset)
+                    HomeAthkarNowStrip(viewModel: viewModel)
+                    HomeNextPrayerCard(viewModel: viewModel)
+                    HomeContinueReadingCard(viewModel: viewModel)
+                    HomeToolsCard(viewModel: viewModel)
+                    HomeLiveStreamSection(viewModel: viewModel)
+                    HomeTodayCard(viewModel: viewModel)
+                    HomeHadithOfTheDayCard(viewModel: viewModel)
+                    HomeFeaturedRecitersSection(viewModel: viewModel)
+                    HomeFeaturedLessonsSection(viewModel: viewModel)
                 }
-                .clipped()
+                .frame(width: geo.size.width)
+                .padding(.bottom, 32)
             }
+            .clipped()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .customBackground(.background)
+        .ignoresSafeArea(edges: .top)
     }
 }
 
-// MARK: - Nav Bar
+// MARK: - Safe Area
 
 extension HomeView {
 
-    var navBar: some View {
-        HStack {
-            Text("Wird")
-                .customStyle(.heading3, .primary)
-
-            Spacer()
-
-            Button(action: {}) {
-                Image(systemName: "magnifyingglass")
-                    .font(.system(size: 18, weight: .medium))
-                    .customForeground(.primary)
-            }
-        }
-        .padding(.horizontal, .big)
-        .padding(.vertical, .sm)
+    var windowTopInset: CGFloat {
+        let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        return scene?.windows.first(where: { $0.isKeyWindow })?.safeAreaInsets.top ?? 0
     }
 }
 
-// MARK: - Welcome Section
+struct AccentIconTile: View {
+    @Environment(\.colorScheme) private var colorScheme
 
-extension HomeView {
+    let icon: String
+    let accent: ColorStyle
 
-    var welcomeSection: some View {
-        ZStack(alignment: .bottomTrailing) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("\(AppLocalizedKeys.assalamuAlaikum.value), \(viewModel.userName)")
-                    .customStyle(.caption1, .onSurfaceVariant)
-                    .tracking(1)
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: .cornerXSm)
+                .fill(accent.color.opacity(colorScheme == .dark ? 0.22 : 0.10))
+                .frame(width: 36, height: 36)
 
-                Text(AppLocalizedKeys.welcomeToSanctuary.value)
-                    .customStyle(.headline, .onSurface)
-
-                HStack(spacing: 12) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "calendar")
-                            .font(.system(size: 10))
-                            .customForeground(.secondary)
-
-                        Text(viewModel.hijriDate)
-                            .customStyle(.caption2, .secondary)
-                    }
-
-                    HStack(spacing: 4) {
-                        Image(systemName: "clock")
-                            .font(.system(size: 10))
-                            .customForeground(.secondary)
-
-                        Text(viewModel.gregorianDate)
-                            .customStyle(.caption2, .secondary)
-                    }
-                }
-                .padding(.top, 4)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            Image(systemName: "building.columns")
-                .font(.system(size: 80))
-                .foregroundColor(ColorStyle.primary.color.opacity(0.08))
-                .offset(x: 20, y: 20)
+            Image(systemName: icon)
+                .font(.system(size: 18))
+                .customForeground(accent)
         }
-        .padding(20)
-        .background(Color.surfaceContainerLow)
-        .customCornerRadius(16)
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
-        )
-        .padding(.horizontal, .big)
-        .padding(.top, .sm)
-    }
-}
-
-// MARK: - Prayer Times
-
-extension HomeView {
-
-    var prayerTimesSection: some View {
-        HStack(spacing: 6) {
-            if viewModel.prayerTimesLoaded {
-                ForEach(viewModel.prayerTimes) { prayer in
-                    PrayerTimeChip(prayer: prayer)
-                }
-            } else {
-                ForEach(0..<5, id: \.self) { _ in
-                    PrayerTimeChipSkeleton()
-                }
-            }
-        }
-        .padding(.horizontal, .big)
-        .animation(.easeInOut(duration: 0.3), value: viewModel.prayerTimesLoaded)
     }
 }
 
 struct PrayerTimeChip: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     let prayer: PrayerTimeItem
+    let accessibilityLabel: String
+    let onToggle: () -> Void
 
     var body: some View {
-        VStack(spacing: 6) {
-            Text(prayer.name)
-                .customStyle(.kitab(size: 10, bold: true))
-                .tracking(0.5)
+        Button(action: onToggle) {
+            VStack(spacing: .xxSm) {
+                Image(systemName: prayer.isPrayed ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 13, weight: .semibold))
+                    .padding(.bottom, 2)
 
-            Text(prayer.time)
-                .customStyle(.kitab(size: 12, bold: true))
-        }
-        .foregroundColor(activeForeground)
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 12)
-        .background(
-            RoundedRectangle(cornerRadius: 10)
-                .fill(activeBackground)
-        )
-        .overlay(
-            Group {
-                if !prayer.isActive {
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
-                }
+                Text(prayer.name)
+                    .customStyle(.kitab(size: 10, bold: true))
+                    .tracking(0.2)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+
+                Text(prayer.time)
+                    .customStyle(.kitab(size: 13, bold: true))
+                    .monospacedDigit()
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
             }
-        )
+            .padding(.horizontal, .xxSm)
+            .foregroundColor(chipForeground)
+            .frame(maxWidth: .infinity)
+            .frame(height: 76)
+            .background(
+                RoundedRectangle(cornerRadius: .cornerMd)
+                    .fill(chipBackground)
+            )
+            .overlay(
+                Group {
+                    if !prayer.isActive {
+                        RoundedRectangle(cornerRadius: .cornerMd)
+                            .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
+                    }
+                }
+            )
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityAddTraits(.isButton)
     }
 
-    private var activeBackground: Color {
+    private var chipBackground: Color {
         if prayer.isActive {
             return ColorStyle.brandActive.color
+        }
+        if prayer.isPrayed {
+            return ColorStyle.washPrimary.color
         }
         return Color.surfaceContainer
     }
 
-    private var activeForeground: Color {
-        prayer.isActive ? .white : ColorStyle.onSurfaceVariant.color
+    private var chipForeground: Color {
+        if prayer.isActive {
+            return colorScheme == .dark ? ColorStyle.primaryContainer.color : .white
+        }
+        if prayer.isPrayed {
+            return ColorStyle.primary.color
+        }
+        return ColorStyle.onSurfaceVariant.color
     }
 }
 
@@ -195,10 +155,10 @@ struct PrayerTimeChipSkeleton: View {
     @State private var pulse = false
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 10)
+        RoundedRectangle(cornerRadius: .cornerMd)
             .fill(Color.surfaceContainer)
             .frame(maxWidth: .infinity)
-            .frame(height: 54)
+            .frame(height: 76)
             .opacity(pulse ? 0.4 : 0.7)
             .onAppear {
                 withAnimation(.easeInOut(duration: 0.85).repeatForever(autoreverses: true)) {
@@ -208,186 +168,45 @@ struct PrayerTimeChipSkeleton: View {
     }
 }
 
-// MARK: - Quick Access Grid
-
-extension HomeView {
-
-    var quickAccessGrid: some View {
-        LazyVGrid(columns: [
-            GridItem(.flexible(), spacing: 12),
-            GridItem(.flexible(), spacing: 12)
-        ], spacing: 12) {
-            ForEach(viewModel.quickAccessItems) { item in
-                QuickAccessCard(item: item) {
-                    viewModel.onQuickAccessTapped(item)
-                }
-            }
-        }
-        .padding(.horizontal, .big)
-    }
-}
+// MARK: - Quick Access Tile
 
 struct QuickAccessCard: View {
     let item: QuickAccessItem
     let action: () -> Void
 
+    @Environment(\.colorScheme) private var colorScheme
+
+    private let tileSide: CGFloat = 58
+
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(spacing: 8) {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(ColorStyle.washPrimary.color)
-                        .frame(width: 36, height: 36)
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .fill(item.accent.color.opacity(colorScheme == .dark ? 0.22 : 0.10))
 
                     Image(systemName: item.icon)
-                        .font(.system(size: 18))
-                        .customForeground(.primary)
+                        .font(.system(size: 26))
+                        .customForeground(item.accent)
                 }
-
-                Spacer()
+                .frame(width: tileSide, height: tileSide)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(item.accent.color.opacity(colorScheme == .dark ? 0.28 : 0.16), lineWidth: 1)
+                )
 
                 Text(item.title)
-                    .customStyle(.headline, .onSurface)
+                    .customStyle(.caption1, .onSurfaceVariant)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(16)
-            .frame(height: 110)
-            .background(Color.cardSurface)
-            .customCornerRadius(16)
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
-            )
+            .frame(width: tileSide)
         }
         .buttonStyle(.plain)
-    }
-}
-
-// MARK: - Continue Reading Card
-
-extension HomeView {
-
-    var continueReadingCard: some View {
-        Button(action: { viewModel.onResumeTapped() }) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(Color.primaryContainer)
-
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(ColorStyle.primary.color.opacity(0.2), lineWidth: 1)
-
-                Circle()
-                    .fill(Color.white.opacity(0.05))
-                    .frame(width: 150, height: 150)
-                    .blur(radius: 40)
-                    .offset(x: 60, y: -40)
-
-                HStack {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(AppLocalizedKeys.continueReading.value)
-                            .customStyle(.kitab(size: 10, bold: true))
-                            .foregroundColor(ColorStyle.onPrimaryContainer.color.opacity(0.6))
-                            .tracking(1.5)
-
-                        Text(viewModel.lastReadSurahName)
-                            .customStyle(.kitab(size: 18, bold: true))
-                            .foregroundColor(.white)
-                            .lineLimit(1)
-
-                        HStack(spacing: 10) {
-                            ZStack(alignment: .leading) {
-                                RoundedRectangle(cornerRadius: 2)
-                                    .fill(Color.white.opacity(0.1))
-                                    .frame(width: 96, height: 4)
-
-                                RoundedRectangle(cornerRadius: 2)
-                                    .fill(ColorStyle.secondary.color)
-                                    .frame(width: max(4, CGFloat(96 * viewModel.lastReadProgress)), height: 4)
-                            }
-
-                            if let page = viewModel.lastReadPage {
-                                Text("\(AppLocalizedKeys.page.value) \(page)")
-                                    .customStyle(.kitab(size: 10, bold: true))
-                                    .foregroundColor(.white.opacity(0.8))
-                            }
-                        }
-                    }
-
-                    Spacer()
-
-                    resumeButton
-                }
-                .padding(24)
-            }
-            .frame(height: 140)
-        }
-        .padding(.horizontal, .big)
-    }
-
-    var resumeButton: some View {
-        Text(AppLocalizedKeys.resume.value)
-            .customStyle(.kitab(size: 12, bold: true), .resumeLabel)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
-            .background(Color.resumeSurface)
-            .customCornerRadius(10)
-    }
-}
-
-// MARK: - Hadith of the Day
-
-extension HomeView {
-
-    var hadithOfTheDayCard: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "quote.opening")
-                .font(.system(size: 28))
-                .foregroundColor(ColorStyle.secondary.color)
-
-            Text(viewModel.hadithArabic)
-                .customStyle(.heading3, .primary)
-                .multilineTextAlignment(.center)
-                .lineSpacing(10)
-
-            Text(viewModel.hadithTranslation)
-                .customStyle(.bodySmall, .onSurfaceVariant)
-                .multilineTextAlignment(.center)
-                .lineSpacing(4)
-                .padding(.horizontal, 8)
-
-            HStack {
-                Rectangle()
-                    .fill(ColorStyle.outlineVariant.color.opacity(0.3))
-                    .frame(height: 0.5)
-
-                // No `fixedSize()`: it ignores the proposed width in both axes, so
-                // this label forced its full single-line width on the card and took
-                // the whole page wider than the screen — 315pt of
-                // "THE FORTY HADITH OF SHAH WALIULLAH 7376" in a 273pt box, which is
-                // what let Home be dragged sideways. Priority keeps the label at its
-                // natural width whenever it fits and the hairlines take the rest;
-                // scaling covers the two long book names, truncation is the net.
-                Text(viewModel.hadithReference)
-                    .customStyle(.kitab(size: 10, bold: true))
-                    .foregroundColor(ColorStyle.onSurfaceVariant.color.opacity(0.6))
-                    .tracking(1.5)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-                    .truncationMode(.tail)
-                    .layoutPriority(1)
-
-                Rectangle()
-                    .fill(ColorStyle.outlineVariant.color.opacity(0.3))
-                    .frame(height: 0.5)
-            }
-        }
-        .padding(32)
-        .background(Color.surfaceContainerLowest)
-        .customCornerRadius(20)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
-        )
-        .padding(.horizontal, .big)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(item.title)
+        .accessibilityAddTraits(.isButton)
     }
 }

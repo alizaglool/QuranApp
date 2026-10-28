@@ -29,6 +29,7 @@ final class DownloadManager: NSObject, ObservableObject {
     @Published var activeDownloads: [String: DownloadProgress] = [:]
     @Published var completedReciters: Set<String> = []
     @Published var deleteTick: Int = 0
+    @Published private(set) var completeSurahs: [String: Set<Int>] = [:]
 
     private var backgroundSession: URLSession!
     private var taskToReciter: [Int: String] = [:]        // taskIdentifier → reciterSlug
@@ -37,6 +38,8 @@ final class DownloadManager: NSObject, ObservableObject {
     private var activeTaskCount: [String: Int] = [:]      // reciterSlug → running task count
     private let maxConcurrent = 4
     private let storage = StorageManager.shared
+    private var savedVerses: [String: [Int: Set<Int>]] = [:]
+    private var scanned: Set<String> = []
 
     private static let sessionIdentifier = "com.quranapp.audio.download"
     private static let audioDir: URL = {
@@ -106,6 +109,8 @@ final class DownloadManager: NSObject, ObservableObject {
             }
         }
         storage.removeDownloadedSurah(reciterSlug: reciter.id, surahNumber: surahNumber)
+        savedVerses[reciter.id]?[surahNumber] = nil
+        completeSurahs[reciter.id]?.remove(surahNumber)
         completedReciters.remove(reciter.id)
         deleteTick += 1
     }
@@ -115,6 +120,9 @@ final class DownloadManager: NSObject, ObservableObject {
         let dir = Self.audioDir.appendingPathComponent(reciterSlug)
         try? FileManager.default.removeItem(at: dir)
         storage.deleteDownloadedReciter(slug: reciterSlug)
+        savedVerses[reciterSlug] = [:]
+        completeSurahs[reciterSlug] = []
+        scanned.remove(reciterSlug)
         completedReciters.remove(reciterSlug)
         deleteTick += 1
     }
@@ -168,11 +176,20 @@ final class DownloadManager: NSObject, ObservableObject {
         drainQueue(for: reciter.id)
     }
 
-    func isSurahFullyDownloaded(reciterSlug: String, surahNumber: Int) -> Bool {
-        let count = ReciterLibrary.verseCounts[surahNumber] ?? 0
-        return (1...max(1, count)).allSatisfy {
-            isAvailable(reciterSlug: reciterSlug, surahNumber: surahNumber, verseNumber: $0)
+    func prepare(reciterSlug: String) {
+        guard !scanned.contains(reciterSlug) else { return }
+        scanned.insert(reciterSlug)
+        let dir = Self.audioDir.appendingPathComponent(reciterSlug)
+        Task { [weak self] in
+            let saved = await Self.scanSavedVerses(in: dir)
+            guard let self else { return }
+            self.savedVerses[reciterSlug] = saved
+            self.completeSurahs[reciterSlug] = Self.completed(from: saved)
         }
+    }
+
+    func isSurahFullyDownloaded(reciterSlug: String, surahNumber: Int) -> Bool {
+        completeSurahs[reciterSlug]?.contains(surahNumber) ?? false
     }
 
     func isSurahDownloading(reciterSlug: String, surahNumber: Int) -> Bool {
@@ -206,6 +223,38 @@ final class DownloadManager: NSObject, ObservableObject {
         let all = storage.getAllDownloadedReciters()
         let totalBytes = all.reduce(Int64(0)) { $0 + $1.totalSizeBytes }
         return Double(totalBytes) / 1_048_576
+    }
+
+    // MARK: - Availability cache
+
+    private nonisolated static func scanSavedVerses(in dir: URL) async -> [Int: Set<Int>] {
+        guard let names = try? FileManager.default.contentsOfDirectory(atPath: dir.path)
+        else { return [:] }
+        var map: [Int: Set<Int>] = [:]
+        for name in names where name.hasSuffix(".mp3") {
+            let stem = name.dropLast(4)
+            guard
+                stem.count == 6,
+                let surah = Int(stem.prefix(3)),
+                let verse = Int(stem.suffix(3))
+            else { continue }
+            map[surah, default: []].insert(verse)
+        }
+        return map
+    }
+
+    private static func completed(from map: [Int: Set<Int>]) -> Set<Int> {
+        Set(map.compactMap { surah, verses in
+            verses.count >= max(1, ReciterLibrary.verseCounts[surah] ?? 0) ? surah : nil
+        })
+    }
+
+    private func noteVerseSaved(reciterSlug: String, surahNumber: Int, verseNumber: Int) {
+        savedVerses[reciterSlug, default: [:]][surahNumber, default: []].insert(verseNumber)
+        let saved = savedVerses[reciterSlug]?[surahNumber]?.count ?? 0
+        if saved >= max(1, ReciterLibrary.verseCounts[surahNumber] ?? 0) {
+            completeSurahs[reciterSlug, default: []].insert(surahNumber)
+        }
     }
 
     // MARK: - Queue management
@@ -327,6 +376,9 @@ extension DownloadManager: URLSessionDownloadDelegate {
                 let surahStr = String(filename.prefix(3))
                 if let surahNum = Int(surahStr) {
                     self.storage.addDownloadedSurah(reciterSlug: slug, surahNumber: surahNum, sizeBytes: size)
+                    if let verseNum = Int(filename.suffix(3)) {
+                        self.noteVerseSaved(reciterSlug: slug, surahNumber: surahNum, verseNumber: verseNum)
+                    }
                 }
 
                 self.activeDownloads[slug]?.completedVerses += 1

@@ -37,6 +37,7 @@ enum AppLocalizedKeys: String {
     case adhkar
     case hadith
     case lessons
+    case radio
     case settings
 
     // MARK: - Adhkar
@@ -45,6 +46,7 @@ enum AppLocalizedKeys: String {
     case myAdhkarTitle
     case myAdhkarSubtitle
     case dailyAdhkar
+    case moreAdhkar
     case adhkarCount
     case tapToCount
     case remaining
@@ -53,6 +55,38 @@ enum AppLocalizedKeys: String {
     case adhkarCompletedMessage
     case repeatAction
     case back
+
+    // MARK: - Athkar hub
+    case athkarHubDailyTitle
+    case athkarHubDailySubtitle
+    case athkarHubCountTitle
+    case athkarHubCountSubtitle
+    case athkarHubDuaaTitle
+    case athkarHubDuaaSubtitle
+    case athkarDownloadAll
+    case athkarDuaaCount
+
+    // MARK: - Athkar reader
+    case athkarReaderPosition
+    case athkarReaderProgress
+    case athkarReaderTimes
+    case athkarReaderTapHint
+    case athkarReaderDoneHint
+    case athkarReaderMeaning
+    case athkarReaderPronunciation
+    case athkarReaderSource
+    case athkarReaderAddFavorite
+    case athkarReaderRemoveFavorite
+    case athkarReaderCopy
+    case athkarReaderReadAgain
+    case athkarReaderCompletedTitle
+    case athkarCopied
+    case athkarAudioFailed
+    case athkarSettingsTitle
+    case athkarSettingsTextSize
+    case athkarSettingsSizeValue
+    case athkarSettingsShowTranslation
+    case athkarSettingsStartOver
 
     // MARK: - Hadith
     case hadithCount
@@ -92,7 +126,48 @@ enum AppLocalizedKeys: String {
     case asr
     case maghrib
     case isha
+    case sunrise
     case seeAll
+    case hadithSectionNineBooks
+    case hadithSectionOtherCollections
+    case hadithChapterCount
+
+    // MARK: - Hadith Details
+    case hadithTabRulings
+    case hadithTabGhareeb
+    case hadithTabNotes
+    case hadithTabSubjects
+    case hadithTabTranslation
+    case hadithTabInfo
+    case hadithTakhrijSameBook
+    case hadithTakhrijCorroborations
+    case hadithTakhrijWitnesses
+    case hadithTakhrijOther
+    case hadithNarratorLayer
+    case hadithNarratorKunya
+    case hadithNarratorLineage
+    case hadithNarratorEpithet
+    case hadithNarratorKnownAs
+    case hadithNarratorGeneration
+    case hadithNarratorCountry
+    case hadithNarratorLifespan
+    case hadithNarratorBirthPlace
+    case hadithNarratorDeathPlace
+    case hadithNarratorIbnHajar
+    case hadithNarratorVerdictsSummary
+    case hadithNarratorVerdicts
+    case hadithNarratorSources
+    case hadithNarratorNotes
+    case hadithNarratorUnknown
+    case hadithSource
+    case hadithInfoCitation
+    case hadithInfoKind
+    case hadithInfoBrief
+    case hadithInfoChapter
+    case hadithInfoNarratedBy
+    case hadithGhareebWord
+    case hadithNoteTitle
+    case hadithDetailsEmpty
     
     // MARK: - Verse Action Sheet
     case edit
@@ -199,6 +274,26 @@ enum AppLocalizedKeys: String {
     case relatedLessons
     case originalSound
 
+    // MARK: - Radio
+    case radioTitle
+    case radioSubtitle
+    case radioLive
+    case radioOffline
+    case radioOfflineMessage
+    case radioTimedOut
+    case radioStreamFailed
+    case downloadRecitersAction
+    case radioSectionLive
+    case radioSectionStations
+    case radioSectionDownloaded
+    case radioNeedsConnection
+
+    // MARK: - Recitations
+    case recitationsSubtitle
+    case featuredReciters
+    case recitersLoadError
+    case currentVerse
+
     // MARK: - Search
     case searchQuran
 
@@ -229,13 +324,202 @@ enum AppLocalizedKeys: String {
     case surahs
     case quarters
     case pagePrefix
+    case ayahPrefix
     case versesCount
+    case noBookmarksYet
     case juz1, juz2, juz3, juz4, juz5
     case juz6, juz7, juz8, juz9, juz10
     case juz11, juz12, juz13, juz14, juz15
     case juz16, juz17, juz18, juz19, juz20
     case juz21, juz22, juz23, juz24, juz25
     case juz26, juz27, juz28, juz29, juz30
+
+    // MARK: - Home Hero
+    case homeHeroTitle
+    case homeSearchAction
+    case homeLocation
+    case homeLocationAccessibility
+    case locationLabelFormat
+    case homeHeroDhikr
+
+    // MARK: - Home Next Prayer
+    case nextPrayerLabel
+    case leftUntilPrayer
+    case hourUnitShort
+    case minuteUnitShort
+    case prayerTimesUnavailable
+    case tryAgainAction
+
+    // MARK: - Home Reading Card
+    case readingStartTitle
+    case readingStartSubtitle
+    case readingStartAction
+    case readingContinueAction
+    case readingStoppedAt
+    case readingQuranPercent
+
+    // MARK: - Home Date
+    case homeGregorianFormat
+    case homeHijriFormat
+    case hijriEraSuffix
+
+    // MARK: - Home Today
+    case homeTodayTitle
+    case homeTodayPrayersLabel
+    case homeTodayQuranLabel
+    case prayersCompletedFormat
+    case markPrayedAccessibility
+    case markNotPrayedAccessibility
+
+    // MARK: - Home Athkar Now
+    case homeNowBadge
+    case homeAthkarNowSubtitle
+    case athkarMorningTitle
+    case athkarEveningTitle
+    case athkarAfterIshaTitle
+    case athkarLastThirdTitle
+
+    // MARK: - Worship Tracker
+    case worshipTracker
+    case worshipHomeTile
+    case worshipYesterday
+    case worshipCurrentStreak
+    case worshipBestStreak
+    case worshipStreaksByCategory
+    case worshipLastSevenDays
+    case worshipYearOverview
+    case worshipTapHint
+    case worshipNotOpenYet
+    case worshipDisclaimerTitle
+    case worshipDisclaimerBody
+    case worshipUpdateYesterday
+    case worshipBackToToday
+    case worshipDaysUnit
+    case worshipPrayers
+    case worshipAthkar
+    case worshipQuran
+    case worshipTasbih
+    case worshipQuranReading
+
+    // MARK: - Settings
+    case settingsSectionQuran
+    case settingsSectionWorship
+    case settingsSectionGeneral
+    case settingsSectionMore
+    case settingsQuranPageSubtitle
+    case settingsWorshipSubtitle
+    case settingsDownloadsEmpty
+    case settingsDownloadsUsedFormat
+    case settingsLanguageTitle
+    case settingsLanguageArabic
+    case settingsLanguageEnglish
+    case settingsAboutTitle
+    case settingsAboutVersionFormat
+    case settingsAppTagline
+    case settingsAboutBody
+
+    // MARK: - Prayer Times
+    case prayerTimesTitle
+    case prayerTimesSubtitle
+    case prayerTimesScheduleTitle
+
+    // MARK: - Location Picker
+    case locationPickerTitle
+    case locationCurrentSection
+    case locationResultsSection
+    case locationUseDevice
+    case locationSearchPlaceholder
+    case locationNoResults
+    case locationPermissionDenied
+    case locationOpenSettings
+    case locationChangeAction
+    case locationAutomaticBadge
+
+    // MARK: - Qibla
+    case qiblaTitle
+    case qiblaDegreesFormat
+    case qiblaAlignHint
+    case qiblaAligned
+    case qiblaUnavailable
+    case qiblaCardinals
+
+    // MARK: - Qibla Guidance
+    case qiblaDistanceFormat
+    case qiblaElevationFormat
+    case qiblaTurnRight
+    case qiblaTurnLeft
+
+    // MARK: - Prayer Times Extra Anchors
+    case prayerTimesGregorianFormat
+    case prayerTimesOtherTimes
+    case duha
+    case islamicMidnight
+    case lastThirdOfNight
+
+    // MARK: - Clock Suffixes
+    case clockMorningSuffix
+    case clockEveningSuffix
+
+    // MARK: - Prayer Calculation Methods
+    case prayerMethodShiaIthnaAshari
+    case prayerMethodKarachi
+    case prayerMethodNorthAmerica
+    case prayerMethodMuslimWorldLeague
+    case prayerMethodUmmAlQura
+    case prayerMethodEgypt
+    case prayerMethodTehran
+    case prayerMethodGulfRegion
+    case prayerMethodKuwait
+    case prayerMethodQatar
+    case prayerMethodSingapore
+    case prayerMethodFrance
+    case prayerMethodTurkey
+    case prayerMethodRussia
+    case prayerMethodMoonsightingCommittee
+    case prayerMethodDubai
+    case prayerMethodMalaysia
+    case prayerMethodTunisia
+    case prayerMethodAlgeria
+    case prayerMethodIndonesia
+    case prayerMethodMorocco
+    case prayerMethodLisbon
+    case prayerMethodJordan
+    case prayerMethodCustom
+
+    // MARK: - Live Stream
+
+    case liveStreamTitle
+
+    // MARK: - Storage
+
+    case storageCategoryRecitations
+    case storageCategoryHadith
+    case storageCategoryAthkar
+    case storageCategoryTafsir
+    case storageFilterAll
+    case storageTotalUsed
+    case storageScanning
+    case storageEmptyTitle
+    case storageEmptyMessage
+    case storageShowMore
+    case storageShowLess
+    case storageDeleteAll
+    case storageDeleteTitle
+    case storageDeleteMessageFormat
+    case storageDeleteAllTitle
+    case storageDeleteAllMessageFormat
+
+    static func prayerCalculationMethodKey(forMethodId methodId: Int) -> AppLocalizedKeys? {
+        let keysByMethodId: [Int: AppLocalizedKeys] = [
+            0: .prayerMethodShiaIthnaAshari, 1: .prayerMethodKarachi, 2: .prayerMethodNorthAmerica, 3: .prayerMethodMuslimWorldLeague,
+            4: .prayerMethodUmmAlQura, 5: .prayerMethodEgypt, 7: .prayerMethodTehran, 8: .prayerMethodGulfRegion,
+            9: .prayerMethodKuwait, 10: .prayerMethodQatar, 11: .prayerMethodSingapore, 12: .prayerMethodFrance,
+            13: .prayerMethodTurkey, 14: .prayerMethodRussia, 15: .prayerMethodMoonsightingCommittee, 16: .prayerMethodDubai,
+            17: .prayerMethodMalaysia, 18: .prayerMethodTunisia, 19: .prayerMethodAlgeria, 20: .prayerMethodIndonesia,
+            21: .prayerMethodMorocco, 22: .prayerMethodLisbon, 23: .prayerMethodJordan, 99: .prayerMethodCustom
+        ]
+        return keysByMethodId[methodId]
+    }
 
     static func juzKey(_ number: Int) -> AppLocalizedKeys {
         let keys: [AppLocalizedKeys] = [

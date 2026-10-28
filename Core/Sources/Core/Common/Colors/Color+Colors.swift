@@ -154,6 +154,16 @@ public extension Color {
     static let brandActive         = Color(.brandActive)
     static let resumeSurface       = Color(.resumeSurface)
     static let resumeLabel         = Color(.resumeLabel)
+    static let homeDomeStart       = Color(.homeDomeStart)
+    static let homeDomeEnd         = Color(.homeDomeEnd)
+
+    static let quickAccentQuran       = Color(.quickAccentQuran)
+    static let quickAccentRecitations = Color(.quickAccentRecitations)
+    static let quickAccentRadio       = Color(.quickAccentRadio)
+    static let quickAccentAdhkar      = Color(.quickAccentAdhkar)
+    static let quickAccentHadith      = Color(.quickAccentHadith)
+    static let quickAccentLessons     = Color(.quickAccentLessons)
+    static let quickAccentWorship     = Color(.quickAccentWorship)
 
     /// Brand avatar circle. Same in both appearances — a saturated fill that
     /// carries white text either way.
@@ -200,4 +210,11 @@ public extension Color {
     static let shortsChipSurface = Color(.shortsChipSurface)
     static let shortsPillSurface = Color(.shortsPillSurface)
     static let shortsAccent      = Color(.shortsAccent)
+}
+
+// MARK: - Qibla
+
+public extension Color {
+
+    static let qiblaAccent = Color(.qiblaAccent)
 }

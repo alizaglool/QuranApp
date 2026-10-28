@@ -46,7 +46,7 @@ extension LovedOnesDhikrView {
     private var navBar: some View {
         HStack {
             Button(action: { coordinator.coordinateBack() }) {
-                Image(systemName: "arrow.left")
+                Image(systemName: "arrow.backward")
                     .font(.system(size: 16, weight: .medium))
                     .customForeground(.onSurface)
                     .frame(width: 36, height: 36)

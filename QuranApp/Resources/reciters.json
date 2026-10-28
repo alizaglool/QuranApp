@@ -1,0 +1,290 @@
+{
+  "baseUrl": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/",
+  "featured": [
+    {
+      "everyayahSlug": "Minshawy_Murattal_128kbps",
+      "mp3quranId": 112,
+      "name": "Al-Minshawi (Murattal)",
+      "nameAr": "محمد صديق المنشاوي",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Muhammad%20Siddiq%20Al-Minshawi.png"
+    },
+    {
+      "everyayahSlug": "Abdul_Basit_Murattal_192kbps",
+      "mp3quranId": 51,
+      "name": "Abdul Basit (Murattal)",
+      "nameAr": "عبد الباسط عبد الصمد",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Abdul%20Basit%20Abdul%20Samad.png"
+    },
+    {
+      "everyayahSlug": "Husary_128kbps",
+      "mp3quranId": 118,
+      "name": "Mahmoud Khalil Al-Husary",
+      "nameAr": "محمود خليل الحصري",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Mahmoud%20Khalil%20Al-Husary.png"
+    },
+    {
+      "everyayahSlug": "Nasser_Alqatami_128kbps",
+      "mp3quranId": 86,
+      "name": "Nasser Al-Qatami",
+      "nameAr": "ناصر القطامي",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Nasser%20Al-Qatami.png"
+    },
+    {
+      "everyayahSlug": "Abu_Bakr_Ash-Shaatree_128kbps",
+      "mp3quranId": 4,
+      "name": "Abu Bakr Ash-Shaatree",
+      "nameAr": "أبو بكر الشاطري",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Sheikh%20Abu%20Bakr%20Al-Shatri.png"
+    },
+    {
+      "everyayahSlug": "Yasser_Ad-Dussary_128kbps",
+      "mp3quranId": 92,
+      "name": "Yasser Ad-Dussary",
+      "nameAr": "ياسر الدوسري",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Yasser%20Al-Dosari.png"
+    },
+    {
+      "everyayahSlug": "Alafasy_128kbps",
+      "mp3quranId": 123,
+      "name": "Mishary Alafasy",
+      "nameAr": "مشاري العفاسي",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Mishary%20Rashid%20Alafasy.png"
+    }
+  ],
+  "reciters": [
+    {
+      "name": "Mishary Alafasy",
+      "nameAr": "مشاري العفاسي",
+      "file": "Mishary Rashid Alafasy.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Mishary%20Rashid%20Alafasy.png",
+      "everyayahSlug": "Alafasy_128kbps",
+      "mp3quranId": 123,
+      "bitrateKbps": 128,
+      "sizeMB": 1667,
+      "bundledIds": [],
+      "radioIds": [
+        79
+      ]
+    },
+    {
+      "name": "Abdurrahmaan As-Sudais",
+      "nameAr": "عبدالرحمن السديس",
+      "file": "Abdulrahman Al-Sudais.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Abdulrahman%20Al-Sudais.png",
+      "everyayahSlug": "Abdurrahmaan_As-Sudais_192kbps",
+      "mp3quranId": 54,
+      "bitrateKbps": 192,
+      "sizeMB": 1754,
+      "bundledIds": [],
+      "radioIds": [
+        33
+      ]
+    },
+    {
+      "name": "Saood ash-Shuraym",
+      "nameAr": "سعود الشريم",
+      "file": "Saud Al-Shuraim.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Saud%20Al-Shuraim.png",
+      "everyayahSlug": "Saood_ash-Shuraym_128kbps",
+      "mp3quranId": 31,
+      "bitrateKbps": 128,
+      "sizeMB": 1025,
+      "bundledIds": [],
+      "radioIds": [
+        18
+      ]
+    },
+    {
+      "name": "Maher Al-Muaiqly",
+      "nameAr": "ماهر المعيقلي",
+      "file": "Maher Al-Muaiqly.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Maher%20Al-Muaiqly.png",
+      "everyayahSlug": "Maher_AlMuaiqly_64kbps",
+      "mp3quranId": 102,
+      "bitrateKbps": 64,
+      "sizeMB": 613,
+      "bundledIds": [],
+      "radioIds": [
+        63
+      ]
+    },
+    {
+      "name": "Yasser Ad-Dussary",
+      "nameAr": "ياسر الدوسري",
+      "file": "Yasser Al-Dosari.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Yasser%20Al-Dosari.png",
+      "everyayahSlug": "Yasser_Ad-Dussary_128kbps",
+      "mp3quranId": 92,
+      "bitrateKbps": 128,
+      "sizeMB": 1459,
+      "bundledIds": [],
+      "radioIds": [
+        58
+      ]
+    },
+    {
+      "name": "Nasser Al-Qatami",
+      "nameAr": "ناصر القطامي",
+      "file": "Nasser Al-Qatami.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Nasser%20Al-Qatami.png",
+      "everyayahSlug": "Nasser_Alqatami_128kbps",
+      "mp3quranId": 86,
+      "bitrateKbps": 128,
+      "sizeMB": 1132,
+      "bundledIds": [],
+      "radioIds": [
+        53
+      ]
+    },
+    {
+      "name": "Muhammad Jibreel",
+      "nameAr": "محمد جبريل",
+      "file": null,
+      "url": null,
+      "everyayahSlug": "Muhammad_Jibreel_128kbps",
+      "mp3quranId": null,
+      "bitrateKbps": 128,
+      "sizeMB": 1464,
+      "bundledIds": [],
+      "radioIds": []
+    },
+    {
+      "name": "Abu Bakr Ash-Shaatree",
+      "nameAr": "أبو بكر الشاطري",
+      "file": "Sheikh Abu Bakr Al-Shatri.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Sheikh%20Abu%20Bakr%20Al-Shatri.png",
+      "everyayahSlug": "Abu_Bakr_Ash-Shaatree_128kbps",
+      "mp3quranId": 4,
+      "bitrateKbps": 128,
+      "sizeMB": 1454,
+      "bundledIds": [],
+      "radioIds": [
+        2
+      ]
+    },
+    {
+      "name": "Abdul Basit (Murattal)",
+      "nameAr": "عبد الباسط عبد الصمد",
+      "file": "Abdul Basit Abdul Samad.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Abdul%20Basit%20Abdul%20Samad.png",
+      "everyayahSlug": "Abdul_Basit_Murattal_192kbps",
+      "mp3quranId": 51,
+      "bitrateKbps": 192,
+      "sizeMB": 2692,
+      "bundledIds": [],
+      "radioIds": [
+        30,
+        31,
+        32,
+        109039
+      ]
+    },
+    {
+      "name": "Mahmoud Khalil Al-Husary",
+      "nameAr": "محمود خليل الحصري",
+      "file": "Mahmoud Khalil Al-Husary.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Mahmoud%20Khalil%20Al-Husary.png",
+      "everyayahSlug": "Husary_128kbps",
+      "mp3quranId": 118,
+      "bitrateKbps": 128,
+      "sizeMB": 2424,
+      "bundledIds": [],
+      "radioIds": [
+        74,
+        75,
+        76
+      ]
+    },
+    {
+      "name": "Al-Minshawi (Murattal)",
+      "nameAr": "محمد صديق المنشاوي",
+      "file": "Muhammad Siddiq Al-Minshawi.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Muhammad%20Siddiq%20Al-Minshawi.png",
+      "everyayahSlug": "Minshawy_Murattal_128kbps",
+      "mp3quranId": 112,
+      "bitrateKbps": 128,
+      "sizeMB": 1617,
+      "bundledIds": [],
+      "radioIds": [
+        69,
+        70
+      ]
+    },
+    {
+      "name": "Hani Rifai",
+      "nameAr": "هاني الرفاعي",
+      "file": "Hani Al-Rifai.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Hani%20Al-Rifai.png",
+      "everyayahSlug": "Hani_Rifai_192kbps",
+      "mp3quranId": 89,
+      "bitrateKbps": 192,
+      "sizeMB": 2104,
+      "bundledIds": [],
+      "radioIds": [
+        56
+      ]
+    },
+    {
+      "name": "Abdullah Basfar",
+      "nameAr": "عبدالله بصفر",
+      "file": null,
+      "url": null,
+      "everyayahSlug": "Abdullah_Basfar_192kbps",
+      "mp3quranId": null,
+      "bitrateKbps": 192,
+      "sizeMB": 2557,
+      "bundledIds": [],
+      "radioIds": []
+    },
+    {
+      "name": "Ahmad Al-Ajamy",
+      "nameAr": "أحمد العجمي",
+      "file": "Ahmad Al-Ajmy.png",
+      "url": "https://raw.githubusercontent.com/bilalelsayed97/quran-data/main/reciters/Ahmad%20Al-Ajmy.png",
+      "everyayahSlug": "ahmed_ibn_ali_al_ajamy_128kbps",
+      "mp3quranId": 5,
+      "bitrateKbps": 128,
+      "sizeMB": 1481,
+      "bundledIds": [],
+      "radioIds": [
+        3
+      ]
+    },
+    {
+      "name": "Ibrahim Al-Akhdar",
+      "nameAr": "إبراهيم الأخضر",
+      "file": null,
+      "url": null,
+      "everyayahSlug": "Ibrahim_Akhdar_32kbps",
+      "mp3quranId": null,
+      "bitrateKbps": 32,
+      "sizeMB": 480,
+      "bundledIds": [],
+      "radioIds": []
+    },
+    {
+      "name": "Ali Al-Huthaifi",
+      "nameAr": "علي الحذيفي",
+      "file": null,
+      "url": null,
+      "everyayahSlug": "Hudhaify_128kbps",
+      "mp3quranId": null,
+      "bitrateKbps": 128,
+      "sizeMB": 1714,
+      "bundledIds": [],
+      "radioIds": []
+    },
+    {
+      "name": "Sahl Yassin",
+      "nameAr": "سهل ياسين",
+      "file": null,
+      "url": null,
+      "everyayahSlug": "Sahl_Yassin_128kbps",
+      "mp3quranId": null,
+      "bitrateKbps": 128,
+      "sizeMB": 1408,
+      "bundledIds": [],
+      "radioIds": []
+    }
+  ]
+}

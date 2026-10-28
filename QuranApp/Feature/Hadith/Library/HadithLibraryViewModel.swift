@@ -253,3 +253,69 @@ final class HadithLibraryViewModel: MainViewModel {
         return HadithHighlightedText.make(HadithSnippet.around(query, in: text), matching: query)
     }
 }
+
+// MARK: - Book Sections
+
+extension HadithLibraryViewModel {
+
+    private static let nineBookIdentifiers: Set<Int> = [7, 5, 6, 4, 1, 2, 9, 8, 11]
+
+    var nineBooks: [HadithBook] {
+        books.filter { Self.nineBookIdentifiers.contains($0.id) }
+    }
+
+    var otherCollections: [HadithBook] {
+        books.filter { !Self.nineBookIdentifiers.contains($0.id) }
+    }
+
+    var nineBooksSectionTitle: String {
+        AppLocalizedKeys.hadithSectionNineBooks.value
+    }
+
+    var otherCollectionsSectionTitle: String {
+        AppLocalizedKeys.hadithSectionOtherCollections.value
+    }
+
+    func metaText(for book: HadithBook) -> String {
+        let hadiths = localizedCount(AppLocalizedKeys.hadithCount, book.hadithCount)
+        let chapters = localizedCount(AppLocalizedKeys.hadithChapterCount, book.chapterCount)
+        return "\(hadiths) · \(chapters)"
+    }
+
+    func readingProgressText(for position: LastReadPosition) -> String {
+        "\(groupedNumber(position.hadithIndex + 1)) / \(groupedNumber(position.bookHadithCount))"
+    }
+
+    private func localizedCount(_ key: AppLocalizedKeys, _ value: Int) -> String {
+        key.value.replacingOccurrences(of: "%d", with: groupedNumber(value))
+    }
+
+    private func groupedNumber(_ value: Int) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.groupingSeparator = ","
+        return formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+    }
+}
+
+// MARK: - Library Titles
+
+extension HadithLibraryViewModel {
+
+    var authenticTraditionsTitle: String {
+        AppLocalizedKeys.theAuthenticTraditions.value.uppercased()
+    }
+
+    var continueReadingTitle: String {
+        AppLocalizedKeys.continueReading.value.uppercased()
+    }
+
+    var resumeTitle: String {
+        AppLocalizedKeys.resume.value.uppercased()
+    }
+
+    var propheticNarrationTitle: String {
+        AppLocalizedKeys.propheticNarration.value.uppercased()
+    }
+}

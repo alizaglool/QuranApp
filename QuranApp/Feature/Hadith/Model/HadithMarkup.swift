@@ -37,6 +37,8 @@ enum HadithSpanKind: Hashable {
     /// An inline hadith number, marking where a sub-report begins.
     /// Always zero length — it is a position in the text, not a run of it.
     case number(Int)
+
+    case note(noteID: Int)
 }
 
 // MARK: - Span
@@ -68,6 +70,13 @@ struct HadithGhareebRef: Identifiable, Hashable {
     var id: Int { wordID }
 }
 
+struct HadithNoteRef: Identifiable, Hashable {
+    let noteID: Int
+    let offset: Int
+
+    var id: Int { noteID }
+}
+
 // MARK: - Parsed body
 
 /// The result of parsing one marked-up hadith body.
@@ -93,6 +102,8 @@ struct HadithMarkup: Hashable {
     /// is a combined entry covering several numbered reports.
     let numbers: [Int]
 
+    let notes: [HadithNoteRef]
+
     /// The chain of transmission as flat text, or empty when the body has none.
     let isnadText: String
 
@@ -107,12 +118,14 @@ struct HadithMarkup: Hashable {
     let ruling: String
 
     static let empty = HadithMarkup(text: "", spans: [], narrators: [], ghareebWords: [],
-                                    numbers: [], isnadText: "", volume: 0, pageNo: 0, ruling: "")
+                                    numbers: [], notes: [], isnadText: "",
+                                    volume: 0, pageNo: 0, ruling: "")
 
     /// A body that carried no markup at all.
     static func plain(_ text: String) -> HadithMarkup {
         HadithMarkup(text: text, spans: [], narrators: [], ghareebWords: [],
-                     numbers: [], isnadText: "", volume: 0, pageNo: 0, ruling: "")
+                     numbers: [], notes: [], isnadText: "",
+                     volume: 0, pageNo: 0, ruling: "")
     }
 
     var isEmpty: Bool { text.isEmpty }

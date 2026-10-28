@@ -17,7 +17,13 @@ protocol HomeCoordinating: AnyObject {
     func coordinateToAdhkar()
     func coordinateToHadith()
     func coordinateToLessons()
+    func coordinateToRadio()
+    func coordinateToRecitations()
+    func coordinateToReciterSurahs(reciter: ReciterInfo)
     func coordinateToSheikhDetail(sheikh: Sheikh)
+    func coordinateToWorship()
+    func coordinateToPrayerTimes()
+    func coordinateToLiveStream(station: RadioStation, title: String)
 }
 
 class HomeCoordinator: MainCoordinator, HomeCoordinating {
@@ -33,6 +39,31 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
     /// is `weak`: a local instance would deallocate before the first tap inside the
     /// pushed screen, leaving its playlist and player rows dead.
     private lazy var lessonsCoordinator = LessonsCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var adhkarCoordinator = AdhkarCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var recitationsCoordinator = RecitationsCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var worshipCoordinator = WorshipCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var prayerTimesCoordinator = PrayerTimesCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var radioCoordinator = RadioCoordinator(
         navigationController: navigationController,
         tabBarController: tabBarController
     )
@@ -52,11 +83,11 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
     }
     
     func coordinateToSearch() {
-        // TODO
+        pushQuranPager(startPage: nil, openSearchOnAppear: true)
     }
     
     func coordinateToAdhkar() {
-        tabBarController.selectedTabItem = TabBarItem.adhkar
+        adhkarCoordinator.start()
     }
 
     func coordinateToHadith() {
@@ -67,15 +98,47 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
         tabBarController.selectedTabItem = TabBarItem.lessons
     }
 
+    func coordinateToRadio() {
+        tabBarController.selectedTabItem = TabBarItem.radio
+    }
+
+    func coordinateToRecitations() {
+        recitationsCoordinator.start()
+    }
+
+    func coordinateToReciterSurahs(reciter: ReciterInfo) {
+        recitationsCoordinator.coordinateToReciterSurahs(reciter: reciter)
+    }
+
     func coordinateToSheikhDetail(sheikh: Sheikh) {
         lessonsCoordinator.coordinateToSheikhDetail(sheikh: sheikh)
     }
 
+    func coordinateToWorship() {
+        worshipCoordinator.start()
+    }
+
+    func coordinateToPrayerTimes() {
+        prayerTimesCoordinator.start()
+    }
+
+    func coordinateToLiveStream(station: RadioStation, title: String) {
+        radioCoordinator.coordinateToLiveChannel(station, title: title)
+    }
+
     func coordinateToQuran(startPage: Int? = nil) {
+        pushQuranPager(startPage: startPage, openSearchOnAppear: false)
+    }
+
+    private func pushQuranPager(startPage: Int?, openSearchOnAppear: Bool) {
         let nav = navigationController
-        let view = QuranPagerView(startPage: startPage, onBack: { [weak nav] in
-            nav?.popViewController(animated: true)
-        })
+        let view = QuranPagerView(
+            startPage: startPage,
+            openSearchOnAppear: openSearchOnAppear,
+            onBack: { [weak nav] in
+                nav?.popViewController(animated: true)
+            }
+        )
         let viewController = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)

@@ -39,6 +39,7 @@
 "myAdhkarTitle" = "أذكاري";
 "myAdhkarSubtitle" = "أذكارك الخاصة";
 "dailyAdhkar" = "الأذكار اليومية";
+"moreAdhkar" = "أدعية وأذكار أخرى";
 "adhkarCount" = "%d أذكار";
 "tapToCount" = "اضغط";
 "remaining" = "المتبقي";
@@ -57,6 +58,9 @@
 "maghrib" = "المغرب";
 "isha" = "العشاء";
 "seeAll" = "المزيد";
+"hadithSectionNineBooks" = "الكتب التسعة";
+"hadithSectionOtherCollections" = "مجموعات أخرى";
+"hadithChapterCount" = "%d كتاب";
 
 "edit" = "تعديل";
 "bookmarks" = "الفواصل";
@@ -182,7 +186,9 @@
 "surahs" = "السور";
 "quarters" = "الأرباع";
 "pagePrefix" = "الصفحة";
+"ayahPrefix" = "آية";
 "versesCount" = "%@ آيات";
+"noBookmarksYet" = "لا توجد فواصل بعد";
 
 // Juz names
 "juz1"  = "الجزء الأول";
@@ -244,6 +250,7 @@
 "lessonsCount" = "درس";
 "retryAction" = "إعادة المحاولة";
 "lessonsLoadError" = "تعذّر تحميل المشايخ، تحقق من الاتصال وأعد المحاولة.";
+"recitersLoadError" = "تعذّر تحميل القرّاء، تحقق من الاتصال وأعد المحاولة.";
 "emptySpecialty" = "لا يوجد مشايخ في هذا التخصص";
 
 "detailTabPlaylists" = "قوائم التشغيل";
@@ -270,3 +277,265 @@
 "playlistNotes" = "ملاحظات";
 "relatedLessons" = "دروس ذات صلة";
 "originalSound" = "صوت أصلي";
+
+// MARK: - Radio
+"radio" = "راديو";
+"radioTitle" = "راديو القرآن";
+"radioSubtitle" = "إذاعات مباشرة وتلاواتك المحمّلة";
+"radioLive" = "مباشر";
+"radioOffline" = "لا يوجد اتصال بالإنترنت";
+"radioOfflineMessage" = "تحتاج الإذاعات المباشرة إلى اتصال. تلاواتك المحمّلة تعمل بدون إنترنت.";
+"radioTimedOut" = "استغرقت الإذاعة وقتًا طويلًا للاستجابة";
+"radioStreamFailed" = "تعذّر تشغيل هذه الإذاعة";
+"downloadRecitersAction" = "تحميل القراء";
+
+// MARK: - Recitations
+"recitationsSubtitle" = "اختر القارئ ثم السورة";
+"featuredReciters" = "قراء مميزون";
+
+"currentVerse" = "آية %@";
+
+// MARK: - Radio Sections
+"radioSectionLive" = "البث المباشر";
+"radioSectionStations" = "الإذاعات";
+"radioSectionDownloaded" = "تلاواتي المحمّلة";
+"radioNeedsConnection" = "يحتاج إلى اتصال";
+
+// MARK: - Home Hero
+"homeHeroTitle" = "وِرد";
+"homeSearchAction" = "بحث";
+"homeLocation" = "الرياض، السعودية";
+"homeLocationAccessibility" = "المواقيت المعروضة لمدينة %@";
+"locationLabelFormat" = "%1$@، %2$@";
+"homeHeroDhikr" = "خير ما بدأت به ذكر الله 🌅";
+
+// MARK: - Home Next Prayer
+"nextPrayerLabel" = "الصلاة القادمة";
+"leftUntilPrayer" = "متبقٍ حتى %@";
+"hourUnitShort" = "س";
+"minuteUnitShort" = "د";
+"prayerTimesUnavailable" = "تعذّر تحميل مواقيت الصلاة";
+"tryAgainAction" = "إعادة المحاولة";
+
+// MARK: - Home Reading Card
+"readingStartTitle" = "اجعل القرآن ربيع قلبك";
+"readingStartSubtitle" = "ابدأ اليوم ولو بآية واحدة";
+"readingStartAction" = "ابدأ القراءة";
+"readingContinueAction" = "تابع القراءة";
+"readingStoppedAt" = "توقفت عند %@";
+"readingQuranPercent" = "%@%% من القرآن";
+
+// MARK: - Home Date
+"homeGregorianFormat" = "EEEE، d MMMM";
+"homeHijriFormat" = "d MMMM yyyy";
+"hijriEraSuffix" = "هـ";
+
+// MARK: - Home Today
+"homeTodayTitle" = "اليوم";
+"homeTodayPrayersLabel" = "الصلوات";
+"homeTodayQuranLabel" = "القرآن";
+"prayersCompletedFormat" = "%1$d من %2$d";
+"markPrayedAccessibility" = "تحديد %@ كمؤدّاة";
+"markNotPrayedAccessibility" = "إلغاء تحديد %@";
+
+// MARK: - Home Athkar Now
+"homeNowBadge" = "الآن";
+"homeAthkarNowSubtitle" = "حان وقتها — افتح أذكارك";
+"athkarMorningTitle" = "أذكار الصباح";
+"athkarEveningTitle" = "أذكار المساء";
+"athkarAfterIshaTitle" = "أذكار بعد العشاء";
+"athkarLastThirdTitle" = "الثلث الأخير من الليل";
+
+// MARK: - Worship Tracker
+"worshipTracker" = "متابعة العبادات";
+"worshipHomeTile" = "العبادات";
+"worshipYesterday" = "الأمس";
+"worshipCurrentStreak" = "المداومة الحالية";
+"worshipBestStreak" = "الأفضل";
+"worshipStreaksByCategory" = "المداومة حسب القسم";
+"worshipLastSevenDays" = "آخر ٧ أيام";
+"worshipYearOverview" = "نظرة على السنة";
+"worshipTapHint" = "اضغط على أي عبادة لتسجيل إتمامها.";
+"worshipNotOpenYet" = "يُفتح بعد وقته المسنون";
+"worshipDisclaimerTitle" = "تنبيه";
+"worshipDisclaimerBody" = "خاصية المتابعة وسيلة تنظيمية تساعدك على الالتزام بالفرائض والسنن، وليست عبادة بذاتها ولا سنة عن النبي صلى الله عليه وسلم؛ فاجعلها سرًا بينك وبين الله، لا لجمع الدرجات ولا للمفاخرة أو الرياء.";
+"worshipUpdateYesterday" = "تحديث عبادات الأمس";
+"worshipBackToToday" = "العودة إلى اليوم";
+"worshipDaysUnit" = "يوم";
+"worshipPrayers" = "الصلوات";
+"worshipAthkar" = "الأذكار";
+"worshipQuran" = "القرآن";
+"worshipTasbih" = "التسبيح";
+"worshipQuranReading" = "ورد القرآن";
+
+// MARK: - Settings
+"settingsSectionQuran" = "القرآن والتلاوة";
+"settingsSectionWorship" = "العبادات";
+"settingsSectionGeneral" = "عام";
+"settingsSectionMore" = "المزيد";
+"settingsQuranPageSubtitle" = "المصحف، التمرير، السمة";
+"settingsWorshipSubtitle" = "تابع صلواتك وأذكارك ووردك";
+"settingsDownloadsEmpty" = "لا توجد تلاوات محمّلة";
+"settingsDownloadsUsedFormat" = "%@ مستخدمة";
+"settingsLanguageTitle" = "اللغة";
+"settingsLanguageArabic" = "العربية";
+"settingsLanguageEnglish" = "English";
+"settingsAboutTitle" = "حول التطبيق";
+"settingsAboutVersionFormat" = "الإصدار %@";
+"settingsAppTagline" = "تطبيقك الإسلامي اليومي";
+"settingsAboutBody" = "وِرد تطبيق للقرآن والأذكار والحديث، صُمِّم ليكون رفيقك اليومي في الذكر والتلاوة.";
+
+// MARK: - Prayer Times
+"sunrise" = "الشروق";
+"prayerTimesTitle" = "أوقات الصلاة";
+"prayerTimesSubtitle" = "مواقيت اليوم";
+"prayerTimesScheduleTitle" = "جدول الصلوات";
+
+// MARK: - Location Picker
+"locationPickerTitle" = "الموقع";
+"locationCurrentSection" = "الموقع الحالي";
+"locationResultsSection" = "نتائج البحث";
+"locationUseDevice" = "استخدام موقعي الحالي";
+"locationSearchPlaceholder" = "ابحث عن مدينة";
+"locationNoResults" = "لا توجد نتائج مطابقة";
+"locationPermissionDenied" = "صلاحية الموقع مرفوضة. فعّلها من الإعدادات لتحديد مدينتك تلقائيًا.";
+"locationOpenSettings" = "فتح الإعدادات";
+"locationChangeAction" = "تغيير الموقع";
+"locationAutomaticBadge" = "تم التحديد تلقائيًا";
+
+/* Qibla */
+"qiblaTitle" = "اتجاه القبلة";
+"qiblaDegreesFormat" = "%d°";
+"qiblaAlignHint" = "أدِر جهازك حتى يستقر المؤشر";
+"qiblaAligned" = "أنت في اتجاه القبلة";
+"qiblaUnavailable" = "البوصلة غير متاحة على هذا الجهاز";
+"qiblaCardinals" = "ش,ق,ج,غ";
+
+/* Qibla Guidance */
+"qiblaDistanceFormat" = "إلى الكعبة %@ كم";
+"qiblaElevationFormat" = "فوق سطح البحر %@ م";
+"qiblaTurnRight" = "انعطف يميناً";
+"qiblaTurnLeft" = "انعطف يساراً";
+
+/* Prayer Times Extra Anchors */
+"prayerTimesGregorianFormat" = "d MMMM yyyy";
+"prayerTimesOtherTimes" = "أوقات إضافية";
+"duha" = "الضحى";
+"islamicMidnight" = "منتصف الليل";
+"lastThirdOfNight" = "الثلث الأخير من الليل";
+
+/* Clock Suffixes */
+"clockMorningSuffix" = "ص";
+"clockEveningSuffix" = "م";
+
+/* Prayer Calculation Methods */
+"prayerMethodShiaIthnaAshari" = "معهد ليفا، قم";
+"prayerMethodKarachi" = "جامعة العلوم الإسلامية، كراتشي";
+"prayerMethodNorthAmerica" = "الجمعية الإسلامية لأمريكا الشمالية";
+"prayerMethodMuslimWorldLeague" = "رابطة العالم الإسلامي";
+"prayerMethodUmmAlQura" = "جامعة أم القرى، مكة المكرمة";
+"prayerMethodEgypt" = "الهيئة المصرية العامة للمساحة";
+"prayerMethodTehran" = "جامعة طهران للجيوفيزياء";
+"prayerMethodGulfRegion" = "منطقة الخليج";
+"prayerMethodKuwait" = "الكويت";
+"prayerMethodQatar" = "قطر";
+"prayerMethodSingapore" = "المجلس الإسلامي، سنغافورة";
+"prayerMethodFrance" = "الاتحاد الإسلامي الفرنسي";
+"prayerMethodTurkey" = "رئاسة الشؤون الدينية، تركيا";
+"prayerMethodRussia" = "الإدارة الروحية لمسلمي روسيا";
+"prayerMethodMoonsightingCommittee" = "لجنة رؤية الهلال العالمية";
+"prayerMethodDubai" = "دبي";
+"prayerMethodMalaysia" = "دائرة التطوير الإسلامي، ماليزيا";
+"prayerMethodTunisia" = "تونس";
+"prayerMethodAlgeria" = "الجزائر";
+"prayerMethodIndonesia" = "وزارة الشؤون الدينية، إندونيسيا";
+"prayerMethodMorocco" = "المغرب";
+"prayerMethodLisbon" = "الجماعة الإسلامية، لشبونة";
+"prayerMethodJordan" = "وزارة الأوقاف، الأردن";
+"prayerMethodCustom" = "إعدادات مخصصة";
+
+// MARK: - Hadith Details
+"hadithTabRulings" = "الأحكام";
+"hadithTabGhareeb" = "غريب الحديث";
+"hadithTabNotes" = "الحواشي";
+"hadithTabSubjects" = "الموضوعات";
+"hadithTabTranslation" = "الترجمة";
+"hadithTabInfo" = "البيانات";
+"hadithTakhrijSameBook" = "في هذا الكتاب";
+"hadithTakhrijCorroborations" = "المتابعات";
+"hadithTakhrijWitnesses" = "الشواهد";
+"hadithTakhrijOther" = "مراجع أخرى";
+"hadithNarratorLayer" = "الطبقة";
+"hadithNarratorKunya" = "الكنية";
+"hadithNarratorLineage" = "النسب";
+"hadithNarratorEpithet" = "اللقب";
+"hadithNarratorKnownAs" = "الشهرة";
+"hadithNarratorGeneration" = "الطبقة";
+"hadithNarratorCountry" = "البلد";
+"hadithNarratorLifespan" = "المولد والوفاة";
+"hadithNarratorBirthPlace" = "مكان الميلاد";
+"hadithNarratorDeathPlace" = "مكان الوفاة";
+"hadithNarratorIbnHajar" = "قول ابن حجر";
+"hadithNarratorVerdictsSummary" = "خلاصة الأقوال";
+"hadithNarratorVerdicts" = "أقوال العلماء";
+"hadithNarratorSources" = "المصادر";
+"hadithNarratorNotes" = "ملاحظات";
+"hadithNarratorUnknown" = "لا توجد ترجمة لهذا الراوي";
+"hadithSource" = "المصدر";
+"hadithInfoCitation" = "الموضع";
+"hadithInfoKind" = "نوع الحديث";
+"hadithInfoBrief" = "الموجز";
+"hadithInfoChapter" = "الباب";
+"hadithInfoNarratedBy" = "راوي الحديث";
+"hadithGhareebWord" = "معنى الكلمة";
+"hadithNoteTitle" = "حاشية";
+"hadithDetailsEmpty" = "لا توجد تفاصيل إضافية لهذا الحديث";
+
+"athkarHubDailyTitle" = "أذكار يومية";
+"athkarHubDailySubtitle" = "الصباح والمساء والنوم";
+"athkarHubCountTitle" = "اقرأ وعُدّ";
+"athkarHubCountSubtitle" = "كرّر واحتسب التسبيح";
+"athkarHubDuaaTitle" = "مجموعات الدعاء";
+"athkarHubDuaaSubtitle" = "أدعية من القرآن والسنة";
+"athkarDownloadAll" = "تحميل الكل (%d)";
+"athkarDuaaCount" = "%d دعاء";
+
+"athkarReaderPosition" = "الذكر %d";
+"athkarReaderProgress" = "أنجزت %d من %d";
+"athkarReaderTimes" = "%d مرات";
+"athkarReaderTapHint" = "اضغط على الدائرة للعدّ";
+"athkarReaderDoneHint" = "اكتمل — اضغط للانتقال إلى التالي";
+"athkarReaderMeaning" = "المعنى";
+"athkarReaderPronunciation" = "النطق";
+"athkarReaderSource" = "الفضل والمصدر";
+"athkarReaderAddFavorite" = "إضافة إلى المفضلة";
+"athkarReaderRemoveFavorite" = "إزالة من المفضلة";
+"athkarReaderCopy" = "نسخ";
+"athkarReaderReadAgain" = "اقرأ مجددًا";
+"athkarReaderCompletedTitle" = "اكتملت %@";
+"athkarCopied" = "تم النسخ";
+"athkarAudioFailed" = "تعذّر تشغيل التلاوة.";
+"athkarSettingsTitle" = "إعدادات القراءة";
+"athkarSettingsTextSize" = "حجم الخط";
+"athkarSettingsSizeValue" = "%d٪";
+"athkarSettingsShowTranslation" = "إظهار الترجمة";
+"athkarSettingsStartOver" = "ابدأ من جديد";
+
+"liveStreamTitle" = "البث المباشر";
+
+"storageCategoryRecitations" = "التلاوات";
+"storageCategoryHadith" = "كتب الحديث";
+"storageCategoryAthkar" = "الأذكار";
+"storageCategoryTafsir" = "التفاسير";
+"storageFilterAll" = "الكل";
+"storageTotalUsed" = "المحتوى المحمّل";
+"storageScanning" = "جارٍ حساب المساحة…";
+"storageEmptyTitle" = "لا يوجد محتوى محمّل";
+"storageEmptyMessage" = "حمّل تلاوة أو كتاب حديث أو ذكرًا للاستماع والقراءة بدون إنترنت.";
+"storageShowMore" = "عرض المزيد";
+"storageShowLess" = "عرض أقل";
+"storageDeleteAll" = "حذف الكل";
+"storageDeleteTitle" = "حذف المحتوى";
+"storageDeleteMessageFormat" = "سيُحذف «%@» من جهازك. يمكنك تحميله مرة أخرى في أي وقت.";
+"storageDeleteAllTitle" = "حذف كل المحتوى";
+"storageDeleteAllMessageFormat" = "سيُحذف كل المحتوى المحمّل لـ «%@» من جهازك.";

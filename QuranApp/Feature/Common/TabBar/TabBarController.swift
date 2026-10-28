@@ -62,12 +62,12 @@ extension TabBarController {
         )
         TabBarItem.lessons = lessons
 
-        let adhkar = TabBarItem(
-            title: AppLocalizedKeys.adhkar.value,
-            image: UIImage(systemName: "sparkles")!.withRenderingMode(.alwaysTemplate),
-            viewControllerProvider: getAdhkarViewController
+        let radio = TabBarItem(
+            title: AppLocalizedKeys.radio.value,
+            image: UIImage(systemName: "dot.radiowaves.left.and.right")!.withRenderingMode(.alwaysTemplate),
+            viewControllerProvider: getRadioViewController
         )
-        TabBarItem.adhkar = adhkar
+        TabBarItem.radio = radio
         
         let hadith = TabBarItem(
             title: AppLocalizedKeys.hadith.value,
@@ -83,7 +83,7 @@ extension TabBarController {
         )
         TabBarItem.settings = settings
 
-        tabBarItems = [home, lessons, adhkar, hadith, settings]
+        tabBarItems = [home, lessons, radio, hadith, settings]
     }
 }
 
@@ -92,13 +92,13 @@ extension TabBarController {
 extension TabBarController {
     
     private func getHomeViewController() -> UIViewController {
-        let navigationController = UINavigationController()
+        let navigationController = StatusBarStyleNavigationController()
         let coordinator = HomeCoordinator(
             navigationController: navigationController,
             tabBarController: self
         )
         let view = HomeView(coordinator: coordinator)
-        let viewController = UIHostingController(
+        let viewController = LightStatusBarHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)
                 .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
@@ -125,13 +125,13 @@ extension TabBarController {
         return navigationController
     }
 
-    private func getAdhkarViewController() -> UIViewController {
+    private func getRadioViewController() -> UIViewController {
         let navigationController = UINavigationController()
-        let coordinator = AdhkarCoordinator(
+        let coordinator = RadioCoordinator(
             navigationController: navigationController,
             tabBarController: self
         )
-        let view = AdhkarCategoriesView(coordinator: coordinator)
+        let view = RadioStationsView(coordinator: coordinator)
         let viewController = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)
@@ -160,16 +160,19 @@ extension TabBarController {
     }
 
     private func getSettingsViewController() -> UIViewController {
-//        let navigationController = UINavigationController()
-//        let view = SettingsView()
-//        let viewController = UIHostingController(
-//            rootView: view
-//                .environmentObject(LocalizationManager.shared)
-//                .environment(\.layoutDirection, .rightToLeft)
-//        )
-//        navigationController.setViewControllers([viewController], animated: false)
-//        navigationController.isNavigationBarHidden = true
-//        return navigationController
-        return UIViewController()
+        let navigationController = UINavigationController()
+        let coordinator = SettingsCoordinator(
+            navigationController: navigationController,
+            tabBarController: self
+        )
+        let view = SettingsView(coordinator: coordinator)
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
+        )
+        navigationController.setViewControllers([viewController], animated: false)
+        navigationController.isNavigationBarHidden = true
+        return navigationController
     }
 }

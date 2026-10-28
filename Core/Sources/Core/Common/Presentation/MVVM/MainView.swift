@@ -31,13 +31,25 @@ public struct MainView<ViewModel: MainViewModel, Content: View>: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .customBackground(.surface)
         .onAppear {
-            viewModel.isTabBarVisible ? showTabBar() : hideTabBar()
+            applyTabBarVisibilityOnAppear()
             viewModel.onAppear()
         }
         .onDisappear {
-            if !viewModel.isTabBarVisible { showTabBar() }
+            applyTabBarVisibilityOnDisappear()
             viewModel.onDisappear()
         }
+    }
+    
+    private func applyTabBarVisibilityOnAppear() {
+        let coordinator = TabBarVisibilityCoordinator.shared
+        viewModel.isTabBarVisible
+            ? coordinator.requestVisibleTabBar()
+            : coordinator.requestHiddenTabBar()
+    }
+    
+    private func applyTabBarVisibilityOnDisappear() {
+        guard !viewModel.isTabBarVisible else { return }
+        TabBarVisibilityCoordinator.shared.withdrawHiddenTabBarRequest()
     }
     
     private var iOS15Body: some View {

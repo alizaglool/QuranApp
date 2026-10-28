@@ -95,6 +95,16 @@ public enum ColorStyle {
     case washSecondarySubtle
     case brandActive
     case resumeLabel
+    case quickAccentQuran
+    case quickAccentRecitations
+    case quickAccentRadio
+    case quickAccentAdhkar
+    case quickAccentHadith
+    case quickAccentLessons
+    case quickAccentWorship
+
+    // Qibla
+    case qiblaAccent
 
     // Hadith Library
     case downloadStroke
@@ -236,6 +246,16 @@ public enum ColorStyle {
         case .washSecondarySubtle: return .washSecondarySubtle
         case .brandActive:         return .brandActive
         case .resumeLabel:         return .resumeLabel
+        case .quickAccentQuran:       return .quickAccentQuran
+        case .quickAccentRecitations: return .quickAccentRecitations
+        case .quickAccentRadio:       return .quickAccentRadio
+        case .quickAccentAdhkar:      return .quickAccentAdhkar
+        case .quickAccentHadith:      return .quickAccentHadith
+        case .quickAccentLessons:     return .quickAccentLessons
+        case .quickAccentWorship:     return .quickAccentWorship
+
+        // Qibla
+        case .qiblaAccent:            return .qiblaAccent
 
         // Hadith Library
         case .downloadStroke:  return .downloadStroke
