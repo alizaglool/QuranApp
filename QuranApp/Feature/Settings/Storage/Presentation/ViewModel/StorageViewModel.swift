@@ -82,6 +82,7 @@ final class StorageViewModel: MainViewModel {
     private let tafsirDownloads = TafsirDownloadManager.shared
     private let hadithCatalog = HadithDatabaseService.shared
     private let athkarManifest = AthkarManifestService.shared
+    private let quranPackStore = QuranImagePackStore.shared
     private weak var coordinator: StorageCoordinating?
 
     private var scan: StorageScan = .empty
@@ -203,6 +204,8 @@ private extension StorageViewModel {
             athkarDownloads.delete(key: key)
         case .tafsirBook(let identifier):
             tafsirDownloads.delete(bookId: identifier)
+        case .quranPack(let key):
+            quranPackStore.delete(key: key)
         }
     }
 
@@ -275,6 +278,7 @@ private extension StorageViewModel {
         case .hadith: return flatGroup(category: .hadith, rows: hadithRows)
         case .athkar: return flatGroup(category: .athkar, rows: athkarRows)
         case .tafsir: return flatGroup(category: .tafsir, rows: tafsirRows)
+        case .quranPages: return flatGroup(category: .quranPages, rows: quranRows)
         }
     }
 
@@ -355,6 +359,20 @@ private extension StorageViewModel {
         }
     }
 
+    var quranRows: [StorageRowItem] {
+        let packs = quranPackStore.packs
+        return scan.quranPacks.map { usage in
+            let pack = packs.first { $0.key == usage.identifier }
+            return StorageRowItem(
+                id: "quran-\(usage.identifier)",
+                title: pack.map { AppLocalizedKeys.juzKey($0.juz).value } ?? usage.identifier,
+                subtitle: pack.map(Self.pagesSubtitle) ?? "",
+                sizeLabel: Self.sizeLabel(usage.bytes),
+                target: .quranPack(key: usage.identifier)
+            )
+        }
+    }
+
     var tafsirRows: [StorageRowItem] {
         scan.tafsirBooks.map { usage in
             let book = TafsirBook.find(id: usage.identifier)
@@ -382,6 +400,16 @@ private extension StorageViewModel {
             ?? String(format: AppLocalizedKeys.surahFallback.value, number)
     }
 
+    static func pagesSubtitle(_ pack: QuranImagePack) -> String {
+        String(format: AppLocalizedKeys.quranDownloadsPagesFormat.value,
+               localizedNumber(pack.firstPage),
+               localizedNumber(pack.lastPage))
+    }
+
+    static func localizedNumber(_ value: Int) -> String {
+        LocalizationManager.shared.currentLanguage == .Arabic ? value.arabicNumerals : "\(value)"
+    }
+
     static func reciterSubtitle(reciter: ReciterInfo?, surahCount: Int) -> String {
         let surahs = String(format: AppLocalizedKeys.surahsDownloaded.value, surahCount)
         guard let reciter else { return surahs }
@@ -394,6 +422,7 @@ private extension StorageViewModel {
         case .hadith: return AppLocalizedKeys.storageCategoryHadith.value
         case .athkar: return AppLocalizedKeys.storageCategoryAthkar.value
         case .tafsir: return AppLocalizedKeys.storageCategoryTafsir.value
+        case .quranPages: return AppLocalizedKeys.storageCategoryQuranPages.value
         }
     }
 
@@ -402,7 +431,8 @@ private extension StorageViewModel {
         case .recitations: return .quickAccentRecitations
         case .hadith: return .quickAccentHadith
         case .athkar: return .quickAccentAdhkar
-        case .tafsir: return .quickAccentQuran
+        case .tafsir: return .quickAccentLessons
+        case .quranPages: return .quickAccentQuran
         }
     }
 }

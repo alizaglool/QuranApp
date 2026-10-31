@@ -307,6 +307,7 @@
 "homeLocation" = "الرياض، السعودية";
 "homeLocationAccessibility" = "المواقيت المعروضة لمدينة %@";
 "locationLabelFormat" = "%1$@، %2$@";
+"locationCurrentPlace" = "موقعك الحالي";
 "homeHeroDhikr" = "خير ما بدأت به ذكر الله 🌅";
 
 // MARK: - Home Next Prayer
@@ -417,6 +418,14 @@
 "qiblaTurnRight" = "انعطف يميناً";
 "qiblaTurnLeft" = "انعطف يساراً";
 
+/* Qibla Readiness */
+"qiblaLocationPermissionNeeded" = "اسمح بالوصول إلى الموقع لتحديد القبلة من مكانك";
+"qiblaLocationPermissionDenied" = "الوصول إلى الموقع متوقف، لذا تُحدد القبلة من مدينة افتراضية";
+"qiblaApproximateLocation" = "الموقع الدقيق متوقف، لذا هذا الاتجاه تقريبي";
+"qiblaDefaultLocation" = "يتم عرض القبلة من مدينة افتراضية. حدّد موقعك للحصول على اتجاه دقيق";
+"qiblaLowHeadingAccuracy" = "دقة البوصلة منخفضة. ابتعد عن المعادن والمغناطيس، ثم حرّك الجهاز على شكل رقم ثمانية";
+"qiblaEnableLocation" = "تشغيل الموقع";
+
 /* Prayer Times Extra Anchors */
 "prayerTimesGregorianFormat" = "d MMMM yyyy";
 "prayerTimesOtherTimes" = "أوقات إضافية";
@@ -500,9 +509,22 @@
 "athkarDownloadAll" = "تحميل الكل (%d)";
 "athkarDuaaCount" = "%d دعاء";
 
+"athkarAudioPromptTitle" = "الصوت غير مُحمَّل";
+"athkarAudioPromptBody" = "حمِّل التلاوة للاستماع أثناء القراءة بالإنترنت أو بدونه.";
+"athkarAudioPromptDownloadFormat" = "تحميل · %@";
+"athkarAudioPromptDownloading" = "جارٍ التحميل…";
+"athkarAudioPromptInstalling" = "جارٍ تهيئة الصوت…";
+"athkarAudioPromptFailed" = "تعذَّر التحميل. تحقَّق من الاتصال وأعِد المحاولة.";
+"athkarAudioPromptNoSpace" = "لا توجد مساحة كافية. أفرِغ مساحة وأعِد المحاولة.";
+"athkarAudioPromptOffline" = "لا يوجد اتصال بالإنترنت. اتصل لتحميل الصوت أو اقرأ النص الآن.";
+"athkarAudioPromptWaitingNetwork" = "بانتظار الاتصال. سيُستأنف التحميل تلقائيًا.";
+"athkarAudioPromptReadWithout" = "القراءة بدون صوت";
+
 "athkarReaderPosition" = "الذكر %d";
 "athkarReaderProgress" = "أنجزت %d من %d";
 "athkarReaderTimes" = "%d مرات";
+"athkarReaderRepetition" = "%1$d / %2$d";
+"athkarReaderRepetitionLabel" = "التكرار %1$d من %2$d";
 "athkarReaderTapHint" = "اضغط على الدائرة للعدّ";
 "athkarReaderDoneHint" = "اكتمل — اضغط للانتقال إلى التالي";
 "athkarReaderMeaning" = "المعنى";
@@ -519,10 +541,15 @@
 "athkarSettingsTextSize" = "حجم الخط";
 "athkarSettingsSizeValue" = "%d٪";
 "athkarSettingsShowTranslation" = "إظهار الترجمة";
+"athkarSettingsLayout" = "نمط القراءة";
+"athkarSettingsLayoutPages" = "صفحات";
+"athkarSettingsLayoutList" = "قائمة";
 "athkarSettingsStartOver" = "ابدأ من جديد";
+"athkarAudioSkipped" = "تم تجاوز الأذكار التي بلا تلاوة.";
 
 "liveStreamTitle" = "البث المباشر";
 
+"storageCategoryQuranPages" = "صفحات المصحف";
 "storageCategoryRecitations" = "التلاوات";
 "storageCategoryHadith" = "كتب الحديث";
 "storageCategoryAthkar" = "الأذكار";
@@ -539,3 +566,161 @@
 "storageDeleteMessageFormat" = "سيُحذف «%@» من جهازك. يمكنك تحميله مرة أخرى في أي وقت.";
 "storageDeleteAllTitle" = "حذف كل المحتوى";
 "storageDeleteAllMessageFormat" = "سيُحذف كل المحتوى المحمّل لـ «%@» من جهازك.";
+
+"quranDownloadsTitle" = "صفحات المصحف";
+"quranDownloadsSettingsRow" = "صفحات المصحف بدون إنترنت";
+"quranDownloadsHeaderCaption" = "الصفحات المحمّلة";
+"quranDownloadsProgressFormat" = "تم تحميل %1$@ من %2$@ جزءًا";
+"quranDownloadsAllDone" = "تم تحميل جميع الأجزاء";
+"quranDownloadsOnDeviceFormat" = "%@ على الجهاز";
+"quranDownloadsDownloadAll" = "تحميل الكل";
+"quranDownloadsCancelAll" = "إلغاء الكل";
+"quranDownloadsDownloadAction" = "تحميل";
+"quranDownloadsBundled" = "مُضمَّن";
+"quranDownloadsPagesFormat" = "الصفحات %1$@–%2$@";
+"quranDownloadsConfirmTitle" = "تحميل الصفحات";
+"quranDownloadsConfirmMessageFormat" = "يحتاج «%1$@» إلى %2$@، وسيبقى على جهازك للقراءة بدون إنترنت.";
+"quranDownloadsConfirmAllTitle" = "تحميل كل الصفحات";
+"quranDownloadsConfirmAllMessageFormat" = "تحتاج %1$@ أجزاء إلى %2$@ إجمالًا، وستبقى على جهازك للقراءة بدون إنترنت.";
+"quranDownloadsEmptyTitle" = "الصفحات غير متاحة";
+"quranDownloadsEmptyMessage" = "اتصل بالإنترنت ليتمكن التطبيق من تحميل قائمة صفحات المصحف.";
+"quranDownloadsOfflineNote" = "الجزء الأول مُضمَّن مع التطبيق، والأجزاء المحمّلة تبقى متاحة بدون اتصال بالإنترنت.";
+"quranDownloadsWaitingNetwork" = "بانتظار الاتصال…";
+
+/* Quran Full Download */
+"quranFullDownloadTitle" = "المصحف كاملًا";
+"quranFullDownloadAction" = "تحميل المصحف كاملًا";
+"quranFullDownloadCancelAction" = "إلغاء التحميل";
+"quranFullDownloadRetryAction" = "إعادة المحاولة";
+"quranFullDownloadDoneAction" = "تم تحميل المصحف";
+"quranFullDownloadIdleDetailFormat" = "%1$@ · يتبقى %2$@ جزءًا للتحميل";
+"quranFullDownloadProgressFormat" = "%1$@ من %2$@ · %3$@";
+"quranFullDownloadInstalling" = "جارٍ التحقق من الصفحات المحمَّلة…";
+"quranFullDownloadFailedDetail" = "لم تكتمل بعض الأجزاء. أعِد المحاولة لتحميل الباقي.";
+"quranFullDownloadNoSpaceFormat" = "يحتاج إلى %@ من المساحة الحرة. أفرِغ مساحة وأعِد المحاولة.";
+"quranFullDownloadIncludesTitle" = "ما يتم تحميله";
+"quranFullDownloadIncludesBody" = "جميع صفحات المصحف كصور، للقراءة بدون اتصال بالإنترنت. أما نص القرآن والبحث وتفسير المختصر فهي مُضمَّنة في التطبيق أصلًا.";
+"quranFullDownloadExcludesBody" = "لا يشمل ذلك تلاوات الصوت ولا كتب التفسير والترجمات الإضافية، فحجمها أكبر بكثير وتُحمَّل من شاشاتها الخاصة.";
+
+/* Quran Page Prompt */
+"quranPagePromptTitle" = "الصفحة غير مُحمَّلة";
+"quranPagePromptBody" = "حمِّل هذا الجزء لقراءة صفحاته بالإنترنت أو بدونه.";
+"quranPagePromptDownloadFormat" = "تحميل · %@";
+"quranPagePromptDownloading" = "جارٍ التحميل…";
+"quranPagePromptInstalling" = "جارٍ تهيئة الصفحات…";
+"quranPagePromptCancel" = "إلغاء";
+"quranPagePromptRetry" = "إعادة المحاولة";
+"quranPagePromptFailed" = "تعذَّر التحميل. تحقَّق من الاتصال وأعِد المحاولة.";
+"quranPagePromptNoSpace" = "لا توجد مساحة كافية. أفرِغ مساحة وأعِد المحاولة.";
+"quranPagePromptUnavailable" = "هذه الصفحة غير متوفرة حاليًا.";
+"quranPagePromptWaitingNetwork" = "بانتظار الاتصال. سيُستأنف التحميل تلقائيًا.";
+
+/* Prayer Notifications */
+"jumuah" = "الجمعة";
+"prayerNotificationsTitle" = "تنبيهات الصلاة";
+"prayerNotificationsSummaryOff" = "متوقفة";
+"prayerNotificationsSummaryCountFormat" = "%1$@ من %2$@ صلوات";
+"prayerNotificationsMasterToggle" = "تنبيهات الصلاة";
+"prayerNotificationsMasterCaption" = "يصلك تنبيه عند دخول وقت كل صلاة في الموقع المختار.";
+"prayerNotificationsAuthorizationDeniedTitle" = "التنبيهات متوقفة";
+"prayerNotificationsAuthorizationDeniedBody" = "التنبيهات محجوبة لهذا التطبيق من النظام، فلن يصلك أي تنبيه. فعِّلها من الإعدادات.";
+"prayerNotificationsOpenSystemSettings" = "فتح الإعدادات";
+"prayerNotificationsEnableAction" = "السماح بالتنبيهات";
+"prayerNotificationsPrayersSection" = "الصلوات المفروضة";
+"prayerNotificationsVoluntarySection" = "تنبيهات اختيارية";
+"prayerNotificationsDuhaCaption" = "محسوب من الشروق والظهر.";
+"prayerNotificationsJumuahCaption" = "الجمعة فقط، في وقت الظهر. ويغني عن تنبيه الظهر في ذلك اليوم.";
+"prayerNotificationsReminderSection" = "تنبيه مُبكِّر";
+"prayerNotificationsReminderToggle" = "نبِّهني قبل كل صلاة";
+"prayerNotificationsReminderLeadFormat" = "قبل %@ دقيقة";
+"prayerNotificationsAlertSection" = "صوت التنبيه";
+"prayerNotificationsStandardToneTitle" = "التنبيه الافتراضي";
+"prayerNotificationsStandardToneCaption" = "نغمة التنبيه الافتراضية في النظام.";
+"prayerNotificationsShortAdhanTitle" = "مقطع أذان قصير";
+"prayerNotificationsShortAdhanCaption" = "مقطع أذان مُضمَّن في التطبيق أقل من ٣٠ ثانية، يشغِّله التنبيه نفسه.";
+"prayerNotificationsShortAdhanMissing" = "لا يوجد مقطع أذان مُضمَّن في هذه النسخة، لذا يُستخدم التنبيه الافتراضي.";
+"prayerNotificationsInAppSection" = "الأذان داخل التطبيق";
+"prayerNotificationsInAppAdhanTitle" = "تشغيل الأذان كاملًا في التطبيق";
+"prayerNotificationsInAppAdhanCaption" = "يُشغَّل الأذان كاملًا أثناء فتح التطبيق فقط. لا يستطيع النظام تشغيله من التنبيه والتطبيق مغلق.";
+"prayerNotificationsInAppAdhanMissing" = "لا يوجد تسجيل أذان كامل مُضمَّن في هذه النسخة.";
+"prayerNotificationsCalculationSection" = "طريقة الحساب";
+"prayerNotificationsMethodTitle" = "طريقة حساب المواقيت";
+"prayerNotificationsSchoolTitle" = "حساب العصر";
+"prayerSchoolStandard" = "المعتاد (الشافعي والمالكي والحنبلي)";
+"prayerSchoolHanafi" = "الحنفي";
+"prayerNotificationsWindowFooterFormat" = "تمت جدولة %1$@ تنبيهًا خلال %2$@ أيام القادمة. يسمح النظام بـ ٦٤ تنبيهًا معلَّقًا فقط، لذا افتح التطبيق من حين لآخر لتستمر التنبيهات.";
+"prayerNotificationAdhanBodyFormat" = "حان وقت %@.";
+"prayerNotificationReminderBodyFormat" = "تبقى %2$@ دقيقة على %1$@.";
+
+// MARK: - Khatmah
+
+"khatmahHomeTile" = "ختمة القرآن";
+"khatmahTitle" = "ختمة القرآن";
+"khatmahReminderTitle" = "ورد الختمة اليومي";
+"khatmahReminderBodyFormat" = "ورد اليوم من صفحة %1$@ إلى %2$@.";
+"khatmahSetupTitle" = "ختمة جديدة";
+"khatmahSetupPaceTitle" = "اختر مدة الختمة";
+"khatmahSetupPaceCaption" = "حدّد مدة الختمة أو التاريخ الذي تريد إتمامها فيه.";
+"khatmahSetupDurationSection" = "المدة";
+"khatmahSetupTargetDateSection" = "تاريخ الإتمام";
+"khatmahSetupStartTitle" = "نقطة البداية";
+"khatmahSetupStartCaption" = "تبدأ ختمتك في هذا التاريخ من هذه الصفحة.";
+"khatmahSetupStartDate" = "تاريخ البدء";
+"khatmahSetupStartPage" = "صفحة البداية";
+"khatmahSetupCreateAction" = "ابدأ الختمة";
+"khatmahDaysFormat" = "%@ يوم";
+"khatmahPagesPerDayFormat" = "حوالي %@ صفحة يوميًا";
+"khatmahReminderSection" = "التذكير اليومي";
+"khatmahReminderToggle" = "تذكيري كل يوم";
+"khatmahReminderTimeTitle" = "وقت التذكير";
+"khatmahNotificationsDeniedBody" = "التنبيهات محجوبة من النظام، فلن يصلك تذكير الختمة اليومي. فعِّلها من الإعدادات.";
+"khatmahTodayTitle" = "ورد اليوم";
+"khatmahPageRangeFormat" = "من صفحة %1$@ إلى %2$@";
+"khatmahPagesCountFormat" = "%@ صفحة";
+"khatmahReadAction" = "اقرأ الآن";
+"khatmahMarkCompleteAction" = "تم القراءة";
+"khatmahTodayDoneTitle" = "أتممت ورد اليوم";
+"khatmahDayOfTotalFormat" = "اليوم %1$@ من %2$@";
+"khatmahProgressTitle" = "التقدم";
+"khatmahRemainingPagesFormat" = "بقيت %@ صفحة";
+"khatmahExpectedCompletionTitle" = "الإتمام المتوقع";
+"khatmahOnScheduleStatus" = "في الموعد";
+"khatmahPagesAheadFormat" = "%@ صفحة قبل الموعد";
+"khatmahPagesBehindFormat" = "%@ صفحة متأخرة";
+"khatmahDaysSectionTitle" = "الخطة اليومية";
+"khatmahDayLabelFormat" = "اليوم %@";
+"khatmahDayStatusCompleted" = "تمت";
+"khatmahDayStatusToday" = "اليوم";
+"khatmahDayStatusMissed" = "فائت";
+"khatmahDayStatusUpcoming" = "قادم";
+"khatmahStartsOnFormat" = "تبدأ في %@";
+"khatmahDeleteAction" = "حذف الختمة";
+"khatmahDeleteTitle" = "حذف هذه الختمة؟";
+"khatmahDeleteMessage" = "ستُحفظ الخطة في السجل وسيتوقف التذكير اليومي.";
+"khatmahCompletedTitle" = "تمت الختمة";
+"khatmahCompletedMessage" = "أتممت الخطة كاملة، تقبل الله منك.";
+"khatmahCompletedCountFormat" = "أتممت %@ ختمة";
+"khatmahEmptyTitle" = "ابدأ ختمة";
+"khatmahEmptyMessage" = "اختر مدة واقرأ القرآن كاملًا، وردًا كل يوم.";
+"khatmahNewPlanAction" = "ختمة جديدة";
+
+// MARK: - Egyptian Radio
+
+"egyptianRadioHomeTile" = "إذاعة القاهرة";
+"egyptianRadioTitle" = "إذاعة القرآن الكريم";
+"egyptianRadioSubtitle" = "من القاهرة";
+"egyptianRadioConnecting" = "جارٍ الاتصال بالإذاعة…";
+"egyptianRadioIdleHint" = "اضغط تشغيل للاستماع إلى البث المباشر.";
+"egyptianRadioLiveNote" = "بث مباشر يحتاج اتصالًا بالإنترنت للتشغيل.";
+
+"contentHomeTile" = "المحتوى";
+"contentTitle" = "المحتوى";
+"contentSubtitle" = "أدلة العمرة والحج";
+"contentEmptyMessage" = "لا يتوفر محتوى لهذا الدليل حاليًا.";
+"contentTopicsCount" = "%d موضوعًا";
+"contentSectionJourney" = "الرحلة";
+"contentSectionLearn" = "تعلّم";
+"contentUmrahTitle" = "رحلة العمرة";
+"contentUmrahSubtitle" = "مناسك العمرة خطوة بخطوة، مع الأدعية والأخطاء الشائعة.";
+"contentHajjTitle" = "دليلك في الحج";
+"contentHajjSubtitle" = "مناسك الحج يومًا بيوم، مع الأركان والشروط والأخطاء الشائعة.";

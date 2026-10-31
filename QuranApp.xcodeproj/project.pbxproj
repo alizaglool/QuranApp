@@ -12,6 +12,7 @@
 		0AF062969D370A21F0C96E25 /* ReciterLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */; };
 		0CA8D7D2B7652268D0FDBC52 /* FullPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D96B5DA5A1045B25C2F23D60 /* FullPlayerView.swift */; };
 		10FF35F853CC761975846A24 /* AudioModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7571D0775518B7FA72F71D9A /* AudioModels.swift */; };
+		1809251DBACB4C629640D24D /* FeaturedSheikhsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B4FEE2D7E14284A2A02F42 /* FeaturedSheikhsCache.swift */; };
 		195A1B50A3CC4CE285E19B0C /* LessonPlayerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7709D829B39A4829A7DF833E /* LessonPlayerViewModel.swift */; };
 		21C94052B00B45578D07AD3C /* YouTubeChannelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1828651FD0741E285475A4E /* YouTubeChannelService.swift */; };
 		2E4D8D4C22244CF0A9C3FD11 /* adhkar.json in Resources */ = {isa = PBXBuildFile; fileRef = F45ABB2CFB4B4500B164A904 /* adhkar.json */; };
@@ -20,22 +21,20 @@
 		535EBD8CD83641FCA390FB18 /* SheikhCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC2DF43D26474C5CAC91C7B6 /* SheikhCardView.swift */; };
 		5ABAC30287B4E688F8838B47 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801A93FD480AA2E4CD4CE921 /* MiniPlayerView.swift */; };
 		6C94842686446A51C0D3F65C /* ReciterLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79584A2647054BD4F800B003 /* ReciterLibrary.swift */; };
-		F8C1A0222FD2000100AA0022 /* ReciterCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0212FD2000100AA0021 /* ReciterCatalog.swift */; };
-		F8C1A0242FD2000100AA0024 /* ReciterCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0232FD2000100AA0023 /* ReciterCatalogService.swift */; };
 		738C6A8F289449B0A7F0270B /* SheikhListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F808A68C98A9446AA043E310 /* SheikhListView.swift */; };
 		874DC48EBDDD347E9BF9E6D0 /* SurahDownloadSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464512F40072C32DC4A66D1F /* SurahDownloadSheet.swift */; };
 		8AA23B868D6540E99D298541 /* LessonPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88367D341E614F228C2DC47A /* LessonPlayerView.swift */; };
 		9D399669B8D24A4BB7B1C3D7 /* SheikhDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4A2F4D7B59413CA3C1A5DB /* SheikhDetailView.swift */; };
 		9D7F05994C4142E18CD56B1C /* SheikhListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */; };
-		A1B2C3D4E5F678901234BCDE /* Audio in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F678901234ABCD /* Audio */; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* AllBookmarksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F4 /* AllBookmarksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */; };
 		AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */; };
 		AA11BB22CC33DD44EE55FF03 /* PlaylistItemsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */; };
 		AA11BB22CC33DD44EE55FF04 /* PlaylistItemsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */; };
 		AA22CC33DD44EE551234ABCF /* PlayToSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */; };
+		AA5101012FD5100100AA5101 /* HomeTodayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5101022FD5100100AA5102 /* HomeTodayCard.swift */; };
+		AA5101032FD5100100AA5103 /* PrayerCompletionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */; };
 		AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */; };
-		F8EB00082FD4000100EB1008 /* HomeFeaturedRecitersSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00082FD4000100EA1008 /* HomeFeaturedRecitersSection.swift */; };
 		B8F58AE72E6C5A9B002673AB /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = B8F58AE62E6C5A9B002673AB /* Core */; };
 		B8F9B7EF80CE3B56C6A7D3C9 /* RepeatSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484E8B69398EA0068B05D21B /* RepeatSettingsSheet.swift */; };
 		BB11CC22DD33EE44FF550012 /* ShortsPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* ShortsPlayerView.swift */; };
@@ -57,10 +56,8 @@
 		E91210AF2E1E6230007EE3E0 /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = E91210AE2E1E6230007EE3E0 /* Core */; };
 		EA8062E4B7E640718C4E8634 /* SheikhDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */; };
 		F0C4A2DB9BFE4E489A853835 /* BatchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFB2BEDE66E44D309E91598E /* BatchService.swift */; };
-		1809251DBACB4C629640D24D /* FeaturedSheikhsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B4FEE2D7E14284A2A02F42 /* FeaturedSheikhsCache.swift */; };
 		F800B3112DB67DDA0035501A /* EmptyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30C2DB67DDA0035501A /* EmptyViewController.swift */; };
 		F800B3122DB67DDA0035501A /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30B2DB67DDA0035501A /* TabBarController.swift */; };
-		FAC200112FC7A00000C20011 /* StatusBarStyleControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC200122FC7A00000C20012 /* StatusBarStyleControllers.swift */; };
 		F800B3152DB67DDA0035501A /* TabBarItem+Tabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B30D2DB67DDA0035501A /* TabBarItem+Tabs.swift */; };
 		F800B3172DB67DDA0035501A /* TabBarController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F800B30A2DB67DDA0035501A /* TabBarController.xib */; };
 		F800B3192DB67FB40035501A /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F800B3182DB67FB40035501A /* AppCoordinator.swift */; };
@@ -96,17 +93,11 @@
 		F84DAA3B2FC893E500C86233 /* HadithDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F84DAA3A2FC893E500C86233 /* HadithDownloadManager.swift */; };
 		F84DAA3D2FC8942000C86233 /* books_manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = F84DAA3C2FC8942000C86233 /* books_manifest.json */; };
 		F87E6B472FD6E9C000E7D5FD /* ShortsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F87E6B462FD6E9C000E7D5FD /* ShortsCardView.swift */; };
-		F88D4B8E2F75FE730025939D /* HafsSmart_08.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */; };
-		F88D4B902F760FB70025939D /* HafsSmart_08_fixed.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */; };
 		F88D4B932F7E8F570025939D /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B922F7E8F570025939D /* StorageManager.swift */; };
 		F88D4B962F7E8F760025939D /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B952F7E8F760025939D /* AppSettings.swift */; };
 		F88D4B982F7E8F7C0025939D /* ReadingProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B972F7E8F7C0025939D /* ReadingProgress.swift */; };
 		F88D4B9A2F7E8F830025939D /* QuranBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B992F7E8F830025939D /* QuranBookmark.swift */; };
 		F88D4B9C2F7E8F880025939D /* AdhkarProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88D4B9B2F7E8F880025939D /* AdhkarProgress.swift */; };
-		F88DD9052F753DAB0025939D /* QuranTitles.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9042F753DAB0025939D /* QuranTitles.ttf */; };
-		F88DD9062F753DAB0025939D /* QuranNumbers.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9032F753DAB0025939D /* QuranNumbers.ttf */; };
-		F88DD9092F753DC10025939D /* Kitab-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9082F753DC10025939D /* Kitab-Regular.ttf */; };
-		F88DD90A2F753DC10025939D /* Kitab-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F88DD9072F753DC10025939D /* Kitab-Bold.ttf */; };
 		F88DD90C2F753DDF0025939D /* quran_positioning.db in Resources */ = {isa = PBXBuildFile; fileRef = F88DD90B2F753DDF0025939D /* quran_positioning.db */; };
 		F88DD90E2F75401B0025939D /* SurahInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD90D2F75401B0025939D /* SurahInfo.swift */; };
 		F88DD9112F7540510025939D /* QuranPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F88DD9102F7540510025939D /* QuranPageView.swift */; };
@@ -135,7 +126,6 @@
 		F8B854DB2FCB4BC1007666A5 /* TafsirDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */; };
 		F8B854DD2FCB4BD7007666A5 /* DailyVerseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B854DC2FCB4BD7007666A5 /* DailyVerseService.swift */; };
 		F8B859992FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F8B859982FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf */; };
-		F8B8599A2FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */; };
 		F8B8599B2FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = F8B859972FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf */; };
 		F8B88D862FCDEFDD007666A5 /* QuranTextPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8B88D852FCDEFDD007666A5 /* QuranTextPageView.swift */; };
 		F8BDD0382F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BDD0372F73F8AF008EFC38 /* PrayerTimesAPIResponse.swift */; };
@@ -148,19 +138,6 @@
 		F8BEB9C42F717879009F1094 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */; };
 		F8BEB9C62F717897009F1094 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C52F717897009F1094 /* HomeViewModel.swift */; };
 		F8BEB9C82F71789E009F1094 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C72F71789E009F1094 /* HomeView.swift */; };
-		F8EA20032FD4200100EA2003 /* HomeNextPrayerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA20042FD4200100EA2004 /* HomeNextPrayerCard.swift */; };
-		FAC100112FD6000100C10011 /* QiblaDirectionCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100212FD6000100C10021 /* QiblaDirectionCalculator.swift */; };
-		FAC100122FD6000100C10012 /* DeviceHeadingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100222FD6000100C10022 /* DeviceHeadingService.swift */; };
-		FAC100132FD6000100C10013 /* QiblaCompassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100232FD6000100C10023 /* QiblaCompassViewModel.swift */; };
-		FAC100142FD6000100C10014 /* QiblaCompassDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100242FD6000100C10024 /* QiblaCompassDial.swift */; };
-		FAC100152FD6000100C10015 /* HomeQiblaCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100252FD6000100C10025 /* HomeQiblaCard.swift */; };
-		FAC100162FD6000100C10016 /* HomePrayerDomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100262FD6000100C10026 /* HomePrayerDomeHeader.swift */; };
-		AA5101012FD5100100AA5101 /* HomeTodayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5101022FD5100100AA5102 /* HomeTodayCard.swift */; };
-		FAC100172FD6000100C10017 /* HomeToolsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100272FD6000100C10027 /* HomeToolsCard.swift */; };
-		FAC1A0052FD6000100C1A005 /* HomeHadithOfTheDayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1A0062FD6000100C1A006 /* HomeHadithOfTheDayCard.swift */; };
-		FAC1A0032FD6000100C1A003 /* HomeContinueReadingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1A0042FD6000100C1A004 /* HomeContinueReadingCard.swift */; };
-		FAC1A0012FD6000100C1A001 /* HomeAthkarNowStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1A0022FD6000100C1A002 /* HomeAthkarNowStrip.swift */; };
-		F8EA20012FD4200100EA2001 /* HomeHeroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA20022FD4200100EA2002 /* HomeHeroHeader.swift */; };
 		F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8BEB9C92F717912009F1094 /* SurahRow.swift */; };
 		F8C118292FCE0ACF009143E2 /* QuranPageBars.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */; };
 		F8C1182B2FCE1342009143E2 /* QuranTafsirPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */; };
@@ -168,69 +145,11 @@
 		F8C1A0022FD1000100AA0002 /* QuranPageImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0012FD1000100AA0001 /* QuranPageImageCache.swift */; };
 		F8C1A0122FD2000100AA0012 /* SheikhChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0112FD2000100AA0011 /* SheikhChannel.swift */; };
 		F8C1A0142FD2000100AA0014 /* sheikhs.json in Resources */ = {isa = PBXBuildFile; fileRef = F8C1A0132FD2000100AA0013 /* sheikhs.json */; };
+		F8C1A0222FD2000100AA0022 /* ReciterCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0212FD2000100AA0021 /* ReciterCatalog.swift */; };
+		F8C1A0242FD2000100AA0024 /* ReciterCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8C1A0232FD2000100AA0023 /* ReciterCatalogService.swift */; };
 		F8C1A0262FD2000100AA0026 /* reciters.json in Resources */ = {isa = PBXBuildFile; fileRef = F8C1A0252FD2000100AA0025 /* reciters.json */; };
+		F8CF00022FD7000600EF2006 /* PrayerClockFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */; };
 		F8D9BC322FD13255008AEC8E /* DailyHadithService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */; };
-		F8F2DC132DC8F11D00001F76 /* CustomPickerItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */; };
-		F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */; };
-		F8FB7F582E10A6C10051D1EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F8FB7F572E10A6C10051D1EA /* InfoPlist.strings */; };
-		F8SD0001AABBCC00001234AB /* ScrollDirectionAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */; };
-		F9AA00012F71800000AA0001 /* AllahNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00002F71800000AA0001 /* AllahNamesView.swift */; };
-		F9AA00032F71800000AA0003 /* MyAdhkarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00022F71800000AA0002 /* MyAdhkarView.swift */; };
-		F9AA00052F71800000AA0005 /* allahNames.json in Resources */ = {isa = PBXBuildFile; fileRef = F9AA00042F71800000AA0004 /* allahNames.json */; };
-		F9AA00062F71800000AA0006 /* TasbihCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00072F71800000AA0007 /* TasbihCounterView.swift */; };
-		F9AA00082F71800000AA0008 /* LovedOnesDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */; };
-		F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F9AA000B2F71800000AA000B /* takbeerat.m4a */; };
-		F9AA00102F71800000AA0010 /* AllahNameReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */; };
-		F9CC00092F71900000CC0009 /* HadithDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */; };
-		F9CC000A2F71900000CC000A /* HadithLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00022F71900000CC0002 /* HadithLibraryView.swift */; };
-		F9CC01022F71900000CC0102 /* HadithBookCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC01012F71900000CC0101 /* HadithBookCoverView.swift */; };
-		F9CC01042F71900000CC0104 /* HadithBookRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC01032F71900000CC0103 /* HadithBookRow.swift */; };
-		F9CC000B2F71900000CC000B /* HadithLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */; };
-		F9CC000C2F71900000CC000C /* HadithChaptersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00042F71900000CC0004 /* HadithChaptersView.swift */; };
-		F9CC000D2F71900000CC000D /* HadithChaptersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */; };
-		F9CC000E2F71900000CC000E /* HadithReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00062F71900000CC0006 /* HadithReadingView.swift */; };
-		F9CC000F2F71900000CC000F /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */; };
-		FA100001000000000000B001 /* HadithMarkup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A001 /* HadithMarkup.swift */; };
-		FA100001000000000000B002 /* HadithReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A002 /* HadithReference.swift */; };
-		FA100001000000000000B003 /* HadithArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A003 /* HadithArchive.swift */; };
-		FA100001000000000000B004 /* HadithBookIDMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A004 /* HadithBookIDMap.swift */; };
-		FA100001000000000000B005 /* HadithManifestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A005 /* HadithManifestService.swift */; };
-		FA100001000000000000B006 /* HadithMarkupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A006 /* HadithMarkupParser.swift */; };
-		FA100001000000000000B010 /* HadithSearchQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A010 /* HadithSearchQuery.swift */; };
-		FA100001000000000000B011 /* HadithSearchPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A011 /* HadithSearchPlanner.swift */; };
-		FA100001000000000000B012 /* HadithSearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A012 /* HadithSearchModels.swift */; };
-		FA100001000000000000B013 /* HadithSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A013 /* HadithSearchResultsView.swift */; };
-		FAC200012FC7A00000C20001 /* ClockWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200012FC7A00000B20001 /* ClockWindow.swift */; };
-		FAC200022FC7A00000C20002 /* DayPrayerTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */; };
-		FAC200032FC7A00000C20003 /* PrayerTimesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */; };
-		FAC200A12FC7A00000C200A1 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A12FC7A00000B200A1 /* DeviceLocationService.swift */; };
-		FAC200A22FC7A00000C200A2 /* SelectedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A22FC7A00000B200A2 /* SelectedLocation.swift */; };
-		FAC200A32FC7A00000C200A3 /* SelectedLocationLabelFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A32FC7A00000B200A3 /* SelectedLocationLabelFormatter.swift */; };
-		FAC200A42FC7A00000C200A4 /* SelectedLocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A42FC7A00000B200A4 /* SelectedLocationStore.swift */; };
-		FAC200A52FC7A00000C200A5 /* CityLookupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A52FC7A00000B200A5 /* CityLookupService.swift */; };
-		AA5101032FD5100100AA5103 /* PrayerCompletionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */; };
-		FAC200042FC7A00000C20004 /* ProhibitedTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200042FC7A00000B20004 /* ProhibitedTimes.swift */; };
-		FAC200052FC7A00000C20005 /* PrayerWindowCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200052FC7A00000B20005 /* PrayerWindowCalculator.swift */; };
-		FAC200062FC7A00000C20006 /* ProhibitedTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200062FC7A00000B20006 /* ProhibitedTimesViewModel.swift */; };
-		FAC200072FC7A00000C20007 /* ProhibitedTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200072FC7A00000B20007 /* ProhibitedTimesView.swift */; };
-		FAC200082FC7A00000C20008 /* ProhibitedTimesBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200082FC7A00000B20008 /* ProhibitedTimesBanner.swift */; };
-		FAC200092FC7A00000C20009 /* prohibited_times.json in Resources */ = {isa = PBXBuildFile; fileRef = FAB200092FC7A00000B20009 /* prohibited_times.json */; };
-		FADC00012FC5A00000DC0001 /* MyDhikr.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00012FC5A00000DB0001 /* MyDhikr.swift */; };
-		FADC00022FC5A00000DC0002 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00022FC5A00000DB0002 /* SectionHeader.swift */; };
-		FADC00032FC5A00000DC0003 /* AdhkarQuickCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */; };
-		FADC00042FC5A00000DC0004 /* SpecialCategoryBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */; };
-		FADC00052FC5A00000DC0005 /* AdhkarCategoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */; };
-		FADC00AA2FC5A00000DCAA01 /* AdhkarCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00AA2FC5A00000DBAA01 /* AdhkarCategoryRow.swift */; };
-		FADC00062FC5A00000DC0006 /* AllahNameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00062FC5A00000DB0006 /* AllahNameCard.swift */; };
-		FADC00072FC5A00000DC0007 /* NamePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00072FC5A00000DB0007 /* NamePageView.swift */; };
-		FADC00082FC5A00000DC0008 /* MyAdhkarCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */; };
-		FADC00092FC5A00000DC0009 /* MyAdhkarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */; };
-		FADC000A2FC5A00000DC000A /* TasbihCounterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */; };
-		FADC000B2FC5A00000DC000B /* DhikrAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */; };
-		FADC000C2FC5A00000DC000C /* DhikrCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000C2FC5A00000DB000C /* DhikrCondition.swift */; };
-		FADC000D2FC5A00000DC000D /* DhikrVisibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */; };
-		FE2A3B4C5D6E7F8901234ABE /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */; };
-		TC001CARD001234AB01 /* TafsirCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC001CARD001234AB00 /* TafsirCardView.swift */; };
 		F8DB00012FD3000100DB1001 /* RadioStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA00012FD3000100DA1001 /* RadioStation.swift */; };
 		F8DB00022FD3000100DB1002 /* RadioCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA00022FD3000100DA1002 /* RadioCatalog.swift */; };
 		F8DB00032FD3000100DB1003 /* RadioCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA00032FD3000100DA1003 /* RadioCatalogService.swift */; };
@@ -241,9 +160,20 @@
 		F8DB00082FD3000100DB1008 /* RadioStationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA00082FD3000100DA1008 /* RadioStationsView.swift */; };
 		F8DB000A2FD3000100DB100A /* RadioStationRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA000A2FD3000100DA100A /* RadioStationRow.swift */; };
 		F8DB000B2FD3000100DB100B /* RadioMiniPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA000B2FD3000100DA100B /* RadioMiniPlayer.swift */; };
+		F8DB000C2FD3000100DB100C /* RadioCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA000C2FD3000100DA100C /* RadioCoordinator.swift */; };
+		F8DB000D2FD3000100DB100D /* radios.json in Resources */ = {isa = PBXBuildFile; fileRef = F8DA000D2FD3000100DA100D /* radios.json */; };
 		F8DB000E2FD3000100DB100E /* LiveChannelCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA000E2FD3000100DA100E /* LiveChannelCard.swift */; };
 		F8DB000F2FD3000100DB100F /* LiveChannelPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA000F2FD3000100DA100F /* LiveChannelPlayerView.swift */; };
-		F8DB000C2FD3000100DB100C /* RadioCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DA000C2FD3000100DA100C /* RadioCoordinator.swift */; };
+		F8DD00012FD7000100DD2001 /* QuranPackDownloadsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000100DD1001 /* QuranPackDownloadsCoordinator.swift */; };
+		F8DD00012FD7000100DD2002 /* QuranPackDownloadsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000100DD1002 /* QuranPackDownloadsViewModel.swift */; };
+		F8DD00012FD7000100DD2003 /* QuranPackDownloadsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000100DD1003 /* QuranPackDownloadsView.swift */; };
+		F8DD00012FD7000100DD2004 /* QuranPackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000100DD1004 /* QuranPackRow.swift */; };
+		F8DD00012FD7000100DD2005 /* QuranFullDownloadStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000100DD1005 /* QuranFullDownloadStatus.swift */; };
+		F8DD00012FD7000200DD2001 /* QuranPageDownloadPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000200DD1001 /* QuranPageDownloadPrompt.swift */; };
+		F8DD00012FD7000200DD2002 /* QuranPageDownloadPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000200DD1002 /* QuranPageDownloadPromptViewModel.swift */; };
+		F8DF00022FD7000600EF2006 /* QiblaCompassRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */; };
+		F8EA20012FD4200100EA2001 /* HomeHeroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA20022FD4200100EA2002 /* HomeHeroHeader.swift */; };
+		F8EA20032FD4200100EA2003 /* HomeNextPrayerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA20042FD4200100EA2004 /* HomeNextPrayerCard.swift */; };
 		F8EB00012FD4000100EB1001 /* RecitationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00012FD4000100EA1001 /* RecitationsCoordinator.swift */; };
 		F8EB00022FD4000100EB1002 /* RecitersListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00022FD4000100EA1002 /* RecitersListViewModel.swift */; };
 		F8EB00032FD4000100EB1003 /* RecitersListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00032FD4000100EA1003 /* RecitersListView.swift */; };
@@ -251,24 +181,24 @@
 		F8EB00052FD4000100EB1005 /* ReciterSurahsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00052FD4000100EA1005 /* ReciterSurahsViewModel.swift */; };
 		F8EB00062FD4000100EB1006 /* ReciterSurahsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00062FD4000100EA1006 /* ReciterSurahsView.swift */; };
 		F8EB00072FD4000100EB1007 /* ReciterSurahRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00072FD4000100EA1007 /* ReciterSurahRowView.swift */; };
+		F8EB00082FD4000100EB1008 /* HomeFeaturedRecitersSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00082FD4000100EA1008 /* HomeFeaturedRecitersSection.swift */; };
 		F8EB00092FD4000100EB1009 /* RecitationsPlayerBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00092FD4000100EA1009 /* RecitationsPlayerBar.swift */; };
 		F8EB000A2FD4000100EB100A /* RecitationsPlayerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA000A2FD4000100EA100A /* RecitationsPlayerSheet.swift */; };
-		F8DB000D2FD3000100DB100D /* radios.json in Resources */ = {isa = PBXBuildFile; fileRef = F8DA000D2FD3000100DA100D /* radios.json */; };
 		F8EE00022FD5000100EE2001 /* WorshipCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000100EE1001 /* WorshipCoordinator.swift */; };
 		F8EE00022FD5000200EE2002 /* WorshipAct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000200EE1002 /* WorshipAct.swift */; };
 		F8EE00022FD5000300EE2003 /* WorshipTrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000300EE1003 /* WorshipTrackerStore.swift */; };
 		F8EE00022FD5000400EE2004 /* WorshipTrackerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000400EE1004 /* WorshipTrackerViewModel.swift */; };
 		F8EE00022FD5000500EE2005 /* WorshipTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000500EE1005 /* WorshipTrackerView.swift */; };
+		F8EE00022FD5000600EE2006 /* WorshipTodayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000600EE1006 /* WorshipTodayCard.swift */; };
+		F8EE00022FD5000700EE2007 /* WorshipActRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000700EE1007 /* WorshipActRow.swift */; };
+		F8EE00022FD5000800EE2008 /* WorshipStreakRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000800EE1008 /* WorshipStreakRow.swift */; };
+		F8EE00022FD5000900EE2009 /* WorshipYearGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000900EE1009 /* WorshipYearGrid.swift */; };
 		F8EE00122FD5000100120001 /* SettingsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00112FD5000100110001 /* SettingsCoordinator.swift */; };
 		F8EE00122FD5000100120002 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00112FD5000100110002 /* SettingsViewModel.swift */; };
 		F8EE00122FD5000100120003 /* SettingsRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00112FD5000100110003 /* SettingsRowView.swift */; };
 		F8EE00122FD5000100120004 /* SettingsAppearancePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00112FD5000100110004 /* SettingsAppearancePickerSheet.swift */; };
 		F8EE00122FD5000100120005 /* SettingsLanguagePickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00112FD5000100110005 /* SettingsLanguagePickerSheet.swift */; };
 		F8EE00122FD5000100120006 /* SettingsAboutSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00112FD5000100110006 /* SettingsAboutSheet.swift */; };
-		F8EE00022FD5000600EE2006 /* WorshipTodayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000600EE1006 /* WorshipTodayCard.swift */; };
-		F8EE00022FD5000700EE2007 /* WorshipActRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000700EE1007 /* WorshipActRow.swift */; };
-		F8EE00022FD5000800EE2008 /* WorshipStreakRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000800EE1008 /* WorshipStreakRow.swift */; };
-		F8EE00022FD5000900EE2009 /* WorshipYearGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00012FD5000900EE1009 /* WorshipYearGrid.swift */; };
 		F8EE00522FD5000100EE2101 /* StorageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00512FD5000100EE1101 /* StorageCoordinator.swift */; };
 		F8EE00522FD5000100EE2102 /* StorageUsage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00512FD5000100EE1102 /* StorageUsage.swift */; };
 		F8EE00522FD5000100EE2103 /* StorageScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00512FD5000100EE1103 /* StorageScanner.swift */; };
@@ -279,15 +209,66 @@
 		F8EE00522FD5000100EE2108 /* StorageGroupCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00512FD5000100EE1108 /* StorageGroupCard.swift */; };
 		F8EE00522FD5000100EE2109 /* StorageEntryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EE00512FD5000100EE1109 /* StorageEntryRow.swift */; };
 		F8EF00022FD6000100EF2001 /* PrayerTimesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EF00012FD6000100EF1001 /* PrayerTimesCoordinator.swift */; };
-		F8F000022FD7000100F02001 /* HomeHeroScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F000012FD7000100F01001 /* HomeHeroScene.swift */; };
-		F8F000022FD7000200F02002 /* HomeLiveStreamSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F000012FD7000200F01002 /* HomeLiveStreamSection.swift */; };
 		F8EF00022FD6000200EF2002 /* PrayerTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EF00012FD6000200EF1002 /* PrayerTimesViewModel.swift */; };
 		F8EF00022FD6000300EF2003 /* LocationPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EF00012FD6000300EF1003 /* LocationPickerViewModel.swift */; };
 		F8EF00022FD6000400EF2004 /* PrayerTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EF00012FD6000400EF1004 /* PrayerTimesView.swift */; };
 		F8EF00022FD6000500EF2005 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EF00012FD6000500EF1005 /* LocationPickerView.swift */; };
 		F8EF00022FD6000600EF2006 /* PrayerTimeRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EF00012FD6000600EF1006 /* PrayerTimeRow.swift */; };
-		F8DF00022FD7000600EF2006 /* QiblaCompassRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */; };
-		F8CF00022FD7000600EF2006 /* PrayerClockFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */; };
+		F8F000022FD7000100F02001 /* HomeHeroScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F000012FD7000100F01001 /* HomeHeroScene.swift */; };
+		F8F000022FD7000200F02002 /* HomeLiveStreamSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F000012FD7000200F01002 /* HomeLiveStreamSection.swift */; };
+		F8F2DC132DC8F11D00001F76 /* CustomPickerItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */; };
+		F8F71DE02DEEF2DB00FA529D /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */; };
+		F8FA00022FD8000200FA2001 /* KhatmahCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1001 /* KhatmahCoordinator.swift */; };
+		F8FA00022FD8000200FA2002 /* KhatmahPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1002 /* KhatmahPlan.swift */; };
+		F8FA00022FD8000200FA2003 /* KhatmahPlanSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1003 /* KhatmahPlanSchedule.swift */; };
+		F8FA00022FD8000200FA2004 /* KhatmahPlanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1004 /* KhatmahPlanStore.swift */; };
+		F8FA00022FD8000200FA2005 /* KhatmahReminderSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1005 /* KhatmahReminderSchedule.swift */; };
+		F8FA00022FD8000200FA2006 /* KhatmahReminderScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1006 /* KhatmahReminderScheduler.swift */; };
+		F8FA00022FD8000200FA2007 /* KhatmahPlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1007 /* KhatmahPlanViewModel.swift */; };
+		F8FA00022FD8000200FA2008 /* KhatmahSetupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1008 /* KhatmahSetupViewModel.swift */; };
+		F8FA00022FD8000200FA2009 /* KhatmahPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1009 /* KhatmahPlanView.swift */; };
+		F8FA00022FD8000200FA200A /* KhatmahSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100A /* KhatmahSetupView.swift */; };
+		F8FA00022FD8000200FA200B /* KhatmahProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100B /* KhatmahProgressRing.swift */; };
+		F8FA00022FD8000200FA200C /* KhatmahDayRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100C /* KhatmahDayRow.swift */; };
+		F8FA00022FD8000200FA200D /* KhatmahCardChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100D /* KhatmahCardChrome.swift */; };
+		F8FB00022FD8000200FB2001 /* EgyptianRadioStationReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FB00012FD8000100FB1001 /* EgyptianRadioStationReference.swift */; };
+		F8FB00022FD8000200FB2002 /* EgyptianRadioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FB00012FD8000100FB1002 /* EgyptianRadioViewModel.swift */; };
+		F8FB00022FD8000200FB2003 /* EgyptianRadioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FB00012FD8000100FB1003 /* EgyptianRadioView.swift */; };
+		F8FB7F582E10A6C10051D1EA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F8FB7F572E10A6C10051D1EA /* InfoPlist.strings */; };
+		F8FC00022FD9000200FC2001 /* ContentCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1001 /* ContentCoordinator.swift */; };
+		F8FC00022FD9000200FC2002 /* GuideContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1002 /* GuideContent.swift */; };
+		F8FC00022FD9000200FC2003 /* GuideContentStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1003 /* GuideContentStore.swift */; };
+		F8FC00022FD9000200FC2004 /* ContentHubViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1004 /* ContentHubViewModel.swift */; };
+		F8FC00022FD9000200FC2005 /* ContentHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1005 /* ContentHubView.swift */; };
+		F8FC00022FD9000200FC2006 /* GuideDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1006 /* GuideDetailViewModel.swift */; };
+		F8FC00022FD9000200FC2007 /* GuideDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1007 /* GuideDetailView.swift */; };
+		F8SD0001AABBCC00001234AB /* ScrollDirectionAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */; };
+		F9AA00012F71800000AA0001 /* AllahNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00002F71800000AA0001 /* AllahNamesView.swift */; };
+		F9AA00032F71800000AA0003 /* MyAdhkarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00022F71800000AA0002 /* MyAdhkarView.swift */; };
+		F9AA00052F71800000AA0005 /* allahNames.json in Resources */ = {isa = PBXBuildFile; fileRef = F9AA00042F71800000AA0004 /* allahNames.json */; };
+		F9AA00062F71800000AA0006 /* TasbihCounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00072F71800000AA0007 /* TasbihCounterView.swift */; };
+		F9AA00082F71800000AA0008 /* LovedOnesDhikrView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */; };
+		F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */ = {isa = PBXBuildFile; fileRef = F9AA000B2F71800000AA000B /* takbeerat.m4a */; };
+		F9AA00102F71800000AA0010 /* AllahNameReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */; };
+		F9CC00092F71900000CC0009 /* HadithDatabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */; };
+		F9CC000A2F71900000CC000A /* HadithLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00022F71900000CC0002 /* HadithLibraryView.swift */; };
+		F9CC000B2F71900000CC000B /* HadithLibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */; };
+		F9CC000C2F71900000CC000C /* HadithChaptersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00042F71900000CC0004 /* HadithChaptersView.swift */; };
+		F9CC000D2F71900000CC000D /* HadithChaptersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */; };
+		F9CC000E2F71900000CC000E /* HadithReadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00062F71900000CC0006 /* HadithReadingView.swift */; };
+		F9CC000F2F71900000CC000F /* HadithReadingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */; };
+		F9CC01022F71900000CC0102 /* HadithBookCoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC01012F71900000CC0101 /* HadithBookCoverView.swift */; };
+		F9CC01042F71900000CC0104 /* HadithBookRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9CC01032F71900000CC0103 /* HadithBookRow.swift */; };
+		FA100001000000000000B001 /* HadithMarkup.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A001 /* HadithMarkup.swift */; };
+		FA100001000000000000B002 /* HadithReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A002 /* HadithReference.swift */; };
+		FA100001000000000000B003 /* HadithArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A003 /* HadithArchive.swift */; };
+		FA100001000000000000B004 /* HadithBookIDMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A004 /* HadithBookIDMap.swift */; };
+		FA100001000000000000B005 /* HadithManifestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A005 /* HadithManifestService.swift */; };
+		FA100001000000000000B006 /* HadithMarkupParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A006 /* HadithMarkupParser.swift */; };
+		FA100001000000000000B010 /* HadithSearchQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A010 /* HadithSearchQuery.swift */; };
+		FA100001000000000000B011 /* HadithSearchPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A011 /* HadithSearchPlanner.swift */; };
+		FA100001000000000000B012 /* HadithSearchModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A012 /* HadithSearchModels.swift */; };
+		FA100001000000000000B013 /* HadithSearchResultsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA100001000000000000A013 /* HadithSearchResultsView.swift */; };
 		FA200001000000000000B001 /* HadithMetaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA200001000000000000A001 /* HadithMetaService.swift */; };
 		FA200001000000000000B002 /* HadithDetailPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA200001000000000000A002 /* HadithDetailPresentation.swift */; };
 		FA200001000000000000B003 /* HadithNarratorPresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA200001000000000000A003 /* HadithNarratorPresentation.swift */; };
@@ -308,6 +289,13 @@
 		FAAE260000000000000B0009 /* Athkar in Resources */ = {isa = PBXBuildFile; fileRef = FAAE260000000000000A0009 /* Athkar */; };
 		FABB0001000000000000B001 /* AthkarHubSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A001 /* AthkarHubSection.swift */; };
 		FABB0001000000000000B002 /* AthkarHubViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A002 /* AthkarHubViewModel.swift */; };
+		FABB0001000000000000B004 /* AthkarHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A004 /* AthkarHubView.swift */; };
+		FABB0001000000000000B005 /* AthkarDownloadControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A005 /* AthkarDownloadControl.swift */; };
+		FABB0001000000000000B006 /* AthkarPackCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A006 /* AthkarPackCard.swift */; };
+		FABB0001000000000000B007 /* AthkarPackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A007 /* AthkarPackRow.swift */; };
+		FABB0001000000000000B008 /* AthkarQuickChipsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A008 /* AthkarQuickChipsRow.swift */; };
+		FABB0001000000000000B009 /* AthkarSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A009 /* AthkarSectionHeaderView.swift */; };
+		FABB0001000000000000B010 /* AthkarTimeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A010 /* AthkarTimeBanner.swift */; };
 		FABB0001000000000000B011 /* AthkarReaderPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A011 /* AthkarReaderPage.swift */; };
 		FABB0001000000000000B012 /* AthkarReaderSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A012 /* AthkarReaderSettings.swift */; };
 		FABB0001000000000000B013 /* AthkarReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A013 /* AthkarReaderViewModel.swift */; };
@@ -316,16 +304,70 @@
 		FABB0001000000000000B016 /* AthkarReaderSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A016 /* AthkarReaderSettingsSheet.swift */; };
 		FABB0001000000000000B017 /* AthkarReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A017 /* AthkarReaderView.swift */; };
 		FABB0001000000000000B018 /* AthkarItemAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A018 /* AthkarItemAudioPlayer.swift */; };
-		FABB0001000000000000B004 /* AthkarHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A004 /* AthkarHubView.swift */; };
-		FABB0001000000000000B005 /* AthkarDownloadControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A005 /* AthkarDownloadControl.swift */; };
-		FABB0001000000000000B006 /* AthkarPackCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A006 /* AthkarPackCard.swift */; };
-		FABB0001000000000000B007 /* AthkarPackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A007 /* AthkarPackRow.swift */; };
-		FABB0001000000000000B008 /* AthkarQuickChipsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A008 /* AthkarQuickChipsRow.swift */; };
-		FABB0001000000000000B009 /* AthkarSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A009 /* AthkarSectionHeaderView.swift */; };
-		FABB0001000000000000B010 /* AthkarTimeBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A010 /* AthkarTimeBanner.swift */; };
+		FABB0001000000000000B050 /* AthkarAudioPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A050 /* AthkarAudioPromptViewModel.swift */; };
+		FABB0001000000000000B051 /* AthkarAudioPromptSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = FABB0001000000000000A051 /* AthkarAudioPromptSheet.swift */; };
+		FAC100112FD6000100C10011 /* QiblaDirectionCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100212FD6000100C10021 /* QiblaDirectionCalculator.swift */; };
+		FAC100122FD6000100C10012 /* DeviceHeadingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100222FD6000100C10022 /* DeviceHeadingService.swift */; };
+		FAC100132FD6000100C10013 /* QiblaCompassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100232FD6000100C10023 /* QiblaCompassViewModel.swift */; };
+		FAC100142FD6000100C10014 /* QiblaCompassDial.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100242FD6000100C10024 /* QiblaCompassDial.swift */; };
+		FAC100152FD6000100C10015 /* HomeQiblaCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100252FD6000100C10025 /* HomeQiblaCard.swift */; };
+		FAC100162FD6000100C10016 /* HomePrayerDomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100262FD6000100C10026 /* HomePrayerDomeHeader.swift */; };
+		FAC100172FD6000100C10017 /* HomeToolsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC100272FD6000100C10027 /* HomeToolsCard.swift */; };
+		FAC1A0012FD6000100C1A001 /* HomeAthkarNowStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1A0022FD6000100C1A002 /* HomeAthkarNowStrip.swift */; };
+		FAC1A0032FD6000100C1A003 /* HomeContinueReadingCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1A0042FD6000100C1A004 /* HomeContinueReadingCard.swift */; };
+		FAC1A0052FD6000100C1A005 /* HomeHadithOfTheDayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1A0062FD6000100C1A006 /* HomeHadithOfTheDayCard.swift */; };
+		FAC200012FC7A00000C20001 /* ClockWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200012FC7A00000B20001 /* ClockWindow.swift */; };
+		FAC200022FC7A00000C20002 /* DayPrayerTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */; };
+		FAC200032FC7A00000C20003 /* PrayerTimesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */; };
+		FAC200042FC7A00000C20004 /* ProhibitedTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200042FC7A00000B20004 /* ProhibitedTimes.swift */; };
+		FAC200052FC7A00000C20005 /* PrayerWindowCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200052FC7A00000B20005 /* PrayerWindowCalculator.swift */; };
+		FAC200062FC7A00000C20006 /* ProhibitedTimesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200062FC7A00000B20006 /* ProhibitedTimesViewModel.swift */; };
+		FAC200072FC7A00000C20007 /* ProhibitedTimesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200072FC7A00000B20007 /* ProhibitedTimesView.swift */; };
+		FAC200082FC7A00000C20008 /* ProhibitedTimesBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200082FC7A00000B20008 /* ProhibitedTimesBanner.swift */; };
+		FAC200092FC7A00000C20009 /* prohibited_times.json in Resources */ = {isa = PBXBuildFile; fileRef = FAB200092FC7A00000B20009 /* prohibited_times.json */; };
+		FAC200112FC7A00000C20011 /* StatusBarStyleControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC200122FC7A00000C20012 /* StatusBarStyleControllers.swift */; };
+		FAC200A12FC7A00000C200A1 /* DeviceLocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A12FC7A00000B200A1 /* DeviceLocationService.swift */; };
+		FAC200A22FC7A00000C200A2 /* SelectedLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A22FC7A00000B200A2 /* SelectedLocation.swift */; };
+		FAC200A32FC7A00000C200A3 /* SelectedLocationLabelFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A32FC7A00000B200A3 /* SelectedLocationLabelFormatter.swift */; };
+		FAC200A42FC7A00000C200A4 /* SelectedLocationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A42FC7A00000B200A4 /* SelectedLocationStore.swift */; };
+		FAC200A52FC7A00000C200A5 /* CityLookupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB200A52FC7A00000B200A5 /* CityLookupService.swift */; };
+		FADC00012FC5A00000DC0001 /* MyDhikr.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00012FC5A00000DB0001 /* MyDhikr.swift */; };
+		FADC00022FC5A00000DC0002 /* SectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00022FC5A00000DB0002 /* SectionHeader.swift */; };
+		FADC00032FC5A00000DC0003 /* AdhkarQuickCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */; };
+		FADC00042FC5A00000DC0004 /* SpecialCategoryBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */; };
+		FADC00052FC5A00000DC0005 /* AdhkarCategoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */; };
+		FADC00062FC5A00000DC0006 /* AllahNameCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00062FC5A00000DB0006 /* AllahNameCard.swift */; };
+		FADC00072FC5A00000DC0007 /* NamePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00072FC5A00000DB0007 /* NamePageView.swift */; };
+		FADC00082FC5A00000DC0008 /* MyAdhkarCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */; };
+		FADC00092FC5A00000DC0009 /* MyAdhkarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */; };
+		FADC000A2FC5A00000DC000A /* TasbihCounterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */; };
+		FADC000B2FC5A00000DC000B /* DhikrAudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */; };
+		FADC000C2FC5A00000DC000C /* DhikrCondition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000C2FC5A00000DB000C /* DhikrCondition.swift */; };
+		FADC000D2FC5A00000DC000D /* DhikrVisibilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */; };
+		FADC00992FC5A00000DC0099 /* LegacyDhikrAudioCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00992FC5A00000DB0099 /* LegacyDhikrAudioCatalog.swift */; };
+		FADC00AA2FC5A00000DCAA01 /* AdhkarCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FADB00AA2FC5A00000DBAA01 /* AdhkarCategoryRow.swift */; };
+		FCD000032FE0000100D00003 /* ContentDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD000022FE0000100D00002 /* ContentDownloader.swift */; };
+		FCD000122FE1000100D00012 /* QuranImagePack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD000112FE1000100D00011 /* QuranImagePack.swift */; };
+		FCD000142FE1000100D00014 /* QuranImageManifestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD000132FE1000100D00013 /* QuranImageManifestService.swift */; };
+		FCD000162FE1000100D00016 /* quran_images_manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = FCD000152FE1000100D00015 /* quran_images_manifest.json */; };
+		FCD000182FE1000100D00018 /* QuranImagePackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD000172FE1000100D00017 /* QuranImagePackStore.swift */; };
+		FCD000212FE0000100D00021 /* ContentCatalogRefresher.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCD000202FE0000100D00020 /* ContentCatalogRefresher.swift */; };
+		FE2A3B4C5D6E7F8901234ABE /* YouTubePlayerKit in Frameworks */ = {isa = PBXBuildFile; productRef = FE2A3B4C5D6E7F8901234ABD /* YouTubePlayerKit */; };
+		TC001CARD001234AB01 /* TafsirCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = TC001CARD001234AB00 /* TafsirCardView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		AA11000000000000000000AB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C88166B42DB662BA00EDECB8 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C88166BB2DB662BA00EDECB8;
+			remoteInfo = QuranApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		03B4FEE2D7E14284A2A02F42 /* FeaturedSheikhsCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedSheikhsCache.swift; sourceTree = "<group>"; };
 		143D1E8731428B60D2178F66 /* AudioEngine.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
 		2512E8FD9FA940318A27AE14 /* SheikhDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhDetailViewModel.swift; sourceTree = "<group>"; };
 		2FED3C3DC74548109FC714CC /* PlaylistCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistCardView.swift; sourceTree = "<group>"; };
@@ -339,21 +381,20 @@
 		7571D0775518B7FA72F71D9A /* AudioModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AudioModels.swift; sourceTree = "<group>"; };
 		7709D829B39A4829A7DF833E /* LessonPlayerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerViewModel.swift; sourceTree = "<group>"; };
 		79584A2647054BD4F800B003 /* ReciterLibrary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterLibrary.swift; sourceTree = "<group>"; };
-		F8C1A0212FD2000100AA0021 /* ReciterCatalog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterCatalog.swift; sourceTree = "<group>"; };
-		F8C1A0232FD2000100AA0023 /* ReciterCatalogService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterCatalogService.swift; sourceTree = "<group>"; };
 		7BB8D5A9704A46E7A4000278 /* SheikhListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhListViewModel.swift; sourceTree = "<group>"; };
 		801A93FD480AA2E4CD4CE921 /* MiniPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MiniPlayerView.swift; sourceTree = "<group>"; };
 		88367D341E614F228C2DC47A /* LessonPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonPlayerView.swift; sourceTree = "<group>"; };
 		992A2F0B24A8BEC68C276E27 /* ReciterLibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterLibraryView.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F678901234ABCD /* Audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Audio; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F3 /* AllBookmarksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F5 /* AllBookmarksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllBookmarksViewModel.swift; sourceTree = "<group>"; };
+		AA11000000000000000000A2 /* QuranAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuranAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "ar-mokhtasar.json"; sourceTree = "<group>"; };
 		AA11BB22CC33DD44EE55FF01 /* PlaylistItemsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsView.swift; sourceTree = "<group>"; };
 		AA11BB22CC33DD44EE55FF02 /* PlaylistItemsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistItemsViewModel.swift; sourceTree = "<group>"; };
 		AA22CC33DD44EE551234ABCE /* PlayToSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayToSheetView.swift; sourceTree = "<group>"; };
+		AA5101022FD5100100AA5102 /* HomeTodayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTodayCard.swift; sourceTree = "<group>"; };
+		AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCompletionStore.swift; sourceTree = "<group>"; };
 		AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeaturedLessonsSection.swift; sourceTree = "<group>"; };
-		F8EA00082FD4000100EA1008 /* HomeFeaturedRecitersSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HomeFeaturedRecitersSection.swift; sourceTree = "<group>"; };
 		ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsCoordinator.swift; sourceTree = "<group>"; };
 		ADE70DA92B7F411787D771F8 /* VideoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCardView.swift; sourceTree = "<group>"; };
 		B1828651FD0741E285475A4E /* YouTubeChannelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeChannelService.swift; sourceTree = "<group>"; };
@@ -374,13 +415,11 @@
 		CF1A2B3C4D5E6F789012ABD0 /* Secrets.xcconfig.example */ = {isa = PBXFileReference; lastKnownFileType = text; path = Secrets.xcconfig.example; sourceTree = "<group>"; };
 		D96B5DA5A1045B25C2F23D60 /* FullPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FullPlayerView.swift; sourceTree = "<group>"; };
 		DFB2BEDE66E44D309E91598E /* BatchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchService.swift; sourceTree = "<group>"; };
-		03B4FEE2D7E14284A2A02F42 /* FeaturedSheikhsCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedSheikhsCache.swift; sourceTree = "<group>"; };
 		E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		EC4A2F4D7B59413CA3C1A5DB /* SheikhDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhDetailView.swift; sourceTree = "<group>"; };
 		F45ABB2CFB4B4500B164A904 /* adhkar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = adhkar.json; sourceTree = "<group>"; };
 		F800B30A2DB67DDA0035501A /* TabBarController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TabBarController.xib; sourceTree = "<group>"; };
 		F800B30B2DB67DDA0035501A /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
-		FAC200122FC7A00000C20012 /* StatusBarStyleControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarStyleControllers.swift; sourceTree = "<group>"; };
 		F800B30C2DB67DDA0035501A /* EmptyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyViewController.swift; sourceTree = "<group>"; };
 		F800B30D2DB67DDA0035501A /* TabBarItem+Tabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TabBarItem+Tabs.swift"; sourceTree = "<group>"; };
 		F800B3182DB67FB40035501A /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
@@ -420,17 +459,11 @@
 		F84DAA3A2FC893E500C86233 /* HadithDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithDownloadManager.swift; sourceTree = "<group>"; };
 		F84DAA3C2FC8942000C86233 /* books_manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = books_manifest.json; sourceTree = "<group>"; };
 		F87E6B462FD6E9C000E7D5FD /* ShortsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortsCardView.swift; sourceTree = "<group>"; };
-		F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = HafsSmart_08.ttf; sourceTree = "<group>"; };
-		F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = HafsSmart_08_fixed.ttf; sourceTree = "<group>"; };
 		F88D4B922F7E8F570025939D /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		F88D4B952F7E8F760025939D /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		F88D4B972F7E8F7C0025939D /* ReadingProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingProgress.swift; sourceTree = "<group>"; };
 		F88D4B992F7E8F830025939D /* QuranBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranBookmark.swift; sourceTree = "<group>"; };
 		F88D4B9B2F7E8F880025939D /* AdhkarProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarProgress.swift; sourceTree = "<group>"; };
-		F88DD9032F753DAB0025939D /* QuranNumbers.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuranNumbers.ttf; sourceTree = "<group>"; };
-		F88DD9042F753DAB0025939D /* QuranTitles.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = QuranTitles.ttf; sourceTree = "<group>"; };
-		F88DD9072F753DC10025939D /* Kitab-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kitab-Bold.ttf"; sourceTree = "<group>"; };
-		F88DD9082F753DC10025939D /* Kitab-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Kitab-Regular.ttf"; sourceTree = "<group>"; };
 		F88DD90B2F753DDF0025939D /* quran_positioning.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = quran_positioning.db; sourceTree = "<group>"; };
 		F88DD90D2F75401B0025939D /* SurahInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahInfo.swift; sourceTree = "<group>"; };
 		F88DD9102F7540510025939D /* QuranPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageView.swift; sourceTree = "<group>"; };
@@ -458,7 +491,6 @@
 		F8B854D82FCB460E007666A5 /* QuranTextService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextService.swift; sourceTree = "<group>"; };
 		F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirDownloadManager.swift; sourceTree = "<group>"; };
 		F8B854DC2FCB4BD7007666A5 /* DailyVerseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVerseService.swift; sourceTree = "<group>"; };
-		F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-Bold.otf"; sourceTree = "<group>"; };
 		F8B859972FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-Regular.otf"; sourceTree = "<group>"; };
 		F8B859982FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "TheYearofHandicrafts-SemiBold.otf"; sourceTree = "<group>"; };
 		F8B88D852FCDEFDD007666A5 /* QuranTextPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTextPageView.swift; sourceTree = "<group>"; };
@@ -472,19 +504,6 @@
 		F8BEB9C32F717879009F1094 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		F8BEB9C52F717897009F1094 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		F8BEB9C72F71789E009F1094 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		F8EA20042FD4200100EA2004 /* HomeNextPrayerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNextPrayerCard.swift; sourceTree = "<group>"; };
-		FAC100212FD6000100C10021 /* QiblaDirectionCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaDirectionCalculator.swift; sourceTree = "<group>"; };
-		FAC100222FD6000100C10022 /* DeviceHeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHeadingService.swift; sourceTree = "<group>"; };
-		FAC100232FD6000100C10023 /* QiblaCompassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassViewModel.swift; sourceTree = "<group>"; };
-		FAC100242FD6000100C10024 /* QiblaCompassDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassDial.swift; sourceTree = "<group>"; };
-		FAC100252FD6000100C10025 /* HomeQiblaCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQiblaCard.swift; sourceTree = "<group>"; };
-		FAC100262FD6000100C10026 /* HomePrayerDomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePrayerDomeHeader.swift; sourceTree = "<group>"; };
-		AA5101022FD5100100AA5102 /* HomeTodayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTodayCard.swift; sourceTree = "<group>"; };
-		FAC100272FD6000100C10027 /* HomeToolsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeToolsCard.swift; sourceTree = "<group>"; };
-		FAC1A0062FD6000100C1A006 /* HomeHadithOfTheDayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHadithOfTheDayCard.swift; sourceTree = "<group>"; };
-		FAC1A0042FD6000100C1A004 /* HomeContinueReadingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContinueReadingCard.swift; sourceTree = "<group>"; };
-		FAC1A0022FD6000100C1A002 /* HomeAthkarNowStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAthkarNowStrip.swift; sourceTree = "<group>"; };
-		F8EA20022FD4200100EA2002 /* HomeHeroHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeroHeader.swift; sourceTree = "<group>"; };
 		F8BEB9C92F717912009F1094 /* SurahRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurahRow.swift; sourceTree = "<group>"; };
 		F8C118282FCE0ACF009143E2 /* QuranPageBars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageBars.swift; sourceTree = "<group>"; };
 		F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranTafsirPageView.swift; sourceTree = "<group>"; };
@@ -492,69 +511,11 @@
 		F8C1A0012FD1000100AA0001 /* QuranPageImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageImageCache.swift; sourceTree = "<group>"; };
 		F8C1A0112FD2000100AA0011 /* SheikhChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheikhChannel.swift; sourceTree = "<group>"; };
 		F8C1A0132FD2000100AA0013 /* sheikhs.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sheikhs.json; sourceTree = "<group>"; };
+		F8C1A0212FD2000100AA0021 /* ReciterCatalog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterCatalog.swift; sourceTree = "<group>"; };
+		F8C1A0232FD2000100AA0023 /* ReciterCatalogService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterCatalogService.swift; sourceTree = "<group>"; };
 		F8C1A0252FD2000100AA0025 /* reciters.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = reciters.json; sourceTree = "<group>"; };
+		F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerClockFormatter.swift; sourceTree = "<group>"; };
 		F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyHadithService.swift; sourceTree = "<group>"; };
-		F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerItems.swift; sourceTree = "<group>"; };
-		F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
-		F8FB7F552E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F8FB7F562E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDirectionAnimationView.swift; sourceTree = "<group>"; };
-		F9AA00002F71800000AA0001 /* AllahNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNamesView.swift; sourceTree = "<group>"; };
-		F9AA00022F71800000AA0002 /* MyAdhkarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarView.swift; sourceTree = "<group>"; };
-		F9AA00042F71800000AA0004 /* allahNames.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allahNames.json; sourceTree = "<group>"; };
-		F9AA00072F71800000AA0007 /* TasbihCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihCounterView.swift; sourceTree = "<group>"; };
-		F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LovedOnesDhikrView.swift; sourceTree = "<group>"; };
-		F9AA000B2F71800000AA000B /* takbeerat.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = takbeerat.m4a; sourceTree = "<group>"; };
-		F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNameReadingView.swift; sourceTree = "<group>"; };
-		F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithDatabaseService.swift; sourceTree = "<group>"; };
-		F9CC00022F71900000CC0002 /* HadithLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryView.swift; sourceTree = "<group>"; };
-		F9CC01012F71900000CC0101 /* HadithBookCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithBookCoverView.swift; sourceTree = "<group>"; };
-		F9CC01032F71900000CC0103 /* HadithBookRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithBookRow.swift; sourceTree = "<group>"; };
-		F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryViewModel.swift; sourceTree = "<group>"; };
-		F9CC00042F71900000CC0004 /* HadithChaptersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersView.swift; sourceTree = "<group>"; };
-		F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersViewModel.swift; sourceTree = "<group>"; };
-		F9CC00062F71900000CC0006 /* HadithReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingView.swift; sourceTree = "<group>"; };
-		F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingViewModel.swift; sourceTree = "<group>"; };
-		FA100001000000000000A001 /* HadithMarkup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithMarkup.swift; sourceTree = "<group>"; };
-		FA100001000000000000A002 /* HadithReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReference.swift; sourceTree = "<group>"; };
-		FA100001000000000000A003 /* HadithArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithArchive.swift; sourceTree = "<group>"; };
-		FA100001000000000000A004 /* HadithBookIDMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithBookIDMap.swift; sourceTree = "<group>"; };
-		FA100001000000000000A005 /* HadithManifestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithManifestService.swift; sourceTree = "<group>"; };
-		FA100001000000000000A006 /* HadithMarkupParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithMarkupParser.swift; sourceTree = "<group>"; };
-		FA100001000000000000A010 /* HadithSearchQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchQuery.swift; sourceTree = "<group>"; };
-		FA100001000000000000A011 /* HadithSearchPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchPlanner.swift; sourceTree = "<group>"; };
-		FA100001000000000000A012 /* HadithSearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchModels.swift; sourceTree = "<group>"; };
-		FA100001000000000000A013 /* HadithSearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchResultsView.swift; sourceTree = "<group>"; };
-		FAB200012FC7A00000B20001 /* ClockWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockWindow.swift; sourceTree = "<group>"; };
-		FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPrayerTimes.swift; sourceTree = "<group>"; };
-		FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesStore.swift; sourceTree = "<group>"; };
-		FAB200A12FC7A00000B200A1 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
-		FAB200A22FC7A00000B200A2 /* SelectedLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocation.swift; sourceTree = "<group>"; };
-		FAB200A32FC7A00000B200A3 /* SelectedLocationLabelFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocationLabelFormatter.swift; sourceTree = "<group>"; };
-		FAB200A42FC7A00000B200A4 /* SelectedLocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocationStore.swift; sourceTree = "<group>"; };
-		FAB200A52FC7A00000B200A5 /* CityLookupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityLookupService.swift; sourceTree = "<group>"; };
-		AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCompletionStore.swift; sourceTree = "<group>"; };
-		FAB200042FC7A00000B20004 /* ProhibitedTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimes.swift; sourceTree = "<group>"; };
-		FAB200052FC7A00000B20005 /* PrayerWindowCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerWindowCalculator.swift; sourceTree = "<group>"; };
-		FAB200062FC7A00000B20006 /* ProhibitedTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimesViewModel.swift; sourceTree = "<group>"; };
-		FAB200072FC7A00000B20007 /* ProhibitedTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimesView.swift; sourceTree = "<group>"; };
-		FAB200082FC7A00000B20008 /* ProhibitedTimesBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimesBanner.swift; sourceTree = "<group>"; };
-		FAB200092FC7A00000B20009 /* prohibited_times.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = prohibited_times.json; sourceTree = "<group>"; };
-		FADB00012FC5A00000DB0001 /* MyDhikr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDhikr.swift; sourceTree = "<group>"; };
-		FADB00022FC5A00000DB0002 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
-		FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarQuickCard.swift; sourceTree = "<group>"; };
-		FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialCategoryBanner.swift; sourceTree = "<group>"; };
-		FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoryCard.swift; sourceTree = "<group>"; };
-		FADB00AA2FC5A00000DBAA01 /* AdhkarCategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoryRow.swift; sourceTree = "<group>"; };
-		FADB00062FC5A00000DB0006 /* AllahNameCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNameCard.swift; sourceTree = "<group>"; };
-		FADB00072FC5A00000DB0007 /* NamePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamePageView.swift; sourceTree = "<group>"; };
-		FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarCard.swift; sourceTree = "<group>"; };
-		FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarViewModel.swift; sourceTree = "<group>"; };
-		FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihCounterViewModel.swift; sourceTree = "<group>"; };
-		FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrAudioService.swift; sourceTree = "<group>"; };
-		FADB000C2FC5A00000DB000C /* DhikrCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrCondition.swift; sourceTree = "<group>"; };
-		FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrVisibilityService.swift; sourceTree = "<group>"; };
-		TC001CARD001234AB00 /* TafsirCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirCardView.swift; sourceTree = "<group>"; };
 		F8DA00012FD3000100DA1001 /* RadioStation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioStation.swift; sourceTree = "<group>"; };
 		F8DA00022FD3000100DA1002 /* RadioCatalog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioCatalog.swift; sourceTree = "<group>"; };
 		F8DA00032FD3000100DA1003 /* RadioCatalogService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioCatalogService.swift; sourceTree = "<group>"; };
@@ -565,9 +526,18 @@
 		F8DA00082FD3000100DA1008 /* RadioStationsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioStationsView.swift; sourceTree = "<group>"; };
 		F8DA000A2FD3000100DA100A /* RadioStationRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioStationRow.swift; sourceTree = "<group>"; };
 		F8DA000B2FD3000100DA100B /* RadioMiniPlayer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioMiniPlayer.swift; sourceTree = "<group>"; };
+		F8DA000C2FD3000100DA100C /* RadioCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioCoordinator.swift; sourceTree = "<group>"; };
+		F8DA000D2FD3000100DA100D /* radios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = radios.json; sourceTree = "<group>"; };
 		F8DA000E2FD3000100DA100E /* LiveChannelCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveChannelCard.swift; sourceTree = "<group>"; };
 		F8DA000F2FD3000100DA100F /* LiveChannelPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LiveChannelPlayerView.swift; sourceTree = "<group>"; };
-		F8DA000C2FD3000100DA100C /* RadioCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RadioCoordinator.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000100DD1001 /* QuranPackDownloadsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPackDownloadsCoordinator.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000100DD1002 /* QuranPackDownloadsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPackDownloadsViewModel.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000100DD1003 /* QuranPackDownloadsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPackDownloadsView.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000100DD1004 /* QuranPackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPackRow.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000100DD1005 /* QuranFullDownloadStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranFullDownloadStatus.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000200DD1001 /* QuranPageDownloadPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageDownloadPrompt.swift; sourceTree = "<group>"; };
+		F8DD00012FD7000200DD1002 /* QuranPageDownloadPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageDownloadPromptViewModel.swift; sourceTree = "<group>"; };
+		F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassRing.swift; sourceTree = "<group>"; };
 		F8EA00012FD4000100EA1001 /* RecitationsCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitationsCoordinator.swift; sourceTree = "<group>"; };
 		F8EA00022FD4000100EA1002 /* RecitersListViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitersListViewModel.swift; sourceTree = "<group>"; };
 		F8EA00032FD4000100EA1003 /* RecitersListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitersListView.swift; sourceTree = "<group>"; };
@@ -575,24 +545,26 @@
 		F8EA00052FD4000100EA1005 /* ReciterSurahsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterSurahsViewModel.swift; sourceTree = "<group>"; };
 		F8EA00062FD4000100EA1006 /* ReciterSurahsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterSurahsView.swift; sourceTree = "<group>"; };
 		F8EA00072FD4000100EA1007 /* ReciterSurahRowView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterSurahRowView.swift; sourceTree = "<group>"; };
+		F8EA00082FD4000100EA1008 /* HomeFeaturedRecitersSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HomeFeaturedRecitersSection.swift; sourceTree = "<group>"; };
 		F8EA00092FD4000100EA1009 /* RecitationsPlayerBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitationsPlayerBar.swift; sourceTree = "<group>"; };
 		F8EA000A2FD4000100EA100A /* RecitationsPlayerSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitationsPlayerSheet.swift; sourceTree = "<group>"; };
-		F8DA000D2FD3000100DA100D /* radios.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = radios.json; sourceTree = "<group>"; };
+		F8EA20022FD4200100EA2002 /* HomeHeroHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeroHeader.swift; sourceTree = "<group>"; };
+		F8EA20042FD4200100EA2004 /* HomeNextPrayerCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNextPrayerCard.swift; sourceTree = "<group>"; };
 		F8EE00012FD5000100EE1001 /* WorshipCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipCoordinator.swift; sourceTree = "<group>"; };
 		F8EE00012FD5000200EE1002 /* WorshipAct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipAct.swift; sourceTree = "<group>"; };
 		F8EE00012FD5000300EE1003 /* WorshipTrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipTrackerStore.swift; sourceTree = "<group>"; };
 		F8EE00012FD5000400EE1004 /* WorshipTrackerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipTrackerViewModel.swift; sourceTree = "<group>"; };
 		F8EE00012FD5000500EE1005 /* WorshipTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipTrackerView.swift; sourceTree = "<group>"; };
+		F8EE00012FD5000600EE1006 /* WorshipTodayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipTodayCard.swift; sourceTree = "<group>"; };
+		F8EE00012FD5000700EE1007 /* WorshipActRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipActRow.swift; sourceTree = "<group>"; };
+		F8EE00012FD5000800EE1008 /* WorshipStreakRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipStreakRow.swift; sourceTree = "<group>"; };
+		F8EE00012FD5000900EE1009 /* WorshipYearGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipYearGrid.swift; sourceTree = "<group>"; };
 		F8EE00112FD5000100110001 /* SettingsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCoordinator.swift; sourceTree = "<group>"; };
 		F8EE00112FD5000100110002 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
 		F8EE00112FD5000100110003 /* SettingsRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRowView.swift; sourceTree = "<group>"; };
 		F8EE00112FD5000100110004 /* SettingsAppearancePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAppearancePickerSheet.swift; sourceTree = "<group>"; };
 		F8EE00112FD5000100110005 /* SettingsLanguagePickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLanguagePickerSheet.swift; sourceTree = "<group>"; };
 		F8EE00112FD5000100110006 /* SettingsAboutSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAboutSheet.swift; sourceTree = "<group>"; };
-		F8EE00012FD5000600EE1006 /* WorshipTodayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipTodayCard.swift; sourceTree = "<group>"; };
-		F8EE00012FD5000700EE1007 /* WorshipActRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipActRow.swift; sourceTree = "<group>"; };
-		F8EE00012FD5000800EE1008 /* WorshipStreakRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipStreakRow.swift; sourceTree = "<group>"; };
-		F8EE00012FD5000900EE1009 /* WorshipYearGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorshipYearGrid.swift; sourceTree = "<group>"; };
 		F8EE00512FD5000100EE1101 /* StorageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageCoordinator.swift; sourceTree = "<group>"; };
 		F8EE00512FD5000100EE1102 /* StorageUsage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUsage.swift; sourceTree = "<group>"; };
 		F8EE00512FD5000100EE1103 /* StorageScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageScanner.swift; sourceTree = "<group>"; };
@@ -603,15 +575,67 @@
 		F8EE00512FD5000100EE1108 /* StorageGroupCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageGroupCard.swift; sourceTree = "<group>"; };
 		F8EE00512FD5000100EE1109 /* StorageEntryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageEntryRow.swift; sourceTree = "<group>"; };
 		F8EF00012FD6000100EF1001 /* PrayerTimesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesCoordinator.swift; sourceTree = "<group>"; };
-		F8F000012FD7000100F01001 /* HomeHeroScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeroScene.swift; sourceTree = "<group>"; };
-		F8F000012FD7000200F01002 /* HomeLiveStreamSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLiveStreamSection.swift; sourceTree = "<group>"; };
 		F8EF00012FD6000200EF1002 /* PrayerTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesViewModel.swift; sourceTree = "<group>"; };
 		F8EF00012FD6000300EF1003 /* LocationPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerViewModel.swift; sourceTree = "<group>"; };
 		F8EF00012FD6000400EF1004 /* PrayerTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesView.swift; sourceTree = "<group>"; };
 		F8EF00012FD6000500EF1005 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		F8EF00012FD6000600EF1006 /* PrayerTimeRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimeRow.swift; sourceTree = "<group>"; };
-		F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassRing.swift; sourceTree = "<group>"; };
-		F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerClockFormatter.swift; sourceTree = "<group>"; };
+		F8F000012FD7000100F01001 /* HomeHeroScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeroScene.swift; sourceTree = "<group>"; };
+		F8F000012FD7000200F01002 /* HomeLiveStreamSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLiveStreamSection.swift; sourceTree = "<group>"; };
+		F8F2DC122DC8F11D00001F76 /* CustomPickerItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerItems.swift; sourceTree = "<group>"; };
+		F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1001 /* KhatmahCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahCoordinator.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1002 /* KhatmahPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahPlan.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1003 /* KhatmahPlanSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahPlanSchedule.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1004 /* KhatmahPlanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahPlanStore.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1005 /* KhatmahReminderSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahReminderSchedule.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1006 /* KhatmahReminderScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahReminderScheduler.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1007 /* KhatmahPlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahPlanViewModel.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1008 /* KhatmahSetupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahSetupViewModel.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1009 /* KhatmahPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahPlanView.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA100A /* KhatmahSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahSetupView.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA100B /* KhatmahProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahProgressRing.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA100C /* KhatmahDayRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahDayRow.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA100D /* KhatmahCardChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahCardChrome.swift; sourceTree = "<group>"; };
+		F8FB00012FD8000100FB1001 /* EgyptianRadioStationReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EgyptianRadioStationReference.swift; sourceTree = "<group>"; };
+		F8FB00012FD8000100FB1002 /* EgyptianRadioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EgyptianRadioViewModel.swift; sourceTree = "<group>"; };
+		F8FB00012FD8000100FB1003 /* EgyptianRadioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EgyptianRadioView.swift; sourceTree = "<group>"; };
+		F8FB7F552E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F8FB7F562E10A6C10051D1EA /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1001 /* ContentCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCoordinator.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1002 /* GuideContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideContent.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1003 /* GuideContentStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideContentStore.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1004 /* ContentHubViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentHubViewModel.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1005 /* ContentHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentHubView.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1006 /* GuideDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideDetailViewModel.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1007 /* GuideDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideDetailView.swift; sourceTree = "<group>"; };
+		F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDirectionAnimationView.swift; sourceTree = "<group>"; };
+		F9AA00002F71800000AA0001 /* AllahNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNamesView.swift; sourceTree = "<group>"; };
+		F9AA00022F71800000AA0002 /* MyAdhkarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarView.swift; sourceTree = "<group>"; };
+		F9AA00042F71800000AA0004 /* allahNames.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = allahNames.json; sourceTree = "<group>"; };
+		F9AA00072F71800000AA0007 /* TasbihCounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihCounterView.swift; sourceTree = "<group>"; };
+		F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LovedOnesDhikrView.swift; sourceTree = "<group>"; };
+		F9AA000B2F71800000AA000B /* takbeerat.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = takbeerat.m4a; sourceTree = "<group>"; };
+		F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNameReadingView.swift; sourceTree = "<group>"; };
+		F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithDatabaseService.swift; sourceTree = "<group>"; };
+		F9CC00022F71900000CC0002 /* HadithLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryView.swift; sourceTree = "<group>"; };
+		F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithLibraryViewModel.swift; sourceTree = "<group>"; };
+		F9CC00042F71900000CC0004 /* HadithChaptersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersView.swift; sourceTree = "<group>"; };
+		F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithChaptersViewModel.swift; sourceTree = "<group>"; };
+		F9CC00062F71900000CC0006 /* HadithReadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingView.swift; sourceTree = "<group>"; };
+		F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReadingViewModel.swift; sourceTree = "<group>"; };
+		F9CC01012F71900000CC0101 /* HadithBookCoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithBookCoverView.swift; sourceTree = "<group>"; };
+		F9CC01032F71900000CC0103 /* HadithBookRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithBookRow.swift; sourceTree = "<group>"; };
+		FA100001000000000000A001 /* HadithMarkup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithMarkup.swift; sourceTree = "<group>"; };
+		FA100001000000000000A002 /* HadithReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithReference.swift; sourceTree = "<group>"; };
+		FA100001000000000000A003 /* HadithArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithArchive.swift; sourceTree = "<group>"; };
+		FA100001000000000000A004 /* HadithBookIDMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithBookIDMap.swift; sourceTree = "<group>"; };
+		FA100001000000000000A005 /* HadithManifestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithManifestService.swift; sourceTree = "<group>"; };
+		FA100001000000000000A006 /* HadithMarkupParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithMarkupParser.swift; sourceTree = "<group>"; };
+		FA100001000000000000A010 /* HadithSearchQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchQuery.swift; sourceTree = "<group>"; };
+		FA100001000000000000A011 /* HadithSearchPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchPlanner.swift; sourceTree = "<group>"; };
+		FA100001000000000000A012 /* HadithSearchModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchModels.swift; sourceTree = "<group>"; };
+		FA100001000000000000A013 /* HadithSearchResultsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithSearchResultsView.swift; sourceTree = "<group>"; };
 		FA200001000000000000A001 /* HadithMetaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithMetaService.swift; sourceTree = "<group>"; };
 		FA200001000000000000A002 /* HadithDetailPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithDetailPresentation.swift; sourceTree = "<group>"; };
 		FA200001000000000000A003 /* HadithNarratorPresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HadithNarratorPresentation.swift; sourceTree = "<group>"; };
@@ -630,8 +654,29 @@
 		FAAE260000000000000A0007 /* AthkarFavoritesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarFavoritesStore.swift; sourceTree = "<group>"; };
 		FAAE260000000000000A0008 /* AthkarCompletionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarCompletionStore.swift; sourceTree = "<group>"; };
 		FAAE260000000000000A0009 /* Athkar */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Athkar; sourceTree = "<group>"; };
+		FAB200012FC7A00000B20001 /* ClockWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClockWindow.swift; sourceTree = "<group>"; };
+		FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayPrayerTimes.swift; sourceTree = "<group>"; };
+		FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerTimesStore.swift; sourceTree = "<group>"; };
+		FAB200042FC7A00000B20004 /* ProhibitedTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimes.swift; sourceTree = "<group>"; };
+		FAB200052FC7A00000B20005 /* PrayerWindowCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerWindowCalculator.swift; sourceTree = "<group>"; };
+		FAB200062FC7A00000B20006 /* ProhibitedTimesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimesViewModel.swift; sourceTree = "<group>"; };
+		FAB200072FC7A00000B20007 /* ProhibitedTimesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimesView.swift; sourceTree = "<group>"; };
+		FAB200082FC7A00000B20008 /* ProhibitedTimesBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProhibitedTimesBanner.swift; sourceTree = "<group>"; };
+		FAB200092FC7A00000B20009 /* prohibited_times.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = prohibited_times.json; sourceTree = "<group>"; };
+		FAB200A12FC7A00000B200A1 /* DeviceLocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLocationService.swift; sourceTree = "<group>"; };
+		FAB200A22FC7A00000B200A2 /* SelectedLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocation.swift; sourceTree = "<group>"; };
+		FAB200A32FC7A00000B200A3 /* SelectedLocationLabelFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocationLabelFormatter.swift; sourceTree = "<group>"; };
+		FAB200A42FC7A00000B200A4 /* SelectedLocationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedLocationStore.swift; sourceTree = "<group>"; };
+		FAB200A52FC7A00000B200A5 /* CityLookupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityLookupService.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A001 /* AthkarHubSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarHubSection.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A002 /* AthkarHubViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarHubViewModel.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A004 /* AthkarHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarHubView.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A005 /* AthkarDownloadControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarDownloadControl.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A006 /* AthkarPackCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarPackCard.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A007 /* AthkarPackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarPackRow.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A008 /* AthkarQuickChipsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarQuickChipsRow.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A009 /* AthkarSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarSectionHeaderView.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A010 /* AthkarTimeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarTimeBanner.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A011 /* AthkarReaderPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarReaderPage.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A012 /* AthkarReaderSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarReaderSettings.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A013 /* AthkarReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarReaderViewModel.swift; sourceTree = "<group>"; };
@@ -640,20 +685,56 @@
 		FABB0001000000000000A016 /* AthkarReaderSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarReaderSettingsSheet.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A017 /* AthkarReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarReaderView.swift; sourceTree = "<group>"; };
 		FABB0001000000000000A018 /* AthkarItemAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarItemAudioPlayer.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A004 /* AthkarHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarHubView.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A005 /* AthkarDownloadControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarDownloadControl.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A006 /* AthkarPackCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarPackCard.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A007 /* AthkarPackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarPackRow.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A008 /* AthkarQuickChipsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarQuickChipsRow.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A009 /* AthkarSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarSectionHeaderView.swift; sourceTree = "<group>"; };
-		FABB0001000000000000A010 /* AthkarTimeBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarTimeBanner.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A050 /* AthkarAudioPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarAudioPromptViewModel.swift; sourceTree = "<group>"; };
+		FABB0001000000000000A051 /* AthkarAudioPromptSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AthkarAudioPromptSheet.swift; sourceTree = "<group>"; };
+		FAC100212FD6000100C10021 /* QiblaDirectionCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaDirectionCalculator.swift; sourceTree = "<group>"; };
+		FAC100222FD6000100C10022 /* DeviceHeadingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceHeadingService.swift; sourceTree = "<group>"; };
+		FAC100232FD6000100C10023 /* QiblaCompassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassViewModel.swift; sourceTree = "<group>"; };
+		FAC100242FD6000100C10024 /* QiblaCompassDial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassDial.swift; sourceTree = "<group>"; };
+		FAC100252FD6000100C10025 /* HomeQiblaCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeQiblaCard.swift; sourceTree = "<group>"; };
+		FAC100262FD6000100C10026 /* HomePrayerDomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePrayerDomeHeader.swift; sourceTree = "<group>"; };
+		FAC100272FD6000100C10027 /* HomeToolsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeToolsCard.swift; sourceTree = "<group>"; };
+		FAC1A0022FD6000100C1A002 /* HomeAthkarNowStrip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAthkarNowStrip.swift; sourceTree = "<group>"; };
+		FAC1A0042FD6000100C1A004 /* HomeContinueReadingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeContinueReadingCard.swift; sourceTree = "<group>"; };
+		FAC1A0062FD6000100C1A006 /* HomeHadithOfTheDayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHadithOfTheDayCard.swift; sourceTree = "<group>"; };
+		FAC200122FC7A00000C20012 /* StatusBarStyleControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarStyleControllers.swift; sourceTree = "<group>"; };
+		FADB00012FC5A00000DB0001 /* MyDhikr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDhikr.swift; sourceTree = "<group>"; };
+		FADB00022FC5A00000DB0002 /* SectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionHeader.swift; sourceTree = "<group>"; };
+		FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarQuickCard.swift; sourceTree = "<group>"; };
+		FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecialCategoryBanner.swift; sourceTree = "<group>"; };
+		FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoryCard.swift; sourceTree = "<group>"; };
+		FADB00062FC5A00000DB0006 /* AllahNameCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNameCard.swift; sourceTree = "<group>"; };
+		FADB00072FC5A00000DB0007 /* NamePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamePageView.swift; sourceTree = "<group>"; };
+		FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarCard.swift; sourceTree = "<group>"; };
+		FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarViewModel.swift; sourceTree = "<group>"; };
+		FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasbihCounterViewModel.swift; sourceTree = "<group>"; };
+		FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrAudioService.swift; sourceTree = "<group>"; };
+		FADB000C2FC5A00000DB000C /* DhikrCondition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrCondition.swift; sourceTree = "<group>"; };
+		FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DhikrVisibilityService.swift; sourceTree = "<group>"; };
+		FADB00992FC5A00000DB0099 /* LegacyDhikrAudioCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyDhikrAudioCatalog.swift; sourceTree = "<group>"; };
+		FADB00AA2FC5A00000DBAA01 /* AdhkarCategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhkarCategoryRow.swift; sourceTree = "<group>"; };
+		FCD000022FE0000100D00002 /* ContentDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentDownloader.swift; sourceTree = "<group>"; };
+		FCD000112FE1000100D00011 /* QuranImagePack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranImagePack.swift; sourceTree = "<group>"; };
+		FCD000132FE1000100D00013 /* QuranImageManifestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranImageManifestService.swift; sourceTree = "<group>"; };
+		FCD000152FE1000100D00015 /* quran_images_manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = quran_images_manifest.json; sourceTree = "<group>"; };
+		FCD000172FE1000100D00017 /* QuranImagePackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranImagePackStore.swift; sourceTree = "<group>"; };
+		FCD000202FE0000100D00020 /* ContentCatalogRefresher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCatalogRefresher.swift; sourceTree = "<group>"; };
+		TC001CARD001234AB00 /* TafsirCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TafsirCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		F88D4B8B2F75487F0025939D /* quran-images */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, ); path = "quran-images"; sourceTree = "<group>"; };
+		AA11000000000000000000A3 /* QuranAppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = QuranAppTests; sourceTree = "<group>"; };
+		F88D4B8B2F75487F0025939D /* quran-images */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ); path = "quran-images"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA11000000000000000000A8 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C88166B92DB662BA00EDECB8 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -818,6 +899,7 @@
 			children = (
 				C88166E62DB6659200EDECB8 /* Core */,
 				C88166BE2DB662BA00EDECB8 /* QuranApp */,
+				AA11000000000000000000A3 /* QuranAppTests */,
 				C88166BD2DB662BA00EDECB8 /* Products */,
 				C88166E72DB6669F00EDECB8 /* Frameworks */,
 			);
@@ -827,6 +909,7 @@
 			isa = PBXGroup;
 			children = (
 				C88166BC2DB662BA00EDECB8 /* QuranApp.app */,
+				AA11000000000000000000A2 /* QuranAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -972,6 +1055,8 @@
 				F8EC00012FD4000100EC1001 /* Recitations */,
 				F8EE00032FD5000100EE3001 /* Worship */,
 				F8EF00032FD6000100EF3001 /* PrayerTimes */,
+				F8FA00032FD8000300FA3001 /* Khatmah */,
+				F8FC00032FD9000300FC3001 /* Content */,
 			);
 			path = Feature;
 			sourceTree = "<group>";
@@ -988,6 +1073,7 @@
 				FAA200012FC7A00000A20001 /* PrayerTimes */,
 				FAA200A12FC7A00000A200A1 /* Location */,
 				FAC100012FD6000100C10001 /* Qibla */,
+				FCD000012FE0000100D00001 /* ContentDownload */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1076,6 +1162,7 @@
 				FADB00012FC5A00000DB0001 /* MyDhikr.swift */,
 				FADB000C2FC5A00000DB000C /* DhikrCondition.swift */,
 				FAB200042FC7A00000B20004 /* ProhibitedTimes.swift */,
+				FADB00992FC5A00000DB0099 /* LegacyDhikrAudioCatalog.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1148,6 +1235,7 @@
 			isa = PBXGroup;
 			children = (
 				F8B651EA2F85140E00C4C7EC /* QuranPager */,
+				F8DD00012FD7000100DD3001 /* Downloads */,
 				TA001TAFR001234AB01 /* Tafsir */,
 				SE001SETT001234AB01 /* Settings */,
 				HO001HOME001234AB01 /* Home */,
@@ -1174,6 +1262,7 @@
 				F8B88D852FCDEFDD007666A5 /* QuranTextPageView.swift */,
 				F88DD9142F7540610025939D /* QuranPagerView.swift */,
 				F88DD9102F7540510025939D /* QuranPageView.swift */,
+				F8DD00012FD7000200DD1001 /* QuranPageDownloadPrompt.swift */,
 				F8B651F02F853B3E00C4C7EC /* LongPressLocationView.swift */,
 				F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */,
 			);
@@ -1184,6 +1273,7 @@
 			isa = PBXGroup;
 			children = (
 				F88DD9122F75405A0025939D /* QuranViewModel.swift */,
+				F8DD00012FD7000200DD1002 /* QuranPageDownloadPromptViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1191,13 +1281,6 @@
 		F8B8599C2FCCB0F3007666A5 /* Font */ = {
 			isa = PBXGroup;
 			children = (
-				F88DD9072F753DC10025939D /* Kitab-Bold.ttf */,
-				F88DD9082F753DC10025939D /* Kitab-Regular.ttf */,
-				F88D4B8D2F75FE730025939D /* HafsSmart_08.ttf */,
-				F88D4B8F2F760FB70025939D /* HafsSmart_08_fixed.ttf */,
-				F88DD9032F753DAB0025939D /* QuranNumbers.ttf */,
-				F88DD9042F753DAB0025939D /* QuranTitles.ttf */,
-				F8B859962FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf */,
 				F8B859972FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf */,
 				F8B859982FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf */,
 			);
@@ -1230,6 +1313,7 @@
 				F8B854D62FCAFF22007666A5 /* DailyVerse.swift */,
 				F8BEB9B62F717468009F1094 /* LastReadEntity.swift */,
 				F8BEB9B42F71745A009F1094 /* AyahEntity.swift */,
+				FCD000112FE1000100D00011 /* QuranImagePack.swift */,
 				F8BEB9B22F71744C009F1094 /* SurahEntity.swift */,
 			);
 			path = Models;
@@ -1251,6 +1335,8 @@
 				F8B854DA2FCB4BC1007666A5 /* TafsirDownloadManager.swift */,
 				F8B854D82FCB460E007666A5 /* QuranTextService.swift */,
 				F8C1A0012FD1000100AA0001 /* QuranPageImageCache.swift */,
+				FCD000132FE1000100D00013 /* QuranImageManifestService.swift */,
+				FCD000172FE1000100D00017 /* QuranImagePackStore.swift */,
 				BB11DD22EE33FF441234AB00 /* QuranSearchService.swift */,
 				F8B854D02FCAFD5A007666A5 /* TafsirService.swift */,
 				F8B854BE2FCA324E007666A5 /* TafsirDatabase.swift */,
@@ -1301,448 +1387,6 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		F8F71DE12DEEF2E900FA529D /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				FAAE260000000000000A0009 /* Athkar */,
-				F88D4B8B2F75487F0025939D /* quran-images */,
-				F88DD90B2F753DDF0025939D /* quran_positioning.db */,
-				FA200001000000000000A009 /* hadith_meta.sqlite */,
-				F8B8599C2FCCB0F3007666A5 /* Font */,
-				C88166C82DB662BC00EDECB8 /* Assets.xcassets */,
-				F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */,
-				F8B854A82FC9BDB0007666A5 /* quran_text.json */,
-				F8C1A0132FD2000100AA0013 /* sheikhs.json */,
-				F8C1A0252FD2000100AA0025 /* reciters.json */,
-				F8DA000D2FD3000100DA100D /* radios.json */,
-				AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */,
-				F84DAA3C2FC8942000C86233 /* books_manifest.json */,
-				F45ABB2CFB4B4500B164A904 /* adhkar.json */,
-				FAB200092FC7A00000B20009 /* prohibited_times.json */,
-				F9AA00042F71800000AA0004 /* allahNames.json */,
-				F9AA000B2F71800000AA000B /* takbeerat.m4a */,
-				A1B2C3D4E5F678901234ABCD /* Audio */,
-			);
-			path = Resources;
-			sourceTree = "<group>";
-		};
-		F9BB00012F71800000BB0001 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				FADA00032FC5A00000DA0003 /* View */,
-				FADA00052FC5A00000DA0005 /* ViewModel */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		F9BB00022F71800000BB0002 /* Reading */ = {
-			isa = PBXGroup;
-			children = (
-				FADA00062FC5A00000DA0006 /* View */,
-				FADA00072FC5A00000DA0007 /* ViewModel */,
-			);
-			path = Reading;
-			sourceTree = "<group>";
-		};
-		F9BB00032F71800000BB0003 /* AllahNames */ = {
-			isa = PBXGroup;
-			children = (
-				FADA00082FC5A00000DA0008 /* View */,
-			);
-			path = AllahNames;
-			sourceTree = "<group>";
-		};
-		F9BB00042F71800000BB0004 /* MyAdhkar */ = {
-			isa = PBXGroup;
-			children = (
-				FADA000A2FC5A00000DA000A /* View */,
-				FADA000C2FC5A00000DA000C /* ViewModel */,
-			);
-			path = MyAdhkar;
-			sourceTree = "<group>";
-		};
-		F9BB00052F71800000BB0005 /* Tasbih */ = {
-			isa = PBXGroup;
-			children = (
-				FADA000D2FC5A00000DA000D /* View */,
-				FADA000E2FC5A00000DA000E /* ViewModel */,
-			);
-			path = Tasbih;
-			sourceTree = "<group>";
-		};
-		F9BB00062F71800000BB0006 /* LovedOnes */ = {
-			isa = PBXGroup;
-			children = (
-				FADA000F2FC5A00000DA000F /* View */,
-			);
-			path = LovedOnes;
-			sourceTree = "<group>";
-		};
-		F9CC00112F71900000CC0011 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */,
-				F84DAA3A2FC893E500C86233 /* HadithDownloadManager.swift */,
-				F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */,
-				FA100001000000000000A003 /* HadithArchive.swift */,
-				FA200001000000000000A001 /* HadithMetaService.swift */,
-				FA100001000000000000A004 /* HadithBookIDMap.swift */,
-				FA100001000000000000A005 /* HadithManifestService.swift */,
-				FA100001000000000000A006 /* HadithMarkupParser.swift */,
-				FA100001000000000000A011 /* HadithSearchPlanner.swift */,
-				FA100001000000000000A010 /* HadithSearchQuery.swift */,
-			);
-			path = Service;
-			sourceTree = "<group>";
-		};
-		F9CC01002F71900000CC0100 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				F9CC01012F71900000CC0101 /* HadithBookCoverView.swift */,
-				F9CC01032F71900000CC0103 /* HadithBookRow.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		F9CC00122F71900000CC0012 /* Library */ = {
-			isa = PBXGroup;
-			children = (
-				F9CC01002F71900000CC0100 /* Components */,
-				F9CC00022F71900000CC0002 /* HadithLibraryView.swift */,
-				F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */,
-				FA100001000000000000A013 /* HadithSearchResultsView.swift */,
-			);
-			path = Library;
-			sourceTree = "<group>";
-		};
-		F9CC00132F71900000CC0013 /* Chapters */ = {
-			isa = PBXGroup;
-			children = (
-				F9CC00042F71900000CC0004 /* HadithChaptersView.swift */,
-				F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */,
-			);
-			path = Chapters;
-			sourceTree = "<group>";
-		};
-		F9CC00142F71900000CC0014 /* Reading */ = {
-			isa = PBXGroup;
-			children = (
-				FA200001000000000000C001 /* Components */,
-				FA200001000000000000C002 /* Narrator */,
-				F9CC00062F71900000CC0006 /* HadithReadingView.swift */,
-				F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */,
-			);
-			path = Reading;
-			sourceTree = "<group>";
-		};
-		FAC100012FD6000100C10001 /* Qibla */ = {
-			isa = PBXGroup;
-			children = (
-				FAC100212FD6000100C10021 /* QiblaDirectionCalculator.swift */,
-				FAC100222FD6000100C10022 /* DeviceHeadingService.swift */,
-			);
-			path = Qibla;
-			sourceTree = "<group>";
-		};
-		FAA200A12FC7A00000A200A1 /* Location */ = {
-			isa = PBXGroup;
-			children = (
-				FAB200A12FC7A00000B200A1 /* DeviceLocationService.swift */,
-				FAB200A22FC7A00000B200A2 /* SelectedLocation.swift */,
-				FAB200A32FC7A00000B200A3 /* SelectedLocationLabelFormatter.swift */,
-				FAB200A42FC7A00000B200A4 /* SelectedLocationStore.swift */,
-				FAB200A52FC7A00000B200A5 /* CityLookupService.swift */,
-			);
-			path = Location;
-			sourceTree = "<group>";
-		};
-		FAA200012FC7A00000A20001 /* PrayerTimes */ = {
-			isa = PBXGroup;
-			children = (
-				FAB200012FC7A00000B20001 /* ClockWindow.swift */,
-				FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */,
-				F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */,
-				FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */,
-				AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */,
-			);
-			path = PrayerTimes;
-			sourceTree = "<group>";
-		};
-		FAA200022FC7A00000A20002 /* ProhibitedTimes */ = {
-			isa = PBXGroup;
-			children = (
-				FAA200032FC7A00000A20003 /* View */,
-				FAA200042FC7A00000A20004 /* ViewModel */,
-			);
-			path = ProhibitedTimes;
-			sourceTree = "<group>";
-		};
-		FAA200032FC7A00000A20003 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				FAB200072FC7A00000B20007 /* ProhibitedTimesView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FAA200042FC7A00000A20004 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				FAB200062FC7A00000B20006 /* ProhibitedTimesViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		FADA00012FC5A00000DA0001 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				F82FA2CC2FC1DF9800E60E39 /* Models */,
-				FADA00102FC5A00000DA0010 /* Service */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		FADA00022FC5A00000DA0002 /* Presentation */ = {
-			isa = PBXGroup;
-			children = (
-				F9BB00012F71800000BB0001 /* Categories */,
-				F9BB00022F71800000BB0002 /* Reading */,
-				F9BB00032F71800000BB0003 /* AllahNames */,
-				F9BB00042F71800000BB0004 /* MyAdhkar */,
-				F9BB00052F71800000BB0005 /* Tasbih */,
-				F9BB00062F71800000BB0006 /* LovedOnes */,
-				FAA200022FC7A00000A20002 /* ProhibitedTimes */,
-				FABB0001000000000000C001 /* Hub */,
-				FABB0001000000000000C007 /* Reader */,
-			);
-			path = Presentation;
-			sourceTree = "<group>";
-		};
-		FADA00032FC5A00000DA0003 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */,
-				FADA00042FC5A00000DA0004 /* Components */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FADA00042FC5A00000DA0004 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */,
-				FADB00AA2FC5A00000DBAA01 /* AdhkarCategoryRow.swift */,
-				FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */,
-				FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */,
-				FADB00022FC5A00000DB0002 /* SectionHeader.swift */,
-				FAB200082FC7A00000B20008 /* ProhibitedTimesBanner.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		FADA00052FC5A00000DA0005 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		FADA00062FC5A00000DA0006 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FADA00072FC5A00000DA0007 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		FADA00082FC5A00000DA0008 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F9AA00002F71800000AA0001 /* AllahNamesView.swift */,
-				F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */,
-				FADA00092FC5A00000DA0009 /* Components */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FADA00092FC5A00000DA0009 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				FADB00062FC5A00000DB0006 /* AllahNameCard.swift */,
-				FADB00072FC5A00000DB0007 /* NamePageView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		FADA000A2FC5A00000DA000A /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F9AA00022F71800000AA0002 /* MyAdhkarView.swift */,
-				FADA000B2FC5A00000DA000B /* Components */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FADA000B2FC5A00000DA000B /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		FADA000C2FC5A00000DA000C /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		FADA000D2FC5A00000DA000D /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F9AA00072F71800000AA0007 /* TasbihCounterView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FADA000E2FC5A00000DA000E /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		FADA000F2FC5A00000DA000F /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		FADA00102FC5A00000DA0010 /* Service */ = {
-			isa = PBXGroup;
-			children = (
-				FAAE260000000000000A0003 /* AthkarArchive.swift */,
-				FAAE260000000000000A0004 /* AthkarManifestService.swift */,
-				FAAE260000000000000A0005 /* AthkarPackStore.swift */,
-				FAAE260000000000000A0006 /* AthkarAudioDownloadManager.swift */,
-				FAAE260000000000000A0007 /* AthkarFavoritesStore.swift */,
-				FAAE260000000000000A0008 /* AthkarCompletionStore.swift */,
-				FABB0001000000000000A018 /* AthkarItemAudioPlayer.swift */,
-				FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */,
-				FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */,
-				FAB200052FC7A00000B20005 /* PrayerWindowCalculator.swift */,
-			);
-			path = Service;
-			sourceTree = "<group>";
-		};
-		HO001HOME001234AB01 /* Home */ = {
-			isa = PBXGroup;
-			children = (
-				HO001HOME001234AB02 /* View */,
-			);
-			path = Home;
-			sourceTree = "<group>";
-		};
-		HO001HOME001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8B854B92FCA3226007666A5 /* TodayView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		SE001SETT001234AB01 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				SE001SETT001234AB02 /* View */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		SE001SETT001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8B854CA2FCAFCD5007666A5 /* QuranPageSettingsSheet.swift */,
-				F8B854C02FCA452C007666A5 /* SurahListSheet.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		SR001SRCH001234AB01 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB01 /* Tafsir */ = {
-			isa = PBXGroup;
-			children = (
-				TA001TAFR001234AB02 /* View */,
-				TA001TAFR001234AB04 /* ViewModel */,
-			);
-			path = Tafsir;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */,
-				F8B854B82FCA3226007666A5 /* TafsirView.swift */,
-				F8B854CB2FCAFCD5007666A5 /* TafsirBookPickerView.swift */,
-				TA001TAFR001234AB03 /* Components */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB03 /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				TC001CARD001234AB00 /* TafsirCardView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		TA001TAFR001234AB04 /* ViewModel */ = {
-			isa = PBXGroup;
-			children = (
-				F8B854CE2FCAFCFF007666A5 /* TafsirViewModel.swift */,
-			);
-			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		VA001VACT001234AB01 /* VerseAction */ = {
-			isa = PBXGroup;
-			children = (
-				VA001VACT001234AB02 /* View */,
-			);
-			path = VerseAction;
-			sourceTree = "<group>";
-		};
-		VA001VACT001234AB02 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */,
-				F8B854BA2FCA3226007666A5 /* VerseSnippetView.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
 		F8DC00012FD3000100DC1001 /* Radio */ = {
 			isa = PBXGroup;
 			children = (
@@ -1766,6 +1410,7 @@
 			children = (
 				F8DA00012FD3000100DA1001 /* RadioStation.swift */,
 				F8DA00022FD3000100DA1002 /* RadioCatalog.swift */,
+				F8FB00012FD8000100FB1001 /* EgyptianRadioStationReference.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1786,6 +1431,7 @@
 			children = (
 				F8DC00062FD3000100DC1006 /* Stations */,
 				F8DC000A2FD3000100DC100A /* LiveChannel */,
+				F8FB00032FD8000300FB3001 /* EgyptianRadio */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -1797,22 +1443,6 @@
 				F8DC00082FD3000100DC1008 /* View */,
 			);
 			path = Stations;
-			sourceTree = "<group>";
-		};
-		F8DC000A2FD3000100DC100A /* LiveChannel */ = {
-			isa = PBXGroup;
-			children = (
-				F8DC000B2FD3000100DC100B /* View */,
-			);
-			path = LiveChannel;
-			sourceTree = "<group>";
-		};
-		F8DC000B2FD3000100DC100B /* View */ = {
-			isa = PBXGroup;
-			children = (
-				F8DA000F2FD3000100DA100F /* LiveChannelPlayerView.swift */,
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		F8DC00072FD3000100DC1007 /* ViewModel */ = {
@@ -1840,6 +1470,66 @@
 				F8DA000E2FD3000100DA100E /* LiveChannelCard.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		F8DC000A2FD3000100DC100A /* LiveChannel */ = {
+			isa = PBXGroup;
+			children = (
+				F8DC000B2FD3000100DC100B /* View */,
+			);
+			path = LiveChannel;
+			sourceTree = "<group>";
+		};
+		F8DC000B2FD3000100DC100B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8DA000F2FD3000100DA100F /* LiveChannelPlayerView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8DD00012FD7000100DD3001 /* Downloads */ = {
+			isa = PBXGroup;
+			children = (
+				F8DD00012FD7000100DD3005 /* Model */,
+				F8DD00012FD7000100DD3002 /* ViewModel */,
+				F8DD00012FD7000100DD3003 /* View */,
+				F8DD00012FD7000100DD1001 /* QuranPackDownloadsCoordinator.swift */,
+			);
+			path = Downloads;
+			sourceTree = "<group>";
+		};
+		F8DD00012FD7000100DD3002 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8DD00012FD7000100DD1002 /* QuranPackDownloadsViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8DD00012FD7000100DD3003 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8DD00012FD7000100DD3004 /* Components */,
+				F8DD00012FD7000100DD1003 /* QuranPackDownloadsView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8DD00012FD7000100DD3004 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F8DD00012FD7000100DD1004 /* QuranPackRow.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F8DD00012FD7000100DD3005 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F8DD00012FD7000100DD1005 /* QuranFullDownloadStatus.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		F8EC00012FD4000100EC1001 /* Recitations */ = {
@@ -2127,6 +1817,343 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		F8F71DE12DEEF2E900FA529D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FAAE260000000000000A0009 /* Athkar */,
+				F88D4B8B2F75487F0025939D /* quran-images */,
+				F88DD90B2F753DDF0025939D /* quran_positioning.db */,
+				FA200001000000000000A009 /* hadith_meta.sqlite */,
+				F8B8599C2FCCB0F3007666A5 /* Font */,
+				C88166C82DB662BC00EDECB8 /* Assets.xcassets */,
+				F8F71DDF2DEEF2DB00FA529D /* Colors.xcassets */,
+				F8B854A82FC9BDB0007666A5 /* quran_text.json */,
+				F8C1A0132FD2000100AA0013 /* sheikhs.json */,
+				F8C1A0252FD2000100AA0025 /* reciters.json */,
+				F8DA000D2FD3000100DA100D /* radios.json */,
+				AA11BB22CC33DD441234ABD0 /* ar-mokhtasar.json */,
+				F84DAA3C2FC8942000C86233 /* books_manifest.json */,
+				F45ABB2CFB4B4500B164A904 /* adhkar.json */,
+				FAB200092FC7A00000B20009 /* prohibited_times.json */,
+				F9AA00042F71800000AA0004 /* allahNames.json */,
+				F9AA000B2F71800000AA000B /* takbeerat.m4a */,
+				FCD000152FE1000100D00015 /* quran_images_manifest.json */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3001 /* Khatmah */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00032FD8000300FA3002 /* Data */,
+				F8FA00032FD8000300FA3006 /* Presentation */,
+				F8FA00012FD8000100FA1001 /* KhatmahCoordinator.swift */,
+			);
+			path = Khatmah;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3002 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00032FD8000300FA3003 /* Models */,
+				F8FA00032FD8000300FA3004 /* Store */,
+				F8FA00032FD8000300FA3005 /* Service */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00012FD8000100FA1002 /* KhatmahPlan.swift */,
+				F8FA00012FD8000100FA1003 /* KhatmahPlanSchedule.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3004 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00012FD8000100FA1004 /* KhatmahPlanStore.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3005 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00012FD8000100FA1005 /* KhatmahReminderSchedule.swift */,
+				F8FA00012FD8000100FA1006 /* KhatmahReminderScheduler.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3006 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00032FD8000300FA3007 /* ViewModel */,
+				F8FA00032FD8000300FA3008 /* View */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3007 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00012FD8000100FA1007 /* KhatmahPlanViewModel.swift */,
+				F8FA00012FD8000100FA1008 /* KhatmahSetupViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3008 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00032FD8000300FA3009 /* Components */,
+				F8FA00012FD8000100FA1009 /* KhatmahPlanView.swift */,
+				F8FA00012FD8000100FA100A /* KhatmahSetupView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8FA00032FD8000300FA3009 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F8FA00012FD8000100FA100B /* KhatmahProgressRing.swift */,
+				F8FA00012FD8000100FA100C /* KhatmahDayRow.swift */,
+				F8FA00012FD8000100FA100D /* KhatmahCardChrome.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F8FB00032FD8000300FB3001 /* EgyptianRadio */ = {
+			isa = PBXGroup;
+			children = (
+				F8FB00032FD8000300FB3002 /* ViewModel */,
+				F8FB00032FD8000300FB3003 /* View */,
+			);
+			path = EgyptianRadio;
+			sourceTree = "<group>";
+		};
+		F8FB00032FD8000300FB3002 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8FB00012FD8000100FB1002 /* EgyptianRadioViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8FB00032FD8000300FB3003 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8FB00012FD8000100FB1003 /* EgyptianRadioView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3001 /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC3002 /* Data */,
+				F8FC00032FD9000300FC3005 /* Presentation */,
+				F8FC00012FD9000100FC1001 /* ContentCoordinator.swift */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3002 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC3003 /* Models */,
+				F8FC00032FD9000300FC3004 /* Service */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3003 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1002 /* GuideContent.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3004 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1003 /* GuideContentStore.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3005 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC3006 /* Hub */,
+				F8FC00032FD9000300FC3009 /* Guide */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3006 /* Hub */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC3007 /* ViewModel */,
+				F8FC00032FD9000300FC3008 /* View */,
+			);
+			path = Hub;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3007 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1004 /* ContentHubViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3008 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1005 /* ContentHubView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3009 /* Guide */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC300A /* ViewModel */,
+				F8FC00032FD9000300FC300B /* View */,
+			);
+			path = Guide;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC300A /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1006 /* GuideDetailViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC300B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1007 /* GuideDetailView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F9BB00012F71800000BB0001 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				FADA00032FC5A00000DA0003 /* View */,
+				FADA00052FC5A00000DA0005 /* ViewModel */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		F9BB00022F71800000BB0002 /* Reading */ = {
+			isa = PBXGroup;
+			children = (
+				FADA00062FC5A00000DA0006 /* View */,
+				FADA00072FC5A00000DA0007 /* ViewModel */,
+			);
+			path = Reading;
+			sourceTree = "<group>";
+		};
+		F9BB00032F71800000BB0003 /* AllahNames */ = {
+			isa = PBXGroup;
+			children = (
+				FADA00082FC5A00000DA0008 /* View */,
+			);
+			path = AllahNames;
+			sourceTree = "<group>";
+		};
+		F9BB00042F71800000BB0004 /* MyAdhkar */ = {
+			isa = PBXGroup;
+			children = (
+				FADA000A2FC5A00000DA000A /* View */,
+				FADA000C2FC5A00000DA000C /* ViewModel */,
+			);
+			path = MyAdhkar;
+			sourceTree = "<group>";
+		};
+		F9BB00052F71800000BB0005 /* Tasbih */ = {
+			isa = PBXGroup;
+			children = (
+				FADA000D2FC5A00000DA000D /* View */,
+				FADA000E2FC5A00000DA000E /* ViewModel */,
+			);
+			path = Tasbih;
+			sourceTree = "<group>";
+		};
+		F9BB00062F71800000BB0006 /* LovedOnes */ = {
+			isa = PBXGroup;
+			children = (
+				FADA000F2FC5A00000DA000F /* View */,
+			);
+			path = LovedOnes;
+			sourceTree = "<group>";
+		};
+		F9CC00112F71900000CC0011 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F8D9BC312FD13255008AEC8E /* DailyHadithService.swift */,
+				F84DAA3A2FC893E500C86233 /* HadithDownloadManager.swift */,
+				F9CC00012F71900000CC0001 /* HadithDatabaseService.swift */,
+				FA100001000000000000A003 /* HadithArchive.swift */,
+				FA200001000000000000A001 /* HadithMetaService.swift */,
+				FA100001000000000000A004 /* HadithBookIDMap.swift */,
+				FA100001000000000000A005 /* HadithManifestService.swift */,
+				FA100001000000000000A006 /* HadithMarkupParser.swift */,
+				FA100001000000000000A011 /* HadithSearchPlanner.swift */,
+				FA100001000000000000A010 /* HadithSearchQuery.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		F9CC00122F71900000CC0012 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC01002F71900000CC0100 /* Components */,
+				F9CC00022F71900000CC0002 /* HadithLibraryView.swift */,
+				F9CC00032F71900000CC0003 /* HadithLibraryViewModel.swift */,
+				FA100001000000000000A013 /* HadithSearchResultsView.swift */,
+			);
+			path = Library;
+			sourceTree = "<group>";
+		};
+		F9CC00132F71900000CC0013 /* Chapters */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC00042F71900000CC0004 /* HadithChaptersView.swift */,
+				F9CC00052F71900000CC0005 /* HadithChaptersViewModel.swift */,
+			);
+			path = Chapters;
+			sourceTree = "<group>";
+		};
+		F9CC00142F71900000CC0014 /* Reading */ = {
+			isa = PBXGroup;
+			children = (
+				FA200001000000000000C001 /* Components */,
+				FA200001000000000000C002 /* Narrator */,
+				F9CC00062F71900000CC0006 /* HadithReadingView.swift */,
+				F9CC00072F71900000CC0007 /* HadithReadingViewModel.swift */,
+			);
+			path = Reading;
+			sourceTree = "<group>";
+		};
+		F9CC01002F71900000CC0100 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F9CC01012F71900000CC0101 /* HadithBookCoverView.swift */,
+				F9CC01032F71900000CC0103 /* HadithBookRow.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		FA200001000000000000C001 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -2144,6 +2171,55 @@
 				FA200001000000000000A008 /* HadithNarratorSheet.swift */,
 			);
 			path = Narrator;
+			sourceTree = "<group>";
+		};
+		FAA200012FC7A00000A20001 /* PrayerTimes */ = {
+			isa = PBXGroup;
+			children = (
+				FAB200012FC7A00000B20001 /* ClockWindow.swift */,
+				FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */,
+				F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */,
+				FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */,
+				AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */,
+			);
+			path = PrayerTimes;
+			sourceTree = "<group>";
+		};
+		FAA200022FC7A00000A20002 /* ProhibitedTimes */ = {
+			isa = PBXGroup;
+			children = (
+				FAA200032FC7A00000A20003 /* View */,
+				FAA200042FC7A00000A20004 /* ViewModel */,
+			);
+			path = ProhibitedTimes;
+			sourceTree = "<group>";
+		};
+		FAA200032FC7A00000A20003 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				FAB200072FC7A00000B20007 /* ProhibitedTimesView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FAA200042FC7A00000A20004 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FAB200062FC7A00000B20006 /* ProhibitedTimesViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FAA200A12FC7A00000A200A1 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				FAB200A12FC7A00000B200A1 /* DeviceLocationService.swift */,
+				FAB200A22FC7A00000B200A2 /* SelectedLocation.swift */,
+				FAB200A32FC7A00000B200A3 /* SelectedLocationLabelFormatter.swift */,
+				FAB200A42FC7A00000B200A4 /* SelectedLocationStore.swift */,
+				FAB200A52FC7A00000B200A5 /* CityLookupService.swift */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 		FABB0001000000000000C001 /* Hub */ = {
@@ -2168,6 +2244,7 @@
 			isa = PBXGroup;
 			children = (
 				FABB0001000000000000A002 /* AthkarHubViewModel.swift */,
+				FABB0001000000000000A050 /* AthkarAudioPromptViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2184,6 +2261,7 @@
 		FABB0001000000000000C005 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				FABB0001000000000000A051 /* AthkarAudioPromptSheet.swift */,
 				FABB0001000000000000A005 /* AthkarDownloadControl.swift */,
 				FABB0001000000000000A006 /* AthkarPackCard.swift */,
 				FABB0001000000000000A007 /* AthkarPackRow.swift */,
@@ -2232,9 +2310,300 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		FAC100012FD6000100C10001 /* Qibla */ = {
+			isa = PBXGroup;
+			children = (
+				FAC100212FD6000100C10021 /* QiblaDirectionCalculator.swift */,
+				FAC100222FD6000100C10022 /* DeviceHeadingService.swift */,
+			);
+			path = Qibla;
+			sourceTree = "<group>";
+		};
+		FADA00012FC5A00000DA0001 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CC2FC1DF9800E60E39 /* Models */,
+				FADA00102FC5A00000DA0010 /* Service */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		FADA00022FC5A00000DA0002 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				F9BB00012F71800000BB0001 /* Categories */,
+				F9BB00022F71800000BB0002 /* Reading */,
+				F9BB00032F71800000BB0003 /* AllahNames */,
+				F9BB00042F71800000BB0004 /* MyAdhkar */,
+				F9BB00052F71800000BB0005 /* Tasbih */,
+				F9BB00062F71800000BB0006 /* LovedOnes */,
+				FAA200022FC7A00000A20002 /* ProhibitedTimes */,
+				FABB0001000000000000C001 /* Hub */,
+				FABB0001000000000000C007 /* Reader */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		FADA00032FC5A00000DA0003 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CD2FC1DF9800E60E39 /* AdhkarCategoriesView.swift */,
+				FADA00042FC5A00000DA0004 /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00042FC5A00000DA0004 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00052FC5A00000DB0005 /* AdhkarCategoryCard.swift */,
+				FADB00AA2FC5A00000DBAA01 /* AdhkarCategoryRow.swift */,
+				FADB00032FC5A00000DB0003 /* AdhkarQuickCard.swift */,
+				FADB00042FC5A00000DB0004 /* SpecialCategoryBanner.swift */,
+				FADB00022FC5A00000DB0002 /* SectionHeader.swift */,
+				FAB200082FC7A00000B20008 /* ProhibitedTimesBanner.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FADA00052FC5A00000DA0005 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CE2FC1DF9800E60E39 /* AdhkarCategoriesViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FADA00062FC5A00000DA0006 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2CF2FC1DF9800E60E39 /* AdhkarReadingView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00072FC5A00000DA0007 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F82FA2D02FC1DF9800E60E39 /* AdhkarReadingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FADA00082FC5A00000DA0008 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00002F71800000AA0001 /* AllahNamesView.swift */,
+				F9AA00112F71800000AA0011 /* AllahNameReadingView.swift */,
+				FADA00092FC5A00000DA0009 /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00092FC5A00000DA0009 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00062FC5A00000DB0006 /* AllahNameCard.swift */,
+				FADB00072FC5A00000DB0007 /* NamePageView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FADA000A2FC5A00000DA000A /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00022F71800000AA0002 /* MyAdhkarView.swift */,
+				FADA000B2FC5A00000DA000B /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA000B2FC5A00000DA000B /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00082FC5A00000DB0008 /* MyAdhkarCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		FADA000C2FC5A00000DA000C /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FADB00092FC5A00000DB0009 /* MyAdhkarViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FADA000D2FC5A00000DA000D /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00072F71800000AA0007 /* TasbihCounterView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA000E2FC5A00000DA000E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				FADB000A2FC5A00000DB000A /* TasbihCounterViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		FADA000F2FC5A00000DA000F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F9AA00092F71800000AA0009 /* LovedOnesDhikrView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		FADA00102FC5A00000DA0010 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				FAAE260000000000000A0003 /* AthkarArchive.swift */,
+				FAAE260000000000000A0004 /* AthkarManifestService.swift */,
+				FAAE260000000000000A0005 /* AthkarPackStore.swift */,
+				FAAE260000000000000A0006 /* AthkarAudioDownloadManager.swift */,
+				FAAE260000000000000A0007 /* AthkarFavoritesStore.swift */,
+				FAAE260000000000000A0008 /* AthkarCompletionStore.swift */,
+				FABB0001000000000000A018 /* AthkarItemAudioPlayer.swift */,
+				FADB000B2FC5A00000DB000B /* DhikrAudioService.swift */,
+				FADB000D2FC5A00000DB000D /* DhikrVisibilityService.swift */,
+				FAB200052FC7A00000B20005 /* PrayerWindowCalculator.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		FCD000012FE0000100D00001 /* ContentDownload */ = {
+			isa = PBXGroup;
+			children = (
+				FCD000022FE0000100D00002 /* ContentDownloader.swift */,
+				FCD000202FE0000100D00020 /* ContentCatalogRefresher.swift */,
+			);
+			path = ContentDownload;
+			sourceTree = "<group>";
+		};
+		HO001HOME001234AB01 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				HO001HOME001234AB02 /* View */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		HO001HOME001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8B854B92FCA3226007666A5 /* TodayView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		SE001SETT001234AB01 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				SE001SETT001234AB02 /* View */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		SE001SETT001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8B854CA2FCAFCD5007666A5 /* QuranPageSettingsSheet.swift */,
+				F8B854C02FCA452C007666A5 /* SurahListSheet.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		SR001SRCH001234AB01 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				BB11DD22EE33FF441234AB02 /* QuranSearchView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB01 /* Tafsir */ = {
+			isa = PBXGroup;
+			children = (
+				TA001TAFR001234AB02 /* View */,
+				TA001TAFR001234AB04 /* ViewModel */,
+			);
+			path = Tafsir;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8C1182A2FCE1342009143E2 /* QuranTafsirPageView.swift */,
+				F8B854B82FCA3226007666A5 /* TafsirView.swift */,
+				F8B854CB2FCAFCD5007666A5 /* TafsirBookPickerView.swift */,
+				TA001TAFR001234AB03 /* Components */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB03 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				TC001CARD001234AB00 /* TafsirCardView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		TA001TAFR001234AB04 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8B854CE2FCAFCFF007666A5 /* TafsirViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		VA001VACT001234AB01 /* VerseAction */ = {
+			isa = PBXGroup;
+			children = (
+				VA001VACT001234AB02 /* View */,
+			);
+			path = VerseAction;
+			sourceTree = "<group>";
+		};
+		VA001VACT001234AB02 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8B651EE2F85145C00C4C7EC /* VerseActionSheet.swift */,
+				F8B854BA2FCA3226007666A5 /* VerseSnippetView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		AA11000000000000000000A1 /* QuranAppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA11000000000000000000A4 /* Build configuration list for PBXNativeTarget "QuranAppTests" */;
+			buildPhases = (
+				AA11000000000000000000A7 /* Sources */,
+				AA11000000000000000000A8 /* Frameworks */,
+				AA11000000000000000000A9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AA11000000000000000000AA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AA11000000000000000000A3 /* QuranAppTests */,
+			);
+			name = QuranAppTests;
+			packageProductDependencies = (
+			);
+			productName = QuranAppTests;
+			productReference = AA11000000000000000000A2 /* QuranAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		C88166BB2DB662BA00EDECB8 /* QuranApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C88166D02DB662BC00EDECB8 /* Build configuration list for PBXNativeTarget "QuranApp" */;
@@ -2271,6 +2640,10 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
+					AA11000000000000000000A1 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = C88166BB2DB662BA00EDECB8;
+					};
 					C88166BB2DB662BA00EDECB8 = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -2296,11 +2669,19 @@
 			projectRoot = "";
 			targets = (
 				C88166BB2DB662BA00EDECB8 /* QuranApp */,
+				AA11000000000000000000A1 /* QuranAppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AA11000000000000000000A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C88166BA2DB662BA00EDECB8 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -2312,14 +2693,8 @@
 				F8DB000D2FD3000100DB100D /* radios.json in Resources */,
 				AA11BB22CC33DD441234ABD1 /* ar-mokhtasar.json in Resources */,
 				F84DAA3D2FC8942000C86233 /* books_manifest.json in Resources */,
-				F88D4B902F760FB70025939D /* HafsSmart_08_fixed.ttf in Resources */,
-				F88D4B8E2F75FE730025939D /* HafsSmart_08.ttf in Resources */,
-				F88DD9052F753DAB0025939D /* QuranTitles.ttf in Resources */,
-				F88DD9062F753DAB0025939D /* QuranNumbers.ttf in Resources */,
-				F88DD9092F753DC10025939D /* Kitab-Regular.ttf in Resources */,
-				F88DD90A2F753DC10025939D /* Kitab-Bold.ttf in Resources */,
+				FCD000162FE1000100D00016 /* quran_images_manifest.json in Resources */,
 				F8B859992FCCB0E0007666A5 /* TheYearofHandicrafts-SemiBold.otf in Resources */,
-				F8B8599A2FCCB0E0007666A5 /* TheYearofHandicrafts-Bold.otf in Resources */,
 				F8B8599B2FCCB0E0007666A5 /* TheYearofHandicrafts-Regular.otf in Resources */,
 				F88DD90C2F753DDF0025939D /* quran_positioning.db in Resources */,
 				FA200001000000000000B009 /* hadith_meta.sqlite in Resources */,
@@ -2334,17 +2709,28 @@
 				FAC200092FC7A00000C20009 /* prohibited_times.json in Resources */,
 				F9AA00052F71800000AA0005 /* allahNames.json in Resources */,
 				F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */,
-				A1B2C3D4E5F678901234BCDE /* Audio in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AA11000000000000000000A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C88166B82DB662BA00EDECB8 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCD000032FE0000100D00003 /* ContentDownloader.swift in Sources */,
+				FCD000212FE0000100D00021 /* ContentCatalogRefresher.swift in Sources */,
+				FCD000122FE1000100D00012 /* QuranImagePack.swift in Sources */,
+				FCD000142FE1000100D00014 /* QuranImageManifestService.swift in Sources */,
+				FCD000182FE1000100D00018 /* QuranImagePackStore.swift in Sources */,
 				FAAE260000000000000B0001 /* AthkarPack.swift in Sources */,
 				FABB0001000000000000B001 /* AthkarHubSection.swift in Sources */,
 				FABB0001000000000000B002 /* AthkarHubViewModel.swift in Sources */,
@@ -2358,6 +2744,8 @@
 				FABB0001000000000000B018 /* AthkarItemAudioPlayer.swift in Sources */,
 				FABB0001000000000000B004 /* AthkarHubView.swift in Sources */,
 				FABB0001000000000000B005 /* AthkarDownloadControl.swift in Sources */,
+				FABB0001000000000000B050 /* AthkarAudioPromptViewModel.swift in Sources */,
+				FABB0001000000000000B051 /* AthkarAudioPromptSheet.swift in Sources */,
 				FABB0001000000000000B006 /* AthkarPackCard.swift in Sources */,
 				FABB0001000000000000B007 /* AthkarPackRow.swift in Sources */,
 				FABB0001000000000000B008 /* AthkarQuickChipsRow.swift in Sources */,
@@ -2386,6 +2774,29 @@
 				F8EE00022FD5000700EE2007 /* WorshipActRow.swift in Sources */,
 				F8EE00022FD5000800EE2008 /* WorshipStreakRow.swift in Sources */,
 				F8EE00022FD5000900EE2009 /* WorshipYearGrid.swift in Sources */,
+				F8FA00022FD8000200FA2001 /* KhatmahCoordinator.swift in Sources */,
+				F8FC00022FD9000200FC2001 /* ContentCoordinator.swift in Sources */,
+				F8FC00022FD9000200FC2002 /* GuideContent.swift in Sources */,
+				F8FC00022FD9000200FC2003 /* GuideContentStore.swift in Sources */,
+				F8FC00022FD9000200FC2004 /* ContentHubViewModel.swift in Sources */,
+				F8FC00022FD9000200FC2005 /* ContentHubView.swift in Sources */,
+				F8FC00022FD9000200FC2006 /* GuideDetailViewModel.swift in Sources */,
+				F8FC00022FD9000200FC2007 /* GuideDetailView.swift in Sources */,
+				F8FA00022FD8000200FA2002 /* KhatmahPlan.swift in Sources */,
+				F8FA00022FD8000200FA2003 /* KhatmahPlanSchedule.swift in Sources */,
+				F8FA00022FD8000200FA2004 /* KhatmahPlanStore.swift in Sources */,
+				F8FA00022FD8000200FA2005 /* KhatmahReminderSchedule.swift in Sources */,
+				F8FA00022FD8000200FA2006 /* KhatmahReminderScheduler.swift in Sources */,
+				F8FA00022FD8000200FA2007 /* KhatmahPlanViewModel.swift in Sources */,
+				F8FA00022FD8000200FA2008 /* KhatmahSetupViewModel.swift in Sources */,
+				F8FA00022FD8000200FA2009 /* KhatmahPlanView.swift in Sources */,
+				F8FA00022FD8000200FA200A /* KhatmahSetupView.swift in Sources */,
+				F8FA00022FD8000200FA200B /* KhatmahProgressRing.swift in Sources */,
+				F8FA00022FD8000200FA200C /* KhatmahDayRow.swift in Sources */,
+				F8FA00022FD8000200FA200D /* KhatmahCardChrome.swift in Sources */,
+				F8FB00022FD8000200FB2001 /* EgyptianRadioStationReference.swift in Sources */,
+				F8FB00022FD8000200FB2002 /* EgyptianRadioViewModel.swift in Sources */,
+				F8FB00022FD8000200FB2003 /* EgyptianRadioView.swift in Sources */,
 				F8EE00522FD5000100EE2101 /* StorageCoordinator.swift in Sources */,
 				F8EE00522FD5000100EE2102 /* StorageUsage.swift in Sources */,
 				F8EE00522FD5000100EE2103 /* StorageScanner.swift in Sources */,
@@ -2395,6 +2806,11 @@
 				F8EE00522FD5000100EE2107 /* StorageFilterChips.swift in Sources */,
 				F8EE00522FD5000100EE2108 /* StorageGroupCard.swift in Sources */,
 				F8EE00522FD5000100EE2109 /* StorageEntryRow.swift in Sources */,
+				F8DD00012FD7000100DD2001 /* QuranPackDownloadsCoordinator.swift in Sources */,
+				F8DD00012FD7000100DD2002 /* QuranPackDownloadsViewModel.swift in Sources */,
+				F8DD00012FD7000100DD2003 /* QuranPackDownloadsView.swift in Sources */,
+				F8DD00012FD7000100DD2004 /* QuranPackRow.swift in Sources */,
+				F8DD00012FD7000100DD2005 /* QuranFullDownloadStatus.swift in Sources */,
 				F8EF00022FD6000100EF2001 /* PrayerTimesCoordinator.swift in Sources */,
 				F8F000022FD7000100F02001 /* HomeHeroScene.swift in Sources */,
 				F8F000022FD7000200F02002 /* HomeLiveStreamSection.swift in Sources */,
@@ -2431,6 +2847,7 @@
 				F82FA2D52FC1DF9800E60E39 /* AdhkarReadingViewModel.swift in Sources */,
 				F82FA2D62FC1DF9800E60E39 /* AdhkarModels.swift in Sources */,
 				FADC00012FC5A00000DC0001 /* MyDhikr.swift in Sources */,
+				FADC00992FC5A00000DC0099 /* LegacyDhikrAudioCatalog.swift in Sources */,
 				FADC000B2FC5A00000DC000B /* DhikrAudioService.swift in Sources */,
 				FADC000C2FC5A00000DC000C /* DhikrCondition.swift in Sources */,
 				FADC000D2FC5A00000DC000D /* DhikrVisibilityService.swift in Sources */,
@@ -2482,6 +2899,8 @@
 				F8B854CC2FCAFCD5007666A5 /* QuranPageSettingsSheet.swift in Sources */,
 				F8B854CD2FCAFCD5007666A5 /* TafsirBookPickerView.swift in Sources */,
 				F88DD9112F7540510025939D /* QuranPageView.swift in Sources */,
+				F8DD00012FD7000200DD2001 /* QuranPageDownloadPrompt.swift in Sources */,
+				F8DD00012FD7000200DD2002 /* QuranPageDownloadPromptViewModel.swift in Sources */,
 				F8BEB9BA2F717485009F1094 /* QuranTextResponse.swift in Sources */,
 				F8BEB9CA2F717912009F1094 /* SurahRow.swift in Sources */,
 				F8BEB9BD2F7174A0009F1094 /* QuranServiceError.swift in Sources */,
@@ -2603,7 +3022,6 @@
 				F8B854BB2FCA3226007666A5 /* TodayView.swift in Sources */,
 				F8B854BC2FCA3226007666A5 /* VerseSnippetView.swift in Sources */,
 				F8B854BD2FCA3226007666A5 /* TafsirView.swift in Sources */,
-				TC001CARD001234AB01 /* TafsirCardView.swift in Sources */,
 				B8F9B7EF80CE3B56C6A7D3C9 /* RepeatSettingsSheet.swift in Sources */,
 				874DC48EBDDD347E9BF9E6D0 /* SurahDownloadSheet.swift in Sources */,
 				CC52FEECAFD82D118DA714FC /* ReciterSelectionSheet.swift in Sources */,
@@ -2632,6 +3050,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AA11000000000000000000AA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C88166BB2DB662BA00EDECB8 /* QuranApp */;
+			targetProxy = AA11000000000000000000AB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		F800B8372DB682FE0035501A /* Main.storyboard */ = {
@@ -2673,6 +3099,46 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		AA11000000000000000000A5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YUFMK8H7DM;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wird.QuranAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuranApp.app/QuranApp";
+			};
+			name = Debug;
+		};
+		AA11000000000000000000A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = YUFMK8H7DM;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wird.QuranAppTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuranApp.app/QuranApp";
+			};
+			name = Release;
+		};
 		C88166CE2DB662BC00EDECB8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2808,7 +3274,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Wird;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to let you take photos for your profile picture.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your location at all times to provide location-based services even when the app is in the background.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Wird uses your location to calculate accurate prayer times and Qibla direction for your city.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "يُستخدم موقعك لحساب مواقيت الصلاة واتجاه القبلة بدقة.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access to save images to your photo library when you download or save content.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photos to let you choose a profile picture and upload images.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -2822,7 +3288,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wird;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wirdd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -2844,7 +3310,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Wird;
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to let you take photos for your profile picture.";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need access to your location at all times to provide location-based services even when the app is in the background.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Wird uses your location to calculate accurate prayer times and Qibla direction for your city.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "يُستخدم موقعك لحساب مواقيت الصلاة واتجاه القبلة بدقة.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "We need access to save images to your photo library when you download or save content.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photos to let you choose a profile picture and upload images.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -2858,7 +3324,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wird;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Quran.wirdd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -2869,6 +3335,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA11000000000000000000A4 /* Build configuration list for PBXNativeTarget "QuranAppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA11000000000000000000A5 /* Debug */,
+				AA11000000000000000000A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		C88166B72DB662BA00EDECB8 /* Build configuration list for PBXProject "QuranApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

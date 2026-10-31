@@ -12,5 +12,4 @@
 "NSPhotoLibraryAddUsageDescription" = "نحتاج إلى إذن لحفظ الصور في مكتبة الصور عند تنزيل المحتوى أو حفظه.";
 
 /* Location Access */
-"NSLocationWhenInUseUsageDescription" = "نحتاج إلى الوصول إلى موقعك الحالي أثناء التسجيل لتحديد موقعك لتقديم خدمة أفضل.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "نحتاج إلى الوصول إلى موقعك في جميع الأوقات لتقديم خدمات تعتمد على الموقع حتى عندما يكون التطبيق في الخلفية.";
+"NSLocationWhenInUseUsageDescription" = "يُستخدم موقعك لحساب مواقيت الصلاة واتجاه القبلة بدقة.";

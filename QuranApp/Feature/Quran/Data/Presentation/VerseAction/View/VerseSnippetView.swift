@@ -107,7 +107,11 @@ struct VerseSnippetView: View {
             let path = "\(resourcePath)/\(page)/\(file).png"
             if let img = UIImage(contentsOfFile: path) { return img }
         }
-        return Bundle.main.path(forResource: "\(file)", ofType: "png", inDirectory: "\(page)")
+        if let bundled = Bundle.main.path(forResource: "\(file)", ofType: "png", inDirectory: "\(page)")
+            .flatMap({ UIImage(contentsOfFile: $0) }) {
+            return bundled
+        }
+        return QuranImagePackStore.shared.localPath(page: page, line: file)
             .flatMap { UIImage(contentsOfFile: $0) }
     }
 }

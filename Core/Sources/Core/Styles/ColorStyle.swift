@@ -102,6 +102,8 @@ public enum ColorStyle {
     case quickAccentHadith
     case quickAccentLessons
     case quickAccentWorship
+    case quickAccentKhatmah
+    case quickAccentContent
 
     // Qibla
     case qiblaAccent
@@ -253,6 +255,8 @@ public enum ColorStyle {
         case .quickAccentHadith:      return .quickAccentHadith
         case .quickAccentLessons:     return .quickAccentLessons
         case .quickAccentWorship:     return .quickAccentWorship
+        case .quickAccentKhatmah:     return .quickAccentKhatmah
+        case .quickAccentContent:     return .quickAccentContent
 
         // Qibla
         case .qiblaAccent:            return .qiblaAccent

@@ -304,9 +304,10 @@
 // MARK: - Home Hero
 "homeHeroTitle" = "Wird";
 "homeSearchAction" = "Search";
-"homeLocation" = "Riyadh, SA";
+"homeLocation" = "Riyadh, Saudi Arabia";
 "homeLocationAccessibility" = "Showing times for %@";
 "locationLabelFormat" = "%1$@, %2$@";
+"locationCurrentPlace" = "Current location";
 "homeHeroDhikr" = "The best way to begin is remembering Allah 🌅";
 
 // MARK: - Home Next Prayer
@@ -417,6 +418,14 @@
 "qiblaTurnRight" = "Turn right";
 "qiblaTurnLeft" = "Turn left";
 
+/* Qibla Readiness */
+"qiblaLocationPermissionNeeded" = "Allow location access to point the Qibla from where you are";
+"qiblaLocationPermissionDenied" = "Location access is off, so the Qibla is pointing from a default city";
+"qiblaApproximateLocation" = "Precise location is off, so this direction is approximate";
+"qiblaDefaultLocation" = "Showing the Qibla from a default city. Set your location for an accurate direction";
+"qiblaLowHeadingAccuracy" = "Compass accuracy is low. Move away from metal and magnets, then wave the device in a figure eight";
+"qiblaEnableLocation" = "Enable location";
+
 /* Prayer Times Extra Anchors */
 "prayerTimesGregorianFormat" = "d MMMM yyyy";
 "prayerTimesOtherTimes" = "Additional Times";
@@ -500,9 +509,22 @@
 "athkarDownloadAll" = "Download all (%d)";
 "athkarDuaaCount" = "%d Duaa";
 
+"athkarAudioPromptTitle" = "Audio not downloaded";
+"athkarAudioPromptBody" = "Download the recitation to listen while you read, online or offline.";
+"athkarAudioPromptDownloadFormat" = "Download · %@";
+"athkarAudioPromptDownloading" = "Downloading…";
+"athkarAudioPromptInstalling" = "Preparing audio…";
+"athkarAudioPromptFailed" = "Download failed. Check your connection and try again.";
+"athkarAudioPromptNoSpace" = "Not enough storage. Free up space and try again.";
+"athkarAudioPromptOffline" = "You are offline. Connect to download the audio, or read the text now.";
+"athkarAudioPromptWaitingNetwork" = "Waiting for a connection. The download resumes automatically.";
+"athkarAudioPromptReadWithout" = "Read without audio";
+
 "athkarReaderPosition" = "DHIKR %d";
 "athkarReaderProgress" = "%d of %d done";
 "athkarReaderTimes" = "%d times";
+"athkarReaderRepetition" = "%1$d / %2$d";
+"athkarReaderRepetitionLabel" = "Repetition %1$d of %2$d";
 "athkarReaderTapHint" = "Tap the circle to count";
 "athkarReaderDoneHint" = "Done — tap to go to the next";
 "athkarReaderMeaning" = "Meaning";
@@ -519,10 +541,15 @@
 "athkarSettingsTextSize" = "Text size";
 "athkarSettingsSizeValue" = "%d%%";
 "athkarSettingsShowTranslation" = "Show translation";
+"athkarSettingsLayout" = "Reading layout";
+"athkarSettingsLayoutPages" = "Pages";
+"athkarSettingsLayoutList" = "List";
 "athkarSettingsStartOver" = "Start over";
+"athkarAudioSkipped" = "Skipped adhkar without recitation.";
 
 "liveStreamTitle" = "Live stream";
 
+"storageCategoryQuranPages" = "Quran pages";
 "storageCategoryRecitations" = "Recitations";
 "storageCategoryHadith" = "Hadith books";
 "storageCategoryAthkar" = "Athkar";
@@ -539,3 +566,161 @@
 "storageDeleteMessageFormat" = "“%@” will be removed from this device. You can download it again any time.";
 "storageDeleteAllTitle" = "Delete all content";
 "storageDeleteAllMessageFormat" = "Everything downloaded for “%@” will be removed from this device.";
+
+"quranDownloadsTitle" = "Quran pages";
+"quranDownloadsSettingsRow" = "Offline Quran pages";
+"quranDownloadsHeaderCaption" = "OFFLINE PAGES";
+"quranDownloadsProgressFormat" = "%1$@ of %2$@ Juz downloaded";
+"quranDownloadsAllDone" = "All Juz downloaded";
+"quranDownloadsOnDeviceFormat" = "%@ on device";
+"quranDownloadsDownloadAll" = "Download all";
+"quranDownloadsCancelAll" = "Cancel all";
+"quranDownloadsDownloadAction" = "Download";
+"quranDownloadsBundled" = "Included";
+"quranDownloadsPagesFormat" = "Pages %1$@–%2$@";
+"quranDownloadsConfirmTitle" = "Download pages";
+"quranDownloadsConfirmMessageFormat" = "“%1$@” needs %2$@. It stays on this device for offline reading.";
+"quranDownloadsConfirmAllTitle" = "Download all pages";
+"quranDownloadsConfirmAllMessageFormat" = "%1$@ Juz need %2$@ in total. They stay on this device for offline reading.";
+"quranDownloadsEmptyTitle" = "Pages unavailable";
+"quranDownloadsEmptyMessage" = "Connect to the internet so the app can load the list of Quran pages.";
+"quranDownloadsOfflineNote" = "Juz 1 is included with the app. Downloaded Juz stay available without an internet connection.";
+"quranDownloadsWaitingNetwork" = "Waiting for connection…";
+
+/* Quran Full Download */
+"quranFullDownloadTitle" = "Entire Quran";
+"quranFullDownloadAction" = "Download Entire Quran";
+"quranFullDownloadCancelAction" = "Cancel Download";
+"quranFullDownloadRetryAction" = "Retry Download";
+"quranFullDownloadDoneAction" = "Quran Downloaded";
+"quranFullDownloadIdleDetailFormat" = "%1$@ · %2$@ Juz still to download";
+"quranFullDownloadProgressFormat" = "%1$@ of %2$@ · %3$@";
+"quranFullDownloadInstalling" = "Verifying downloaded pages…";
+"quranFullDownloadFailedDetail" = "Some Juz did not finish. Retry to download the rest.";
+"quranFullDownloadNoSpaceFormat" = "Needs %@ of free space. Free up space and try again.";
+"quranFullDownloadIncludesTitle" = "What this downloads";
+"quranFullDownloadIncludesBody" = "All Quran pages as images, for reading without an internet connection. The Quran text, search and the Mukhtasar tafsir are already built into the app.";
+"quranFullDownloadExcludesBody" = "Recitation audio and the extra tafsir and translation books are not included. They are far larger and are downloaded on their own screens.";
+
+/* Quran Page Prompt */
+"quranPagePromptTitle" = "Page not downloaded";
+"quranPagePromptBody" = "Download this Juz to read its pages, online or offline.";
+"quranPagePromptDownloadFormat" = "Download · %@";
+"quranPagePromptDownloading" = "Downloading…";
+"quranPagePromptInstalling" = "Preparing pages…";
+"quranPagePromptCancel" = "Cancel";
+"quranPagePromptRetry" = "Try Again";
+"quranPagePromptFailed" = "Download failed. Check your connection and try again.";
+"quranPagePromptNoSpace" = "Not enough storage. Free up space and try again.";
+"quranPagePromptUnavailable" = "This page is not available yet.";
+"quranPagePromptWaitingNetwork" = "Waiting for a connection. The download resumes automatically.";
+
+/* Prayer Notifications */
+"jumuah" = "Jumu'ah";
+"prayerNotificationsTitle" = "Prayer Notifications";
+"prayerNotificationsSummaryOff" = "Off";
+"prayerNotificationsSummaryCountFormat" = "%1$@ of %2$@ prayers";
+"prayerNotificationsMasterToggle" = "Prayer notifications";
+"prayerNotificationsMasterCaption" = "Get a notification when each prayer time begins at your selected location.";
+"prayerNotificationsAuthorizationDeniedTitle" = "Notifications are turned off";
+"prayerNotificationsAuthorizationDeniedBody" = "iOS is blocking notifications for this app, so nothing can be delivered. Turn them on in Settings.";
+"prayerNotificationsOpenSystemSettings" = "Open Settings";
+"prayerNotificationsEnableAction" = "Allow Notifications";
+"prayerNotificationsPrayersSection" = "Obligatory prayers";
+"prayerNotificationsVoluntarySection" = "Optional reminders";
+"prayerNotificationsDuhaCaption" = "Derived from sunrise and Dhuhr.";
+"prayerNotificationsJumuahCaption" = "Fridays only, at the Dhuhr time. Replaces the Dhuhr notification that day.";
+"prayerNotificationsReminderSection" = "Early reminder";
+"prayerNotificationsReminderToggle" = "Remind me before each prayer";
+"prayerNotificationsReminderLeadFormat" = "%@ minutes before";
+"prayerNotificationsAlertSection" = "Notification sound";
+"prayerNotificationsStandardToneTitle" = "Standard notification";
+"prayerNotificationsStandardToneCaption" = "The default iOS notification tone.";
+"prayerNotificationsShortAdhanTitle" = "Short Adhan tone";
+"prayerNotificationsShortAdhanCaption" = "A bundled Adhan clip under 30 seconds, played by the notification itself.";
+"prayerNotificationsShortAdhanMissing" = "No Adhan tone is bundled in this build, so the standard notification is used.";
+"prayerNotificationsInAppSection" = "In-app Adhan";
+"prayerNotificationsInAppAdhanTitle" = "Play the full Adhan in the app";
+"prayerNotificationsInAppAdhanCaption" = "Plays the complete Adhan only while the app is open. iOS cannot play it from a notification when the app is closed.";
+"prayerNotificationsInAppAdhanMissing" = "No full Adhan recording is bundled in this build.";
+"prayerNotificationsCalculationSection" = "Calculation";
+"prayerNotificationsMethodTitle" = "Calculation method";
+"prayerNotificationsSchoolTitle" = "Asr calculation";
+"prayerSchoolStandard" = "Standard (Shafi'i, Maliki, Hanbali)";
+"prayerSchoolHanafi" = "Hanafi";
+"prayerNotificationsWindowFooterFormat" = "%1$@ notifications are scheduled across the next %2$@ days. iOS allows only 64 pending notifications, so open the app from time to time to keep them coming.";
+"prayerNotificationAdhanBodyFormat" = "It is time for %@.";
+"prayerNotificationReminderBodyFormat" = "%1$@ begins in %2$@ minutes.";
+
+// MARK: - Khatmah
+
+"khatmahHomeTile" = "Khatmah";
+"khatmahTitle" = "Quran Khatmah";
+"khatmahReminderTitle" = "Today's khatmah portion";
+"khatmahReminderBodyFormat" = "Pages %1$@ to %2$@ are waiting for you today.";
+"khatmahSetupTitle" = "New Khatmah";
+"khatmahSetupPaceTitle" = "Choose your pace";
+"khatmahSetupPaceCaption" = "Pick how long the khatmah should take, or the date you want to finish on.";
+"khatmahSetupDurationSection" = "Duration";
+"khatmahSetupTargetDateSection" = "Finish by";
+"khatmahSetupStartTitle" = "Where to start";
+"khatmahSetupStartCaption" = "Your khatmah begins on this date, from this page.";
+"khatmahSetupStartDate" = "Start date";
+"khatmahSetupStartPage" = "Start page";
+"khatmahSetupCreateAction" = "Start khatmah";
+"khatmahDaysFormat" = "%@ days";
+"khatmahPagesPerDayFormat" = "About %@ pages a day";
+"khatmahReminderSection" = "Daily reminder";
+"khatmahReminderToggle" = "Remind me every day";
+"khatmahReminderTimeTitle" = "Reminder time";
+"khatmahNotificationsDeniedBody" = "iOS is blocking notifications, so the daily khatmah reminder cannot be delivered. Turn them on in Settings.";
+"khatmahTodayTitle" = "Today's portion";
+"khatmahPageRangeFormat" = "Page %1$@ to %2$@";
+"khatmahPagesCountFormat" = "%@ pages";
+"khatmahReadAction" = "Read now";
+"khatmahMarkCompleteAction" = "Mark as read";
+"khatmahTodayDoneTitle" = "Today's portion is done";
+"khatmahDayOfTotalFormat" = "Day %1$@ of %2$@";
+"khatmahProgressTitle" = "Progress";
+"khatmahRemainingPagesFormat" = "%@ pages left";
+"khatmahExpectedCompletionTitle" = "Expected completion";
+"khatmahOnScheduleStatus" = "On schedule";
+"khatmahPagesAheadFormat" = "%@ pages ahead";
+"khatmahPagesBehindFormat" = "%@ pages behind";
+"khatmahDaysSectionTitle" = "Daily plan";
+"khatmahDayLabelFormat" = "Day %@";
+"khatmahDayStatusCompleted" = "Read";
+"khatmahDayStatusToday" = "Today";
+"khatmahDayStatusMissed" = "Missed";
+"khatmahDayStatusUpcoming" = "Upcoming";
+"khatmahStartsOnFormat" = "Starts on %@";
+"khatmahDeleteAction" = "Delete khatmah";
+"khatmahDeleteTitle" = "Delete this khatmah?";
+"khatmahDeleteMessage" = "The plan will be archived and the daily reminder will stop.";
+"khatmahCompletedTitle" = "Khatmah complete";
+"khatmahCompletedMessage" = "You have read the whole plan. May Allah accept it from you.";
+"khatmahCompletedCountFormat" = "%@ khatmahs completed";
+"khatmahEmptyTitle" = "Start a khatmah";
+"khatmahEmptyMessage" = "Set a pace and read the Quran through, a portion each day.";
+"khatmahNewPlanAction" = "New khatmah";
+
+// MARK: - Egyptian Radio
+
+"egyptianRadioHomeTile" = "Cairo Radio";
+"egyptianRadioTitle" = "Holy Quran Radio";
+"egyptianRadioSubtitle" = "From Cairo";
+"egyptianRadioConnecting" = "Connecting to the station…";
+"egyptianRadioIdleHint" = "Tap play to listen to the live broadcast.";
+"egyptianRadioLiveNote" = "A live broadcast — it needs an internet connection to play.";
+
+"contentHomeTile" = "Content";
+"contentTitle" = "Content";
+"contentSubtitle" = "Umrah and Hajj guides";
+"contentEmptyMessage" = "No content is available for this guide yet.";
+"contentTopicsCount" = "%d topics";
+"contentSectionJourney" = "The Journey";
+"contentSectionLearn" = "Learn";
+"contentUmrahTitle" = "Umrah Journey";
+"contentUmrahSubtitle" = "The rites of Umrah step by step, with its supplications and common mistakes.";
+"contentHajjTitle" = "Your Hajj Guide";
+"contentHajjSubtitle" = "The rites of Hajj day by day, with its pillars, conditions and common mistakes.";

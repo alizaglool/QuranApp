@@ -11,6 +11,37 @@ import CoreLocation
 import UIKit
 import Core
 
+// MARK: - Readiness
+
+enum QiblaReadinessState {
+    case ready
+    case headingUnavailable
+    case locationPermissionNotRequested
+    case locationPermissionDenied
+    case fallbackLocation
+    case approximateLocation
+    case lowHeadingAccuracy
+}
+
+enum QiblaRecoveryAction {
+    case requestLocationPermission
+    case openSystemSettings
+}
+
+extension QiblaReadinessState {
+
+    var isBearingTrustworthy: Bool {
+        switch self {
+        case .ready, .approximateLocation, .lowHeadingAccuracy:
+            return true
+        case .headingUnavailable, .locationPermissionNotRequested, .locationPermissionDenied, .fallbackLocation:
+            return false
+        }
+    }
+}
+
+// MARK: - View Model
+
 @MainActor
 final class QiblaCompassViewModel: ObservableObject {
 
@@ -20,22 +51,39 @@ final class QiblaCompassViewModel: ObservableObject {
     @Published private(set) var isCompassAvailable: Bool = true
     @Published private(set) var distanceToKaabaMeters: Double = 0
     @Published private(set) var elevationMeters: Double?
+    @Published private(set) var readinessState: QiblaReadinessState = .ready
+    @Published private(set) var headingAccuracy: DeviceHeadingAccuracy = .invalid
 
-    private let headingService = DeviceHeadingService()
-    private let locationStore = SelectedLocationStore.shared
+    private let headingService: DeviceHeadingProviding
+    private let locationStore: SelectedLocationStore
+    private let locationAuthorization: DeviceLocationAuthorizing
     private let alignmentFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     private var cancellables = Set<AnyCancellable>()
     private var hasReceivedHeading = false
+    private var isObservingHeading = false
 
     private static let headingSmoothingFactor: Double = 0.25
     private static let facingToleranceDegrees: Double = 5
 
-    init() {
-        isCompassAvailable = headingService.isHeadingAvailable
-        recomputeBearing(for: locationStore.selectedLocation)
+    init(headingService: DeviceHeadingProviding? = nil,
+         locationStore: SelectedLocationStore? = nil,
+         locationAuthorization: DeviceLocationAuthorizing? = nil) {
+        self.headingService = headingService ?? DeviceHeadingService.shared
+        self.locationStore = locationStore ?? SelectedLocationStore.shared
+        self.locationAuthorization = locationAuthorization ?? DeviceLocationService.shared
+
+        isCompassAvailable = self.headingService.isHeadingAvailable
+        recomputeBearing(for: self.locationStore.selectedLocation)
         bindSelectedLocation()
         bindDeviceHeading()
+        bindLocationAuthorization()
+        refreshReadinessState()
+    }
+
+    deinit {
+        guard isObservingHeading else { return }
+        headingService.detachHeadingObserver()
     }
 }
 
@@ -44,11 +92,16 @@ final class QiblaCompassViewModel: ObservableObject {
 extension QiblaCompassViewModel {
 
     func onAppear() {
-        headingService.startTrackingHeading()
+        guard !isObservingHeading else { return }
+        isObservingHeading = true
+        headingService.attachHeadingObserver()
+        refreshReadinessState()
     }
 
     func onDisappear() {
-        headingService.stopTrackingHeading()
+        guard isObservingHeading else { return }
+        isObservingHeading = false
+        headingService.detachHeadingObserver()
     }
 }
 
@@ -72,6 +125,63 @@ extension QiblaCompassViewModel {
     }
 }
 
+// MARK: - Readiness State
+
+extension QiblaCompassViewModel {
+
+    var readinessMessage: String? {
+        switch readinessState {
+        case .ready:
+            return nil
+        case .headingUnavailable:
+            return AppLocalizedKeys.qiblaUnavailable.value
+        case .locationPermissionNotRequested:
+            return AppLocalizedKeys.qiblaLocationPermissionNeeded.value
+        case .locationPermissionDenied:
+            return AppLocalizedKeys.qiblaLocationPermissionDenied.value
+        case .fallbackLocation:
+            return AppLocalizedKeys.qiblaDefaultLocation.value
+        case .approximateLocation:
+            return AppLocalizedKeys.qiblaApproximateLocation.value
+        case .lowHeadingAccuracy:
+            return AppLocalizedKeys.qiblaLowHeadingAccuracy.value
+        }
+    }
+
+    var recoveryAction: QiblaRecoveryAction? {
+        switch readinessState {
+        case .locationPermissionNotRequested:
+            return .requestLocationPermission
+        case .locationPermissionDenied, .approximateLocation:
+            return .openSystemSettings
+        case .ready, .headingUnavailable, .fallbackLocation, .lowHeadingAccuracy:
+            return nil
+        }
+    }
+
+    var recoveryActionTitle: String? {
+        switch recoveryAction {
+        case .requestLocationPermission:
+            return AppLocalizedKeys.qiblaEnableLocation.value
+        case .openSystemSettings:
+            return AppLocalizedKeys.locationOpenSettings.value
+        case .none:
+            return nil
+        }
+    }
+
+    func onRecoveryActionTapped() {
+        switch recoveryAction {
+        case .requestLocationPermission:
+            locationAuthorization.requestAuthorizationIfNotDetermined()
+        case .openSystemSettings:
+            openSystemSettings()
+        case .none:
+            break
+        }
+    }
+}
+
 // MARK: - Presentation Strings
 
 extension QiblaCompassViewModel {
@@ -83,7 +193,7 @@ extension QiblaCompassViewModel {
     }
 
     var statusText: String {
-        guard isCompassAvailable else { return AppLocalizedKeys.qiblaUnavailable.value }
+        if let readinessMessage { return readinessMessage }
         return isFacingQibla
             ? AppLocalizedKeys.qiblaAligned.value
             : AppLocalizedKeys.qiblaAlignHint.value
@@ -111,7 +221,7 @@ extension QiblaCompassViewModel {
     }
 
     var turnGuidanceText: String {
-        guard isCompassAvailable else { return AppLocalizedKeys.qiblaUnavailable.value }
+        if let readinessMessage { return readinessMessage }
         guard !isFacingQibla else { return AppLocalizedKeys.qiblaAligned.value }
         return qiblaOffsetDegrees > 0
             ? AppLocalizedKeys.qiblaTurnRight.value
@@ -131,15 +241,23 @@ private extension QiblaCompassViewModel {
         locationStore.$selectedLocation
             .sink { [weak self] location in
                 self?.recomputeBearing(for: location)
+                self?.refreshReadinessState()
             }
             .store(in: &cancellables)
     }
 
     func bindDeviceHeading() {
-        headingService.$trueHeadingDegrees
-            .compactMap { $0 }
-            .sink { [weak self] heading in
-                self?.applyHeading(heading)
+        headingService.headingReadings
+            .sink { [weak self] reading in
+                self?.applyHeadingReading(reading)
+            }
+            .store(in: &cancellables)
+    }
+
+    func bindLocationAuthorization() {
+        locationAuthorization.authorizationStatusChanges
+            .sink { [weak self] _ in
+                self?.refreshReadinessState()
             }
             .store(in: &cancellables)
     }
@@ -154,9 +272,48 @@ private extension QiblaCompassViewModel {
     }
 }
 
+// MARK: - Readiness Resolution
+
+private extension QiblaCompassViewModel {
+
+    func refreshReadinessState() {
+        readinessState = resolvedReadinessState()
+        refreshFacingState(for: smoothedHeadingDegrees)
+    }
+
+    func resolvedReadinessState() -> QiblaReadinessState {
+        guard isCompassAvailable else { return .headingUnavailable }
+
+        switch locationAuthorization.authorizationStatus {
+        case .notDetermined:
+            return .locationPermissionNotRequested
+        case .denied, .restricted:
+            return .locationPermissionDenied
+        default:
+            break
+        }
+
+        if locationStore.isUsingFallbackLocation { return .fallbackLocation }
+        if locationAuthorization.isPreciseAccuracyReduced { return .approximateLocation }
+        if headingAccuracy == .poor { return .lowHeadingAccuracy }
+        return .ready
+    }
+
+    func openSystemSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(settingsURL)
+    }
+}
+
 // MARK: - Heading Smoothing
 
 private extension QiblaCompassViewModel {
+
+    func applyHeadingReading(_ reading: DeviceHeadingReading) {
+        headingAccuracy = reading.accuracy
+        applyHeading(reading.degreesFromNorth)
+        refreshReadinessState()
+    }
 
     func applyHeading(_ rawHeading: Double) {
         guard hasReceivedHeading else {
@@ -175,7 +332,10 @@ private extension QiblaCompassViewModel {
     func refreshFacingState(for heading: Double) {
         let offset = abs(QiblaDirectionCalculator.shortestRotation(from: heading,
                                                                   to: qiblaBearingDegrees))
-        let isFacing = isCompassAvailable && offset <= QiblaCompassViewModel.facingToleranceDegrees
+        let isFacing = isCompassAvailable
+            && readinessState.isBearingTrustworthy
+            && headingAccuracy.isReliable
+            && offset <= QiblaCompassViewModel.facingToleranceDegrees
         guard isFacing != isFacingQibla else { return }
 
         isFacingQibla = isFacing

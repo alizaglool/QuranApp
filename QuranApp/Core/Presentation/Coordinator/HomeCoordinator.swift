@@ -24,6 +24,9 @@ protocol HomeCoordinating: AnyObject {
     func coordinateToWorship()
     func coordinateToPrayerTimes()
     func coordinateToLiveStream(station: RadioStation, title: String)
+    func coordinateToEgyptianRadio()
+    func coordinateToKhatmah()
+    func coordinateToContent()
 }
 
 class HomeCoordinator: MainCoordinator, HomeCoordinating {
@@ -64,6 +67,19 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
     )
 
     private lazy var radioCoordinator = RadioCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var khatmahCoordinator = KhatmahCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController,
+        onReadPage: { [weak self] page in
+            self?.pushQuranPager(startPage: page, openSearchOnAppear: false)
+        }
+    )
+
+    private lazy var contentCoordinator = ContentCoordinator(
         navigationController: navigationController,
         tabBarController: tabBarController
     )
@@ -124,6 +140,18 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
 
     func coordinateToLiveStream(station: RadioStation, title: String) {
         radioCoordinator.coordinateToLiveChannel(station, title: title)
+    }
+
+    func coordinateToEgyptianRadio() {
+        radioCoordinator.coordinateToEgyptianRadio()
+    }
+
+    func coordinateToKhatmah() {
+        khatmahCoordinator.start()
+    }
+
+    func coordinateToContent() {
+        contentCoordinator.start()
     }
 
     func coordinateToQuran(startPage: Int? = nil) {

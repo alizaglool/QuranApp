@@ -13,7 +13,9 @@ struct SelectedLocationLabelFormatter {
     func displayLabel(for location: SelectedLocation) -> String {
         let countryName = localizedCountryName(for: location.countryCode)
 
-        guard location.hasResolvedCityName else { return AppLocalizedKeys.homeLocation.value }
+        guard location.hasResolvedCityName else {
+            return unresolvedCityLabel(for: location, countryName: countryName)
+        }
         guard !countryName.isEmpty else { return location.cityName }
 
         return String(format: AppLocalizedKeys.locationLabelFormat.value,
@@ -26,5 +28,15 @@ struct SelectedLocationLabelFormatter {
 
         let activeLanguageCode = LocalizationManager.shared.currentLanguage.rawValue
         return Locale(identifier: activeLanguageCode).localizedString(forRegionCode: countryCode) ?? ""
+    }
+}
+
+// MARK: - Unresolved City
+
+private extension SelectedLocationLabelFormatter {
+
+    func unresolvedCityLabel(for location: SelectedLocation, countryName: String) -> String {
+        guard location.isResolvedFromDevice else { return AppLocalizedKeys.homeLocation.value }
+        return countryName.isEmpty ? AppLocalizedKeys.locationCurrentPlace.value : countryName
     }
 }

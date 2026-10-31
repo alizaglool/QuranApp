@@ -33,8 +33,8 @@ extension SelectedLocationStore {
 
     func updateSelectedLocation(_ location: SelectedLocation) {
         guard selectedLocation != location else { return }
-        selectedLocation = location
         persist(location)
+        selectedLocation = location
     }
 }
 

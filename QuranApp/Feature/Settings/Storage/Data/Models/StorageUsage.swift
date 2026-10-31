@@ -8,6 +8,7 @@
 import Foundation
 
 enum StorageCategory: String, CaseIterable, Identifiable, Sendable {
+    case quranPages
     case recitations
     case hadith
     case athkar
@@ -22,6 +23,7 @@ enum StorageDeleteTarget: Hashable, Sendable {
     case hadithBook(identifier: Int)
     case athkarPack(key: String)
     case tafsirBook(identifier: String)
+    case quranPack(key: String)
 }
 
 struct SurahUsage: Hashable, Sendable {
@@ -45,8 +47,13 @@ struct StorageScan: Sendable {
     let hadithBooks: [StorageItemUsage]
     let athkarPacks: [StorageItemUsage]
     let tafsirBooks: [StorageItemUsage]
+    let quranPacks: [StorageItemUsage]
 
-    static let empty = StorageScan(reciters: [], hadithBooks: [], athkarPacks: [], tafsirBooks: [])
+    static let empty = StorageScan(reciters: [],
+                                   hadithBooks: [],
+                                   athkarPacks: [],
+                                   tafsirBooks: [],
+                                   quranPacks: [])
 }
 
 // MARK: - Totals
@@ -65,6 +72,7 @@ extension StorageScan {
         case .hadith: return hadithBooks.reduce(Int64(0)) { $0 + $1.bytes }
         case .athkar: return athkarPacks.reduce(Int64(0)) { $0 + $1.bytes }
         case .tafsir: return tafsirBooks.reduce(Int64(0)) { $0 + $1.bytes }
+        case .quranPages: return quranPacks.reduce(Int64(0)) { $0 + $1.bytes }
         }
     }
 }

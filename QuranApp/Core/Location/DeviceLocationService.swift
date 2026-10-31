@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 import CoreLocation
 import Core
 
@@ -14,11 +15,22 @@ import Core
 enum DeviceLocationError: Error {
     case authorizationDenied
     case coordinateUnavailable
+    case timedOut
+}
+
+// MARK: - Authorization
+
+protocol DeviceLocationAuthorizing: AnyObject {
+    var authorizationStatus: CLAuthorizationStatus { get }
+    var isPreciseAccuracyReduced: Bool { get }
+    var authorizationStatusChanges: AnyPublisher<CLAuthorizationStatus, Never> { get }
+
+    func requestAuthorizationIfNotDetermined()
 }
 
 // MARK: - Service
 
-final class DeviceLocationService: NSObject, ObservableObject {
+final class DeviceLocationService: NSObject, ObservableObject, DeviceLocationAuthorizing {
 
     static let shared = DeviceLocationService()
 
@@ -28,6 +40,10 @@ final class DeviceLocationService: NSObject, ObservableObject {
     private let reverseGeocoder = CLGeocoder()
     private var pendingAuthorizationContinuations: [CheckedContinuation<CLAuthorizationStatus, Never>] = []
     private var pendingCoordinateContinuations: [CheckedContinuation<CLLocation, Error>] = []
+    private var coordinateTimeoutTask: Task<Void, Never>?
+
+    private static let coordinateTimeoutInSeconds: UInt64 = 15
+    private static let maxFixAgeInSeconds: TimeInterval = 300
 
     override init() {
         super.init()
@@ -47,6 +63,19 @@ extension DeviceLocationService {
 
     var isAuthorizationDenied: Bool {
         authorizationStatus == .denied || authorizationStatus == .restricted
+    }
+
+    var isPreciseAccuracyReduced: Bool {
+        locationManager.accuracyAuthorization == .reducedAccuracy
+    }
+
+    var authorizationStatusChanges: AnyPublisher<CLAuthorizationStatus, Never> {
+        $authorizationStatus.eraseToAnyPublisher()
+    }
+
+    func requestAuthorizationIfNotDetermined() {
+        guard authorizationStatus == .notDetermined else { return }
+        locationManager.requestWhenInUseAuthorization()
     }
 }
 
@@ -86,6 +115,16 @@ private extension DeviceLocationService {
         try await withCheckedThrowingContinuation { continuation in
             pendingCoordinateContinuations.append(continuation)
             locationManager.requestLocation()
+            scheduleCoordinateTimeout()
+        }
+    }
+
+    func scheduleCoordinateTimeout() {
+        coordinateTimeoutTask?.cancel()
+        coordinateTimeoutTask = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: DeviceLocationService.coordinateTimeoutInSeconds * 1_000_000_000)
+            guard !Task.isCancelled else { return }
+            self?.failPendingCoordinateRequests(with: .timedOut)
         }
     }
 }
@@ -121,12 +160,16 @@ private extension DeviceLocationService {
 private extension DeviceLocationService {
 
     func completePendingCoordinateRequests(with deviceLocation: CLLocation) {
+        coordinateTimeoutTask?.cancel()
+        coordinateTimeoutTask = nil
         let continuations = pendingCoordinateContinuations
         pendingCoordinateContinuations.removeAll()
         continuations.forEach { $0.resume(returning: deviceLocation) }
     }
 
     func failPendingCoordinateRequests(with error: DeviceLocationError) {
+        coordinateTimeoutTask?.cancel()
+        coordinateTimeoutTask = nil
         let continuations = pendingCoordinateContinuations
         pendingCoordinateContinuations.removeAll()
         continuations.forEach { $0.resume(throwing: error) }
@@ -152,7 +195,7 @@ extension DeviceLocationService: CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let deviceLocation = locations.last else {
+        guard let deviceLocation = locations.last(where: DeviceLocationService.isUsableFix) else {
             failPendingCoordinateRequests(with: .coordinateUnavailable)
             return
         }
@@ -161,5 +204,11 @@ extension DeviceLocationService: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         failPendingCoordinateRequests(with: .coordinateUnavailable)
+    }
+
+    static func isUsableFix(_ deviceLocation: CLLocation) -> Bool {
+        guard CLLocationCoordinate2DIsValid(deviceLocation.coordinate) else { return false }
+        guard deviceLocation.horizontalAccuracy >= 0 else { return false }
+        return abs(deviceLocation.timestamp.timeIntervalSinceNow) <= DeviceLocationService.maxFixAgeInSeconds
     }
 }

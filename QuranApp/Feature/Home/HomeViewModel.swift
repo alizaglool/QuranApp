@@ -28,7 +28,7 @@ struct QuickAccessItem: Identifiable {
 }
 
 enum QuickAccessType {
-    case quran, recitations, radio, adhkar, hadith, lessons, worship
+    case quran, recitations, radio, egyptianRadio, adhkar, khatmah, hadith, lessons, worship, content
 }
 
 private struct PrayerAnchor {
@@ -99,14 +99,20 @@ final class HomeViewModel: MainViewModel {
                         accent: .quickAccentRecitations, type: .recitations),
         QuickAccessItem(id: 2, title: AppLocalizedKeys.radio.value, icon: "dot.radiowaves.left.and.right",
                         accent: .quickAccentRadio, type: .radio),
-        QuickAccessItem(id: 3, title: AppLocalizedKeys.adhkar.value, icon: "sparkles",
+        QuickAccessItem(id: 3, title: AppLocalizedKeys.egyptianRadioHomeTile.value, icon: "antenna.radiowaves.left.and.right",
+                        accent: .quickAccentRadio, type: .egyptianRadio),
+        QuickAccessItem(id: 4, title: AppLocalizedKeys.adhkar.value, icon: "sparkles",
                         accent: .quickAccentAdhkar, type: .adhkar),
-        QuickAccessItem(id: 4, title: AppLocalizedKeys.hadith.value, icon: "text.book.closed.fill",
+        QuickAccessItem(id: 5, title: AppLocalizedKeys.khatmahHomeTile.value, icon: "book.closed.fill",
+                        accent: .quickAccentKhatmah, type: .khatmah),
+        QuickAccessItem(id: 6, title: AppLocalizedKeys.hadith.value, icon: "text.book.closed.fill",
                         accent: .quickAccentHadith, type: .hadith),
-        QuickAccessItem(id: 5, title: AppLocalizedKeys.lessons.value, icon: "play.rectangle.fill",
+        QuickAccessItem(id: 7, title: AppLocalizedKeys.lessons.value, icon: "play.rectangle.fill",
                         accent: .quickAccentLessons, type: .lessons),
-        QuickAccessItem(id: 6, title: AppLocalizedKeys.worshipHomeTile.value, icon: "checkmark.seal.fill",
-                        accent: .quickAccentWorship, type: .worship)
+        QuickAccessItem(id: 8, title: AppLocalizedKeys.worshipHomeTile.value, icon: "checkmark.seal.fill",
+                        accent: .quickAccentWorship, type: .worship),
+        QuickAccessItem(id: 9, title: AppLocalizedKeys.contentHomeTile.value, icon: "signpost.right.fill",
+                        accent: .quickAccentContent, type: .content)
     ]
 
     init(coordinator: HomeCoordinating) {
@@ -129,6 +135,7 @@ extension HomeViewModel {
         loadLastRead()
         loadFeaturedReciters()
         loadLiveStations()
+        resolveDeviceLocationIfNeeded()
         guard featuredSheikhs.isEmpty else { return }
         Task { await loadFeaturedSheikhs() }
     }
@@ -197,6 +204,29 @@ extension HomeViewModel {
         var remaining = nextPrayerTargetSeconds - day.seconds(at: date)
         if remaining <= 0 { remaining += HomeViewModel.secondsPerDay }
         return HomeViewModel.countdownString(forSecondsRemaining: remaining)
+    }
+
+    func resolveDeviceLocationIfNeeded() {
+        let hasNeverChosenLocation = locationStore.isUsingFallbackLocation
+        let isFollowingDeviceLocation = locationStore.selectedLocation.isResolvedFromDevice
+        guard hasNeverChosenLocation || isFollowingDeviceLocation else { return }
+
+        let locationService = DeviceLocationService.shared
+        let canPrompt = hasNeverChosenLocation && !locationService.isAuthorizationDenied
+        guard canPrompt || locationService.isAuthorized else { return }
+
+        Task { [weak self] in
+            guard let self else { return }
+            guard let resolved = try? await locationService.resolveCurrentLocation() else { return }
+            let current = self.locationStore.selectedLocation
+            let hasMovedCity = resolved.prayerTimesCacheIdentifier != current.prayerTimesCacheIdentifier
+            let hasLateCityName = resolved.hasResolvedCityName && !current.hasResolvedCityName
+            guard hasMovedCity || hasLateCityName else { return }
+
+            self.locationStore.updateSelectedLocation(resolved)
+            guard hasMovedCity else { return }
+            self.prayerStore.reloadAfterSelectedLocationChange()
+        }
     }
 
     func heroScene(at date: Date) -> HomeHeroScene {
@@ -632,14 +662,20 @@ extension HomeViewModel {
             coordinator.coordinateToRecitations()
         case .radio:
             coordinator.coordinateToRadio()
+        case .egyptianRadio:
+            coordinator.coordinateToEgyptianRadio()
         case .adhkar:
             coordinator.coordinateToAdhkar()
+        case .khatmah:
+            coordinator.coordinateToKhatmah()
         case .hadith:
             coordinator.coordinateToHadith()
         case .lessons:
             coordinator.coordinateToLessons()
         case .worship:
             coordinator.coordinateToWorship()
+        case .content:
+            coordinator.coordinateToContent()
         }
     }
 

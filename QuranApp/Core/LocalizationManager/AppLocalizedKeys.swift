@@ -66,10 +66,24 @@ enum AppLocalizedKeys: String {
     case athkarDownloadAll
     case athkarDuaaCount
 
+    // MARK: - Athkar audio prompt
+    case athkarAudioPromptTitle
+    case athkarAudioPromptBody
+    case athkarAudioPromptDownloadFormat
+    case athkarAudioPromptDownloading
+    case athkarAudioPromptInstalling
+    case athkarAudioPromptFailed
+    case athkarAudioPromptNoSpace
+    case athkarAudioPromptOffline
+    case athkarAudioPromptWaitingNetwork
+    case athkarAudioPromptReadWithout
+
     // MARK: - Athkar reader
     case athkarReaderPosition
     case athkarReaderProgress
     case athkarReaderTimes
+    case athkarReaderRepetition
+    case athkarReaderRepetitionLabel
     case athkarReaderTapHint
     case athkarReaderDoneHint
     case athkarReaderMeaning
@@ -86,7 +100,11 @@ enum AppLocalizedKeys: String {
     case athkarSettingsTextSize
     case athkarSettingsSizeValue
     case athkarSettingsShowTranslation
+    case athkarSettingsLayout
+    case athkarSettingsLayoutPages
+    case athkarSettingsLayoutList
     case athkarSettingsStartOver
+    case athkarAudioSkipped
 
     // MARK: - Hadith
     case hadithCount
@@ -340,6 +358,7 @@ enum AppLocalizedKeys: String {
     case homeLocation
     case homeLocationAccessibility
     case locationLabelFormat
+    case locationCurrentPlace
     case homeHeroDhikr
 
     // MARK: - Home Next Prayer
@@ -449,6 +468,14 @@ enum AppLocalizedKeys: String {
     case qiblaTurnRight
     case qiblaTurnLeft
 
+    // MARK: - Qibla Readiness
+    case qiblaLocationPermissionNeeded
+    case qiblaLocationPermissionDenied
+    case qiblaApproximateLocation
+    case qiblaDefaultLocation
+    case qiblaLowHeadingAccuracy
+    case qiblaEnableLocation
+
     // MARK: - Prayer Times Extra Anchors
     case prayerTimesGregorianFormat
     case prayerTimesOtherTimes
@@ -492,6 +519,7 @@ enum AppLocalizedKeys: String {
 
     // MARK: - Storage
 
+    case storageCategoryQuranPages
     case storageCategoryRecitations
     case storageCategoryHadith
     case storageCategoryAthkar
@@ -508,6 +536,171 @@ enum AppLocalizedKeys: String {
     case storageDeleteMessageFormat
     case storageDeleteAllTitle
     case storageDeleteAllMessageFormat
+
+    // MARK: - Quran Downloads
+
+    case quranDownloadsTitle
+    case quranDownloadsHeaderCaption
+    case quranDownloadsProgressFormat
+    case quranDownloadsAllDone
+    case quranDownloadsOnDeviceFormat
+    case quranDownloadsDownloadAll
+    case quranDownloadsCancelAll
+    case quranDownloadsDownloadAction
+    case quranDownloadsBundled
+    case quranDownloadsPagesFormat
+    case quranDownloadsConfirmTitle
+    case quranDownloadsConfirmMessageFormat
+    case quranDownloadsConfirmAllTitle
+    case quranDownloadsConfirmAllMessageFormat
+    case quranDownloadsEmptyTitle
+    case quranDownloadsEmptyMessage
+    case quranDownloadsOfflineNote
+    case quranDownloadsWaitingNetwork
+    case quranDownloadsSettingsRow
+
+    // MARK: - Quran Full Download
+
+    case quranFullDownloadTitle
+    case quranFullDownloadAction
+    case quranFullDownloadCancelAction
+    case quranFullDownloadRetryAction
+    case quranFullDownloadDoneAction
+    case quranFullDownloadIdleDetailFormat
+    case quranFullDownloadProgressFormat
+    case quranFullDownloadInstalling
+    case quranFullDownloadFailedDetail
+    case quranFullDownloadNoSpaceFormat
+    case quranFullDownloadIncludesTitle
+    case quranFullDownloadIncludesBody
+    case quranFullDownloadExcludesBody
+
+    // MARK: - Quran Page Prompt
+
+    case quranPagePromptTitle
+    case quranPagePromptBody
+    case quranPagePromptDownloadFormat
+    case quranPagePromptDownloading
+    case quranPagePromptInstalling
+    case quranPagePromptCancel
+    case quranPagePromptRetry
+    case quranPagePromptFailed
+    case quranPagePromptNoSpace
+    case quranPagePromptUnavailable
+    case quranPagePromptWaitingNetwork
+
+    // MARK: - Prayer Notifications
+
+    case jumuah
+    case prayerNotificationsTitle
+    case prayerNotificationsSummaryOff
+    case prayerNotificationsSummaryCountFormat
+    case prayerNotificationsMasterToggle
+    case prayerNotificationsMasterCaption
+    case prayerNotificationsAuthorizationDeniedTitle
+    case prayerNotificationsAuthorizationDeniedBody
+    case prayerNotificationsOpenSystemSettings
+    case prayerNotificationsEnableAction
+    case prayerNotificationsPrayersSection
+    case prayerNotificationsVoluntarySection
+    case prayerNotificationsDuhaCaption
+    case prayerNotificationsJumuahCaption
+    case prayerNotificationsReminderSection
+    case prayerNotificationsReminderToggle
+    case prayerNotificationsReminderLeadFormat
+    case prayerNotificationsAlertSection
+    case prayerNotificationsStandardToneTitle
+    case prayerNotificationsStandardToneCaption
+    case prayerNotificationsShortAdhanTitle
+    case prayerNotificationsShortAdhanCaption
+    case prayerNotificationsShortAdhanMissing
+    case prayerNotificationsInAppSection
+    case prayerNotificationsInAppAdhanTitle
+    case prayerNotificationsInAppAdhanCaption
+    case prayerNotificationsInAppAdhanMissing
+    case prayerNotificationsCalculationSection
+    case prayerNotificationsMethodTitle
+    case prayerNotificationsSchoolTitle
+    case prayerSchoolStandard
+    case prayerSchoolHanafi
+    case prayerNotificationsWindowFooterFormat
+    case prayerNotificationAdhanBodyFormat
+    case prayerNotificationReminderBodyFormat
+
+    // MARK: - Khatmah
+
+    case khatmahHomeTile
+    case khatmahTitle
+    case khatmahReminderTitle
+    case khatmahReminderBodyFormat
+    case khatmahSetupTitle
+    case khatmahSetupPaceTitle
+    case khatmahSetupPaceCaption
+    case khatmahSetupDurationSection
+    case khatmahSetupTargetDateSection
+    case khatmahSetupStartTitle
+    case khatmahSetupStartCaption
+    case khatmahSetupStartDate
+    case khatmahSetupStartPage
+    case khatmahSetupCreateAction
+    case khatmahDaysFormat
+    case khatmahPagesPerDayFormat
+    case khatmahReminderSection
+    case khatmahReminderToggle
+    case khatmahReminderTimeTitle
+    case khatmahNotificationsDeniedBody
+    case khatmahTodayTitle
+    case khatmahPageRangeFormat
+    case khatmahPagesCountFormat
+    case khatmahReadAction
+    case khatmahMarkCompleteAction
+    case khatmahTodayDoneTitle
+    case khatmahDayOfTotalFormat
+    case khatmahProgressTitle
+    case khatmahRemainingPagesFormat
+    case khatmahExpectedCompletionTitle
+    case khatmahOnScheduleStatus
+    case khatmahPagesAheadFormat
+    case khatmahPagesBehindFormat
+    case khatmahDaysSectionTitle
+    case khatmahDayLabelFormat
+    case khatmahDayStatusCompleted
+    case khatmahDayStatusToday
+    case khatmahDayStatusMissed
+    case khatmahDayStatusUpcoming
+    case khatmahStartsOnFormat
+    case khatmahDeleteAction
+    case khatmahDeleteTitle
+    case khatmahDeleteMessage
+    case khatmahCompletedTitle
+    case khatmahCompletedMessage
+    case khatmahCompletedCountFormat
+    case khatmahEmptyTitle
+    case khatmahEmptyMessage
+    case khatmahNewPlanAction
+
+    // MARK: - Egyptian Radio
+
+    case egyptianRadioHomeTile
+    case egyptianRadioTitle
+    case egyptianRadioSubtitle
+    case egyptianRadioConnecting
+    case egyptianRadioIdleHint
+    case egyptianRadioLiveNote
+
+    // MARK: - Content
+
+    case contentHomeTile
+    case contentTitle
+    case contentSubtitle
+    case contentEmptyMessage
+    case contentTopicsCount
+    case contentSectionJourney
+    case contentSectionLearn
+    case contentUmrahTitle
+    case contentUmrahSubtitle
+    case contentHajjTitle
+    case contentHajjSubtitle
 
     static func prayerCalculationMethodKey(forMethodId methodId: Int) -> AppLocalizedKeys? {
         let keysByMethodId: [Int: AppLocalizedKeys] = [

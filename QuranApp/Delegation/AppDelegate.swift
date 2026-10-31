@@ -7,6 +7,7 @@
 
 import UIKit
 import Core
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
@@ -15,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
         FontsManager.registerFonts()
         ReciterLibrary.warmUp()
         RadioCatalogService.shared.warmUp()
+        ContentCatalogRefresher.shared.start()
+        startPrayerNotifications()
+        startKhatmahReminders()
         return true
     }
 
@@ -46,8 +50,56 @@ class AppDelegate: UIResponder, UIApplicationDelegate, AppDelegateProtocol {
         backgroundSessionCompletionHandler = completionHandler
         // Accessing shared recreates the session if needed so its delegate
         // is live and can receive the pending callbacks from the OS.
-        _ = DownloadManager.shared
+        switch BackgroundSessionOwner(sessionIdentifier: identifier) {
+        case .quranImagePacks:
+            _ = QuranImagePackStore.shared
+        case .athkarAudio:
+            _ = AthkarAudioDownloadManager.shared
+        case .recitationAudio:
+            _ = DownloadManager.shared
+        }
     }
 
 }
 
+// MARK: - Prayer Notifications
+
+private extension AppDelegate {
+
+    func startPrayerNotifications() {
+        let manager = PrayerNotificationManager.shared
+        UNUserNotificationCenter.current().delegate = manager
+        manager.startObservingPrayerTimes()
+        manager.rescheduleFromPrayerTimesStore()
+    }
+}
+
+// MARK: - Khatmah Reminders
+
+private extension AppDelegate {
+
+    func startKhatmahReminders() {
+        let scheduler = KhatmahReminderScheduler.shared
+        scheduler.startObservingPlanChanges()
+        scheduler.rescheduleFromStore()
+    }
+}
+
+// MARK: - Background Session Owner
+
+enum BackgroundSessionOwner: Equatable {
+    case quranImagePacks
+    case athkarAudio
+    case recitationAudio
+
+    init(sessionIdentifier: String) {
+        switch sessionIdentifier {
+        case QuranImagePackStore.backgroundSessionIdentifier:
+            self = .quranImagePacks
+        case AthkarAudioDownloadManager.backgroundSessionIdentifier:
+            self = .athkarAudio
+        default:
+            self = .recitationAudio
+        }
+    }
+}

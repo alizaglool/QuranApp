@@ -55,6 +55,8 @@ final class PrayerTimesViewModel: MainViewModel {
     private var nextPrayerIdentifier: String = ""
     private var nextPrayerStartSeconds: Int = -1
     private var lastRefreshedMinute: Int = -1
+    private var isRefreshingPrayerTimes: Bool = false
+    private var lastDateTextsDayKey: String = ""
 
     var isTabBarVisible: Bool { false }
 
@@ -65,6 +67,7 @@ final class PrayerTimesViewModel: MainViewModel {
         loadDateTexts()
         bindPrayerTimes()
         bindSelectedLocation()
+        bindRefreshState()
     }
 
     func onAppear() {
@@ -120,6 +123,8 @@ extension PrayerTimesViewModel {
         let minute = Int(Date().timeIntervalSince1970 / 60)
         guard minute != lastRefreshedMinute else { return }
         lastRefreshedMinute = minute
+        prayerTimesStore.loadTodayForSelectedLocation()
+        loadDateTextsIfDayChanged()
         refreshSchedule()
     }
 
@@ -153,6 +158,16 @@ private extension PrayerTimesViewModel {
             .sink { [weak self] day in
                 self?.currentDay = day
                 self?.lastRefreshedMinute = -1
+                self?.refreshSchedule()
+            }
+            .store(in: &cancellables)
+    }
+
+    func bindRefreshState() {
+        prayerTimesStore.$isRefreshing
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isRefreshing in
+                self?.isRefreshingPrayerTimes = isRefreshing
                 self?.refreshSchedule()
             }
             .store(in: &cancellables)
@@ -209,7 +224,7 @@ private extension PrayerTimesViewModel {
         timeLeftDescription = ""
         prayedPrayerCount = 0
         hasLoadedPrayerTimes = false
-        hasFailedToLoadPrayerTimes = true
+        hasFailedToLoadPrayerTimes = !isRefreshingPrayerTimes
     }
 
     func rebuildRows(anchors: [DailyPrayerAnchor], dayKey: String) {
@@ -239,7 +254,19 @@ private extension PrayerTimesViewModel {
         }
     }
 
+    func loadDateTextsIfDayChanged() {
+        let dayKey = PrayerTimesViewModel.dateTextsDayKey()
+        guard dayKey != lastDateTextsDayKey else { return }
+        loadDateTexts()
+    }
+
+    static func dateTextsDayKey() -> String {
+        let components = Calendar.current.dateComponents([.year, .month, .day], from: Date())
+        return "\(components.year ?? 0)-\(components.month ?? 0)-\(components.day ?? 0)"
+    }
+
     func loadDateTexts() {
+        lastDateTextsDayKey = PrayerTimesViewModel.dateTextsDayKey()
         let languageCode = LocalizationManager.shared.currentLanguage == .Arabic ? "ar" : "en"
         let today = Date()
 

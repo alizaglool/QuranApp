@@ -13,7 +13,6 @@ public struct FontsManager {
     private static let uiFontFileNames: [String] = [
         "NotoSerif-Regular", "NotoSerif-Medium", "NotoSerif-SemiBold", "NotoSerif-Bold",
         "Manrope-Regular",   "Manrope-Medium",   "Manrope-SemiBold",   "Manrope-Bold",
-        "ElMessiri-Regular", "ElMessiri-Medium", "ElMessiri-SemiBold", "ElMessiri-Bold",
         "Kitab-Regular",     "Kitab-Bold"
     ]
 

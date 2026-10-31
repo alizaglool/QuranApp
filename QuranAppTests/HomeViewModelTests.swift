@@ -16,12 +16,18 @@ final class HomeCoordinatorSpy: HomeCoordinating {
         case search
         case quran(startPage: Int?)
         case adhkar
+        case khatmah
         case hadith
         case lessons
         case radio
+        case egyptianRadio
         case recitations
         case reciterSurahs
         case sheikhDetail(id: String)
+        case worship
+        case prayerTimes
+        case liveStream(title: String)
+        case content
     }
 
     private(set) var calls: [Call] = []
@@ -56,6 +62,18 @@ final class HomeCoordinatorSpy: HomeCoordinating {
         calls.append(.radio)
     }
 
+    func coordinateToEgyptianRadio() {
+        calls.append(.egyptianRadio)
+    }
+
+    func coordinateToKhatmah() {
+        calls.append(.khatmah)
+    }
+
+    func coordinateToContent() {
+        calls.append(.content)
+    }
+
     func coordinateToRecitations() {
         calls.append(.recitations)
     }
@@ -66,6 +84,18 @@ final class HomeCoordinatorSpy: HomeCoordinating {
 
     func coordinateToSheikhDetail(sheikh: Sheikh) {
         calls.append(.sheikhDetail(id: sheikh.id))
+    }
+
+    func coordinateToWorship() {
+        calls.append(.worship)
+    }
+
+    func coordinateToPrayerTimes() {
+        calls.append(.prayerTimes)
+    }
+
+    func coordinateToLiveStream(station: RadioStation, title: String) {
+        calls.append(.liveStream(title: title))
     }
 }
 
@@ -93,22 +123,22 @@ final class HomeViewModelTests: XCTestCase {
 extension HomeViewModelTests {
 
     func testInitAppliesReadingStartState() {
-        XCTAssertFalse(viewModel.hasReadingProgress)
+        XCTAssertTrue(viewModel.lastReadSurahName.isEmpty)
         XCTAssertNil(viewModel.lastReadPage)
         XCTAssertEqual(viewModel.lastReadProgress, 0)
-        XCTAssertEqual(viewModel.readingPercentText, "")
+        XCTAssertEqual(viewModel.quranProgressText, "0%")
     }
 
     func testStartStateCopyIsPresent() {
-        XCTAssertFalse(viewModel.readingTitle.isEmpty)
-        XCTAssertFalse(viewModel.readingSubtitle.isEmpty)
-        XCTAssertFalse(viewModel.readingCTATitle.isEmpty)
+        XCTAssertFalse(viewModel.continueReadingTitle.isEmpty)
+        XCTAssertFalse(viewModel.pageTitle.isEmpty)
+        XCTAssertFalse(viewModel.resumeTitle.isEmpty)
     }
 
     func testStartStateCopyIsLocalizedNotRawKeys() {
-        XCTAssertNotEqual(viewModel.readingTitle, AppLocalizedKeys.readingStartTitle.rawValue)
-        XCTAssertNotEqual(viewModel.readingSubtitle, AppLocalizedKeys.readingStartSubtitle.rawValue)
-        XCTAssertNotEqual(viewModel.readingCTATitle, AppLocalizedKeys.readingStartAction.rawValue)
+        XCTAssertNotEqual(viewModel.continueReadingTitle, AppLocalizedKeys.continueReading.rawValue)
+        XCTAssertNotEqual(viewModel.pageTitle, AppLocalizedKeys.page.rawValue)
+        XCTAssertNotEqual(viewModel.resumeTitle, AppLocalizedKeys.resume.rawValue)
     }
 
     func testInitPerformsNoNavigation() {
@@ -122,7 +152,8 @@ extension HomeViewModelTests {
 
     func testQuickAccessItemsOrderAndCount() {
         let types: [QuickAccessType] = viewModel.quickAccessItems.map { $0.type }
-        XCTAssertEqual(types, [.quran, .recitations, .radio, .adhkar, .hadith, .lessons])
+        XCTAssertEqual(types, [.quran, .recitations, .radio, .egyptianRadio, .adhkar,
+                               .khatmah, .hadith, .lessons, .worship, .content])
     }
 
     func testQuickAccessItemsCarryTitleAndIcon() {
@@ -133,7 +164,9 @@ extension HomeViewModelTests {
     }
 
     func testQuickAccessTitlesAreLocalizedNotRawKeys() {
-        let keys: [AppLocalizedKeys] = [.quran, .recitations, .radio, .adhkar, .hadith, .lessons]
+        let keys: [AppLocalizedKeys] = [.quran, .recitations, .radio, .egyptianRadioHomeTile, .adhkar,
+                                        .khatmahHomeTile, .hadith, .lessons, .worshipHomeTile,
+                                        .contentHomeTile]
         for (item, key) in zip(viewModel.quickAccessItems, keys) {
             XCTAssertNotEqual(item.title, key.rawValue)
         }
@@ -144,9 +177,13 @@ extension HomeViewModelTests {
             .quran(startPage: nil),
             .recitations,
             .radio,
+            .egyptianRadio,
             .adhkar,
+            .khatmah,
             .hadith,
-            .lessons
+            .lessons,
+            .worship,
+            .content
         ]
 
         for item in viewModel.quickAccessItems {
@@ -209,10 +246,9 @@ extension HomeViewModelTests {
 
         XCTAssertTrue(viewModel.prayerTimesFailed)
         XCTAssertFalse(viewModel.prayerTimesLoaded)
-        XCTAssertEqual(viewModel.loadingState, .failed)
         XCTAssertTrue(viewModel.prayerTimes.isEmpty)
         XCTAssertEqual(viewModel.nextPrayerName, "")
-        XCTAssertEqual(viewModel.countdownText, "")
+        XCTAssertEqual(viewModel.countdownText(at: Date()), "")
         XCTAssertEqual(viewModel.leftUntilText, "")
     }
 

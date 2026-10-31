@@ -30,12 +30,22 @@ extension HomeHeroScene {
     }
 
     var isLightScene: Bool {
-        self == .fajr || self == .day
+        self == .fajr || self == .day || self == .sunset
     }
 
-    var scrimOpacity: Double {
-        isLightScene ? 0.42 : 0.22
+    func scrimStops(isDarkAppearance: Bool) -> [Double] {
+        let base = isLightScene ? HomeHeroScene.lightSceneBaseScrim : HomeHeroScene.darkSceneBaseScrim
+        let boost = isDarkAppearance ? HomeHeroScene.darkAppearanceScrimBoost : 0
+        return [base + HomeHeroScene.topScrimLift + boost,
+                base + boost,
+                base + HomeHeroScene.bottomScrimLift + boost]
     }
+
+    private static let lightSceneBaseScrim: Double = 0.48
+    private static let darkSceneBaseScrim: Double = 0.22
+    private static let topScrimLift: Double = 0.10
+    private static let bottomScrimLift: Double = 0.16
+    private static let darkAppearanceScrimBoost: Double = 0.08
 }
 
 // MARK: - Selection

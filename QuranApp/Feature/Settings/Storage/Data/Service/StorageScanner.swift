@@ -30,12 +30,17 @@ private extension StorageScanner {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 
+    static var applicationSupport: URL {
+        FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first ?? documents
+    }
+
     static func performScan() -> StorageScan {
         StorageScan(
             reciters: scanReciters(),
             hadithBooks: scanHadithBooks(),
             athkarPacks: scanAthkarPacks(),
-            tafsirBooks: scanTafsirBooks()
+            tafsirBooks: scanTafsirBooks(),
+            quranPacks: scanQuranPacks()
         )
     }
 
@@ -91,6 +96,19 @@ private extension StorageScanner {
                                     bytes: directorySize(root.appendingPathComponent($0, isDirectory: true))) }
             .filter { $0.bytes > 0 }
             .sorted { $0.bytes > $1.bytes }
+    }
+
+    static func scanQuranPacks() -> [StorageItemUsage] {
+        let root = applicationSupport.appendingPathComponent(QuranImagePackStore.contentDirectoryName,
+                                                             isDirectory: true)
+        guard let keys = try? FileManager.default.contentsOfDirectory(atPath: root.path) else { return [] }
+
+        return keys
+            .filter { !$0.hasPrefix(".") }
+            .map { StorageItemUsage(identifier: $0,
+                                    bytes: directorySize(root.appendingPathComponent($0, isDirectory: true))) }
+            .filter { $0.bytes > 0 }
+            .sorted { $0.identifier < $1.identifier }
     }
 
     static func scanTafsirBooks() -> [StorageItemUsage] {

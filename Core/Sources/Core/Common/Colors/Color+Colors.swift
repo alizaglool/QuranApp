@@ -164,6 +164,8 @@ public extension Color {
     static let quickAccentHadith      = Color(.quickAccentHadith)
     static let quickAccentLessons     = Color(.quickAccentLessons)
     static let quickAccentWorship     = Color(.quickAccentWorship)
+    static let quickAccentKhatmah     = Color(.quickAccentKhatmah)
+    static let quickAccentContent     = Color(.quickAccentContent)
 
     /// Brand avatar circle. Same in both appearances — a saturated fill that
     /// carries white text either way.

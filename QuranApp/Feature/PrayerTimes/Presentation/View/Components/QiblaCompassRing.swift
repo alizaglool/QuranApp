@@ -23,7 +23,12 @@ struct QiblaCompassRing: View {
     var body: some View {
         VStack(spacing: .md) {
             ringStack
-            guidanceLabel
+
+            if viewModel.readinessMessage == nil {
+                guidanceLabel
+            } else {
+                readinessNotice
+            }
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
@@ -175,5 +180,57 @@ private extension QiblaCompassRing {
 
     var guidanceColor: Color {
         viewModel.isFacingQibla ? ColorStyle.primary.color : Color.qiblaAccent
+    }
+}
+
+// MARK: - Readiness Notice
+
+private extension QiblaCompassRing {
+
+    var readinessNotice: some View {
+        VStack(spacing: .xSm) {
+            readinessMessageLabel
+            recoveryActionButton
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.big)
+        .background(ColorStyle.surfaceContainerLow.color)
+        .customCornerRadius(.cornerXxl)
+        .overlay(
+            RoundedRectangle(cornerRadius: .cornerXxl, style: .continuous)
+                .stroke(Color.cardBorder, lineWidth: 1)
+        )
+    }
+
+    @ViewBuilder
+    var readinessMessageLabel: some View {
+        if let message = viewModel.readinessMessage {
+            HStack(spacing: .xSm) {
+                Image(systemName: "exclamationmark.circle.fill")
+                    .font(.system(size: 18))
+                    .customForeground(.warning)
+
+                Text(message)
+                    .customStyle(.bodySmall, .onSurfaceVariant)
+                    .multilineTextAlignment(.leading)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var recoveryActionButton: some View {
+        if let actionTitle = viewModel.recoveryActionTitle {
+            Button(action: viewModel.onRecoveryActionTapped) {
+                Text(actionTitle)
+                    .customStyle(.buttonText, .primary)
+                    .padding(.vertical, .xSm)
+                    .padding(.horizontal, .md)
+                    .background(ColorStyle.primary.color.opacity(0.08))
+                    .customCornerRadius(.cornerMd)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
     }
 }

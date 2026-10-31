@@ -15,6 +15,8 @@ struct HomePrayerDomeHeader: View {
 
     let topInset: CGFloat
 
+    @Environment(\.colorScheme) private var colorScheme
+
     @StateObject private var compassViewModel = QiblaCompassViewModel()
 
     @State private var now = Date()
@@ -42,6 +44,11 @@ struct HomePrayerDomeHeader: View {
         .padding(.bottom, .big)
         .frame(maxWidth: .infinity)
         .background(domeBackground)
+        .clipShape(
+            UnevenRoundedRectangle(bottomLeadingRadius: HomePrayerDomeHeader.bottomCornerRadius,
+                                   bottomTrailingRadius: HomePrayerDomeHeader.bottomCornerRadius,
+                                   style: .continuous)
+        )
     }
 }
 
@@ -63,13 +70,11 @@ private extension HomePrayerDomeHeader {
                 .id(heroScene)
                 .transition(.opacity)
 
-            Color.black.opacity(heroScene.scrimOpacity)
+            LinearGradient(colors: heroScene.scrimStops(isDarkAppearance: colorScheme == .dark)
+                .map { Color.black.opacity($0) },
+                           startPoint: .top,
+                           endPoint: .bottom)
         }
-        .clipShape(
-            UnevenRoundedRectangle(bottomLeadingRadius: HomePrayerDomeHeader.bottomCornerRadius,
-                                   bottomTrailingRadius: HomePrayerDomeHeader.bottomCornerRadius,
-                                   style: .continuous)
-        )
         .animation(.easeInOut(duration: 0.5), value: heroScene)
     }
 }
@@ -122,7 +127,7 @@ private extension HomePrayerDomeHeader {
     var dateLine: some View {
         Text(viewModel.dateLine)
             .customStyle(.caption2)
-            .foregroundColor(.white.opacity(0.65))
+            .foregroundColor(.white.opacity(0.95))
             .lineLimit(1)
             .minimumScaleFactor(0.8)
             .padding(.horizontal, .big)
@@ -214,7 +219,7 @@ private extension HomePrayerDomeHeader {
 
             Text(viewModel.nextPrayerHeroLine)
                 .customStyle(.kitab(size: 15, bold: true))
-                .foregroundColor(.white.opacity(0.85))
+                .foregroundColor(.white.opacity(0.95))
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }
@@ -241,7 +246,7 @@ private extension HomePrayerDomeHeader {
     var dhikrLine: some View {
         Text(viewModel.heroDhikrLine)
             .customStyle(.caption1)
-            .foregroundColor(.white.opacity(0.7))
+            .foregroundColor(.white.opacity(0.95))
             .multilineTextAlignment(.center)
             .lineLimit(2)
             .fixedSize(horizontal: false, vertical: true)
@@ -265,7 +270,7 @@ private extension HomePrayerDomeHeader {
             Text(compassViewModel.statusText)
         }
         .customStyle(.caption1)
-        .foregroundColor(.white.opacity(0.75))
+        .foregroundColor(.white.opacity(0.95))
         .lineLimit(1)
         .minimumScaleFactor(0.8)
         .padding(.horizontal, .xxBig)

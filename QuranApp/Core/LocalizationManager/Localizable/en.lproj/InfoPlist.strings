@@ -12,5 +12,4 @@
 "NSPhotoLibraryAddUsageDescription" = "We need access to save images to your photo library when you download or save content.";
 
 /* Location Access */
-"NSLocationWhenInUseUsageDescription" = "We need access to your location to set your current location during registration for better service.";
-"NSLocationAlwaysAndWhenInUseUsageDescription" = "We need access to your location at all times to provide location-based services even when the app is in the background.";
+"NSLocationWhenInUseUsageDescription" = "Your location is used to calculate accurate prayer times and the Qibla direction.";
