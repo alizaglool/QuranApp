@@ -15,6 +15,7 @@ final class AdhkarReadingViewModel: MainViewModel {
     @Published var currentTapCount: Int = 0
     @Published var isComplete: Bool = false
     @Published var isPlaying: Bool = false
+    @Published private(set) var hasAudio: Bool = false
 
     let category: DhikrCategory
     let orderedAdhkar: [Dhikr]
@@ -22,7 +23,7 @@ final class AdhkarReadingViewModel: MainViewModel {
 
     weak var coordinator: AdhkarCoordinating?
 
-    private let audioService = DhikrAudioService()
+    private let audioService: DhikrAudioService
     private var isAudioSessionActive: Bool = false
 
     private static func adhkarInReadingOrder(for category: DhikrCategory) -> [Dhikr] {
@@ -40,7 +41,6 @@ final class AdhkarReadingViewModel: MainViewModel {
     }
 
     var canGoNext: Bool { currentIndex < orderedAdhkar.count - 1 }
-    var hasAudio: Bool { currentDhikr?.audio != nil }
 
     /// One uniform contract for the view: a dhikr that ships `segments` is used as
     /// authored, anything older is synthesised from `textAr` + `description`.
@@ -52,6 +52,61 @@ final class AdhkarReadingViewModel: MainViewModel {
             synthesised.append(DhikrSegment(kind: .note, text: description))
         }
         return synthesised
+    }
+
+    func shareText(for dhikr: Dhikr) -> String {
+        var blocks: [String] = displaySegments(for: dhikr).compactMap { segment in
+            guard let text = segment.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+                  !text.isEmpty else { return nil }
+            return text
+        }
+
+        if let repeatLabel = dhikr.repeatLabel?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !repeatLabel.isEmpty {
+            blocks.append(repeatLabel)
+        }
+
+        let body = blocks.joined(separator: "\n\n")
+
+        guard let reference = dhikr.title?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !reference.isEmpty,
+              !Self.comparableForm(of: body).contains(Self.comparableForm(of: reference)) else {
+            return body
+        }
+        return body.isEmpty ? reference : body + "\n\n" + reference
+    }
+
+    private static let diacriticScalars: Set<Unicode.Scalar> = {
+        var scalars: Set<Unicode.Scalar> = []
+        for range in [0x0610...0x061A, 0x064B...0x065F, 0x06D6...0x06ED] {
+            for value in range {
+                if let scalar = Unicode.Scalar(UInt32(value)) { scalars.insert(scalar) }
+            }
+        }
+        for value in [0x0640, 0x0670] {
+            if let scalar = Unicode.Scalar(UInt32(value)) { scalars.insert(scalar) }
+        }
+        return scalars
+    }()
+
+    private static let letterVariants: [String: String] = [
+        "\u{0623}": "\u{0627}",
+        "\u{0625}": "\u{0627}",
+        "\u{0622}": "\u{0627}",
+        "\u{0671}": "\u{0627}",
+        "\u{0649}": "\u{064A}",
+        "\u{0629}": "\u{0647}"
+    ]
+
+    private static func comparableForm(of text: String) -> String {
+        var stripped = ""
+        for scalar in text.unicodeScalars where !diacriticScalars.contains(scalar) {
+            stripped.unicodeScalars.append(scalar)
+        }
+        for (variant, canonical) in letterVariants {
+            stripped = stripped.replacingOccurrences(of: variant, with: canonical)
+        }
+        return stripped.split(whereSeparator: \.isWhitespace).joined(separator: " ")
     }
 
     /// Athkar fills the bar by position, not by work done, so the first dhikr
@@ -67,14 +122,16 @@ final class AdhkarReadingViewModel: MainViewModel {
         return Double(currentTapCount) / Double(dhikr.count)
     }
 
-    init(coordinator: AdhkarCoordinating, category: DhikrCategory) {
+    init(coordinator: AdhkarCoordinating, category: DhikrCategory, downloads: AthkarAudioDownloadManager = .shared) {
         self.coordinator = coordinator
         self.category = category
         self.orderedAdhkar = Self.adhkarInReadingOrder(for: category)
+        self.audioService = DhikrAudioService(downloads: downloads)
 
         audioService.onStateChange = { [weak self] playing in
             self?.isPlaying = playing
         }
+        refreshAudioAvailability()
     }
 
     func goBack() {
@@ -86,6 +143,7 @@ final class AdhkarReadingViewModel: MainViewModel {
         currentIndex = 0
         currentTapCount = 0
         isComplete = false
+        refreshAudioAvailability()
     }
 
     func onTap() {
@@ -101,6 +159,7 @@ final class AdhkarReadingViewModel: MainViewModel {
         audioService.stop()
         currentTapCount = 0
         currentIndex = index
+        refreshAudioAvailability()
         continueAudioSessionIfActive()
     }
 
@@ -122,6 +181,7 @@ final class AdhkarReadingViewModel: MainViewModel {
         currentIndex = 0
         currentTapCount = 0
         isComplete = false
+        refreshAudioAvailability()
     }
 
     func onDisappear() {
@@ -147,13 +207,21 @@ final class AdhkarReadingViewModel: MainViewModel {
         playCurrentDhikrAudio()
     }
 
-    private func playCurrentDhikrAudio() {
-        guard let dhikr = currentDhikr, let audioFile = dhikr.audio else { return }
-        audioService.play(resource: audioFile, repeats: audioRepeats(for: dhikr))
+    private func refreshAudioAvailability() {
+        let resolved = currentDhikr.flatMap { dhikr in
+            dhikr.audio.flatMap { file in audioService.resourceURL(forDhikrIdentifier: dhikr.id, resource: file) }
+        }
+        let available = resolved != nil
+        if available != hasAudio { hasAudio = available }
     }
 
-    private func audioRepeats(for dhikr: Dhikr) -> Int {
-        dhikr.count
+    private func playCurrentDhikrAudio() {
+        guard let dhikr = currentDhikr, let audioFile = dhikr.audio else { return }
+        audioService.play(dhikrIdentifier: dhikr.id, resource: audioFile, repeats: audioRepeats(for: dhikr))
+    }
+
+    func audioRepeats(for dhikr: Dhikr) -> Int {
+        AthkarItemAudioPlayer.audioPlayCount(forRepeatCount: dhikr.count)
     }
 
     private func stopAudio() {

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Core
 
 // MARK: - Block
 
@@ -69,8 +70,8 @@ extension AthkarReaderPage {
             repeatBadge: item.showsRepeatBadge ? repeatBadge : "",
             situation: item.situationTag(),
             blocks: blocks(for: item),
-            transliteration: item.transliteration,
-            meaning: item.textEn,
+            transliteration: latinScriptText(item.transliteration),
+            meaning: latinScriptText(item.textEn),
             source: item.source,
             shareText: shareText(for: item)
         )
@@ -100,6 +101,10 @@ extension AthkarReaderPage {
         }
 
         return blocks
+    }
+
+    private static func latinScriptText(_ text: String) -> String {
+        LocalizationManager.shared.currentLanguage == .Arabic ? "" : text
     }
 
     private static func shareText(for item: AthkarItem) -> String {

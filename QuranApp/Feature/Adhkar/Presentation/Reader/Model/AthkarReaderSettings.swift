@@ -8,6 +8,15 @@
 import Foundation
 import Combine
 
+// MARK: - Layout
+
+enum AthkarReaderLayout: String, CaseIterable, Hashable {
+    case horizontal
+    case vertical
+}
+
+// MARK: - Settings
+
 final class AthkarReaderSettings: ObservableObject {
 
     static let shared = AthkarReaderSettings()
@@ -16,11 +25,13 @@ final class AthkarReaderSettings: ObservableObject {
 
     private static let scaleKey = "athkar.reader.textScale"
     private static let translationKey = "athkar.reader.showsTranslation"
+    private static let layoutKey = "athkar.reader.layoutMode"
 
     private let defaults: UserDefaults
 
     @Published private(set) var percent: Int
     @Published private(set) var showsTranslation: Bool
+    @Published private(set) var layout: AthkarReaderLayout
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -28,6 +39,9 @@ final class AthkarReaderSettings: ObservableObject {
         let stored = defaults.object(forKey: Self.scaleKey) as? Int ?? 0
         percent = Self.steps.contains(stored) ? stored : 100
         showsTranslation = defaults.object(forKey: Self.translationKey) as? Bool ?? true
+
+        let storedLayout = defaults.string(forKey: Self.layoutKey) ?? ""
+        layout = AthkarReaderLayout(rawValue: storedLayout) ?? .horizontal
     }
 
     // MARK: - Output
@@ -52,6 +66,12 @@ final class AthkarReaderSettings: ObservableObject {
     func grow() {
         guard let index = Self.steps.firstIndex(where: { $0 > percent }) else { return }
         apply(percent: Self.steps[index])
+    }
+
+    func setLayout(_ value: AthkarReaderLayout) {
+        guard value != layout else { return }
+        layout = value
+        defaults.set(value.rawValue, forKey: Self.layoutKey)
     }
 
     func setShowsTranslation(_ value: Bool) {

@@ -34,10 +34,7 @@ struct AdhkarReadingView: View {
 
     private var shareText: String {
         guard let dhikr = viewModel.currentDhikr else { return "" }
-        var parts: [String] = [dhikr.textAr]
-        if let desc = dhikr.description, !desc.isEmpty { parts.append(desc) }
-        if let ref  = dhikr.title,        !ref.isEmpty  { parts.append(ref) }
-        return parts.joined(separator: "\n\n")
+        return viewModel.shareText(for: dhikr)
     }
 
     var body: some View {

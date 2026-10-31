@@ -17,6 +17,8 @@ struct AthkarReaderCard: View {
     let meaningTitle: String
     let pronunciationTitle: String
     let sourceTitle: String
+    var repetitionLabel: String = ""
+    var repetitionAccessibilityLabel: String = ""
 
     var body: some View {
         VStack(alignment: .leading, spacing: .big) {
@@ -78,7 +80,9 @@ private extension AthkarReaderCard {
 
                 Spacer(minLength: .xSm)
 
-                if page.hasRepeatBadge {
+                if !repetitionLabel.isEmpty {
+                    repetitionBadge
+                } else if page.hasRepeatBadge {
                     repeatBadge
                 }
             }
@@ -102,6 +106,27 @@ private extension AthkarReaderCard {
             .background(
                 Capsule().fill(ColorStyle.washSecondarySubtle.color)
             )
+    }
+
+    var repetitionBadge: some View {
+        HStack(spacing: .xxSm) {
+            Image(systemName: "speaker.wave.2.fill")
+                .font(.caption2)
+                .customForeground(.primary)
+
+            Text(repetitionLabel)
+                .customStyle(.caption2, .primary)
+                .monospacedDigit()
+                .environment(\.layoutDirection, .leftToRight)
+        }
+        .padding(.horizontal, .sm)
+        .padding(.vertical, .xxSm)
+        .background(
+            Capsule().fill(ColorStyle.washPrimary.color)
+        )
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(repetitionAccessibilityLabel)
+        .animation(.easeInOut(duration: 0.2), value: repetitionLabel)
     }
 }
 

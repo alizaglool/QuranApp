@@ -12,6 +12,7 @@ struct AthkarReaderView: View {
 
     @StateObject private var viewModel: AthkarReaderViewModel
     @EnvironmentObject private var localizationManager: LocalizationManager
+    @State private var scrollPositionID: Int?
 
     init(coordinator: AdhkarCoordinating, pack: AthkarPack, items: [AthkarItem]) {
         _viewModel = StateObject(
@@ -39,7 +40,7 @@ struct AthkarReaderView: View {
                     if viewModel.isFinished {
                         completionView
                     } else {
-                        pager
+                        readerContent
                     }
                 }
 
@@ -134,6 +135,22 @@ private extension AthkarReaderView {
     }
 }
 
+// MARK: - Layout
+
+private extension AthkarReaderView {
+
+    @ViewBuilder
+    var readerContent: some View {
+        switch viewModel.layout {
+        case .horizontal:
+            pager
+
+        case .vertical:
+            verticalList
+        }
+    }
+}
+
 // MARK: - Pager
 
 private extension AthkarReaderView {
@@ -164,7 +181,9 @@ private extension AthkarReaderView {
                 showsTranslation: viewModel.showsTranslation,
                 meaningTitle: viewModel.meaningTitle,
                 pronunciationTitle: viewModel.pronunciationTitle,
-                sourceTitle: viewModel.sourceTitle
+                sourceTitle: viewModel.sourceTitle,
+                repetitionLabel: viewModel.repetitionLabel(forItemID: page.item.id),
+                repetitionAccessibilityLabel: viewModel.repetitionAccessibilityLabel(forItemID: page.item.id)
             )
             .padding(.horizontal, .md)
             .padding(.top, .xBig)
@@ -173,6 +192,60 @@ private extension AthkarReaderView {
         .scrollBounceBehavior(.basedOnSize)
         .contentShape(Rectangle())
         .onTapGesture { viewModel.count() }
+    }
+}
+
+// MARK: - Vertical list
+
+private extension AthkarReaderView {
+
+    var verticalList: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            LazyVStack(spacing: .md) {
+                ForEach(viewModel.pages) { page in
+                    listCard(page)
+                }
+            }
+            .scrollTargetLayout()
+            .padding(.horizontal, .md)
+            .padding(.top, .big)
+            .padding(.bottom, 170)
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollPosition(id: $scrollPositionID, anchor: .top)
+        .onAppear { scrollPositionID = viewModel.focusedItemID }
+        .onChange(of: scrollPositionID) { _, newValue in
+            guard let newValue else { return }
+            viewModel.focus(onItemID: newValue)
+        }
+        .onChange(of: viewModel.scrollTarget) { _, newValue in
+            guard let newValue, scrollPositionID != newValue else { return }
+            withAnimation(.easeInOut(duration: 0.3)) { scrollPositionID = newValue }
+        }
+    }
+
+    func listCard(_ page: AthkarReaderPage) -> some View {
+        AthkarReaderCard(
+            page: page,
+            icon: AthkarPackIcon.symbol(for: viewModel.pack.key),
+            scale: viewModel.textScale,
+            showsTranslation: viewModel.showsTranslation,
+            meaningTitle: viewModel.meaningTitle,
+            pronunciationTitle: viewModel.pronunciationTitle,
+            sourceTitle: viewModel.sourceTitle,
+            repetitionLabel: viewModel.repetitionLabel(forItemID: page.item.id),
+            repetitionAccessibilityLabel: viewModel.repetitionAccessibilityLabel(forItemID: page.item.id)
+        )
+        .overlay(playingHighlight(isActive: viewModel.playingItemID == page.item.id))
+        .contentShape(Rectangle())
+        .onTapGesture { viewModel.count(itemID: page.item.id) }
+    }
+
+    func playingHighlight(isActive: Bool) -> some View {
+        RoundedRectangle(cornerRadius: 24, style: .continuous)
+            .stroke(ColorStyle.primary.color.opacity(isActive ? 0.55 : 0), lineWidth: 1.5)
+            .animation(.easeInOut(duration: 0.25), value: isActive)
+            .allowsHitTesting(false)
     }
 }
 
@@ -201,7 +274,24 @@ private extension AthkarReaderView {
             )
         }
         .padding(.horizontal, .big)
+        .padding(.top, .xxBig)
+        .background(bottomPanelScrim)
         .ignoresSafeArea(.container, edges: .bottom)
+    }
+
+    var bottomPanelScrim: some View {
+        VStack(spacing: 0) {
+            LinearGradient(
+                colors: [Color.background.opacity(0), Color.background],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: .xxBig)
+
+            Color.background
+        }
+        .ignoresSafeArea(.container, edges: .bottom)
+        .allowsHitTesting(false)
     }
 
     var toastView: some View {

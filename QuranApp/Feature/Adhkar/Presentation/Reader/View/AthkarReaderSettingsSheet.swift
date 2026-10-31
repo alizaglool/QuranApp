@@ -27,9 +27,13 @@ struct AthkarReaderSettingsSheet: View {
                 .customStyle(.heading3, .onSurface)
 
             VStack(spacing: .sm) {
+                layoutRow
+
                 textSizeRow
 
-                translationRow
+                if viewModel.hasTranslatableContent {
+                    translationRow
+                }
             }
 
             startOverButton
@@ -40,7 +44,7 @@ struct AthkarReaderSettingsSheet: View {
         .padding(.bottom, .xBig)
         .frame(maxWidth: .infinity)
         .background(Color.background.ignoresSafeArea())
-        .presentationDetents([.height(360)])
+        .presentationDetents([.height(440)])
         .presentationDragIndicator(.hidden)
     }
 }
@@ -54,6 +58,56 @@ private extension AthkarReaderSettingsSheet {
             .fill(ColorStyle.outlineVariant.color)
             .frame(width: 40, height: 4)
             .padding(.top, .sm)
+    }
+
+    var layoutRow: some View {
+        HStack(spacing: .sm) {
+            Text(viewModel.layoutTitle)
+                .customStyle(.subheadline, .onSurface)
+
+            Spacer(minLength: .sm)
+
+            layoutOption(
+                title: viewModel.layoutPagesTitle,
+                systemName: "rectangle.on.rectangle",
+                layout: .horizontal
+            )
+
+            layoutOption(
+                title: viewModel.layoutListTitle,
+                systemName: "list.bullet.rectangle",
+                layout: .vertical
+            )
+        }
+        .padding(.horizontal, .md)
+        .padding(.vertical, .sm)
+        .background(rowBackground)
+    }
+
+    func layoutOption(title: String, systemName: String, layout: AthkarReaderLayout) -> some View {
+        let isSelected = viewModel.layout == layout
+
+        return Button {
+            viewModel.setLayout(layout)
+        } label: {
+            HStack(spacing: .xxSm) {
+                Image(systemName: systemName)
+                    .font(.system(size: 13, weight: .semibold))
+
+                Text(title)
+                    .customStyle(.caption1)
+            }
+            .customForeground(isSelected ? .onPrimary : .onSurfaceVariant)
+            .padding(.horizontal, .sm)
+            .frame(height: 34)
+            .background(
+                Capsule()
+                    .fill(isSelected ? ColorStyle.primary.color : Color.surfaceContainerLow)
+                    .overlay(Capsule().stroke(ColorStyle.cardBorder.color, lineWidth: isSelected ? 0 : 1))
+            )
+        }
+        .buttonStyle(.plain)
+        .animation(.easeInOut(duration: 0.2), value: isSelected)
     }
 
     var textSizeRow: some View {
