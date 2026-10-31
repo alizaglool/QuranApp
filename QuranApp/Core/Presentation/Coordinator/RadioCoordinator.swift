@@ -14,6 +14,7 @@ import Core
 protocol RadioCoordinating: AnyObject {
     func start()
     func coordinateToLiveChannel(_ station: RadioStation, title: String)
+    func coordinateToEgyptianRadio()
     func coordinateBack()
 }
 
@@ -36,6 +37,17 @@ class RadioCoordinator: MainCoordinator, RadioCoordinating {
 
     func coordinateToLiveChannel(_ station: RadioStation, title: String) {
         let view = LiveChannelPlayerView(station: station, title: title, coordinator: self)
+        let viewController = UIHostingController(
+            rootView: view
+                .environmentObject(LocalizationManager.shared)
+                .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
+        )
+        viewController.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func coordinateToEgyptianRadio() {
+        let view = EgyptianRadioView(coordinator: self)
         let viewController = UIHostingController(
             rootView: view
                 .environmentObject(LocalizationManager.shared)

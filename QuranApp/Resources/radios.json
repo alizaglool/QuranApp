@@ -1,6 +1,12 @@
 {
   "stations": [
     {
+      "id": 900003,
+      "nameAr": "إذاعة القرآن الكريم من القاهرة",
+      "nameEn": "Holy Quran Radio from Cairo",
+      "url": "https://stream.radiojar.com/8s5u5tpdtwzuv"
+    },
+    {
       "id": 900001,
       "nameAr": "القرآن الكريم - بث مباشر من الحرم المكي",
       "nameEn": "Holy Quran - Makkah Haram Live",
