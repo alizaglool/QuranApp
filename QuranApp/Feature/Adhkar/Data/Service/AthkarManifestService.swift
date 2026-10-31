@@ -25,7 +25,7 @@ final class AthkarManifestService {
     static let supportedSchemaVersion = 1
     static let bundledResourceName = "zikr_athkar_manifest"
     static let bundledDirectory = "Athkar"
-    static let releaseURL = URL(string: "https://github.com/bilalelsayed97/zikr-athkar-data/releases/latest/download/zikr_athkar_manifest.json")!
+    static let releaseURL = URL(string: "https://github.com/alizaglool/quran-athkar-data/releases/latest/download/zikr_athkar_manifest.json")!
 
     private(set) var source: AthkarManifestSource = .bundled
 

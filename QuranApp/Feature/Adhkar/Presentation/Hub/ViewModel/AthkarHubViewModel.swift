@@ -18,6 +18,8 @@ final class AthkarHubViewModel: MainViewModel {
     @Published private(set) var catalog: AthkarHubCatalog?
     @Published private(set) var specialCategories: [DhikrCategory] = []
     @Published private(set) var audioStates: [String: AthkarAudioState] = [:]
+    @Published private(set) var installedStates: [String: AthkarAudioState] = [:]
+    @Published var downloadPrompt: AthkarPack?
     @Published private(set) var banner: AthkarHubBanner?
     @Published private(set) var activeProhibitedWindow: ProhibitedWindow?
     @Published private(set) var prohibitedCardTitle = ""
@@ -34,6 +36,7 @@ final class AthkarHubViewModel: MainViewModel {
     private let prayerTimesStore = PrayerTimesStore.shared
     private var cancellables = Set<AnyCancellable>()
     private var refreshTask: Task<Void, Never>?
+    private var pendingReaderPack: AthkarPack?
 
     var isTabBarVisible: Bool { true }
 
@@ -113,7 +116,9 @@ final class AthkarHubViewModel: MainViewModel {
     }
 
     func state(for pack: AthkarPack) -> AthkarAudioState {
-        audioStates[pack.key] ?? .notDownloaded
+        if let live = audioStates[pack.key], live.isBusy { return live }
+        if let installed = installedStates[pack.key] { return installed }
+        return audioStates[pack.key] ?? .notDownloaded
     }
 
     // MARK: - Lifecycle
@@ -125,6 +130,7 @@ final class AthkarHubViewModel: MainViewModel {
             loadAllahNames()
             loadProhibitedTimes()
         }
+        refreshInstalledStates()
         prayerTimesStore.loadTodayForSelectedLocation()
         observe()
         refreshVisibility()
@@ -139,6 +145,28 @@ final class AthkarHubViewModel: MainViewModel {
     // MARK: - Actions
 
     func selectPack(_ pack: AthkarPack) {
+        guard !packStore.items(forKey: pack.key).isEmpty else { return }
+
+        guard pack.hasAudio, state(for: pack) != .downloaded else {
+            openReader(pack)
+            return
+        }
+        downloadPrompt = pack
+    }
+
+    func openReaderWithoutAudio() {
+        guard let pack = downloadPrompt else { return }
+        pendingReaderPack = pack
+        downloadPrompt = nil
+    }
+
+    func onDownloadPromptDismissed() {
+        guard let pack = pendingReaderPack else { return }
+        pendingReaderPack = nil
+        openReader(pack)
+    }
+
+    private func openReader(_ pack: AthkarPack) {
         let items = packStore.items(forKey: pack.key)
         guard !items.isEmpty else { return }
         coordinator?.coordinateToAthkarReader(pack: pack, items: items)
@@ -214,6 +242,37 @@ final class AthkarHubViewModel: MainViewModel {
         prohibitedCardTitle = content.titleAr
     }
 
+    // MARK: - Download state
+
+    private func settledKeys(from previous: [String: AthkarAudioState],
+                             to current: [String: AthkarAudioState]) -> Set<String> {
+        var keys: Set<String> = []
+        for (key, state) in current where previous[key]?.isBusy == true && !state.isBusy {
+            keys.insert(key)
+        }
+        for (key, state) in previous where state.isBusy && current[key] == nil {
+            keys.insert(key)
+        }
+        return keys
+    }
+
+    private func refreshInstalledStates() {
+        guard let catalog else { return }
+
+        let packs = (catalog.daily + catalog.countable + catalog.duaa).filter(\.hasAudio)
+        var resolved: [String: AthkarAudioState] = [:]
+        for pack in packs where downloads.state(for: pack) == .downloaded {
+            resolved[pack.key] = .downloaded
+        }
+        if resolved != installedStates { installedStates = resolved }
+    }
+
+    private func openPromptedReaderIfReady() {
+        guard let pack = downloadPrompt, state(for: pack) == .downloaded else { return }
+        pendingReaderPack = pack
+        downloadPrompt = nil
+    }
+
     // MARK: - Observation
 
     private func observe() {
@@ -221,7 +280,13 @@ final class AthkarHubViewModel: MainViewModel {
 
         downloads.$states
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.audioStates = $0 }
+            .sink { [weak self] states in
+                guard let self else { return }
+                let settled = self.settledKeys(from: self.audioStates, to: states)
+                self.audioStates = states
+                if !settled.isEmpty { self.refreshInstalledStates() }
+                self.openPromptedReaderIfReady()
+            }
             .store(in: &cancellables)
 
         prayerTimesStore.$today
@@ -233,6 +298,7 @@ final class AthkarHubViewModel: MainViewModel {
             .publisher(for: UIApplication.willEnterForegroundNotification)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
+                self?.refreshInstalledStates()
                 self?.prayerTimesStore.loadTodayForSelectedLocation()
                 self?.refreshVisibility()
             }

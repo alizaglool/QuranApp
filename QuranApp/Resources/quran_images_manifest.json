@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "dataVersion": "2026.10.1",
+  "totalPages": 604,
+  "linesPerPage": 15,
+  "bundledFirstPage": 1,
+  "bundledLastPage": 21,
+  "packs": [
+    {
+      "juz": 1,
+      "firstPage": 1,
+      "lastPage": 21,
+      "imageCount": 315,
+      "size": 3271981,
+      "sha256": "9eab9f4a0f2bfdc6c2d2c19100ccb3e51c40291e676a199690a46b8bf94801d5",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_01.zip"
+    },
+    {
+      "juz": 2,
+      "firstPage": 22,
+      "lastPage": 41,
+      "imageCount": 300,
+      "size": 3403541,
+      "sha256": "5e3ce5507c935ae39bd09c1d5fa6f02884868875878cc5c14eee97477d8a4742",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_02.zip"
+    },
+    {
+      "juz": 3,
+      "firstPage": 42,
+      "lastPage": 61,
+      "imageCount": 300,
+      "size": 3360597,
+      "sha256": "62c7ef9e824f262cd65fd3fe31bbf2e4d3f0c2cf5a59e60aa85ada475105f36a",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_03.zip"
+    },
+    {
+      "juz": 4,
+      "firstPage": 62,
+      "lastPage": 81,
+      "imageCount": 300,
+      "size": 3325152,
+      "sha256": "7aacc00db8d728c5eca7dafc2531606854ec8f0b8465998e545cba026b47ca6b",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_04.zip"
+    },
+    {
+      "juz": 5,
+      "firstPage": 82,
+      "lastPage": 101,
+      "imageCount": 300,
+      "size": 3357220,
+      "sha256": "7239b5f22966a91a506354ad0a1f0f8d413592e9f6ea207220c9dc8347dd147e",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_05.zip"
+    },
+    {
+      "juz": 6,
+      "firstPage": 102,
+      "lastPage": 120,
+      "imageCount": 285,
+      "size": 3232182,
+      "sha256": "f2ee719fbc0aaa32323be4f4f157c064bd6f5d967607ec71554603c52916c4ef",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_06.zip"
+    },
+    {
+      "juz": 7,
+      "firstPage": 121,
+      "lastPage": 141,
+      "imageCount": 315,
+      "size": 3604715,
+      "sha256": "7145c9a911aa48f0642a095b4946ebe9fcc8546e9a6e7a41caff01ee3b012f60",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_07.zip"
+    },
+    {
+      "juz": 8,
+      "firstPage": 142,
+      "lastPage": 161,
+      "imageCount": 300,
+      "size": 3309958,
+      "sha256": "64e13b3259935392e23c3e834eced87601f2e42d2f5505c9a0e93110d3d742b1",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_08.zip"
+    },
+    {
+      "juz": 9,
+      "firstPage": 162,
+      "lastPage": 181,
+      "imageCount": 300,
+      "size": 3309213,
+      "sha256": "8983e4866b86189743bc7f4da4b8e838df941e3d336a355cf6320b20b6049b32",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_09.zip"
+    },
+    {
+      "juz": 10,
+      "firstPage": 182,
+      "lastPage": 200,
+      "imageCount": 285,
+      "size": 3105838,
+      "sha256": "0354c1eea0ccee43597b4d5c57c3533b32cd12151e2b767e6d7769f95d9c41b4",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_10.zip"
+    },
+    {
+      "juz": 11,
+      "firstPage": 201,
+      "lastPage": 221,
+      "imageCount": 315,
+      "size": 3511472,
+      "sha256": "90c90c669f985ba0b99ead3d07a1d2edb8e65fa97f721f21351f714ac38addce",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_11.zip"
+    },
+    {
+      "juz": 12,
+      "firstPage": 222,
+      "lastPage": 241,
+      "imageCount": 300,
+      "size": 3342518,
+      "sha256": "cc1590ca6d5cdee380f75f05cdb29865b93e954091fca0b52bc8520a9eaee6a8",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_12.zip"
+    },
+    {
+      "juz": 13,
+      "firstPage": 242,
+      "lastPage": 261,
+      "imageCount": 300,
+      "size": 3320592,
+      "sha256": "1f9fe40b2aa8453e55d9142237c78a383c7540df78dacf980f25abf2d5fb2e13",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_13.zip"
+    },
+    {
+      "juz": 14,
+      "firstPage": 262,
+      "lastPage": 281,
+      "imageCount": 300,
+      "size": 3263676,
+      "sha256": "ee476b8adcb1895a36e78ad1da0db52dca5d611cfddbb39b88605850305b599f",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_14.zip"
+    },
+    {
+      "juz": 15,
+      "firstPage": 282,
+      "lastPage": 301,
+      "imageCount": 300,
+      "size": 3373243,
+      "sha256": "85f0673460c82450d97167ebda702e4447c1bdadb6ca15668052c3692d4a0ee5",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_15.zip"
+    },
+    {
+      "juz": 16,
+      "firstPage": 302,
+      "lastPage": 321,
+      "imageCount": 300,
+      "size": 3342097,
+      "sha256": "5ef3b5562b7292a4e061da57bef9dd561ac4ecaede82d2cf35497281406ca4b1",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_16.zip"
+    },
+    {
+      "juz": 17,
+      "firstPage": 322,
+      "lastPage": 341,
+      "imageCount": 300,
+      "size": 3197658,
+      "sha256": "dfb9032c5cbb97c75c0b1d2901e8b70819560ab0bcec81d9b627f86c5a2b1aae",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_17.zip"
+    },
+    {
+      "juz": 18,
+      "firstPage": 342,
+      "lastPage": 361,
+      "imageCount": 300,
+      "size": 3396668,
+      "sha256": "5dfc1afa2db244c009caafcfc568c23c8fbcf13f273bf6cb50de851125b2c244",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_18.zip"
+    },
+    {
+      "juz": 19,
+      "firstPage": 362,
+      "lastPage": 381,
+      "imageCount": 300,
+      "size": 3318693,
+      "sha256": "90e02920d3c56c3903e15bc37c6b6b6b58119b6e2a6e4f242577e64254aa84c3",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_19.zip"
+    },
+    {
+      "juz": 20,
+      "firstPage": 382,
+      "lastPage": 401,
+      "imageCount": 300,
+      "size": 3251754,
+      "sha256": "9eb36d947a0d1c9ec9294d142337be6245142105870c46f08c4daa151461046b",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_20.zip"
+    },
+    {
+      "juz": 21,
+      "firstPage": 402,
+      "lastPage": 421,
+      "imageCount": 300,
+      "size": 3326852,
+      "sha256": "8e9a84ca94d3cccda7a866c1a86a323fa9255aa6ed65048f17e5c1e7293c5523",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_21.zip"
+    },
+    {
+      "juz": 22,
+      "firstPage": 422,
+      "lastPage": 441,
+      "imageCount": 300,
+      "size": 3359923,
+      "sha256": "c6143e1ef1808d90954532ad67acdd96af161acaf2cf13a180759fb5ca91fae7",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_22.zip"
+    },
+    {
+      "juz": 23,
+      "firstPage": 442,
+      "lastPage": 461,
+      "imageCount": 300,
+      "size": 3352913,
+      "sha256": "32a31b238251bd3fe063eb4efd6b2dba41c56febe247c5b81bfc7ba38f671f25",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_23.zip"
+    },
+    {
+      "juz": 24,
+      "firstPage": 462,
+      "lastPage": 481,
+      "imageCount": 300,
+      "size": 3250331,
+      "sha256": "3f4b0c66c17fa7c9a3a3645e5a9005c44a6fdc05f162dab55b198eae84a44df9",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_24.zip"
+    },
+    {
+      "juz": 25,
+      "firstPage": 482,
+      "lastPage": 501,
+      "imageCount": 300,
+      "size": 3310397,
+      "sha256": "7f46636fecf89c8e2cedf0a0d5baa2bcee73d4167dfd3dc2d11060900e14b4a0",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_25.zip"
+    },
+    {
+      "juz": 26,
+      "firstPage": 502,
+      "lastPage": 521,
+      "imageCount": 300,
+      "size": 3449715,
+      "sha256": "27b5ba69781dc85d85a47fb56efe98adeb6c6142ee090f087ad8aa7d5ae387c1",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_26.zip"
+    },
+    {
+      "juz": 27,
+      "firstPage": 522,
+      "lastPage": 541,
+      "imageCount": 300,
+      "size": 3312859,
+      "sha256": "b3df975fdd82fa68d63150d8afb34449a38310f644066c0d59fb79505d5cc143",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_27.zip"
+    },
+    {
+      "juz": 28,
+      "firstPage": 542,
+      "lastPage": 561,
+      "imageCount": 300,
+      "size": 3460740,
+      "sha256": "cc20e8cbfd55bc1ca9f3970ffd169c824cc24ee0d21d3f6a06db0e92bd570c5f",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_28.zip"
+    },
+    {
+      "juz": 29,
+      "firstPage": 562,
+      "lastPage": 581,
+      "imageCount": 300,
+      "size": 3369761,
+      "sha256": "22333393c99b0353a84b0a78ad95ba2a8763471accbf3b06e4e30f1f4da3bb3a",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_29.zip"
+    },
+    {
+      "juz": 30,
+      "firstPage": 582,
+      "lastPage": 604,
+      "imageCount": 345,
+      "size": 3292884,
+      "sha256": "fc20b36aaffadda82f41207a380cf31cd1a9489ee323356fa6a5e64f2ea5932d",
+      "url": "https://github.com/alizaglool/quran-athkar-data/releases/download/quran-images-v2026.10.1/quran_images_juz_30.zip"
+    }
+  ]
+}

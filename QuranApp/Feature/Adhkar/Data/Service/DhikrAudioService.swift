@@ -20,13 +20,17 @@ final class DhikrAudioService {
     private var targetPlays: Int = 1
 
     private let searchExtensions = ["m4a", "mp3", "aac", "caf"]
-    private let subdirectory = "Audio"
+    private let downloads: AthkarAudioDownloadManager
+
+    init(downloads: AthkarAudioDownloadManager = .shared) {
+        self.downloads = downloads
+    }
 
     // MARK: - Playback
 
-    func play(resource: String, repeats: Int) {
+    func play(dhikrIdentifier: String, resource: String, repeats: Int) {
         stop()
-        guard let url = resourceURL(for: resource) else { return }
+        guard let url = resourceURL(forDhikrIdentifier: dhikrIdentifier, resource: resource) else { return }
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -60,7 +64,17 @@ final class DhikrAudioService {
 
     // MARK: - Resource lookup
 
-    private func resourceURL(for resource: String) -> URL? {
+    func resourceURL(forDhikrIdentifier identifier: String, resource: String) -> URL? {
+        if let downloaded = downloadedPackURL(forDhikrIdentifier: identifier) { return downloaded }
+        return bundleURL(for: resource)
+    }
+
+    func downloadedPackURL(forDhikrIdentifier identifier: String) -> URL? {
+        guard let source = LegacyDhikrAudioCatalog.source(forDhikrIdentifier: identifier) else { return nil }
+        return downloads.localURL(forFileNamed: source.fileName, inPack: source.packKey)
+    }
+
+    private func bundleURL(for resource: String) -> URL? {
         let name = (resource as NSString).deletingPathExtension
         let declared = (resource as NSString).pathExtension
         let candidates = declared.isEmpty
@@ -68,9 +82,6 @@ final class DhikrAudioService {
             : [declared] + searchExtensions.filter { $0 != declared }
 
         for ext in candidates {
-            if let url = Bundle.main.url(forResource: name, withExtension: ext, subdirectory: subdirectory) {
-                return url
-            }
             if let url = Bundle.main.url(forResource: name, withExtension: ext) {
                 return url
             }

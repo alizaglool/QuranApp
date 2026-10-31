@@ -35,6 +35,9 @@ final class QuranPageImageCache {
     private var inFlight = Set<String>()
     private let inFlightLock = NSLock()
 
+    private var availablePages = Set<Int>()
+    private let availabilityLock = NSLock()
+
     /// Captured once on the main thread — `UIScreen` must not be read from a
     /// background queue.
     private let screenScale: CGFloat
@@ -93,6 +96,28 @@ final class QuranPageImageCache {
         cache.removeAllObjects()
     }
 
+    // MARK: - Availability
+
+    func isPageAvailable(_ page: Int) -> Bool {
+        availabilityLock.lock()
+        let remembered = availablePages.contains(page)
+        availabilityLock.unlock()
+        if remembered { return true }
+
+        guard imagePath(page: page, line: 1) != nil else { return false }
+
+        availabilityLock.lock()
+        availablePages.insert(page)
+        availabilityLock.unlock()
+        return true
+    }
+
+    func forgetAvailability() {
+        availabilityLock.lock()
+        availablePages.removeAll()
+        availabilityLock.unlock()
+    }
+
     // MARK: - Decoding
 
     private func decode(page: Int, line: Int, maxPixelSize: Int) -> UIImage? {
@@ -124,7 +149,10 @@ final class QuranPageImageCache {
             let candidate = "\(resourcePath)/\(page)/\(line).png"
             if FileManager.default.fileExists(atPath: candidate) { return candidate }
         }
-        return Bundle.main.path(forResource: "\(line)", ofType: "png", inDirectory: "\(page)")
+        if let bundled = Bundle.main.path(forResource: "\(line)", ofType: "png", inDirectory: "\(page)") {
+            return bundled
+        }
+        return QuranImagePackStore.shared.localPath(page: page, line: line)
     }
 
     // MARK: - Prefetch

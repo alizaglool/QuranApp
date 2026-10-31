@@ -24,7 +24,7 @@ struct AthkarDownloadControl: View {
                 ZStack {
                     Circle().stroke(ColorStyle.downloadStroke.color.opacity(0.40), lineWidth: 2.5)
                     Circle()
-                        .trim(from: 0, to: CGFloat(progress))
+                        .trim(from: 0, to: AthkarDownloadControl.ringFraction(progress))
                         .stroke(Color.secondaryColor, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
                         .rotationEffect(.degrees(-90))
                         .animation(.linear(duration: 0.15), value: progress)
@@ -33,6 +33,7 @@ struct AthkarDownloadControl: View {
                         .customForeground(.downloadIcon)
                 }
                 .frame(width: side, height: side)
+                .environment(\.layoutDirection, .leftToRight)
             }
 
         case .installing:
@@ -62,6 +63,10 @@ struct AthkarDownloadControl: View {
     }
 
     // MARK: - Pieces
+
+    private static func ringFraction(_ progress: Double) -> CGFloat {
+        CGFloat(min(max(progress, 0), 1))
+    }
 
     private func button<Content: View>(@ViewBuilder label: () -> Content) -> some View {
         Button(action: action, label: label)

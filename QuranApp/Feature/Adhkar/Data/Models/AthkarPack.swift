@@ -32,6 +32,19 @@ enum AthkarDataError: LocalizedError {
     }
 }
 
+// MARK: - Error · download failure mapping
+
+extension AthkarDataError: ContentDownloadFailureConvertible {
+
+    var contentDownloadFailure: ContentDownloadFailure {
+        switch self {
+        case .checksumMismatch, .corruptArchive: return .corrupt
+        case .insufficientSpace:                 return .noSpace
+        default:                                 return .transfer
+        }
+    }
+}
+
 // MARK: - Kind
 
 enum AthkarPackKind: String, Codable, Hashable, CaseIterable {

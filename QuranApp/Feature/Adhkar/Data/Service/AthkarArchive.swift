@@ -62,10 +62,16 @@ enum AthkarArchive {
 
     static func verify(digest: String, matches expected: String) throws {
         let wanted = expected.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        guard !wanted.isEmpty else { return }
+        guard isWellFormedDigest(wanted) else {
+            throw AthkarDataError.checksumMismatch(digest)
+        }
         guard digest.lowercased() == wanted else {
             throw AthkarDataError.checksumMismatch(digest)
         }
+    }
+
+    static func isWellFormedDigest(_ value: String) -> Bool {
+        value.count == 64 && value.allSatisfy(\.isHexDigit)
     }
 
     // MARK: - Listing
@@ -165,6 +171,7 @@ enum AthkarArchive {
     @discardableResult
     static func extract(archiveAt url: URL,
                         to directory: URL,
+                        isCancelled: () -> Bool = { false },
                         where include: (Entry) -> Bool = { _ in true }) throws -> [URL] {
         let name = url.lastPathComponent
         let archive = try Data(contentsOf: url, options: .mappedIfSafe)
@@ -175,6 +182,8 @@ enum AthkarArchive {
         var written: [URL] = []
 
         for entry in all where !entry.isDirectory && include(entry) {
+            if isCancelled() { throw CancellationError() }
+
             let target = directory.appendingPathComponent(entry.path)
             let parent = target.deletingLastPathComponent()
 

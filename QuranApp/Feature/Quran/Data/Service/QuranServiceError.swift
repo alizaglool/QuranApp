@@ -97,9 +97,25 @@ final class QuranService {
     
     // MARK: - Fetch Prayer Times
 
-    func fetchPrayerTimes(latitude: Double, longitude: Double) async throws -> PrayerTimesData {
+    static func prayerTimesURLString(latitude: Double,
+                                     longitude: Double,
+                                     methodId: Int,
+                                     schoolId: Int,
+                                     dayTimestamp: Int) -> String {
+        "https://api.aladhan.com/v1/timings/\(dayTimestamp)"
+            + "?latitude=\(latitude)&longitude=\(longitude)&method=\(methodId)&school=\(schoolId)"
+    }
+
+    func fetchPrayerTimes(latitude: Double,
+                          longitude: Double,
+                          methodId: Int,
+                          schoolId: Int) async throws -> PrayerTimesData {
         let dayTimestamp = Int(Date().timeIntervalSince1970)
-        let urlString = "https://api.aladhan.com/v1/timings/\(dayTimestamp)?latitude=\(latitude)&longitude=\(longitude)"
+        let urlString = QuranService.prayerTimesURLString(latitude: latitude,
+                                                          longitude: longitude,
+                                                          methodId: methodId,
+                                                          schoolId: schoolId,
+                                                          dayTimestamp: dayTimestamp)
         let url = try buildURL(urlString)
         let data = try await fetchData(from: url)
 

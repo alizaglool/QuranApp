@@ -239,6 +239,14 @@ struct QuranPageView: View {
     private let quranDB = QuranDatabase.shared
     private let imageCache = QuranPageImageCache.shared
 
+    @State private var pageAvailability: Bool?
+
+    private let installedPacks = QuranImagePackStore.shared.$installedKeys.removeDuplicates()
+
+    private var isPageAvailable: Bool {
+        pageAvailability ?? imageCache.isPageAvailable(pageNumber)
+    }
+
     /// One bookmarked verse on this page, with everything we need to render
     /// its tinted highlight (per-line rects) and end-of-verse bookmark icon.
     private struct BookmarkRender {
@@ -318,55 +326,65 @@ struct QuranPageView: View {
                 let pageHeight = geo.size.height
 
                 ZStack {
-                    surahHeaders(pageWidth: pageWidth, lineHeight: lineHeight)
+                    if isPageAvailable {
+                        surahHeaders(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                    bookmarkHighlights(pageWidth: pageWidth, lineHeight: lineHeight)
+                        bookmarkHighlights(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                    playingVerseHighlight(pageWidth: pageWidth, lineHeight: lineHeight)
+                        playingVerseHighlight(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                    lineImages(pageWidth: pageWidth, lineHeight: lineHeight)
+                        lineImages(pageWidth: pageWidth, lineHeight: lineHeight)
 
-                    if viewModel.selectedPage == pageNumber {
-                        ForEach(viewModel.highlightRects, id: \.line) { rect in
-                            highlightRect(
-                                rect: rect,
-                                pageWidth: pageWidth,
-                                lineHeight: lineHeight
-                            )
+                        if viewModel.selectedPage == pageNumber {
+                            ForEach(viewModel.highlightRects, id: \.line) { rect in
+                                highlightRect(
+                                    rect: rect,
+                                    pageWidth: pageWidth,
+                                    lineHeight: lineHeight
+                                )
+                            }
                         }
-                    }
 
-                    verseMarkers(pageWidth: pageWidth, pageHeight: pageHeight)
+                        verseMarkers(pageWidth: pageWidth, pageHeight: pageHeight)
+                    } else {
+                        QuranPageDownloadPrompt(page: pageNumber)
+                    }
                 }
                 .onAppear {
                     imageCache.prefetchNeighbors(of: pageNumber, targetWidth: pageWidth)
                 }
+                .onReceive(installedPacks) { _ in
+                    let available = imageCache.isPageAvailable(pageNumber)
+                    if pageAvailability != available { pageAvailability = available }
+                }
                 .contentShape(Rectangle())
                 .overlay {
-                    LongPressLocationView(
-                        minimumPressDuration: 0.4,
-                        onLongPress: { location in
-                            let line = Int(location.y / lineHeight)
-                            let normalizedX = location.x / pageWidth
+                    if isPageAvailable {
+                        LongPressLocationView(
+                            minimumPressDuration: 0.4,
+                            onLongPress: { location in
+                                let line = Int(location.y / lineHeight)
+                                let normalizedX = location.x / pageWidth
 
-                            viewModel.selectVerse(
-                                atLine: line,
-                                normalizedX: normalizedX,
-                                pageNumber: pageNumber
-                            )
-                        },
-                        onTap: {
-                            let hasVisibleHighlight = !viewModel.highlightRects.isEmpty
-                                                   && viewModel.selectedPage == pageNumber
-                            if hasVisibleHighlight {
-                                viewModel.clearSelection()
-                            } else {
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    viewModel.toggleOverlay()
+                                viewModel.selectVerse(
+                                    atLine: line,
+                                    normalizedX: normalizedX,
+                                    pageNumber: pageNumber
+                                )
+                            },
+                            onTap: {
+                                let hasVisibleHighlight = !viewModel.highlightRects.isEmpty
+                                                       && viewModel.selectedPage == pageNumber
+                                if hasVisibleHighlight {
+                                    viewModel.clearSelection()
+                                } else {
+                                    withAnimation(.easeInOut(duration: 0.25)) {
+                                        viewModel.toggleOverlay()
+                                    }
                                 }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
 

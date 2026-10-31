@@ -24,6 +24,12 @@ struct AthkarHubView: View {
         }
         .onAppear { viewModel.onAppear() }
         .onDisappear { viewModel.onDisappear() }
+        .sheet(item: $viewModel.downloadPrompt,
+               onDismiss: viewModel.onDownloadPromptDismissed) { pack in
+            AthkarAudioPromptSheet(pack: pack) { viewModel.openReaderWithoutAudio() }
+                .presentationDetents([.height(380)])
+                .presentationDragIndicator(.visible)
+        }
     }
 }
 
