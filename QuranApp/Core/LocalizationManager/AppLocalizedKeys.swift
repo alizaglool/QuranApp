@@ -626,6 +626,30 @@ enum AppLocalizedKeys: String {
     case prayerNotificationsWindowFooterFormat
     case prayerNotificationAdhanBodyFormat
     case prayerNotificationReminderBodyFormat
+    case prayerNotificationAdhanSubtitle
+    case prayerNotificationReminderSubtitleFormat
+    case prayerNotificationsTestSection
+    case prayerNotificationsTestAction
+    case prayerNotificationsTestCaption
+    case prayerNotificationsTestTitle
+    case prayerNotificationsTestBody
+    case prayerNotificationsTestScheduled
+    case prayerNotificationsTestDenied
+    case prayerNotificationsTestNotRequested
+
+    // MARK: - Adhan Voice
+
+    case adhanVoiceScreenTitle
+    case adhanVoiceSectionTitle
+    case adhanVoiceFooter
+    case adhanVoiceUnavailable
+    case adhanVoicePreviewFormat
+    case adhanVoiceStopPreview
+    case adhanVoiceNotificationToneLabel
+    case adhanVoiceFullSectionTitle
+    case adhanVoicePlayFullAdhan
+    case adhanVoiceFullDurationFormat
+    case adhanVoicePlaybackFailed
 
     // MARK: - Khatmah
 
@@ -643,26 +667,31 @@ enum AppLocalizedKeys: String {
     case khatmahSetupStartDate
     case khatmahSetupStartPage
     case khatmahSetupCreateAction
-    case khatmahDaysFormat
+    case khatmahDaysCountOneFormat
+    case khatmahDaysCountTwoFormat
+    case khatmahDaysCountFewFormat
+    case khatmahDaysCountManyFormat
     case khatmahPagesPerDayFormat
-    case khatmahReminderSection
     case khatmahReminderToggle
     case khatmahReminderTimeTitle
     case khatmahNotificationsDeniedBody
     case khatmahTodayTitle
     case khatmahPageRangeFormat
-    case khatmahPagesCountFormat
+    case khatmahPagesCountOneFormat
+    case khatmahPagesCountTwoFormat
+    case khatmahPagesCountFewFormat
+    case khatmahPagesCountManyFormat
     case khatmahReadAction
     case khatmahMarkCompleteAction
     case khatmahTodayDoneTitle
     case khatmahDayOfTotalFormat
-    case khatmahProgressTitle
     case khatmahRemainingPagesFormat
     case khatmahExpectedCompletionTitle
+    case khatmahDaysLeftTitle
+    case khatmahPagesLeftTitle
     case khatmahOnScheduleStatus
     case khatmahPagesAheadFormat
     case khatmahPagesBehindFormat
-    case khatmahDaysSectionTitle
     case khatmahDayLabelFormat
     case khatmahDayStatusCompleted
     case khatmahDayStatusToday
@@ -675,9 +704,39 @@ enum AppLocalizedKeys: String {
     case khatmahCompletedTitle
     case khatmahCompletedMessage
     case khatmahCompletedCountFormat
+    case khatmahCountOneFormat
+    case khatmahCountTwoFormat
+    case khatmahCountFewFormat
+    case khatmahCountManyFormat
     case khatmahEmptyTitle
     case khatmahEmptyMessage
     case khatmahNewPlanAction
+    case khatmahScheduleTitle
+    case khatmahScheduleCompletedFormat
+    case khatmahAllDaysFormat
+    case khatmahDaysRemainingFormat
+    case khatmahLastDayLabel
+    case khatmahFromLabel
+    case khatmahToLabel
+    case khatmahVersePointFormat
+    case khatmahVerseRangeFormat
+    case khatmahPageNumberFormat
+    case khatmahHowItWorksTitle
+    case khatmahHowItWorksPace
+    case khatmahHowItWorksPortion
+    case khatmahHowItWorksReminder
+    case khatmahWorkloadJuzOne
+    case khatmahWorkloadJuzTwo
+    case khatmahWorkloadJuzFewFormat
+    case khatmahWorkloadJuzManyFormat
+    case khatmahWorkloadThreeQuarterJuz
+    case khatmahWorkloadHalfJuz
+    case khatmahWorkloadQuarterJuz
+    case khatmahStepFormat
+    case khatmahNextAction
+    case khatmahBackAction
+    case khatmahStartFromBeginning
+    case khatmahStartCustomPage
 
     // MARK: - Egyptian Radio
 
@@ -688,19 +747,28 @@ enum AppLocalizedKeys: String {
     case egyptianRadioIdleHint
     case egyptianRadioLiveNote
 
-    // MARK: - Content
+    // MARK: - Rites Guide
 
-    case contentHomeTile
-    case contentTitle
-    case contentSubtitle
-    case contentEmptyMessage
-    case contentTopicsCount
-    case contentSectionJourney
-    case contentSectionLearn
-    case contentUmrahTitle
-    case contentUmrahSubtitle
-    case contentHajjTitle
-    case contentHajjSubtitle
+    case ritesHomeTile
+    case ritesTitle
+    case ritesSubtitle
+    case ritesIntro
+    case ritesEmptyMessage
+    case ritesStagesLabel
+    case ritesTopicsLabel
+    case ritesStepsLabel
+    case ritesSectionJourney
+    case ritesSectionLearn
+    case ritesSectionExtras
+    case ritesUmrahTitle
+    case ritesUmrahSubtitle
+    case ritesHajjTitle
+    case ritesHajjSubtitle
+    case ritesOverviewTitle
+    case ritesStartJourney
+    case ritesPagePosition
+    case ritesPrevious
+    case ritesNext
 
     static func prayerCalculationMethodKey(forMethodId methodId: Int) -> AppLocalizedKeys? {
         let keysByMethodId: [Int: AppLocalizedKeys] = [

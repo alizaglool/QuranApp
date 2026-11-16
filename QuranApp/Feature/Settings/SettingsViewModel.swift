@@ -425,6 +425,8 @@ final class PrayerNotificationSettingsViewModel: MainViewModel {
     @Published private(set) var canIncreaseReminderLead: Bool = false
     @Published private(set) var canDecreaseReminderLead: Bool = false
     @Published private(set) var alertStyles: [PrayerNotificationAlertStyleItem] = []
+    @Published private(set) var isAdhanVoiceAvailable: Bool = false
+    @Published private(set) var adhanVoiceValue: String = ""
     @Published private(set) var isInAppAdhanEnabled: Bool = false
     @Published private(set) var isInAppAdhanAvailable: Bool = false
     @Published private(set) var methodValue: String = ""
@@ -432,6 +434,8 @@ final class PrayerNotificationSettingsViewModel: MainViewModel {
     @Published private(set) var methodOptions: [SettingsOptionItem] = []
     @Published private(set) var schoolOptions: [SettingsOptionItem] = []
     @Published private(set) var windowFooter: String = ""
+    @Published private(set) var testNotificationMessage: String = ""
+    @Published private(set) var isTestNotificationInFlight: Bool = false
     @Published var activeSheet: PrayerNotificationSettingsSheet?
 
     var isTabBarVisible: Bool { false }
@@ -471,6 +475,7 @@ extension PrayerNotificationSettingsViewModel {
     var reminderSectionTitle: String { AppLocalizedKeys.prayerNotificationsReminderSection.value }
     var reminderToggleTitle: String { AppLocalizedKeys.prayerNotificationsReminderToggle.value }
     var alertSectionTitle: String { AppLocalizedKeys.prayerNotificationsAlertSection.value }
+    var adhanVoiceRowTitle: String { AppLocalizedKeys.adhanVoiceScreenTitle.value }
     var inAppSectionTitle: String { AppLocalizedKeys.prayerNotificationsInAppSection.value }
     var inAppAdhanTitle: String { AppLocalizedKeys.prayerNotificationsInAppAdhanTitle.value }
     var inAppAdhanCaption: String { AppLocalizedKeys.prayerNotificationsInAppAdhanCaption.value }
@@ -478,6 +483,9 @@ extension PrayerNotificationSettingsViewModel {
     var calculationSectionTitle: String { AppLocalizedKeys.prayerNotificationsCalculationSection.value }
     var methodRowTitle: String { AppLocalizedKeys.prayerNotificationsMethodTitle.value }
     var schoolRowTitle: String { AppLocalizedKeys.prayerNotificationsSchoolTitle.value }
+    var testSectionTitle: String { AppLocalizedKeys.prayerNotificationsTestSection.value }
+    var testActionTitle: String { AppLocalizedKeys.prayerNotificationsTestAction.value }
+    var testActionCaption: String { AppLocalizedKeys.prayerNotificationsTestCaption.value }
 }
 
 // MARK: - Actions
@@ -531,6 +539,10 @@ extension PrayerNotificationSettingsViewModel {
         manager.updatePreferences { $0.isInAppAdhanAudioEnabled = isEnabled }
     }
 
+    func onAdhanVoiceRowTapped() {
+        coordinator?.coordinateToAdhanVoice()
+    }
+
     func onMethodRowTapped() {
         activeSheet = .calculationMethod
     }
@@ -560,6 +572,17 @@ extension PrayerNotificationSettingsViewModel {
 
     func onSheetDismissed() {
         reloadNotificationState()
+    }
+
+    func onTestNotificationTapped() {
+        guard !isTestNotificationInFlight else { return }
+        isTestNotificationInFlight = true
+        testNotificationMessage = ""
+
+        Task { [weak self, manager] in
+            let outcome = await manager.sendTestNotification()
+            self?.applyTestNotificationOutcome(outcome)
+        }
     }
 }
 
@@ -617,6 +640,8 @@ private extension PrayerNotificationSettingsViewModel {
         canIncreaseReminderLead = leadMinutes < PrayerNotificationPreferences.reminderLeadMinutesRange.upperBound
         canDecreaseReminderLead = leadMinutes > PrayerNotificationPreferences.reminderLeadMinutesRange.lowerBound
         alertStyles = makeAlertStyles()
+        isAdhanVoiceAvailable = !manager.availableRecordings.isEmpty
+        adhanVoiceValue = makeAdhanVoiceValue()
         isInAppAdhanEnabled = preferences.isInAppAdhanAudioEnabled
         isInAppAdhanAvailable = manager.isFullAdhanAudioAvailable
         methodValue = methodName(for: preferences.calculationMethod)
@@ -629,6 +654,20 @@ private extension PrayerNotificationSettingsViewModel {
     func changeReminderLead(by delta: Int) {
         manager.updatePreferences { preferences in
             preferences.prePrayerReminderLeadMinutes = preferences.clampedReminderLeadMinutes + delta
+        }
+    }
+
+    func applyTestNotificationOutcome(_ outcome: PrayerNotificationTestOutcome) {
+        isTestNotificationInFlight = false
+        reloadNotificationState()
+
+        switch outcome {
+        case .scheduled:
+            testNotificationMessage = AppLocalizedKeys.prayerNotificationsTestScheduled.value
+        case .authorizationDenied:
+            testNotificationMessage = AppLocalizedKeys.prayerNotificationsTestDenied.value
+        case .authorizationNotRequested:
+            testNotificationMessage = AppLocalizedKeys.prayerNotificationsTestNotRequested.value
         }
     }
 
@@ -679,6 +718,13 @@ private extension PrayerNotificationSettingsViewModel {
                                              isSelected: effective == .shortAdhanTone,
                                              isAvailable: isShortToneAvailable)
         ]
+    }
+
+    func makeAdhanVoiceValue() -> String {
+        guard let recording = manager.selectedRecording else { return "" }
+        return localizationManager.currentLanguage == .Arabic
+            ? recording.arabicTitle
+            : recording.englishTitle
     }
 
     func makeReminderLeadText(_ minutes: Int) -> String {

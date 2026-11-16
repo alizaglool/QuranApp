@@ -308,7 +308,7 @@
 "homeLocationAccessibility" = "المواقيت المعروضة لمدينة %@";
 "locationLabelFormat" = "%1$@، %2$@";
 "locationCurrentPlace" = "موقعك الحالي";
-"homeHeroDhikr" = "خير ما بدأت به ذكر الله 🌅";
+"homeHeroDhikr" = "ابدأ يومك بذكر الله 🌅";
 
 // MARK: - Home Next Prayer
 "nextPrayerLabel" = "الصلاة القادمة";
@@ -651,6 +651,30 @@
 "prayerNotificationsWindowFooterFormat" = "تمت جدولة %1$@ تنبيهًا خلال %2$@ أيام القادمة. يسمح النظام بـ ٦٤ تنبيهًا معلَّقًا فقط، لذا افتح التطبيق من حين لآخر لتستمر التنبيهات.";
 "prayerNotificationAdhanBodyFormat" = "حان وقت %@.";
 "prayerNotificationReminderBodyFormat" = "تبقى %2$@ دقيقة على %1$@.";
+"prayerNotificationAdhanSubtitle" = "حان وقت الصلاة";
+"prayerNotificationReminderSubtitleFormat" = "بعد %@ دقيقة";
+"prayerNotificationsTestSection" = "الاختبار";
+"prayerNotificationsTestAction" = "اختبار إشعار الصلاة";
+"prayerNotificationsTestCaption" = "أداة للاختبار فقط. ترسل إشعارًا تجريبيًا واحدًا بعد نحو ٥ ثوانٍ، ولا تغيّر مواقيت الصلاة أو إعدادات الإشعارات.";
+"prayerNotificationsTestTitle" = "اختبار إشعار الصلاة";
+"prayerNotificationsTestBody" = "هذا إشعار تجريبي. لم تتغيّر مواقيت الصلاة ولا الإعدادات.";
+"prayerNotificationsTestScheduled" = "تم إرسال الإشعار التجريبي. سيظهر بعد نحو ٥ ثوانٍ.";
+"prayerNotificationsTestDenied" = "الإشعارات معطّلة لهذا التطبيق. افتح الإعدادات للسماح بها ثم أعد المحاولة.";
+"prayerNotificationsTestNotRequested" = "اسمح بالإشعارات أولًا ثم أرسل الاختبار.";
+
+// MARK: - Adhan Voice
+
+"adhanVoiceScreenTitle" = "صوت الأذان";
+"adhanVoiceSectionTitle" = "اختر الصوت";
+"adhanVoiceFooter" = "لا يشغّل iOS أكثر من ٣٠ ثانية على شاشة القفل، لذلك يستخدم الإشعار بداية الأذان. ويُشغَّل الأذان كاملًا داخل التطبيق عند تفعيل الصوت داخل التطبيق.";
+"adhanVoiceUnavailable" = "لا توجد تسجيلات أذان مضمّنة في هذه النسخة.";
+"adhanVoicePreviewFormat" = "معاينة %@";
+"adhanVoiceStopPreview" = "إيقاف المعاينة";
+"adhanVoiceNotificationToneLabel" = "نغمة الإشعار";
+"adhanVoiceFullSectionTitle" = "الأذان كاملًا";
+"adhanVoicePlayFullAdhan" = "تشغيل الأذان كاملًا";
+"adhanVoiceFullDurationFormat" = "الأذان كاملًا %@";
+"adhanVoicePlaybackFailed" = "تعذّر تشغيل هذا التسجيل. اختر صوتًا آخر.";
 
 // MARK: - Khatmah
 
@@ -664,30 +688,35 @@
 "khatmahSetupDurationSection" = "المدة";
 "khatmahSetupTargetDateSection" = "تاريخ الإتمام";
 "khatmahSetupStartTitle" = "نقطة البداية";
-"khatmahSetupStartCaption" = "تبدأ ختمتك في هذا التاريخ من هذه الصفحة.";
+"khatmahSetupStartCaption" = "اختر الصفحة التي تبدأ منها ختمتك.";
 "khatmahSetupStartDate" = "تاريخ البدء";
 "khatmahSetupStartPage" = "صفحة البداية";
 "khatmahSetupCreateAction" = "ابدأ الختمة";
-"khatmahDaysFormat" = "%@ يوم";
-"khatmahPagesPerDayFormat" = "حوالي %@ صفحة يوميًا";
-"khatmahReminderSection" = "التذكير اليومي";
+"khatmahDaysCountOneFormat" = "يوم واحد";
+"khatmahDaysCountTwoFormat" = "يومان";
+"khatmahDaysCountFewFormat" = "%@ أيام";
+"khatmahDaysCountManyFormat" = "%@ يومًا";
+"khatmahPagesPerDayFormat" = "حوالي %@ يوميًا";
 "khatmahReminderToggle" = "تذكيري كل يوم";
 "khatmahReminderTimeTitle" = "وقت التذكير";
 "khatmahNotificationsDeniedBody" = "التنبيهات محجوبة من النظام، فلن يصلك تذكير الختمة اليومي. فعِّلها من الإعدادات.";
 "khatmahTodayTitle" = "ورد اليوم";
 "khatmahPageRangeFormat" = "من صفحة %1$@ إلى %2$@";
-"khatmahPagesCountFormat" = "%@ صفحة";
+"khatmahPagesCountOneFormat" = "صفحة واحدة";
+"khatmahPagesCountTwoFormat" = "صفحتان";
+"khatmahPagesCountFewFormat" = "%@ صفحات";
+"khatmahPagesCountManyFormat" = "%@ صفحة";
 "khatmahReadAction" = "اقرأ الآن";
 "khatmahMarkCompleteAction" = "تم القراءة";
 "khatmahTodayDoneTitle" = "أتممت ورد اليوم";
 "khatmahDayOfTotalFormat" = "اليوم %1$@ من %2$@";
-"khatmahProgressTitle" = "التقدم";
-"khatmahRemainingPagesFormat" = "بقيت %@ صفحة";
+"khatmahRemainingPagesFormat" = "بقيت %@";
 "khatmahExpectedCompletionTitle" = "الإتمام المتوقع";
+"khatmahDaysLeftTitle" = "أيام متبقية";
+"khatmahPagesLeftTitle" = "صفحات متبقية";
 "khatmahOnScheduleStatus" = "في الموعد";
-"khatmahPagesAheadFormat" = "%@ صفحة قبل الموعد";
-"khatmahPagesBehindFormat" = "%@ صفحة متأخرة";
-"khatmahDaysSectionTitle" = "الخطة اليومية";
+"khatmahPagesAheadFormat" = "%@ قبل الموعد";
+"khatmahPagesBehindFormat" = "%@ متأخرة";
 "khatmahDayLabelFormat" = "اليوم %@";
 "khatmahDayStatusCompleted" = "تمت";
 "khatmahDayStatusToday" = "اليوم";
@@ -699,10 +728,40 @@
 "khatmahDeleteMessage" = "ستُحفظ الخطة في السجل وسيتوقف التذكير اليومي.";
 "khatmahCompletedTitle" = "تمت الختمة";
 "khatmahCompletedMessage" = "أتممت الخطة كاملة، تقبل الله منك.";
-"khatmahCompletedCountFormat" = "أتممت %@ ختمة";
+"khatmahCompletedCountFormat" = "أتممت %@";
+"khatmahCountOneFormat" = "ختمة واحدة";
+"khatmahCountTwoFormat" = "ختمتين";
+"khatmahCountFewFormat" = "%@ ختمات";
+"khatmahCountManyFormat" = "%@ ختمة";
 "khatmahEmptyTitle" = "ابدأ ختمة";
 "khatmahEmptyMessage" = "اختر مدة واقرأ القرآن كاملًا، وردًا كل يوم.";
 "khatmahNewPlanAction" = "ختمة جديدة";
+"khatmahScheduleTitle" = "الورد اليومي";
+"khatmahScheduleCompletedFormat" = "تمت قراءة %1$@ من %2$@";
+"khatmahAllDaysFormat" = "كل الأيام (%@)";
+"khatmahDaysRemainingFormat" = "بقي %@";
+"khatmahLastDayLabel" = "اليوم الأخير";
+"khatmahFromLabel" = "من";
+"khatmahToLabel" = "إلى";
+"khatmahVersePointFormat" = "%1$@ %2$@";
+"khatmahVerseRangeFormat" = "%1$@ إلى %2$@";
+"khatmahPageNumberFormat" = "صفحة %@";
+"khatmahHowItWorksTitle" = "كيف تعمل";
+"khatmahHowItWorksPace" = "اختر المدة التي تريد إتمام الختمة فيها.";
+"khatmahHowItWorksPortion" = "اقرأ ورد اليوم ثم علّمه كمقروء.";
+"khatmahHowItWorksReminder" = "تذكير يومي يبقيك على الموعد.";
+"khatmahWorkloadJuzOne" = "جزء كل يوم";
+"khatmahWorkloadJuzTwo" = "جزآن كل يوم";
+"khatmahWorkloadJuzFewFormat" = "%@ أجزاء كل يوم";
+"khatmahWorkloadJuzManyFormat" = "%@ جزءًا كل يوم";
+"khatmahWorkloadThreeQuarterJuz" = "ثلاثة أرباع الجزء كل يوم";
+"khatmahWorkloadHalfJuz" = "نصف جزء كل يوم";
+"khatmahWorkloadQuarterJuz" = "ربع جزء كل يوم";
+"khatmahStepFormat" = "الخطوة %1$@ من %2$@";
+"khatmahNextAction" = "التالي";
+"khatmahBackAction" = "رجوع";
+"khatmahStartFromBeginning" = "بداية القرآن";
+"khatmahStartCustomPage" = "صفحة أخرى";
 
 // MARK: - Egyptian Radio
 
@@ -713,14 +772,23 @@
 "egyptianRadioIdleHint" = "اضغط تشغيل للاستماع إلى البث المباشر.";
 "egyptianRadioLiveNote" = "بث مباشر يحتاج اتصالًا بالإنترنت للتشغيل.";
 
-"contentHomeTile" = "المحتوى";
-"contentTitle" = "المحتوى";
-"contentSubtitle" = "أدلة العمرة والحج";
-"contentEmptyMessage" = "لا يتوفر محتوى لهذا الدليل حاليًا.";
-"contentTopicsCount" = "%d موضوعًا";
-"contentSectionJourney" = "الرحلة";
-"contentSectionLearn" = "تعلّم";
-"contentUmrahTitle" = "رحلة العمرة";
-"contentUmrahSubtitle" = "مناسك العمرة خطوة بخطوة، مع الأدعية والأخطاء الشائعة.";
-"contentHajjTitle" = "دليلك في الحج";
-"contentHajjSubtitle" = "مناسك الحج يومًا بيوم، مع الأركان والشروط والأخطاء الشائعة.";
+"ritesHomeTile" = "دليلك للمناسك";
+"ritesTitle" = "دليلك للمناسك";
+"ritesSubtitle" = "العمرة والحج خطوة بخطوة";
+"ritesIntro" = "رحلتان في دليل واحد: المناسك بترتيبها، والأدعية، والأحكام، والأخطاء الشائعة.";
+"ritesEmptyMessage" = "لا يتوفر هذا الدليل حاليًا.";
+"ritesStagesLabel" = "مراحل";
+"ritesTopicsLabel" = "مواضيع";
+"ritesStepsLabel" = "خطوات";
+"ritesSectionJourney" = "مراحل الرحلة";
+"ritesSectionLearn" = "تعلّم";
+"ritesSectionExtras" = "مواضيع إضافية";
+"ritesUmrahTitle" = "رحلة العمرة";
+"ritesUmrahSubtitle" = "مناسك العمرة خطوة بخطوة، مع الأدعية والأخطاء الشائعة.";
+"ritesHajjTitle" = "رحلة الحج";
+"ritesHajjSubtitle" = "مناسك الحج يومًا بيوم، مع الأركان والشروط والأخطاء الشائعة.";
+"ritesOverviewTitle" = "نظرة عامة";
+"ritesStartJourney" = "ابدأ الرحلة";
+"ritesPagePosition" = "%1$@ من %2$@";
+"ritesPrevious" = "السابق";
+"ritesNext" = "التالي";

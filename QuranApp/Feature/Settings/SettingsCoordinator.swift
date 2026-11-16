@@ -75,9 +75,50 @@ class SettingsCoordinator: MainCoordinator, SettingsCoordinating {
 
 protocol PrayerNotificationSettingsCoordinating: AnyObject {
     func coordinateBack()
+    func coordinateToAdhanVoice()
 }
 
 class PrayerNotificationSettingsCoordinator: MainCoordinator, PrayerNotificationSettingsCoordinating {
+
+    var navigationController: UINavigationController
+    var tabBarController: TabBarController
+
+    private lazy var adhanVoiceCoordinator = AdhanVoiceCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    init(navigationController: UINavigationController, tabBarController: TabBarController) {
+        self.navigationController = navigationController
+        self.tabBarController = tabBarController
+    }
+
+    func start() {
+        let localizationManager = LocalizationManager.shared
+        let view = PrayerNotificationSettingsView(coordinator: self)
+            .environmentObject(localizationManager)
+            .environment(\.layoutDirection, localizationManager.currentLanguage.direction)
+        let viewController = UIHostingController(rootView: view)
+        viewController.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(viewController, animated: true)
+    }
+
+    func coordinateBack() {
+        navigationController.popViewController(animated: true)
+    }
+
+    func coordinateToAdhanVoice() {
+        adhanVoiceCoordinator.start()
+    }
+}
+
+// MARK: - Adhan Voice Coordinator
+
+protocol AdhanVoiceCoordinating: AnyObject {
+    func coordinateBack()
+}
+
+class AdhanVoiceCoordinator: MainCoordinator, AdhanVoiceCoordinating {
 
     var navigationController: UINavigationController
     var tabBarController: TabBarController
@@ -89,7 +130,7 @@ class PrayerNotificationSettingsCoordinator: MainCoordinator, PrayerNotification
 
     func start() {
         let localizationManager = LocalizationManager.shared
-        let view = PrayerNotificationSettingsView(coordinator: self)
+        let view = AdhanVoiceView(coordinator: self)
             .environmentObject(localizationManager)
             .environment(\.layoutDirection, localizationManager.currentLanguage.direction)
         let viewController = UIHostingController(rootView: view)

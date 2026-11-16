@@ -218,6 +218,8 @@ private extension PrayerNotificationSettingsView {
 
                     calculationSection
 
+                    testSection
+
                     if !viewModel.windowFooter.isEmpty {
                         Text(viewModel.windowFooter)
                             .customStyle(.kitab(size: 12, bold: false), .onSurfaceVariant)
@@ -336,6 +338,14 @@ private extension PrayerNotificationSettingsView {
                     rowDivider
                 }
             }
+
+            if viewModel.isAdhanVoiceAvailable {
+                rowDivider
+
+                PrayerNotificationValueRow(title: viewModel.adhanVoiceRowTitle,
+                                           value: viewModel.adhanVoiceValue,
+                                           action: viewModel.onAdhanVoiceRowTapped)
+            }
         }
     }
 
@@ -354,6 +364,28 @@ private extension PrayerNotificationSettingsView {
                 .customStyle(.kitab(size: 12, bold: false), .onSurfaceVariant)
                 .fixedSize(horizontal: false, vertical: true)
                 .padding(.horizontal, .xSm)
+        }
+    }
+
+    var testSection: some View {
+        VStack(alignment: .leading, spacing: .xSm) {
+            section(viewModel.testSectionTitle) {
+                PrayerNotificationTestRow(title: viewModel.testActionTitle,
+                                          isInFlight: viewModel.isTestNotificationInFlight,
+                                          action: viewModel.onTestNotificationTapped)
+            }
+
+            Text(viewModel.testActionCaption)
+                .customStyle(.kitab(size: 12, bold: false), .onSurfaceVariant)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, .xSm)
+
+            if !viewModel.testNotificationMessage.isEmpty {
+                Text(viewModel.testNotificationMessage)
+                    .customStyle(.kitab(size: 12, bold: true), .primary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, .xSm)
+            }
         }
     }
 
@@ -563,6 +595,41 @@ struct PrayerNotificationStepperRow: View {
         .buttonStyle(.plain)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.4)
+    }
+}
+
+struct PrayerNotificationTestRow: View {
+
+    let title: String
+    let isInFlight: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: .sm) {
+                PrayerNotificationIconTile(iconName: "bell.badge.waveform")
+
+                Text(title)
+                    .customStyle(.kitab(size: 16, bold: false), .onSurface)
+
+                Spacer(minLength: .xSm)
+
+                if isInFlight {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .scaleEffect(0.8)
+                } else {
+                    Image(systemName: "paperplane.fill")
+                        .font(.system(size: 14, weight: .semibold))
+                        .customForeground(.primary)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, .md)
+            .padding(.vertical, .sm)
+        }
+        .buttonStyle(SettingsRowButtonStyle())
+        .disabled(isInFlight)
     }
 }
 

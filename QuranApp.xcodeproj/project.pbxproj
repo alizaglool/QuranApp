@@ -35,6 +35,28 @@
 		AA5101012FD5100100AA5101 /* HomeTodayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5101022FD5100100AA5102 /* HomeTodayCard.swift */; };
 		AA5101032FD5100100AA5103 /* PrayerCompletionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */; };
 		AB81A020F8C058E0FFF0EEAB /* HomeFeaturedLessonsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */; };
+		ADCB00012F71800000AA0001 /* adhan_tone_mecca_ali_mulla.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00012F71800000AA0001 /* adhan_tone_mecca_ali_mulla.caf */; };
+		ADCB00022F71800000AA0002 /* adhan_tone_almadena_almonawra.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00022F71800000AA0002 /* adhan_tone_almadena_almonawra.caf */; };
+		ADCB00032F71800000AA0003 /* adhan_tone_azan_alquds.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00032F71800000AA0003 /* adhan_tone_azan_alquds.caf */; };
+		ADCB00042F71800000AA0004 /* adhan_tone_muhammed_altablawy.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00042F71800000AA0004 /* adhan_tone_muhammed_altablawy.caf */; };
+		ADCB00052F71800000AA0005 /* adhan_tone_yasser_aldosary.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00052F71800000AA0005 /* adhan_tone_yasser_aldosary.caf */; };
+		ADCB00062F71800000AA0006 /* adhan_tone_edres_abkar.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00062F71800000AA0006 /* adhan_tone_edres_abkar.caf */; };
+		ADCB00072F71800000AA0007 /* adhan_tone_saad_alghamdy.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00072F71800000AA0007 /* adhan_tone_saad_alghamdy.caf */; };
+		ADCB00082F71800000AA0008 /* adhan_tone_islam_sobhey.caf in Resources */ = {isa = PBXBuildFile; fileRef = ADCA00082F71800000AA0008 /* adhan_tone_islam_sobhey.caf */; };
+		ADDB00012F71800000AA0001 /* AdhanRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00012F71800000AA0001 /* AdhanRecording.swift */; };
+		ADDB00022F71800000AA0002 /* AdhanAudioFocus.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00022F71800000AA0002 /* AdhanAudioFocus.swift */; };
+		ADDB00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift */; };
+		ADDB00042F71800000AA0004 /* AdhanVoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00042F71800000AA0004 /* AdhanVoiceViewModel.swift */; };
+		ADDB00052F71800000AA0005 /* AdhanVoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00052F71800000AA0005 /* AdhanVoiceView.swift */; };
+		ADDB00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift */; };
+		ADFB00012F71800000AA0001 /* adhan_full_mecca_ali_mulla.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00012F71800000AA0001 /* adhan_full_mecca_ali_mulla.m4a */; };
+		ADFB00022F71800000AA0002 /* adhan_full_almadena_almonawra.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00022F71800000AA0002 /* adhan_full_almadena_almonawra.m4a */; };
+		ADFB00032F71800000AA0003 /* adhan_full_azan_alquds.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00032F71800000AA0003 /* adhan_full_azan_alquds.m4a */; };
+		ADFB00042F71800000AA0004 /* adhan_full_muhammed_altablawy.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00042F71800000AA0004 /* adhan_full_muhammed_altablawy.m4a */; };
+		ADFB00052F71800000AA0005 /* adhan_full_yasser_aldosary.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00052F71800000AA0005 /* adhan_full_yasser_aldosary.m4a */; };
+		ADFB00062F71800000AA0006 /* adhan_full_edres_abkar.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00062F71800000AA0006 /* adhan_full_edres_abkar.m4a */; };
+		ADFB00072F71800000AA0007 /* adhan_full_saad_alghamdy.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00072F71800000AA0007 /* adhan_full_saad_alghamdy.m4a */; };
+		ADFB00082F71800000AA0008 /* adhan_full_islam_sobhey.m4a in Resources */ = {isa = PBXBuildFile; fileRef = ADFA00082F71800000AA0008 /* adhan_full_islam_sobhey.m4a */; };
 		B8F58AE72E6C5A9B002673AB /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = B8F58AE62E6C5A9B002673AB /* Core */; };
 		B8F9B7EF80CE3B56C6A7D3C9 /* RepeatSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 484E8B69398EA0068B05D21B /* RepeatSettingsSheet.swift */; };
 		BB11CC22DD33EE44FF550012 /* ShortsPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* ShortsPlayerView.swift */; };
@@ -172,6 +194,7 @@
 		F8DD00012FD7000200DD2001 /* QuranPageDownloadPrompt.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000200DD1001 /* QuranPageDownloadPrompt.swift */; };
 		F8DD00012FD7000200DD2002 /* QuranPageDownloadPromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DD00012FD7000200DD1002 /* QuranPageDownloadPromptViewModel.swift */; };
 		F8DF00022FD7000600EF2006 /* QiblaCompassRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */; };
+		F8DF00042FD7000600EF2007 /* QiblaDirectionArc.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8DF00032FD7000600EF1007 /* QiblaDirectionArc.swift */; };
 		F8EA20012FD4200100EA2001 /* HomeHeroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA20022FD4200100EA2002 /* HomeHeroHeader.swift */; };
 		F8EA20032FD4200100EA2003 /* HomeNextPrayerCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA20042FD4200100EA2004 /* HomeNextPrayerCard.swift */; };
 		F8EB00012FD4000100EB1001 /* RecitationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8EA00012FD4000100EA1001 /* RecitationsCoordinator.swift */; };
@@ -228,9 +251,19 @@
 		F8FA00022FD8000200FA2008 /* KhatmahSetupViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1008 /* KhatmahSetupViewModel.swift */; };
 		F8FA00022FD8000200FA2009 /* KhatmahPlanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1009 /* KhatmahPlanView.swift */; };
 		F8FA00022FD8000200FA200A /* KhatmahSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100A /* KhatmahSetupView.swift */; };
-		F8FA00022FD8000200FA200B /* KhatmahProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100B /* KhatmahProgressRing.swift */; };
-		F8FA00022FD8000200FA200C /* KhatmahDayRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100C /* KhatmahDayRow.swift */; };
 		F8FA00022FD8000200FA200D /* KhatmahCardChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100D /* KhatmahCardChrome.swift */; };
+		F8FA00022FD8000200FA200E /* KhatmahVerseRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100E /* KhatmahVerseRange.swift */; };
+		F8FA00022FD8000200FA200F /* KhatmahWorkload.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA100F /* KhatmahWorkload.swift */; };
+		F8FA00022FD8000200FA2010 /* KhatmahVerseRangeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1010 /* KhatmahVerseRangeIndex.swift */; };
+		F8FA00022FD8000200FA2011 /* KhatmahScheduleViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1011 /* KhatmahScheduleViewModel.swift */; };
+		F8FA00022FD8000200FA2012 /* KhatmahScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1012 /* KhatmahScheduleView.swift */; };
+		F8FA00022FD8000200FA2013 /* KhatmahProgressRing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1013 /* KhatmahProgressRing.swift */; };
+		F8FA00022FD8000200FA2014 /* KhatmahProgressTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1014 /* KhatmahProgressTrack.swift */; };
+		F8FA00022FD8000200FA2015 /* KhatmahSelectableRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1015 /* KhatmahSelectableRow.swift */; };
+		F8FA00022FD8000200FA2016 /* KhatmahSettingRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1016 /* KhatmahSettingRow.swift */; };
+		F8FA00022FD8000200FA2017 /* KhatmahDayRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1017 /* KhatmahDayRow.swift */; };
+		F8FA00022FD8000200FA2018 /* KhatmahLocalizedFormatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1018 /* KhatmahLocalizedFormatting.swift */; };
+		F8FA00022FD8000200FA2019 /* KhatmahTodayCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FA00012FD8000100FA1019 /* KhatmahTodayCard.swift */; };
 		F8FB00022FD8000200FB2001 /* EgyptianRadioStationReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FB00012FD8000100FB1001 /* EgyptianRadioStationReference.swift */; };
 		F8FB00022FD8000200FB2002 /* EgyptianRadioViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FB00012FD8000100FB1002 /* EgyptianRadioViewModel.swift */; };
 		F8FB00022FD8000200FB2003 /* EgyptianRadioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FB00012FD8000100FB1003 /* EgyptianRadioView.swift */; };
@@ -242,6 +275,11 @@
 		F8FC00022FD9000200FC2005 /* ContentHubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1005 /* ContentHubView.swift */; };
 		F8FC00022FD9000200FC2006 /* GuideDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1006 /* GuideDetailViewModel.swift */; };
 		F8FC00022FD9000200FC2007 /* GuideDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1007 /* GuideDetailView.swift */; };
+		F8FC00022FD9000200FC2008 /* GuideTextSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1008 /* GuideTextSegment.swift */; };
+		F8FC00022FD9000200FC2009 /* GuideReaderPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC1009 /* GuideReaderPlan.swift */; };
+		F8FC00022FD9000200FC200A /* GuideStageReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC100A /* GuideStageReaderViewModel.swift */; };
+		F8FC00022FD9000200FC200B /* GuideStageReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC100B /* GuideStageReaderView.swift */; };
+		F8FC00022FD9000200FC200C /* GuideTextBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8FC00012FD9000100FC100C /* GuideTextBlockView.swift */; };
 		F8SD0001AABBCC00001234AB /* ScrollDirectionAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */; };
 		F9AA00012F71800000AA0001 /* AllahNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00002F71800000AA0001 /* AllahNamesView.swift */; };
 		F9AA00032F71800000AA0003 /* MyAdhkarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AA00022F71800000AA0002 /* MyAdhkarView.swift */; };
@@ -396,7 +434,29 @@
 		AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerCompletionStore.swift; sourceTree = "<group>"; };
 		AA81A020F8C058E0FFF0EEAA /* HomeFeaturedLessonsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFeaturedLessonsSection.swift; sourceTree = "<group>"; };
 		ACE2F1DE099B4971AE12FA23 /* LessonsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsCoordinator.swift; sourceTree = "<group>"; };
+		ADCA00012F71800000AA0001 /* adhan_tone_mecca_ali_mulla.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_mecca_ali_mulla.caf; sourceTree = "<group>"; };
+		ADCA00022F71800000AA0002 /* adhan_tone_almadena_almonawra.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_almadena_almonawra.caf; sourceTree = "<group>"; };
+		ADCA00032F71800000AA0003 /* adhan_tone_azan_alquds.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_azan_alquds.caf; sourceTree = "<group>"; };
+		ADCA00042F71800000AA0004 /* adhan_tone_muhammed_altablawy.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_muhammed_altablawy.caf; sourceTree = "<group>"; };
+		ADCA00052F71800000AA0005 /* adhan_tone_yasser_aldosary.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_yasser_aldosary.caf; sourceTree = "<group>"; };
+		ADCA00062F71800000AA0006 /* adhan_tone_edres_abkar.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_edres_abkar.caf; sourceTree = "<group>"; };
+		ADCA00072F71800000AA0007 /* adhan_tone_saad_alghamdy.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_saad_alghamdy.caf; sourceTree = "<group>"; };
+		ADCA00082F71800000AA0008 /* adhan_tone_islam_sobhey.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = adhan_tone_islam_sobhey.caf; sourceTree = "<group>"; };
+		ADDA00012F71800000AA0001 /* AdhanRecording.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanRecording.swift; sourceTree = "<group>"; };
+		ADDA00022F71800000AA0002 /* AdhanAudioFocus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanAudioFocus.swift; sourceTree = "<group>"; };
+		ADDA00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerAdhanAudioPlayer.swift; sourceTree = "<group>"; };
+		ADDA00042F71800000AA0004 /* AdhanVoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanVoiceViewModel.swift; sourceTree = "<group>"; };
+		ADDA00052F71800000AA0005 /* AdhanVoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanVoiceView.swift; sourceTree = "<group>"; };
+		ADDA00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerNotificationContentCatalog.swift; sourceTree = "<group>"; };
 		ADE70DA92B7F411787D771F8 /* VideoCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCardView.swift; sourceTree = "<group>"; };
+		ADFA00012F71800000AA0001 /* adhan_full_mecca_ali_mulla.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_mecca_ali_mulla.m4a; sourceTree = "<group>"; };
+		ADFA00022F71800000AA0002 /* adhan_full_almadena_almonawra.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_almadena_almonawra.m4a; sourceTree = "<group>"; };
+		ADFA00032F71800000AA0003 /* adhan_full_azan_alquds.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_azan_alquds.m4a; sourceTree = "<group>"; };
+		ADFA00042F71800000AA0004 /* adhan_full_muhammed_altablawy.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_muhammed_altablawy.m4a; sourceTree = "<group>"; };
+		ADFA00052F71800000AA0005 /* adhan_full_yasser_aldosary.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_yasser_aldosary.m4a; sourceTree = "<group>"; };
+		ADFA00062F71800000AA0006 /* adhan_full_edres_abkar.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_edres_abkar.m4a; sourceTree = "<group>"; };
+		ADFA00072F71800000AA0007 /* adhan_full_saad_alghamdy.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_saad_alghamdy.m4a; sourceTree = "<group>"; };
+		ADFA00082F71800000AA0008 /* adhan_full_islam_sobhey.m4a */ = {isa = PBXFileReference; lastKnownFileType = audio.m4a; path = adhan_full_islam_sobhey.m4a; sourceTree = "<group>"; };
 		B1828651FD0741E285475A4E /* YouTubeChannelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouTubeChannelService.swift; sourceTree = "<group>"; };
 		B51BDEE776F991E54CED7AB8 /* ReciterSelectionSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReciterSelectionSheet.swift; sourceTree = "<group>"; };
 		BB11CC22DD33EE44FF550011 /* ShortsPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortsPlayerView.swift; sourceTree = "<group>"; };
@@ -538,6 +598,7 @@
 		F8DD00012FD7000200DD1001 /* QuranPageDownloadPrompt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageDownloadPrompt.swift; sourceTree = "<group>"; };
 		F8DD00012FD7000200DD1002 /* QuranPageDownloadPromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuranPageDownloadPromptViewModel.swift; sourceTree = "<group>"; };
 		F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaCompassRing.swift; sourceTree = "<group>"; };
+		F8DF00032FD7000600EF1007 /* QiblaDirectionArc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QiblaDirectionArc.swift; sourceTree = "<group>"; };
 		F8EA00012FD4000100EA1001 /* RecitationsCoordinator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitationsCoordinator.swift; sourceTree = "<group>"; };
 		F8EA00022FD4000100EA1002 /* RecitersListViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitersListViewModel.swift; sourceTree = "<group>"; };
 		F8EA00032FD4000100EA1003 /* RecitersListView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecitersListView.swift; sourceTree = "<group>"; };
@@ -594,9 +655,19 @@
 		F8FA00012FD8000100FA1008 /* KhatmahSetupViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahSetupViewModel.swift; sourceTree = "<group>"; };
 		F8FA00012FD8000100FA1009 /* KhatmahPlanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahPlanView.swift; sourceTree = "<group>"; };
 		F8FA00012FD8000100FA100A /* KhatmahSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahSetupView.swift; sourceTree = "<group>"; };
-		F8FA00012FD8000100FA100B /* KhatmahProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahProgressRing.swift; sourceTree = "<group>"; };
-		F8FA00012FD8000100FA100C /* KhatmahDayRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahDayRow.swift; sourceTree = "<group>"; };
 		F8FA00012FD8000100FA100D /* KhatmahCardChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahCardChrome.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA100E /* KhatmahVerseRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahVerseRange.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA100F /* KhatmahWorkload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahWorkload.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1010 /* KhatmahVerseRangeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahVerseRangeIndex.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1011 /* KhatmahScheduleViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahScheduleViewModel.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1012 /* KhatmahScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahScheduleView.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1013 /* KhatmahProgressRing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahProgressRing.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1014 /* KhatmahProgressTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahProgressTrack.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1015 /* KhatmahSelectableRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahSelectableRow.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1016 /* KhatmahSettingRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahSettingRow.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1017 /* KhatmahDayRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahDayRow.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1018 /* KhatmahLocalizedFormatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahLocalizedFormatting.swift; sourceTree = "<group>"; };
+		F8FA00012FD8000100FA1019 /* KhatmahTodayCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KhatmahTodayCard.swift; sourceTree = "<group>"; };
 		F8FB00012FD8000100FB1001 /* EgyptianRadioStationReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EgyptianRadioStationReference.swift; sourceTree = "<group>"; };
 		F8FB00012FD8000100FB1002 /* EgyptianRadioViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EgyptianRadioViewModel.swift; sourceTree = "<group>"; };
 		F8FB00012FD8000100FB1003 /* EgyptianRadioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EgyptianRadioView.swift; sourceTree = "<group>"; };
@@ -609,6 +680,11 @@
 		F8FC00012FD9000100FC1005 /* ContentHubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentHubView.swift; sourceTree = "<group>"; };
 		F8FC00012FD9000100FC1006 /* GuideDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideDetailViewModel.swift; sourceTree = "<group>"; };
 		F8FC00012FD9000100FC1007 /* GuideDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideDetailView.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1008 /* GuideTextSegment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideTextSegment.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC1009 /* GuideReaderPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideReaderPlan.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC100A /* GuideStageReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideStageReaderViewModel.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC100B /* GuideStageReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideStageReaderView.swift; sourceTree = "<group>"; };
+		F8FC00012FD9000100FC100C /* GuideTextBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuideTextBlockView.swift; sourceTree = "<group>"; };
 		F8SD0000AABBCC00001234AA /* ScrollDirectionAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDirectionAnimationView.swift; sourceTree = "<group>"; };
 		F9AA00002F71800000AA0001 /* AllahNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllahNamesView.swift; sourceTree = "<group>"; };
 		F9AA00022F71800000AA0002 /* MyAdhkarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyAdhkarView.swift; sourceTree = "<group>"; };
@@ -778,6 +854,8 @@
 				E0EDCD9717A44CCCA20A8940 /* SettingsView.swift */,
 				F8EE00112FD5000100110001 /* SettingsCoordinator.swift */,
 				F8EE00112FD5000100110002 /* SettingsViewModel.swift */,
+				ADDA00042F71800000AA0004 /* AdhanVoiceViewModel.swift */,
+				ADDA00052F71800000AA0005 /* AdhanVoiceView.swift */,
 				F8EE00112FD5000100110003 /* SettingsRowView.swift */,
 				F8EE00112FD5000100110004 /* SettingsAppearancePickerSheet.swift */,
 				F8EE00112FD5000100110005 /* SettingsLanguagePickerSheet.swift */,
@@ -1813,6 +1891,7 @@
 			children = (
 				F8EF00012FD6000600EF1006 /* PrayerTimeRow.swift */,
 				F8DF00012FD7000600EF1006 /* QiblaCompassRing.swift */,
+				F8DF00032FD7000600EF1007 /* QiblaDirectionArc.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1837,6 +1916,22 @@
 				FAB200092FC7A00000B20009 /* prohibited_times.json */,
 				F9AA00042F71800000AA0004 /* allahNames.json */,
 				F9AA000B2F71800000AA000B /* takbeerat.m4a */,
+				ADCA00012F71800000AA0001 /* adhan_tone_mecca_ali_mulla.caf */,
+				ADFA00012F71800000AA0001 /* adhan_full_mecca_ali_mulla.m4a */,
+				ADCA00022F71800000AA0002 /* adhan_tone_almadena_almonawra.caf */,
+				ADFA00022F71800000AA0002 /* adhan_full_almadena_almonawra.m4a */,
+				ADCA00032F71800000AA0003 /* adhan_tone_azan_alquds.caf */,
+				ADFA00032F71800000AA0003 /* adhan_full_azan_alquds.m4a */,
+				ADCA00042F71800000AA0004 /* adhan_tone_muhammed_altablawy.caf */,
+				ADFA00042F71800000AA0004 /* adhan_full_muhammed_altablawy.m4a */,
+				ADCA00052F71800000AA0005 /* adhan_tone_yasser_aldosary.caf */,
+				ADFA00052F71800000AA0005 /* adhan_full_yasser_aldosary.m4a */,
+				ADCA00062F71800000AA0006 /* adhan_tone_edres_abkar.caf */,
+				ADFA00062F71800000AA0006 /* adhan_full_edres_abkar.m4a */,
+				ADCA00072F71800000AA0007 /* adhan_tone_saad_alghamdy.caf */,
+				ADFA00072F71800000AA0007 /* adhan_full_saad_alghamdy.m4a */,
+				ADCA00082F71800000AA0008 /* adhan_tone_islam_sobhey.caf */,
+				ADFA00082F71800000AA0008 /* adhan_full_islam_sobhey.m4a */,
 				FCD000152FE1000100D00015 /* quran_images_manifest.json */,
 			);
 			path = Resources;
@@ -1867,6 +1962,9 @@
 			children = (
 				F8FA00012FD8000100FA1002 /* KhatmahPlan.swift */,
 				F8FA00012FD8000100FA1003 /* KhatmahPlanSchedule.swift */,
+				F8FA00012FD8000100FA100E /* KhatmahVerseRange.swift */,
+				F8FA00012FD8000100FA100F /* KhatmahWorkload.swift */,
+				F8FA00012FD8000100FA1018 /* KhatmahLocalizedFormatting.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1884,6 +1982,7 @@
 			children = (
 				F8FA00012FD8000100FA1005 /* KhatmahReminderSchedule.swift */,
 				F8FA00012FD8000100FA1006 /* KhatmahReminderScheduler.swift */,
+				F8FA00012FD8000100FA1010 /* KhatmahVerseRangeIndex.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -1902,6 +2001,7 @@
 			children = (
 				F8FA00012FD8000100FA1007 /* KhatmahPlanViewModel.swift */,
 				F8FA00012FD8000100FA1008 /* KhatmahSetupViewModel.swift */,
+				F8FA00012FD8000100FA1011 /* KhatmahScheduleViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -1912,6 +2012,7 @@
 				F8FA00032FD8000300FA3009 /* Components */,
 				F8FA00012FD8000100FA1009 /* KhatmahPlanView.swift */,
 				F8FA00012FD8000100FA100A /* KhatmahSetupView.swift */,
+				F8FA00012FD8000100FA1012 /* KhatmahScheduleView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1919,9 +2020,13 @@
 		F8FA00032FD8000300FA3009 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F8FA00012FD8000100FA100B /* KhatmahProgressRing.swift */,
-				F8FA00012FD8000100FA100C /* KhatmahDayRow.swift */,
 				F8FA00012FD8000100FA100D /* KhatmahCardChrome.swift */,
+				F8FA00012FD8000100FA1017 /* KhatmahDayRow.swift */,
+				F8FA00012FD8000100FA1013 /* KhatmahProgressRing.swift */,
+				F8FA00012FD8000100FA1014 /* KhatmahProgressTrack.swift */,
+				F8FA00012FD8000100FA1015 /* KhatmahSelectableRow.swift */,
+				F8FA00012FD8000100FA1016 /* KhatmahSettingRow.swift */,
+				F8FA00012FD8000100FA1019 /* KhatmahTodayCard.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -1974,6 +2079,7 @@
 			isa = PBXGroup;
 			children = (
 				F8FC00012FD9000100FC1002 /* GuideContent.swift */,
+				F8FC00012FD9000100FC1008 /* GuideTextSegment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1991,6 +2097,7 @@
 			children = (
 				F8FC00032FD9000300FC3006 /* Hub */,
 				F8FC00032FD9000300FC3009 /* Guide */,
+				F8FC00032FD9000300FC300C /* Reader */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -2043,6 +2150,49 @@
 				F8FC00012FD9000100FC1007 /* GuideDetailView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC300C /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC300D /* Model */,
+				F8FC00032FD9000300FC300E /* ViewModel */,
+				F8FC00032FD9000300FC300F /* View */,
+			);
+			path = Reader;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC300D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC1009 /* GuideReaderPlan.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC300E /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC100A /* GuideStageReaderViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC300F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00032FD9000300FC3010 /* Components */,
+				F8FC00012FD9000100FC100B /* GuideStageReaderView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		F8FC00032FD9000300FC3010 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				F8FC00012FD9000100FC100C /* GuideTextBlockView.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		F9BB00012F71800000BB0001 /* Categories */ = {
@@ -2180,6 +2330,10 @@
 				FAB200022FC7A00000B20002 /* DayPrayerTimes.swift */,
 				F8CF00012FD7000600EF1006 /* PrayerClockFormatter.swift */,
 				FAB200032FC7A00000B20003 /* PrayerTimesStore.swift */,
+				ADDA00012F71800000AA0001 /* AdhanRecording.swift */,
+				ADDA00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift */,
+				ADDA00022F71800000AA0002 /* AdhanAudioFocus.swift */,
+				ADDA00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift */,
 				AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */,
 			);
 			path = PrayerTimes;
@@ -2709,6 +2863,22 @@
 				FAC200092FC7A00000C20009 /* prohibited_times.json in Resources */,
 				F9AA00052F71800000AA0005 /* allahNames.json in Resources */,
 				F9AA000A2F71800000AA000A /* takbeerat.m4a in Resources */,
+				ADCB00012F71800000AA0001 /* adhan_tone_mecca_ali_mulla.caf in Resources */,
+				ADFB00012F71800000AA0001 /* adhan_full_mecca_ali_mulla.m4a in Resources */,
+				ADCB00022F71800000AA0002 /* adhan_tone_almadena_almonawra.caf in Resources */,
+				ADFB00022F71800000AA0002 /* adhan_full_almadena_almonawra.m4a in Resources */,
+				ADCB00032F71800000AA0003 /* adhan_tone_azan_alquds.caf in Resources */,
+				ADFB00032F71800000AA0003 /* adhan_full_azan_alquds.m4a in Resources */,
+				ADCB00042F71800000AA0004 /* adhan_tone_muhammed_altablawy.caf in Resources */,
+				ADFB00042F71800000AA0004 /* adhan_full_muhammed_altablawy.m4a in Resources */,
+				ADCB00052F71800000AA0005 /* adhan_tone_yasser_aldosary.caf in Resources */,
+				ADFB00052F71800000AA0005 /* adhan_full_yasser_aldosary.m4a in Resources */,
+				ADCB00062F71800000AA0006 /* adhan_tone_edres_abkar.caf in Resources */,
+				ADFB00062F71800000AA0006 /* adhan_full_edres_abkar.m4a in Resources */,
+				ADCB00072F71800000AA0007 /* adhan_tone_saad_alghamdy.caf in Resources */,
+				ADFB00072F71800000AA0007 /* adhan_full_saad_alghamdy.m4a in Resources */,
+				ADCB00082F71800000AA0008 /* adhan_tone_islam_sobhey.caf in Resources */,
+				ADFB00082F71800000AA0008 /* adhan_full_islam_sobhey.m4a in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2766,6 +2936,8 @@
 				F8EE00022FD5000500EE2005 /* WorshipTrackerView.swift in Sources */,
 				F8EE00122FD5000100120001 /* SettingsCoordinator.swift in Sources */,
 				F8EE00122FD5000100120002 /* SettingsViewModel.swift in Sources */,
+				ADDB00042F71800000AA0004 /* AdhanVoiceViewModel.swift in Sources */,
+				ADDB00052F71800000AA0005 /* AdhanVoiceView.swift in Sources */,
 				F8EE00122FD5000100120003 /* SettingsRowView.swift in Sources */,
 				F8EE00122FD5000100120004 /* SettingsAppearancePickerSheet.swift in Sources */,
 				F8EE00122FD5000100120005 /* SettingsLanguagePickerSheet.swift in Sources */,
@@ -2782,6 +2954,11 @@
 				F8FC00022FD9000200FC2005 /* ContentHubView.swift in Sources */,
 				F8FC00022FD9000200FC2006 /* GuideDetailViewModel.swift in Sources */,
 				F8FC00022FD9000200FC2007 /* GuideDetailView.swift in Sources */,
+				F8FC00022FD9000200FC2008 /* GuideTextSegment.swift in Sources */,
+				F8FC00022FD9000200FC2009 /* GuideReaderPlan.swift in Sources */,
+				F8FC00022FD9000200FC200A /* GuideStageReaderViewModel.swift in Sources */,
+				F8FC00022FD9000200FC200B /* GuideStageReaderView.swift in Sources */,
+				F8FC00022FD9000200FC200C /* GuideTextBlockView.swift in Sources */,
 				F8FA00022FD8000200FA2002 /* KhatmahPlan.swift in Sources */,
 				F8FA00022FD8000200FA2003 /* KhatmahPlanSchedule.swift in Sources */,
 				F8FA00022FD8000200FA2004 /* KhatmahPlanStore.swift in Sources */,
@@ -2791,9 +2968,19 @@
 				F8FA00022FD8000200FA2008 /* KhatmahSetupViewModel.swift in Sources */,
 				F8FA00022FD8000200FA2009 /* KhatmahPlanView.swift in Sources */,
 				F8FA00022FD8000200FA200A /* KhatmahSetupView.swift in Sources */,
-				F8FA00022FD8000200FA200B /* KhatmahProgressRing.swift in Sources */,
-				F8FA00022FD8000200FA200C /* KhatmahDayRow.swift in Sources */,
 				F8FA00022FD8000200FA200D /* KhatmahCardChrome.swift in Sources */,
+				F8FA00022FD8000200FA200E /* KhatmahVerseRange.swift in Sources */,
+				F8FA00022FD8000200FA200F /* KhatmahWorkload.swift in Sources */,
+				F8FA00022FD8000200FA2018 /* KhatmahLocalizedFormatting.swift in Sources */,
+				F8FA00022FD8000200FA2010 /* KhatmahVerseRangeIndex.swift in Sources */,
+				F8FA00022FD8000200FA2011 /* KhatmahScheduleViewModel.swift in Sources */,
+				F8FA00022FD8000200FA2012 /* KhatmahScheduleView.swift in Sources */,
+				F8FA00022FD8000200FA2013 /* KhatmahProgressRing.swift in Sources */,
+				F8FA00022FD8000200FA2014 /* KhatmahProgressTrack.swift in Sources */,
+				F8FA00022FD8000200FA2015 /* KhatmahSelectableRow.swift in Sources */,
+				F8FA00022FD8000200FA2016 /* KhatmahSettingRow.swift in Sources */,
+				F8FA00022FD8000200FA2017 /* KhatmahDayRow.swift in Sources */,
+				F8FA00022FD8000200FA2019 /* KhatmahTodayCard.swift in Sources */,
 				F8FB00022FD8000200FB2001 /* EgyptianRadioStationReference.swift in Sources */,
 				F8FB00022FD8000200FB2002 /* EgyptianRadioViewModel.swift in Sources */,
 				F8FB00022FD8000200FB2003 /* EgyptianRadioView.swift in Sources */,
@@ -2820,6 +3007,7 @@
 				F8EF00022FD6000500EF2005 /* LocationPickerView.swift in Sources */,
 				F8EF00022FD6000600EF2006 /* PrayerTimeRow.swift in Sources */,
 				F8DF00022FD7000600EF2006 /* QiblaCompassRing.swift in Sources */,
+				F8DF00042FD7000600EF2007 /* QiblaDirectionArc.swift in Sources */,
 				F8B854AB2FC9BDC3007666A5 /* QuranTextProvider.swift in Sources */,
 				F800B3112DB67DDA0035501A /* EmptyViewController.swift in Sources */,
 				F800B3122DB67DDA0035501A /* TabBarController.swift in Sources */,
@@ -2830,6 +3018,10 @@
 				FAC200022FC7A00000C20002 /* DayPrayerTimes.swift in Sources */,
 				F8CF00022FD7000600EF2006 /* PrayerClockFormatter.swift in Sources */,
 				FAC200032FC7A00000C20003 /* PrayerTimesStore.swift in Sources */,
+				ADDB00012F71800000AA0001 /* AdhanRecording.swift in Sources */,
+				ADDB00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift in Sources */,
+				ADDB00022F71800000AA0002 /* AdhanAudioFocus.swift in Sources */,
+				ADDB00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift in Sources */,
 				FAC200A12FC7A00000C200A1 /* DeviceLocationService.swift in Sources */,
 				FAC200A22FC7A00000C200A2 /* SelectedLocation.swift in Sources */,
 				FAC200A32FC7A00000C200A3 /* SelectedLocationLabelFormatter.swift in Sources */,

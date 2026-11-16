@@ -52,11 +52,11 @@
 "hadithCount" = "%d Hadith";
 "noResults" = "No results found";
 "bookmark" = "Bookmark";
-"fajr" = "FAJR";
-"dhuhr" = "DHUHR";
-"asr" = "ASR";
-"maghrib" = "MAGHRIB";
-"isha" = "ISHA";
+"fajr" = "Fajr";
+"dhuhr" = "Dhuhr";
+"asr" = "Asr";
+"maghrib" = "Maghrib";
+"isha" = "Isha";
 "seeAll" = "See All";
 "hadithSectionNineBooks" = "The Nine Books";
 "hadithSectionOtherCollections" = "Other Collections";
@@ -308,7 +308,7 @@
 "homeLocationAccessibility" = "Showing times for %@";
 "locationLabelFormat" = "%1$@, %2$@";
 "locationCurrentPlace" = "Current location";
-"homeHeroDhikr" = "The best way to begin is remembering Allah 🌅";
+"homeHeroDhikr" = "Start your day with the remembrance of Allah 🌅";
 
 // MARK: - Home Next Prayer
 "nextPrayerLabel" = "NEXT PRAYER";
@@ -651,6 +651,30 @@
 "prayerNotificationsWindowFooterFormat" = "%1$@ notifications are scheduled across the next %2$@ days. iOS allows only 64 pending notifications, so open the app from time to time to keep them coming.";
 "prayerNotificationAdhanBodyFormat" = "It is time for %@.";
 "prayerNotificationReminderBodyFormat" = "%1$@ begins in %2$@ minutes.";
+"prayerNotificationAdhanSubtitle" = "It is time to pray";
+"prayerNotificationReminderSubtitleFormat" = "In %@ minutes";
+"prayerNotificationsTestSection" = "Testing";
+"prayerNotificationsTestAction" = "Test Prayer Notification";
+"prayerNotificationsTestCaption" = "A testing utility. It delivers one sample notification in about 5 seconds and never changes your prayer times or notification settings.";
+"prayerNotificationsTestTitle" = "Test Prayer Notification";
+"prayerNotificationsTestBody" = "This is a test. Your prayer schedule and settings were not changed.";
+"prayerNotificationsTestScheduled" = "Test notification sent. It arrives in about 5 seconds.";
+"prayerNotificationsTestDenied" = "Notifications are turned off for this app. Open Settings to allow them, then try again.";
+"prayerNotificationsTestNotRequested" = "Allow notifications first, then send the test.";
+
+// MARK: - Adhan Voice
+
+"adhanVoiceScreenTitle" = "Adhan Voice";
+"adhanVoiceSectionTitle" = "Choose a voice";
+"adhanVoiceFooter" = "iOS plays at most 30 seconds on the lock screen, so the notification uses the opening of the adhan. The complete adhan plays inside the app when in-app audio is on.";
+"adhanVoiceUnavailable" = "No adhan recordings are bundled with this build.";
+"adhanVoicePreviewFormat" = "Preview %@";
+"adhanVoiceStopPreview" = "Stop preview";
+"adhanVoiceNotificationToneLabel" = "Notification tone";
+"adhanVoiceFullSectionTitle" = "Full adhan";
+"adhanVoicePlayFullAdhan" = "Play the full adhan";
+"adhanVoiceFullDurationFormat" = "Full adhan %@";
+"adhanVoicePlaybackFailed" = "This recording could not be played. Choose another voice.";
 
 // MARK: - Khatmah
 
@@ -664,30 +688,35 @@
 "khatmahSetupDurationSection" = "Duration";
 "khatmahSetupTargetDateSection" = "Finish by";
 "khatmahSetupStartTitle" = "Where to start";
-"khatmahSetupStartCaption" = "Your khatmah begins on this date, from this page.";
+"khatmahSetupStartCaption" = "Choose the page your khatmah starts from.";
 "khatmahSetupStartDate" = "Start date";
 "khatmahSetupStartPage" = "Start page";
 "khatmahSetupCreateAction" = "Start khatmah";
-"khatmahDaysFormat" = "%@ days";
-"khatmahPagesPerDayFormat" = "About %@ pages a day";
-"khatmahReminderSection" = "Daily reminder";
+"khatmahDaysCountOneFormat" = "%@ day";
+"khatmahDaysCountTwoFormat" = "%@ days";
+"khatmahDaysCountFewFormat" = "%@ days";
+"khatmahDaysCountManyFormat" = "%@ days";
+"khatmahPagesPerDayFormat" = "About %@ a day";
 "khatmahReminderToggle" = "Remind me every day";
 "khatmahReminderTimeTitle" = "Reminder time";
 "khatmahNotificationsDeniedBody" = "iOS is blocking notifications, so the daily khatmah reminder cannot be delivered. Turn them on in Settings.";
 "khatmahTodayTitle" = "Today's portion";
 "khatmahPageRangeFormat" = "Page %1$@ to %2$@";
-"khatmahPagesCountFormat" = "%@ pages";
+"khatmahPagesCountOneFormat" = "%@ page";
+"khatmahPagesCountTwoFormat" = "%@ pages";
+"khatmahPagesCountFewFormat" = "%@ pages";
+"khatmahPagesCountManyFormat" = "%@ pages";
 "khatmahReadAction" = "Read now";
 "khatmahMarkCompleteAction" = "Mark as read";
 "khatmahTodayDoneTitle" = "Today's portion is done";
 "khatmahDayOfTotalFormat" = "Day %1$@ of %2$@";
-"khatmahProgressTitle" = "Progress";
-"khatmahRemainingPagesFormat" = "%@ pages left";
+"khatmahRemainingPagesFormat" = "%@ left";
 "khatmahExpectedCompletionTitle" = "Expected completion";
+"khatmahDaysLeftTitle" = "Days left";
+"khatmahPagesLeftTitle" = "Pages left";
 "khatmahOnScheduleStatus" = "On schedule";
-"khatmahPagesAheadFormat" = "%@ pages ahead";
-"khatmahPagesBehindFormat" = "%@ pages behind";
-"khatmahDaysSectionTitle" = "Daily plan";
+"khatmahPagesAheadFormat" = "%@ ahead";
+"khatmahPagesBehindFormat" = "%@ behind";
 "khatmahDayLabelFormat" = "Day %@";
 "khatmahDayStatusCompleted" = "Read";
 "khatmahDayStatusToday" = "Today";
@@ -699,10 +728,40 @@
 "khatmahDeleteMessage" = "The plan will be archived and the daily reminder will stop.";
 "khatmahCompletedTitle" = "Khatmah complete";
 "khatmahCompletedMessage" = "You have read the whole plan. May Allah accept it from you.";
-"khatmahCompletedCountFormat" = "%@ khatmahs completed";
+"khatmahCompletedCountFormat" = "%@ completed";
+"khatmahCountOneFormat" = "%@ khatmah";
+"khatmahCountTwoFormat" = "%@ khatmahs";
+"khatmahCountFewFormat" = "%@ khatmahs";
+"khatmahCountManyFormat" = "%@ khatmahs";
 "khatmahEmptyTitle" = "Start a khatmah";
 "khatmahEmptyMessage" = "Set a pace and read the Quran through, a portion each day.";
 "khatmahNewPlanAction" = "New khatmah";
+"khatmahScheduleTitle" = "Daily plan";
+"khatmahScheduleCompletedFormat" = "%1$@ of %2$@ read";
+"khatmahAllDaysFormat" = "All days (%@)";
+"khatmahDaysRemainingFormat" = "%@ left";
+"khatmahLastDayLabel" = "Last day";
+"khatmahFromLabel" = "From";
+"khatmahToLabel" = "To";
+"khatmahVersePointFormat" = "%1$@ %2$@";
+"khatmahVerseRangeFormat" = "%1$@ to %2$@";
+"khatmahPageNumberFormat" = "Page %@";
+"khatmahHowItWorksTitle" = "How it works";
+"khatmahHowItWorksPace" = "Pick how long your khatmah should take.";
+"khatmahHowItWorksPortion" = "Read today's portion and mark it as read.";
+"khatmahHowItWorksReminder" = "A daily reminder keeps you on schedule.";
+"khatmahWorkloadJuzOne" = "A juz a day";
+"khatmahWorkloadJuzTwo" = "Two juz a day";
+"khatmahWorkloadJuzFewFormat" = "%@ juz a day";
+"khatmahWorkloadJuzManyFormat" = "%@ juz a day";
+"khatmahWorkloadThreeQuarterJuz" = "Three quarters of a juz a day";
+"khatmahWorkloadHalfJuz" = "Half a juz a day";
+"khatmahWorkloadQuarterJuz" = "A quarter of a juz a day";
+"khatmahStepFormat" = "Step %1$@ of %2$@";
+"khatmahNextAction" = "Next";
+"khatmahBackAction" = "Back";
+"khatmahStartFromBeginning" = "Beginning of the Quran";
+"khatmahStartCustomPage" = "Another page";
 
 // MARK: - Egyptian Radio
 
@@ -713,14 +772,23 @@
 "egyptianRadioIdleHint" = "Tap play to listen to the live broadcast.";
 "egyptianRadioLiveNote" = "A live broadcast — it needs an internet connection to play.";
 
-"contentHomeTile" = "Content";
-"contentTitle" = "Content";
-"contentSubtitle" = "Umrah and Hajj guides";
-"contentEmptyMessage" = "No content is available for this guide yet.";
-"contentTopicsCount" = "%d topics";
-"contentSectionJourney" = "The Journey";
-"contentSectionLearn" = "Learn";
-"contentUmrahTitle" = "Umrah Journey";
-"contentUmrahSubtitle" = "The rites of Umrah step by step, with its supplications and common mistakes.";
-"contentHajjTitle" = "Your Hajj Guide";
-"contentHajjSubtitle" = "The rites of Hajj day by day, with its pillars, conditions and common mistakes.";
+"ritesHomeTile" = "Rites Guide";
+"ritesTitle" = "Your Rites Guide";
+"ritesSubtitle" = "Umrah and Hajj, step by step";
+"ritesIntro" = "Two journeys in one guide: the rites in order, with their supplications, rulings and common mistakes.";
+"ritesEmptyMessage" = "This guide is not available yet.";
+"ritesStagesLabel" = "Stages";
+"ritesTopicsLabel" = "Topics";
+"ritesStepsLabel" = "Steps";
+"ritesSectionJourney" = "Journey Stages";
+"ritesSectionLearn" = "Learn";
+"ritesSectionExtras" = "Additional Topics";
+"ritesUmrahTitle" = "The Umrah Journey";
+"ritesUmrahSubtitle" = "The rites of Umrah step by step, with its supplications and common mistakes.";
+"ritesHajjTitle" = "The Hajj Journey";
+"ritesHajjSubtitle" = "The rites of Hajj day by day, with its pillars, conditions and common mistakes.";
+"ritesOverviewTitle" = "Overview";
+"ritesStartJourney" = "Start the journey";
+"ritesPagePosition" = "%1$@ of %2$@";
+"ritesPrevious" = "Previous";
+"ritesNext" = "Next";
