@@ -15,7 +15,7 @@ struct PrayerTimeItem: Identifiable {
     let id: Int
     let name: String
     let time: String
-    let isActive: Bool
+    let symbol: String
     let isPrayed: Bool
 }
 
@@ -36,6 +36,7 @@ private struct PrayerAnchor {
     let title: String
     let minutes: Int
     let clock: String
+    let symbol: String
 }
 
 
@@ -95,29 +96,19 @@ final class HomeViewModel: MainViewModel {
     let quickAccessItems: [QuickAccessItem] = [
         QuickAccessItem(id: 0, title: AppLocalizedKeys.quran.value, icon: "book.fill",
                         accent: .quickAccentQuran, type: .quran),
-        QuickAccessItem(id: 1, title: AppLocalizedKeys.recitations.value, icon: "waveform",
-                        accent: .quickAccentRecitations, type: .recitations),
-        QuickAccessItem(id: 2, title: AppLocalizedKeys.radio.value, icon: "dot.radiowaves.left.and.right",
-                        accent: .quickAccentRadio, type: .radio),
-        QuickAccessItem(id: 3, title: AppLocalizedKeys.egyptianRadioHomeTile.value, icon: "antenna.radiowaves.left.and.right",
-                        accent: .quickAccentRadio, type: .egyptianRadio),
-        QuickAccessItem(id: 4, title: AppLocalizedKeys.adhkar.value, icon: "sparkles",
+        QuickAccessItem(id: 1, title: AppLocalizedKeys.adhkar.value, icon: "sparkles",
                         accent: .quickAccentAdhkar, type: .adhkar),
-        QuickAccessItem(id: 5, title: AppLocalizedKeys.khatmahHomeTile.value, icon: "book.closed.fill",
+        QuickAccessItem(id: 2, title: AppLocalizedKeys.khatmahHomeTile.value, icon: "book.closed.fill",
                         accent: .quickAccentKhatmah, type: .khatmah),
-        QuickAccessItem(id: 6, title: AppLocalizedKeys.hadith.value, icon: "text.book.closed.fill",
-                        accent: .quickAccentHadith, type: .hadith),
-        QuickAccessItem(id: 7, title: AppLocalizedKeys.lessons.value, icon: "play.rectangle.fill",
-                        accent: .quickAccentLessons, type: .lessons),
-        QuickAccessItem(id: 8, title: AppLocalizedKeys.worshipHomeTile.value, icon: "checkmark.seal.fill",
+        QuickAccessItem(id: 3, title: AppLocalizedKeys.worshipHomeTile.value, icon: "checkmark.seal.fill",
                         accent: .quickAccentWorship, type: .worship),
-        QuickAccessItem(id: 9, title: AppLocalizedKeys.contentHomeTile.value, icon: "signpost.right.fill",
+        QuickAccessItem(id: 4, title: AppLocalizedKeys.ritesHomeTile.value, icon: "signpost.right.fill",
                         accent: .quickAccentContent, type: .content)
     ]
 
     init(coordinator: HomeCoordinating) {
         self.coordinator = coordinator
-        locationLabel = locationLabelFormatter.displayLabel(for: locationStore.selectedLocation)
+        locationLabel = locationLabelFormatter.displayLabelWithDistrict(for: locationStore.selectedLocation)
         applyReadingStartState()
     }
 }
@@ -174,7 +165,7 @@ extension HomeViewModel {
         locationStore.$selectedLocation
             .sink { [weak self] location in
                 guard let self else { return }
-                self.locationLabel = self.locationLabelFormatter.displayLabel(for: location)
+                self.locationLabel = self.locationLabelFormatter.displayLabelWithDistrict(for: location)
             }
             .store(in: &cancellables)
     }
@@ -221,7 +212,8 @@ extension HomeViewModel {
             let current = self.locationStore.selectedLocation
             let hasMovedCity = resolved.prayerTimesCacheIdentifier != current.prayerTimesCacheIdentifier
             let hasLateCityName = resolved.hasResolvedCityName && !current.hasResolvedCityName
-            guard hasMovedCity || hasLateCityName else { return }
+            let hasLateDistrictName = resolved.hasResolvedDistrictName && !current.hasResolvedDistrictName
+            guard hasMovedCity || hasLateCityName || hasLateDistrictName else { return }
 
             self.locationStore.updateSelectedLocation(resolved)
             guard hasMovedCity else { return }
@@ -236,9 +228,7 @@ extension HomeViewModel {
     func togglePrayed(_ item: PrayerTimeItem) {
         guard let day = currentDay else { return }
         completionStore.toggle(index: item.id, on: day.dayKey)
-        rebuildPrayerTimes(anchors: HomeViewModel.anchors(of: day),
-                           activeIndex: activePrayerIndex,
-                           dayKey: day.dayKey)
+        rebuildPrayerTimes(anchors: HomeViewModel.anchors(of: day), dayKey: day.dayKey)
     }
 
     private func refreshCountdown() {
@@ -267,7 +257,7 @@ extension HomeViewModel {
 
         if index != activePrayerIndex || prayerTimes.isEmpty {
             activePrayerIndex = index
-            rebuildPrayerTimes(anchors: anchors, activeIndex: index, dayKey: day.dayKey)
+            rebuildPrayerTimes(anchors: anchors, dayKey: day.dayKey)
         }
 
         refreshAthkarNow(day: day)
@@ -275,13 +265,13 @@ extension HomeViewModel {
         assign(&prayerTimesFailed, false)
     }
 
-    private func rebuildPrayerTimes(anchors: [PrayerAnchor], activeIndex: Int, dayKey: String) {
+    private func rebuildPrayerTimes(anchors: [PrayerAnchor], dayKey: String) {
         let prayed = completionStore.prayed(on: dayKey)
         prayerTimes = anchors.enumerated().map { offset, item in
             PrayerTimeItem(id: offset,
                            name: item.chipTitle,
                            time: item.clock,
-                           isActive: offset == activeIndex,
+                           symbol: item.symbol,
                            isPrayed: prayed.contains(offset))
         }
         assign(&prayedCount, prayed.count)
@@ -293,21 +283,22 @@ extension HomeViewModel {
     }
 
     private static func anchors(of day: DayPrayerTimes) -> [PrayerAnchor] {
-        let entries: [(AppLocalizedKeys, Int)] = [
-            (.fajr, day.fajr),
-            (.dhuhr, day.dhuhr),
-            (.asr, day.asr),
-            (.maghrib, day.maghrib),
-            (.isha, day.isha)
+        let entries: [(AppLocalizedKeys, Int, String)] = [
+            (.fajr, day.fajr, "sunrise.fill"),
+            (.dhuhr, day.dhuhr, "sun.max.fill"),
+            (.asr, day.asr, "sun.haze.fill"),
+            (.maghrib, day.maghrib, "sunset.fill"),
+            (.isha, day.isha, "moon.stars.fill")
         ]
 
-        return entries.map { key, minutes in
+        return entries.map { key, minutes, symbol in
             let chipTitle = key.value
             return PrayerAnchor(
                 chipTitle: chipTitle,
                 title: chipTitle.capitalized,
                 minutes: minutes,
-                clock: PrayerClockFormatter.twelveHourClock(fromMinutesSinceMidnight: minutes)
+                clock: PrayerClockFormatter.twelveHourClock(fromMinutesSinceMidnight: minutes),
+                symbol: symbol
             )
         }
     }

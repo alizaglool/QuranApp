@@ -13,16 +13,14 @@ struct HomeToolsCard: View {
     @ObservedObject var viewModel: HomeViewModel
 
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(alignment: .top, spacing: .sm) {
-                ForEach(viewModel.quickAccessItems) { item in
-                    QuickAccessCard(item: item) {
-                        viewModel.onQuickAccessTapped(item)
-                    }
+        HStack(alignment: .top, spacing: .xxSm) {
+            ForEach(viewModel.quickAccessItems) { item in
+                QuickAccessCard(item: item) {
+                    viewModel.onQuickAccessTapped(item)
                 }
             }
-            .padding(.horizontal, .sm)
         }
+        .padding(.horizontal, .xSm)
         .padding(.vertical, .sm)
         .background(
             RoundedRectangle(cornerRadius: .cornerXxl)

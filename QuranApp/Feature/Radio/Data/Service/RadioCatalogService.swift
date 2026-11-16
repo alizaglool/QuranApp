@@ -147,7 +147,14 @@ final class RadioCatalogService {
             Self.log.error("Radio catalog held no usable stations")
             throw RadioCatalogError.decodingFailed
         }
-        return catalog
+        return RadioCatalog(stations: Self.stationsWithEgyptianRadio(catalog.stations))
+    }
+
+    private static func stationsWithEgyptianRadio(_ stations: [RadioStation]) -> [RadioStation] {
+        guard !stations.contains(where: { $0.id == EgyptianRadioStationReference.identifier }) else {
+            return stations
+        }
+        return [EgyptianRadioStationReference.fallback] + stations
     }
 
     // MARK: - Fallback
@@ -250,7 +257,9 @@ final class RadioCatalogService {
             let entry = try? JSONDecoder().decode(CachedRadioCatalog.self, from: data),
             !entry.stations.isEmpty
         else { return nil }
-        return entry
+        return CachedRadioCatalog(stations: Self.stationsWithEgyptianRadio(entry.stations),
+                                  etag: entry.etag,
+                                  fetchedAt: entry.fetchedAt)
     }
 
     private func writeCacheFile(_ entry: CachedRadioCatalog) {

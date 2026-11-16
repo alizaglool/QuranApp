@@ -82,7 +82,6 @@ struct AccentIconTile: View {
 }
 
 struct PrayerTimeChip: View {
-    @Environment(\.colorScheme) private var colorScheme
 
     let prayer: PrayerTimeItem
     let accessibilityLabel: String
@@ -91,9 +90,7 @@ struct PrayerTimeChip: View {
     var body: some View {
         Button(action: onToggle) {
             VStack(spacing: .xxSm) {
-                Image(systemName: prayer.isPrayed ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 13, weight: .semibold))
-                    .padding(.bottom, 2)
+                medallion
 
                 Text(prayer.name)
                     .customStyle(.kitab(size: 10, bold: true))
@@ -116,12 +113,8 @@ struct PrayerTimeChip: View {
                     .fill(chipBackground)
             )
             .overlay(
-                Group {
-                    if !prayer.isActive {
-                        RoundedRectangle(cornerRadius: .cornerMd)
-                            .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
-                    }
-                }
+                RoundedRectangle(cornerRadius: .cornerMd)
+                    .stroke(ColorStyle.outlineVariant.color.opacity(0.1), lineWidth: 1)
             )
             .contentShape(Rectangle())
         }
@@ -130,24 +123,36 @@ struct PrayerTimeChip: View {
         .accessibilityAddTraits(.isButton)
     }
 
+    // MARK: - Medallion
+
+    private var medallion: some View {
+        Image(systemName: prayer.symbol)
+            .font(.system(size: 13, weight: .semibold))
+            .symbolRenderingMode(.hierarchical)
+            .customForeground(prayer.isPrayed ? .primary : .onSurfaceVariant)
+            .frame(width: 26, height: 26)
+            .background(Circle().fill(medallionBackground))
+            .overlay(alignment: .bottomTrailing) {
+                if prayer.isPrayed {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 10, weight: .bold))
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(ColorStyle.primary.color, chipBackground)
+                }
+            }
+            .padding(.bottom, 1)
+    }
+
+    private var medallionBackground: Color {
+        ColorStyle.primary.color.opacity(prayer.isPrayed ? 0.20 : 0.09)
+    }
+
     private var chipBackground: Color {
-        if prayer.isActive {
-            return ColorStyle.brandActive.color
-        }
-        if prayer.isPrayed {
-            return ColorStyle.washPrimary.color
-        }
-        return Color.surfaceContainer
+        prayer.isPrayed ? ColorStyle.washPrimary.color : Color.surfaceContainer
     }
 
     private var chipForeground: Color {
-        if prayer.isActive {
-            return colorScheme == .dark ? ColorStyle.primaryContainer.color : .white
-        }
-        if prayer.isPrayed {
-            return ColorStyle.primary.color
-        }
-        return ColorStyle.onSurfaceVariant.color
+        prayer.isPrayed ? ColorStyle.primary.color : ColorStyle.onSurfaceVariant.color
     }
 }
 
@@ -176,7 +181,7 @@ struct QuickAccessCard: View {
 
     @Environment(\.colorScheme) private var colorScheme
 
-    private let tileSide: CGFloat = 58
+    private let tileSide: CGFloat = 54
 
     var body: some View {
         Button(action: action) {
@@ -186,7 +191,7 @@ struct QuickAccessCard: View {
                         .fill(item.accent.color.opacity(colorScheme == .dark ? 0.22 : 0.10))
 
                     Image(systemName: item.icon)
-                        .font(.system(size: 26))
+                        .font(.system(size: 24))
                         .customForeground(item.accent)
                 }
                 .frame(width: tileSide, height: tileSide)
@@ -196,13 +201,14 @@ struct QuickAccessCard: View {
                 )
 
                 Text(item.title)
-                    .customStyle(.caption1, .onSurfaceVariant)
+                    .customStyle(.caption2, .onSurfaceVariant)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
-                    .minimumScaleFactor(0.85)
+                    .minimumScaleFactor(0.8)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .frame(width: tileSide)
+            .frame(maxWidth: .infinity, alignment: .top)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)

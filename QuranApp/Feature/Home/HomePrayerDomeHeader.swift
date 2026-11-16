@@ -100,6 +100,7 @@ private extension HomePrayerDomeHeader {
             Text(viewModel.locationLabel)
                 .customStyle(.caption2)
                 .lineLimit(1)
+                .minimumScaleFactor(0.85)
         }
         .foregroundColor(.white.opacity(0.9))
         .padding(.horizontal, .sm)

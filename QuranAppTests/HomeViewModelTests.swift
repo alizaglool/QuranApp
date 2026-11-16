@@ -152,8 +152,7 @@ extension HomeViewModelTests {
 
     func testQuickAccessItemsOrderAndCount() {
         let types: [QuickAccessType] = viewModel.quickAccessItems.map { $0.type }
-        XCTAssertEqual(types, [.quran, .recitations, .radio, .egyptianRadio, .adhkar,
-                               .khatmah, .hadith, .lessons, .worship, .content])
+        XCTAssertEqual(types, [.quran, .adhkar, .khatmah, .worship, .content])
     }
 
     func testQuickAccessItemsCarryTitleAndIcon() {
@@ -164,9 +163,8 @@ extension HomeViewModelTests {
     }
 
     func testQuickAccessTitlesAreLocalizedNotRawKeys() {
-        let keys: [AppLocalizedKeys] = [.quran, .recitations, .radio, .egyptianRadioHomeTile, .adhkar,
-                                        .khatmahHomeTile, .hadith, .lessons, .worshipHomeTile,
-                                        .contentHomeTile]
+        let keys: [AppLocalizedKeys] = [.quran, .adhkar, .khatmahHomeTile,
+                                        .worshipHomeTile, .ritesHomeTile]
         for (item, key) in zip(viewModel.quickAccessItems, keys) {
             XCTAssertNotEqual(item.title, key.rawValue)
         }
@@ -175,13 +173,8 @@ extension HomeViewModelTests {
     func testQuickAccessRoutesEachTypeToItsDestination() {
         let expected: [HomeCoordinatorSpy.Call] = [
             .quran(startPage: nil),
-            .recitations,
-            .radio,
-            .egyptianRadio,
             .adhkar,
             .khatmah,
-            .hadith,
-            .lessons,
             .worship,
             .content
         ]

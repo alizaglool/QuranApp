@@ -10,6 +10,7 @@ import CoreLocation
 
 struct SelectedLocation: Codable, Equatable {
 
+    let districtName: String?
     let cityName: String
     let countryCode: String
     let latitude: Double
@@ -17,6 +18,24 @@ struct SelectedLocation: Codable, Equatable {
     let timeZoneIdentifier: String?
     let isResolvedFromDevice: Bool
     let altitudeMeters: Double?
+
+    init(districtName: String? = nil,
+         cityName: String,
+         countryCode: String,
+         latitude: Double,
+         longitude: Double,
+         timeZoneIdentifier: String?,
+         isResolvedFromDevice: Bool,
+         altitudeMeters: Double?) {
+        self.districtName = districtName
+        self.cityName = cityName
+        self.countryCode = countryCode
+        self.latitude = latitude
+        self.longitude = longitude
+        self.timeZoneIdentifier = timeZoneIdentifier
+        self.isResolvedFromDevice = isResolvedFromDevice
+        self.altitudeMeters = altitudeMeters
+    }
 }
 
 // MARK: - Fallback
@@ -43,6 +62,11 @@ extension SelectedLocation {
     var hasResolvedCityName: Bool {
         !cityName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
+
+    var hasResolvedDistrictName: Bool {
+        guard let districtName else { return false }
+        return !districtName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }
 
 // MARK: - Placemark Mapping
@@ -53,7 +77,8 @@ extension SelectedLocation {
          coordinate: CLLocationCoordinate2D,
          isResolvedFromDevice: Bool,
          altitudeMeters: Double?) {
-        self.init(cityName: placemark.flatMap(SelectedLocation.cityName(from:)) ?? "",
+        self.init(districtName: placemark.flatMap(SelectedLocation.districtName(from:)),
+                  cityName: placemark.flatMap(SelectedLocation.cityName(from:)) ?? "",
                   countryCode: placemark?.isoCountryCode ?? "",
                   latitude: coordinate.latitude,
                   longitude: coordinate.longitude,
@@ -67,5 +92,13 @@ extension SelectedLocation {
             ?? placemark.subAdministrativeArea
             ?? placemark.administrativeArea
             ?? placemark.country
+    }
+
+    static func districtName(from placemark: CLPlacemark) -> String? {
+        guard let subLocality = placemark.subLocality?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !subLocality.isEmpty
+        else { return nil }
+
+        return subLocality
     }
 }

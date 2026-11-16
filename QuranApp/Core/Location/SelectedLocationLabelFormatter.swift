@@ -23,6 +23,16 @@ struct SelectedLocationLabelFormatter {
                       countryName)
     }
 
+    func displayLabelWithDistrict(for location: SelectedLocation) -> String {
+        let countryName = localizedCountryName(for: location.countryCode)
+
+        guard location.hasResolvedCityName else {
+            return unresolvedCityLabel(for: location, countryName: countryName)
+        }
+
+        return joinedLabel(from: [location.districtName ?? "", location.cityName, countryName])
+    }
+
     func localizedCountryName(for countryCode: String) -> String {
         guard !countryCode.isEmpty else { return "" }
 
@@ -38,5 +48,27 @@ private extension SelectedLocationLabelFormatter {
     func unresolvedCityLabel(for location: SelectedLocation, countryName: String) -> String {
         guard location.isResolvedFromDevice else { return AppLocalizedKeys.homeLocation.value }
         return countryName.isEmpty ? AppLocalizedKeys.locationCurrentPlace.value : countryName
+    }
+}
+
+// MARK: - Joining
+
+private extension SelectedLocationLabelFormatter {
+
+    func joinedLabel(from components: [String]) -> String {
+        var kept: [String] = []
+
+        for component in components {
+            let trimmed = component.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { continue }
+            guard !kept.contains(where: { $0.localizedLowercase == trimmed.localizedLowercase }) else { continue }
+            kept.append(trimmed)
+        }
+
+        guard let first = kept.first else { return "" }
+
+        return kept.dropFirst().reduce(first) { joined, next in
+            String(format: AppLocalizedKeys.locationLabelFormat.value, joined, next)
+        }
     }
 }

@@ -273,11 +273,12 @@ final class QuranDatabase {
     
     // MARK: - Juz Number
     
+    static let juzStartPages = [1,22,42,62,82,102,121,142,162,182,
+                                201,222,242,262,282,302,322,342,362,382,
+                                402,422,442,462,482,502,522,542,562,582]
+
     func getJuz(forPage page: Int) -> Int {
-        let juzPages = [1,22,42,62,82,102,121,142,162,182,
-                        201,222,242,262,282,302,322,342,362,382,
-                        402,422,442,462,482,502,522,542,562,582]
-        for (index, startPage) in juzPages.enumerated().reversed() {
+        for (index, startPage) in QuranDatabase.juzStartPages.enumerated().reversed() {
             if page >= startPage { return index + 1 }
         }
         return 1
@@ -384,6 +385,37 @@ final class QuranDatabase {
         }
         sqlite3_finalize(stmt)
         return result
+    }
+
+    // MARK: - Page Verse References
+
+    func getPageVerseReferences(fromPage firstPage: Int, toPage lastPage: Int) -> [(page: Int, chapterNumber: Int, verseNumber: Int)] {
+        guard let db = db, firstPage <= lastPage else { return [] }
+
+        let query = """
+            SELECT pv.pageIdentifier, v.chapterNumber, v.number
+            FROM page_verse pv
+            JOIN verse v ON v.verseID = pv.verseID
+            WHERE pv.pageIdentifier BETWEEN ? AND ? AND pv.edition = '1441'
+            ORDER BY pv.pageIdentifier, v.verseID
+        """
+
+        var stmt: OpaquePointer?
+        var rows: [(page: Int, chapterNumber: Int, verseNumber: Int)] = []
+
+        if sqlite3_prepare_v2(db, query, -1, &stmt, nil) == SQLITE_OK {
+            sqlite3_bind_int(stmt, 1, Int32(firstPage - 1))
+            sqlite3_bind_int(stmt, 2, Int32(lastPage - 1))
+            while sqlite3_step(stmt) == SQLITE_ROW {
+                rows.append((
+                    page: Int(sqlite3_column_int(stmt, 0)) + 1,
+                    chapterNumber: Int(sqlite3_column_int(stmt, 1)),
+                    verseNumber: Int(sqlite3_column_int(stmt, 2))
+                ))
+            }
+        }
+        sqlite3_finalize(stmt)
+        return rows
     }
 
     // MARK: - Total Pages
