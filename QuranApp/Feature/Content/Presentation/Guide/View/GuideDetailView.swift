@@ -12,218 +12,204 @@ struct GuideDetailView: View {
 
     @StateObject private var viewModel: GuideDetailViewModel
 
-    init(key: GuideKey, coordinator: any ContentCoordinating) {
+    init(key: GuideKey, coordinator: ContentCoordinating?) {
         _viewModel = StateObject(wrappedValue: GuideDetailViewModel(key: key, coordinator: coordinator))
     }
 
     var body: some View {
         MainView(viewModel: viewModel) {
-            mainContent
-        }
-    }
-}
+            VStack(spacing: 0) {
+                navigationBar
 
-// MARK: - Layout
+                NoIndicatorsScrollView {
+                    VStack(alignment: .leading, spacing: .xBig) {
+                        header
 
-private extension GuideDetailView {
+                        if viewModel.hasContent {
+                            if let overview = viewModel.overview {
+                                overviewCard(overview)
+                            }
 
-    var mainContent: some View {
-        VStack(spacing: 0) {
-            navBar
+                            if viewModel.canStart {
+                                startButton
+                            }
 
-            NoIndicatorsScrollView {
-                VStack(alignment: .leading, spacing: .big) {
-                    if viewModel.hasContent {
-                        if let overview = viewModel.overview {
-                            headerCard(overview)
+                            ForEach(viewModel.sections) { section in
+                                sectionBlock(section)
+                            }
+                        } else {
+                            emptyState
                         }
-
-                        ForEach(viewModel.sections) { section in
-                            sectionBlock(section)
-                        }
-
-                        ForEach(viewModel.pages) { page in
-                            pageCard(page)
-                        }
-                    } else {
-                        emptyCard
                     }
+                    .padding(.horizontal, .md)
+                    .padding(.top, .xSm)
+                    .padding(.bottom, .xxxBig)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.horizontal, .big)
-                .padding(.top, .sm)
-                .padding(.bottom, .xxxBig)
             }
+            .customBackground(.background)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .customBackground(.background)
     }
 
-    var navBar: some View {
-        HStack(spacing: 10) {
+    // MARK: - Navigation Bar
+
+    private var navigationBar: some View {
+        HStack(spacing: .no) {
             Button(action: viewModel.onBackTapped) {
                 Image(systemName: "chevron.backward")
-                    .font(.system(size: 15, weight: .semibold))
-                    .customForeground(.primary)
-                    .frame(width: 32, height: 32)
+                    .font(.system(size: 17, weight: .semibold))
+                    .customForeground(.onSurface)
+                    .frame(width: 34, height: 34)
             }
+            .buttonStyle(.plain)
             .accessibilityLabel(viewModel.backAccessibilityLabel)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(viewModel.screenTitle)
-                    .customStyle(.heading3, .onSurface)
-                Text(viewModel.screenSubtitle)
-                    .customStyle(.caption1, .subtitle)
+            Spacer(minLength: .no)
+        }
+        .padding(.horizontal, .sm)
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: .xSm) {
+            Text(viewModel.screenTitle)
+                .customStyle(.largeTitle, .onSurface)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(viewModel.screenSubtitle)
+                .customStyle(.bodySmall, .onSurfaceVariant)
+                .lineSpacing(6)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // MARK: - Overview
+
+    private func overviewCard(_ overview: GuideReaderNote) -> some View {
+        VStack(alignment: .leading, spacing: .xSm) {
+            Text(viewModel.overviewTitle)
+                .customStyle(.caption2, .primary)
+
+            if overview.hasSubtitle {
+                Text(overview.subtitle)
+                    .customStyle(.bodyMedium, .onSurfaceVariant)
+                    .lineSpacing(7)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
-            Spacer(minLength: 0)
+            GuideTextBlocksView(blocks: overview.blocks)
+
+            if overview.hasSource {
+                Text(overview.source)
+                    .customStyle(.caption2, .outline)
+            }
         }
-        .padding(.horizontal, .big)
-        .padding(.vertical, .sm)
+        .padding(.md)
+        .contentCardChrome()
     }
-}
 
-// MARK: - Sections
+    // MARK: - Start
 
-private extension GuideDetailView {
+    private var startButton: some View {
+        Button(action: viewModel.onStartTapped) {
+            HStack(spacing: .xSm) {
+                Text(viewModel.startTitle)
+                    .customStyle(.buttonText)
+                Image(systemName: "chevron.forward")
+                    .font(.system(size: 13, weight: .semibold))
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .customForeground(.onPrimary)
+            .background(ColorStyle.primary.color)
+            .clipShape(RoundedRectangle(cornerRadius: .cornerMd, style: .continuous))
+        }
+        .buttonStyle(.plain)
+    }
 
-    func sectionBlock(_ section: GuideDetailSection) -> some View {
+    // MARK: - Sections
+
+    private func sectionBlock(_ section: GuideIndexSection) -> some View {
         VStack(alignment: .leading, spacing: .sm) {
             Text(section.title)
-                .customStyle(.heading2, .onSurface)
+                .customStyle(.heading3, .onSurface)
 
-            if let header = section.header {
-                headerCard(header)
+            VStack(spacing: .no) {
+                ForEach(Array(section.rows.enumerated()), id: \.element.id) { offset, row in
+                    if offset > 0 {
+                        Rectangle()
+                            .fill(ColorStyle.outlineVariant.color)
+                            .frame(height: 1)
+                            .padding(.leading, .md)
+                    }
+                    GuideIndexRowView(row: row) {
+                        viewModel.onRowTapped(row)
+                    }
+                }
             }
-
-            ForEach(section.stages) { stage in
-                stageCard(stage)
-            }
-        }
-    }
-
-    func stageCard(_ stage: GuideDetailStage) -> some View {
-        VStack(alignment: .leading, spacing: .sm) {
-            Text(stage.title)
-                .customStyle(.headline, .onSurface)
-                .fixedSize(horizontal: false, vertical: true)
-
-            if let header = stage.header {
-                headerBody(header)
-            }
-
-            ForEach(stage.items) { item in
-                itemBlock(item)
-            }
-
-            ForEach(stage.substages) { substage in
-                substageCard(substage)
-            }
-        }
-        .padding(.md)
-        .contentCardChrome()
-    }
-
-    func substageCard(_ stage: GuideDetailStage) -> some View {
-        VStack(alignment: .leading, spacing: .xSm) {
-            Text(stage.title)
-                .customStyle(.subheadline, .primary)
-                .fixedSize(horizontal: false, vertical: true)
-
-            ForEach(stage.items) { item in
-                itemBlock(item)
-            }
-        }
-        .padding(.sm)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: .cornerMd)
-                .fill(ColorStyle.surfaceContainerLow.color)
-        )
-    }
-}
-
-// MARK: - Items
-
-private extension GuideDetailView {
-
-    func itemBlock(_ item: GuideItem) -> some View {
-        VStack(alignment: .leading, spacing: .xxSm) {
-            if item.hasTitle {
-                Text(item.displayTitle)
-                    .customStyle(.subheadline, .onSurface)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            Text(viewModel.attributed(item.displayBody))
-                .customStyle(.bodyMedium, .onSurfaceVariant)
-                .fixedSize(horizontal: false, vertical: true)
-
-            if !item.source.isEmpty {
-                Text(item.source)
-                    .customStyle(.caption2, .outline)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
-// MARK: - Headers
-
-private extension GuideDetailView {
-
-    func headerCard(_ header: GuideHeader) -> some View {
-        headerBody(header)
-            .padding(.md)
             .contentCardChrome()
-    }
-
-    func headerBody(_ header: GuideHeader) -> some View {
-        VStack(alignment: .leading, spacing: .xSm) {
-            if !header.subtitle.isEmpty {
-                Text(viewModel.attributed(header.subtitle))
-                    .customStyle(.bodyMedium, .onSurfaceVariant)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            if !header.text.isEmpty {
-                Text(viewModel.attributed(header.text))
-                    .customStyle(.adhkar(size: 18), .primary)
-                    .multilineTextAlignment(.leading)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            if !header.source.isEmpty {
-                Text(header.source)
-                    .customStyle(.caption2, .outline)
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-}
 
-// MARK: - Pages
+    // MARK: - Empty
 
-private extension GuideDetailView {
-
-    func pageCard(_ page: GuidePage) -> some View {
-        VStack(alignment: .leading, spacing: .xSm) {
-            Text(page.displayTitle)
-                .customStyle(.headline, .onSurface)
-                .fixedSize(horizontal: false, vertical: true)
-
-            Text(viewModel.attributed(page.displayBody))
-                .customStyle(.adhkar(size: 17), .onSurfaceVariant)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .padding(.md)
-        .contentCardChrome()
-    }
-
-    var emptyCard: some View {
+    private var emptyState: some View {
         Text(viewModel.emptyMessage)
-            .customStyle(.bodySmall, .subtitle)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.md)
-            .contentCardChrome()
+            .customStyle(.subheadline, .onSurfaceVariant)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, .xBig)
+    }
+}
+
+// MARK: - GuideIndexRowView
+
+private struct GuideIndexRowView: View {
+
+    let row: GuideIndexRow
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: .sm) {
+                if row.hasMarker {
+                    Text(row.marker)
+                        .customStyle(.caption1, .primary)
+                        .frame(width: 28, height: 28)
+                        .background(Color.washPrimary)
+                        .clipShape(Circle())
+                }
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(row.title)
+                        .customStyle(.subheadline, .onSurface)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    if let detail = row.detail {
+                        HStack(spacing: .xxSm) {
+                            Text(detail.label)
+                                .customStyle(.caption2, .onSurfaceVariant)
+
+                            Text(detail.value)
+                                .customStyle(.caption2, .onSurface)
+                        }
+                    }
+                }
+
+                Spacer(minLength: .xSm)
+
+                Image(systemName: "chevron.forward")
+                    .font(.system(size: 12, weight: .semibold))
+                    .customForeground(.outline)
+            }
+            .padding(.horizontal, .md)
+            .padding(.vertical, .sm)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
     }
 }

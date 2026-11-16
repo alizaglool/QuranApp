@@ -6,41 +6,42 @@
 //
 
 import Foundation
-import SwiftUI
 import Core
 
-struct GuideDetailStage: Identifiable {
-    let key: String
+// MARK: - GuideIndexRow
+
+struct GuideIndexRow: Identifiable {
+    let id: String
+    let pageIndex: Int
+    let marker: String
     let title: String
-    let header: GuideHeader?
-    let items: [GuideItem]
-    let substages: [GuideDetailStage]
+    let detail: GuideMetric?
 
-    var id: String { key }
-
-    var isEmpty: Bool { items.isEmpty && substages.allSatisfy(\.isEmpty) }
+    var hasMarker: Bool { !marker.isEmpty }
 }
 
-struct GuideDetailSection: Identifiable {
-    let kind: GuideSectionKind
-    let title: String
-    let header: GuideHeader?
-    let stages: [GuideDetailStage]
+// MARK: - GuideIndexSection
 
-    var id: String { kind.rawValue }
+struct GuideIndexSection: Identifiable {
+    let id: String
+    let title: String
+    let rows: [GuideIndexRow]
 }
+
+// MARK: - GuideDetailViewModel
 
 @MainActor
 final class GuideDetailViewModel: MainViewModel {
 
     // MARK: - Output
 
-    @Published private(set) var overview: GuideHeader?
-    @Published private(set) var sections: [GuideDetailSection] = []
-    @Published private(set) var pages: [GuidePage] = []
+    @Published private(set) var overview: GuideReaderNote?
+    @Published private(set) var sections: [GuideIndexSection] = []
 
     private let key: GuideKey
     private let store: GuideContentStore
+
+    private var plan = GuideReaderPlan()
 
     var isTabBarVisible: Bool { false }
 
@@ -56,47 +57,50 @@ final class GuideDetailViewModel: MainViewModel {
 
     var screenTitle: String {
         switch key {
-        case .umrah:    return AppLocalizedKeys.contentUmrahTitle.value
-        case .hajj:     return AppLocalizedKeys.contentHajjTitle.value
+        case .umrah:    return AppLocalizedKeys.ritesUmrahTitle.value
+        case .hajj:     return AppLocalizedKeys.ritesHajjTitle.value
         }
     }
 
     var screenSubtitle: String {
         switch key {
-        case .umrah:    return AppLocalizedKeys.contentUmrahSubtitle.value
-        case .hajj:     return AppLocalizedKeys.contentHajjSubtitle.value
+        case .umrah:    return AppLocalizedKeys.ritesUmrahSubtitle.value
+        case .hajj:     return AppLocalizedKeys.ritesHajjSubtitle.value
         }
     }
 
+    var overviewTitle: String { AppLocalizedKeys.ritesOverviewTitle.value }
+
+    var startTitle: String { AppLocalizedKeys.ritesStartJourney.value }
+
     var backAccessibilityLabel: String { AppLocalizedKeys.back.value }
 
-    var emptyMessage: String { AppLocalizedKeys.contentEmptyMessage.value }
+    var emptyMessage: String { AppLocalizedKeys.ritesEmptyMessage.value }
 
-    var hasContent: Bool { overview != nil || !sections.isEmpty || !pages.isEmpty }
+    var hasContent: Bool { overview != nil || !sections.isEmpty }
+
+    var canStart: Bool { !plan.pages.isEmpty }
 
     // MARK: - Lifecycle
 
     func onAppear() {
-        guard sections.isEmpty, pages.isEmpty, overview == nil else { return }
+        guard plan.isEmpty else { return }
         load()
     }
 
     // MARK: - Actions
 
-    func onBackTapped() {
-        coordinator?.coordinateBack()
+    func onStartTapped() {
+        guard canStart else { return }
+        coordinator?.coordinateToReader(key: key, pageIndex: 0)
     }
 
-    // MARK: - Markdown
+    func onRowTapped(_ row: GuideIndexRow) {
+        coordinator?.coordinateToReader(key: key, pageIndex: row.pageIndex)
+    }
 
-    func attributed(_ text: String) -> AttributedString {
-        let options = AttributedString.MarkdownParsingOptions(
-            interpretedSyntax: .inlineOnlyPreservingWhitespace
-        )
-        guard let parsed = try? AttributedString(markdown: text, options: options) else {
-            return AttributedString(text)
-        }
-        return parsed
+    func onBackTapped() {
+        coordinator?.coordinateBack()
     }
 
     // MARK: - Loading
@@ -104,40 +108,27 @@ final class GuideDetailViewModel: MainViewModel {
     private func load() {
         guard let content = store.content(for: key) else { return }
 
-        overview = content.overviewHeader
-        sections = GuideSectionKind.allCases.compactMap { section(kind: $0, in: content) }
-        pages = content.pages
-    }
-
-    private func section(kind: GuideSectionKind, in content: GuideContent) -> GuideDetailSection? {
-        let stages = content.stages(in: kind).map { stage(from: $0, in: content) }
-            .filter { !$0.isEmpty }
-        guard !stages.isEmpty else { return nil }
-
-        return GuideDetailSection(kind: kind,
-                                  title: title(for: kind),
-                                  header: content.header(forStage: kind.rawValue),
-                                  stages: stages)
-    }
-
-    private func stage(from stage: GuideStage, in content: GuideContent) -> GuideDetailStage {
-        GuideDetailStage(key: stage.key,
-                         title: stage.displayTitle,
-                         header: content.header(forStage: stage.key),
-                         items: content.items(forStage: stage.key),
-                         substages: content.substages(of: stage).map {
-                             GuideDetailStage(key: $0.key,
-                                              title: $0.displayTitle,
-                                              header: content.header(forStage: $0.key),
-                                              items: content.items(forStage: $0.key),
-                                              substages: [])
-                         })
-    }
-
-    private func title(for kind: GuideSectionKind) -> String {
-        switch kind {
-        case .journey:  return AppLocalizedKeys.contentSectionJourney.value
-        case .learn:    return AppLocalizedKeys.contentSectionLearn.value
+        plan = GuideReaderPlan(content: content)
+        overview = plan.overviewNote
+        sections = plan.sections.map { section in
+            GuideIndexSection(id: section.id,
+                              title: section.title,
+                              rows: section.pageIndices.map(row(atPage:)))
         }
+    }
+
+    private func row(atPage index: Int) -> GuideIndexRow {
+        let page = plan.pages[index]
+        return GuideIndexRow(id: page.id,
+                             pageIndex: index,
+                             marker: page.marker,
+                             title: page.title,
+                             detail: stepsDetail(count: page.stepCount))
+    }
+
+    private func stepsDetail(count: Int) -> GuideMetric? {
+        guard count > 0 else { return nil }
+        return GuideMetric(label: AppLocalizedKeys.ritesStepsLabel.value,
+                           value: GuideReaderPlan.numeral(count))
     }
 }

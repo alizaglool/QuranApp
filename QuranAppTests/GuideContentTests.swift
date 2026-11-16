@@ -316,7 +316,201 @@ extension GuideContentTests {
     }
 }
 
-// MARK: - Detail View Model
+// MARK: - Text Parser
+
+final class GuideTextParserTests: XCTestCase {
+
+    private var store: GuideContentStore!
+
+    override func setUp() {
+        super.setUp()
+        store = GuideContentStore(bundle: .main)
+    }
+
+    override func tearDown() {
+        store = nil
+        super.tearDown()
+    }
+
+    private func normalised(_ text: String) -> String {
+        text.replacingOccurrences(of: "**", with: "")
+            .components(separatedBy: .whitespacesAndNewlines)
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+    }
+
+    private func everyBundledBody() throws -> [String] {
+        var bodies: [String] = []
+        for key in GuideKey.allCases {
+            let content = try XCTUnwrap(store.content(for: key), key.rawValue)
+            bodies += content.items.flatMap { [$0.titleAr, $0.titleEn, $0.bodyAr, $0.bodyEn] }
+            bodies += content.headers.map(\.text)
+            bodies += content.pages.flatMap { [$0.bodyAr, $0.bodyEn] }
+        }
+        return bodies.filter { !normalised($0).isEmpty }
+    }
+
+    func testEveryBundledBodySurvivesParsingWordForWord() throws {
+        let bodies = try everyBundledBody()
+
+        XCTAssertGreaterThan(bodies.count, 300)
+
+        for body in bodies {
+            let rebuilt = GuideTextParser.blocks(from: body)
+                .map { block -> String in
+                    switch block.segment {
+                    case .revelation(let text, let reference): return text + " " + reference
+                    default:                                   return block.segment.text
+                    }
+                }
+                .joined(separator: " ")
+
+            XCTAssertEqual(normalised(rebuilt), normalised(body))
+        }
+    }
+
+    func testEveryBundledBodyProducesAtLeastOneBlock() throws {
+        for body in try everyBundledBody() {
+            XCTAssertFalse(GuideTextParser.blocks(from: body).isEmpty)
+        }
+    }
+
+    func testBlockIndicesAreContiguous() throws {
+        for body in try everyBundledBody() {
+            let blocks = GuideTextParser.blocks(from: body)
+            XCTAssertEqual(blocks.map(\.index), Array(0..<blocks.count))
+        }
+    }
+
+    func testPlainProseIsASingleInstructionBlock() {
+        let blocks = GuideTextParser.blocks(from: "اغتسل ثم ألبس الإحرام")
+
+        XCTAssertEqual(blocks.count, 1)
+        XCTAssertEqual(blocks.first?.segment, .instruction("اغتسل ثم ألبس الإحرام"))
+    }
+
+    func testEmphasisedLineFollowedByProseIsAHeading() {
+        let blocks = GuideTextParser.blocks(from: "**التكبير المطلق**\nيبدأ من أول ذي الحجة.")
+
+        XCTAssertEqual(blocks.count, 2)
+        XCTAssertEqual(blocks.first?.segment, .heading("التكبير المطلق"))
+        XCTAssertEqual(blocks.last?.segment, .instruction("يبدأ من أول ذي الحجة."))
+    }
+
+    func testEmphasisedLineFollowedByABlankLineStaysASupplication() {
+        let blocks = GuideTextParser.blocks(from: "**لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ**\n\nثم تطوف بالبيت.")
+
+        XCTAssertEqual(blocks.count, 2)
+        XCTAssertEqual(blocks.first?.segment, .supplication("لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ"))
+        XCTAssertEqual(blocks.last?.segment, .instruction("ثم تطوف بالبيت."))
+    }
+
+    func testOnlyTheTakbeerSubheadingsAreClassifiedAsHeadingsInTheBundledPacks() throws {
+        var headings: [String] = []
+
+        for body in try everyBundledBody() {
+            headings += GuideTextParser.blocks(from: body).compactMap { block in
+                guard case .heading(let text) = block.segment else { return nil }
+                return text
+            }
+        }
+
+        XCTAssertEqual(headings, ["التكبير المطلق",
+                                  "التكبير المقيّد",
+                                  "Unrestricted Takbir",
+                                  "Restricted Takbir"])
+    }
+
+    func testEveryBundledSupplicationKeepsItsSupplicationTreatment() throws {
+        var supplications = 0
+
+        for body in try everyBundledBody() {
+            supplications += GuideTextParser.blocks(from: body).filter { block in
+                if case .supplication = block.segment { return true }
+                return false
+            }.count
+        }
+
+        XCTAssertEqual(supplications, 41)
+    }
+
+    func testFullyEmphasisedLineIsASupplication() {
+        let blocks = GuideTextParser.blocks(from: "**لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ**")
+
+        XCTAssertEqual(blocks.count, 1)
+        XCTAssertEqual(blocks.first?.segment, .supplication("لَبَّيْكَ اللَّهُمَّ لَبَّيْكَ"))
+    }
+
+    func testInlineEmphasisStaysInsideTheInstruction() {
+        let blocks = GuideTextParser.blocks(from: "قل **لبيك** ثم امض")
+
+        XCTAssertEqual(blocks.count, 1)
+        XCTAssertEqual(blocks.first?.segment, .instruction("قل **لبيك** ثم امض"))
+    }
+
+    func testRevelationKeepsItsReferenceSeparately() {
+        let blocks = GuideTextParser.blocks(from: "﴿وَأَتِمُّوا الْحَجَّ﴾ «البقرة:١٩٦»")
+
+        XCTAssertEqual(blocks.count, 1)
+        XCTAssertEqual(blocks.first?.segment, .revelation(text: "﴿وَأَتِمُّوا الْحَجَّ﴾",
+                                                          reference: "«البقرة:١٩٦»"))
+    }
+
+    func testRevelationWithoutAReferenceKeepsAnEmptyReference() {
+        let blocks = GuideTextParser.blocks(from: "﴿وَأَتِمُّوا الْحَجَّ﴾")
+
+        XCTAssertEqual(blocks.first?.segment, .revelation(text: "﴿وَأَتِمُّوا الْحَجَّ﴾", reference: ""))
+    }
+
+    func testQuotedLineIsNarration() {
+        let blocks = GuideTextParser.blocks(from: "«خذوا عني مناسككم»")
+
+        XCTAssertEqual(blocks.first?.segment, .narration("«خذوا عني مناسككم»"))
+    }
+
+    func testAdjacentLinesOfTheSameKindMerge() {
+        let blocks = GuideTextParser.blocks(from: "**سبحان الله**\n**والحمد لله**")
+
+        XCTAssertEqual(blocks.count, 1)
+        XCTAssertEqual(blocks.first?.segment, .supplication("سبحان الله\nوالحمد لله"))
+    }
+
+    func testMixedLinesSplitInSourceOrder() {
+        let blocks = GuideTextParser.blocks(from: "ثم قل:\n**لبيك اللهم لبيك**\n\nثم امض إلى الحرم")
+
+        XCTAssertEqual(blocks.count, 3)
+        XCTAssertEqual(blocks[0].segment, .instruction("ثم قل:"))
+        XCTAssertEqual(blocks[1].segment, .supplication("لبيك اللهم لبيك"))
+        XCTAssertEqual(blocks[2].segment, .instruction("ثم امض إلى الحرم"))
+    }
+
+    func testMarkdownIsRenderedWithoutLosingNewlines() {
+        XCTAssertEqual(String(GuideTextParser.attributed("one **two**\nthree").characters),
+                       "one two\nthree")
+    }
+
+    func testPlainArabicTextPassesThroughUnchanged() {
+        let raw = "plain ﴿ ayah ﴾ text"
+
+        XCTAssertEqual(String(GuideTextParser.attributed(raw).characters), raw)
+    }
+
+    func testSelfNumberedTextIsDetected() {
+        XCTAssertTrue(GuideTextParser.carriesOwnNumbering(["1. الإحرام من الميقات:"]))
+        XCTAssertTrue(GuideTextParser.carriesOwnNumbering(["لا رقم هنا", "2) الحلق أو التقصير"]))
+        XCTAssertFalse(GuideTextParser.carriesOwnNumbering(["الإحرام من الميقات"]))
+        XCTAssertFalse(GuideTextParser.carriesOwnNumbering(["١٩٦ البقرة"]))
+    }
+
+    func testUmrahDutiesCarryTheirOwnNumbering() throws {
+        let content = try XCTUnwrap(store.content(for: .umrah))
+        let texts = content.items(forStage: "duties").flatMap { [$0.displayTitle, $0.displayBody] }
+
+        XCTAssertTrue(GuideTextParser.carriesOwnNumbering(texts))
+    }
+}
+
+// MARK: - Journey Index View Model
 
 @MainActor
 final class GuideDetailViewModelTests: XCTestCase {
@@ -331,86 +525,89 @@ final class GuideDetailViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.sections.isEmpty)
         XCTAssertNil(viewModel.overview)
         XCTAssertFalse(viewModel.hasContent)
+        XCTAssertFalse(viewModel.canStart)
     }
 
-    func testOnAppearBuildsBothSections() {
+    func testUmrahIndexSplitsJourneyAndLearnOnly() {
         let viewModel = makeViewModel(.umrah)
 
         viewModel.onAppear()
 
         XCTAssertTrue(viewModel.hasContent)
+        XCTAssertTrue(viewModel.canStart)
         XCTAssertNotNil(viewModel.overview)
-        XCTAssertEqual(viewModel.sections.map(\.kind), [.journey, .learn])
+        XCTAssertEqual(viewModel.sections.map(\.id), ["journey", "learn"])
     }
 
-    func testEveryRenderedStageHasContent() {
+    func testHajjIndexAddsAnExtrasSectionForItsStandalonePage() {
+        let viewModel = makeViewModel(.hajj)
+
+        viewModel.onAppear()
+
+        XCTAssertEqual(viewModel.sections.map(\.id), ["journey", "learn", "extras"])
+        XCTAssertEqual(viewModel.sections.last?.rows.map(\.id), ["page.dhul_hijjah_takbeer"])
+    }
+
+    func testEveryRowIsFullyPopulated() {
         let viewModel = makeViewModel(.hajj)
 
         viewModel.onAppear()
 
         for section in viewModel.sections {
             XCTAssertFalse(section.title.isEmpty)
-            XCTAssertFalse(section.stages.isEmpty)
+            XCTAssertFalse(section.rows.isEmpty)
 
-            for stage in section.stages {
-                XCTAssertFalse(stage.isEmpty)
-                XCTAssertFalse(stage.title.isEmpty)
+            for row in section.rows {
+                XCTAssertFalse(row.id.isEmpty)
+                XCTAssertFalse(row.title.isEmpty)
+                XCTAssertNotNil(row.detail)
+                XCTAssertGreaterThanOrEqual(row.pageIndex, 0)
             }
         }
     }
 
-    func testHajjExposesItsTakbeerPage() {
+    func testOnlyJourneyRowsAreNumbered() {
+        let viewModel = makeViewModel(.umrah)
+
+        viewModel.onAppear()
+
+        let journey = viewModel.sections.first { $0.id == "journey" }
+        let learn = viewModel.sections.first { $0.id == "learn" }
+
+        XCTAssertEqual(journey?.rows.map(\.marker), (1...4).map(GuideReaderPlan.numeral))
+        XCTAssertEqual(learn?.rows.allSatisfy { !$0.hasMarker }, true)
+    }
+
+    func testSubstagesAreNotPromotedToRows() {
+        let viewModel = makeViewModel(.umrah)
+
+        viewModel.onAppear()
+
+        let ids = viewModel.sections.flatMap(\.rows).map(\.id)
+
+        XCTAssertEqual(viewModel.sections.first?.rows.count, 4)
+        XCTAssertFalse(ids.contains { $0.hasSuffix("_mistakes") })
+    }
+
+    func testRowPageIndicesAreUniqueAndContiguous() {
+        for key in GuideKey.allCases {
+            let viewModel = makeViewModel(key)
+            viewModel.onAppear()
+
+            let indices = viewModel.sections.flatMap(\.rows).map(\.pageIndex)
+
+            XCTAssertEqual(indices, Array(0..<indices.count), key.rawValue)
+        }
+    }
+
+    func testRepeatedOnAppearDoesNotDuplicateRows() {
         let viewModel = makeViewModel(.hajj)
 
         viewModel.onAppear()
-
-        XCTAssertEqual(viewModel.pages.map(\.slug), ["dhul_hijjah_takbeer"])
-    }
-
-    func testUmrahHasNoStandalonePages() {
-        let viewModel = makeViewModel(.umrah)
-
+        let first = viewModel.sections.flatMap(\.rows).count
         viewModel.onAppear()
 
-        XCTAssertTrue(viewModel.pages.isEmpty)
-    }
-
-    func testSubstagesAreNestedNotPromoted() {
-        let viewModel = makeViewModel(.umrah)
-
-        viewModel.onAppear()
-
-        let journey = viewModel.sections.first { $0.kind == .journey }
-        let nested = journey?.stages.flatMap(\.substages).map(\.key) ?? []
-
-        XCTAssertEqual(Set(nested), ["ihram_mistakes", "tawaf_mistakes", "sai_mistakes"])
-        XCTAssertEqual(journey?.stages.count, 4)
-        XCTAssertFalse(journey?.stages.contains { $0.key.hasSuffix("_mistakes") } ?? true)
-    }
-
-    func testRepeatedOnAppearDoesNotDuplicateSections() {
-        let viewModel = makeViewModel(.hajj)
-
-        viewModel.onAppear()
-        let first = viewModel.sections.flatMap(\.stages).count
-        viewModel.onAppear()
-
-        XCTAssertEqual(viewModel.sections.flatMap(\.stages).count, first)
-    }
-
-    func testMarkdownIsRenderedWithoutLosingNewlines() {
-        let viewModel = makeViewModel(.umrah)
-
-        let rendered = viewModel.attributed("one **two**\nthree")
-
-        XCTAssertEqual(String(rendered.characters), "one two\nthree")
-    }
-
-    func testPlainArabicTextPassesThroughUnchanged() {
-        let viewModel = makeViewModel(.umrah)
-        let raw = "plain ﴿ ayah ﴾ text"
-
-        XCTAssertEqual(String(viewModel.attributed(raw).characters), raw)
+        XCTAssertEqual(viewModel.sections.flatMap(\.rows).count, first)
     }
 
     func testLabelsAreLocalizedNotRawKeys() {
@@ -418,9 +615,191 @@ final class GuideDetailViewModelTests: XCTestCase {
 
         XCTAssertFalse(viewModel.screenTitle.isEmpty)
         XCTAssertFalse(viewModel.screenSubtitle.isEmpty)
-        XCTAssertNotEqual(viewModel.screenTitle, AppLocalizedKeys.contentHajjTitle.rawValue)
-        XCTAssertNotEqual(viewModel.screenSubtitle, AppLocalizedKeys.contentHajjSubtitle.rawValue)
-        XCTAssertNotEqual(viewModel.emptyMessage, AppLocalizedKeys.contentEmptyMessage.rawValue)
+        XCTAssertNotEqual(viewModel.screenTitle, AppLocalizedKeys.ritesHajjTitle.rawValue)
+        XCTAssertNotEqual(viewModel.screenSubtitle, AppLocalizedKeys.ritesHajjSubtitle.rawValue)
+        XCTAssertNotEqual(viewModel.emptyMessage, AppLocalizedKeys.ritesEmptyMessage.rawValue)
+        XCTAssertNotEqual(viewModel.startTitle, AppLocalizedKeys.ritesStartJourney.rawValue)
+        XCTAssertNotEqual(viewModel.overviewTitle, AppLocalizedKeys.ritesOverviewTitle.rawValue)
+    }
+
+    func testNoUserFacingLabelMentionsTheInternalContentName() {
+        for key in GuideKey.allCases {
+            let viewModel = makeViewModel(key)
+
+            for label in [viewModel.screenTitle, viewModel.screenSubtitle,
+                          viewModel.emptyMessage, viewModel.startTitle, viewModel.overviewTitle] {
+                XCTAssertFalse(label.lowercased().contains("content"), label)
+                XCTAssertFalse(label.contains("المحتوى"), label)
+            }
+        }
+    }
+
+    func testTabBarIsHiddenOnThisScreen() {
+        XCTAssertFalse(makeViewModel(.umrah).isTabBarVisible)
+    }
+}
+
+// MARK: - Stage Reader View Model
+
+@MainActor
+final class GuideStageReaderViewModelTests: XCTestCase {
+
+    private func makeViewModel(_ key: GuideKey, pageIndex: Int = 0) -> GuideStageReaderViewModel {
+        GuideStageReaderViewModel(key: key, pageIndex: pageIndex, coordinator: nil)
+    }
+
+    private func loaded(_ key: GuideKey, pageIndex: Int = 0) -> GuideStageReaderViewModel {
+        let viewModel = makeViewModel(key, pageIndex: pageIndex)
+        viewModel.onAppear()
+        return viewModel
+    }
+
+    func testLoadIsDeferredUntilOnAppear() {
+        let viewModel = makeViewModel(.umrah)
+
+        XCTAssertTrue(viewModel.pages.isEmpty)
+        XCTAssertFalse(viewModel.hasContent)
+        XCTAssertEqual(viewModel.positionText, "")
+    }
+
+    func testUmrahReaderPagesAreItsParentStages() {
+        let viewModel = loaded(.umrah)
+
+        XCTAssertEqual(viewModel.pages.map(\.id),
+                       ["miqat", "ihram", "tawaf", "sai", "conditions", "duties", "rulings"])
+    }
+
+    func testHajjReaderEndsWithItsStandalonePage() {
+        let viewModel = loaded(.hajj)
+
+        XCTAssertEqual(viewModel.pages.count, 20)
+        XCTAssertEqual(viewModel.pages.last?.id, "page.dhul_hijjah_takbeer")
+    }
+
+    func testEveryBundledItemIsRenderedExactlyOnce() throws {
+        let store = GuideContentStore(bundle: .main)
+
+        for key in GuideKey.allCases {
+            let content = try XCTUnwrap(store.content(for: key), key.rawValue)
+            let viewModel = loaded(key)
+
+            let rendered = viewModel.pages.flatMap { page in
+                page.steps.map(\.id) + page.groups.flatMap { $0.steps.map(\.id) }
+            }
+
+            XCTAssertEqual(Set(rendered).count, rendered.count, key.rawValue)
+            XCTAssertEqual(rendered.count - content.pages.count, content.items.count, key.rawValue)
+        }
+    }
+
+    func testSubstagesAreRenderedAsGroupsOnTheirParentPage() throws {
+        let viewModel = loaded(.umrah)
+        let tawaf = try XCTUnwrap(viewModel.pages.first { $0.id == "tawaf" })
+
+        XCTAssertEqual(tawaf.groups.map(\.id), ["tawaf_mistakes"])
+        XCTAssertFalse(viewModel.pages.contains { $0.id.hasSuffix("_mistakes") })
+    }
+
+    func testStepCountIncludesNestedGroups() throws {
+        let viewModel = loaded(.umrah)
+        let tawaf = try XCTUnwrap(viewModel.pages.first { $0.id == "tawaf" })
+
+        XCTAssertEqual(tawaf.steps.count, 9)
+        XCTAssertEqual(tawaf.groups.first?.steps.count, 8)
+        XCTAssertEqual(tawaf.stepCount, 17)
+    }
+
+    func testStepsAreNumberedInSourceOrder() throws {
+        let viewModel = loaded(.umrah)
+        let miqat = try XCTUnwrap(viewModel.pages.first { $0.id == "miqat" })
+
+        XCTAssertEqual(miqat.steps.map(\.marker), (1...6).map(GuideReaderPlan.numeral))
+    }
+
+    func testNumberingIsSuppressedWhereTheSourceNumbersItself() throws {
+        let viewModel = loaded(.umrah)
+        let duties = try XCTUnwrap(viewModel.pages.first { $0.id == "duties" })
+
+        XCTAssertEqual(duties.steps.allSatisfy { !$0.hasMarker }, true)
+        XCTAssertFalse(duties.steps.isEmpty)
+    }
+
+    func testJourneyPagesCarryAMarkerAndLearnPagesDoNot() throws {
+        let viewModel = loaded(.umrah)
+
+        XCTAssertEqual(viewModel.pages.prefix(4).map(\.marker), (1...4).map(GuideReaderPlan.numeral))
+        XCTAssertEqual(viewModel.pages.dropFirst(4).allSatisfy { !$0.hasMarker }, true)
+    }
+
+    func testEveryPageIsHeadedAndNonEmpty() {
+        for key in GuideKey.allCases {
+            let viewModel = loaded(key)
+
+            for page in viewModel.pages {
+                XCTAssertFalse(page.isEmpty, page.id)
+                XCTAssertFalse(page.title.isEmpty, page.id)
+                XCTAssertFalse(page.sectionTitle.isEmpty, page.id)
+            }
+        }
+    }
+
+    func testNavigationStopsAtBothEnds() {
+        let viewModel = loaded(.umrah)
+
+        XCTAssertFalse(viewModel.canGoPrevious)
+        viewModel.onPreviousTapped()
+        XCTAssertEqual(viewModel.pageIndex, 0)
+
+        while viewModel.canGoNext { viewModel.onNextTapped() }
+
+        XCTAssertEqual(viewModel.pageIndex, viewModel.pages.count - 1)
+        viewModel.onNextTapped()
+        XCTAssertEqual(viewModel.pageIndex, viewModel.pages.count - 1)
+    }
+
+    func testProgressRunsFromTheFirstPageToOne() {
+        let viewModel = loaded(.umrah)
+
+        XCTAssertEqual(viewModel.progress, 1.0 / 7.0, accuracy: 0.0001)
+
+        while viewModel.canGoNext { viewModel.onNextTapped() }
+
+        XCTAssertEqual(viewModel.progress, 1.0, accuracy: 0.0001)
+    }
+
+    func testDeepLinkedPageIndexIsKept() {
+        let viewModel = loaded(.umrah, pageIndex: 3)
+
+        XCTAssertEqual(viewModel.pageIndex, 3)
+        XCTAssertEqual(viewModel.currentPage?.id, "sai")
+    }
+
+    func testOutOfRangeDeepLinkIsClamped() {
+        let viewModel = loaded(.umrah, pageIndex: 99)
+
+        XCTAssertEqual(viewModel.pageIndex, viewModel.pages.count - 1)
+        XCTAssertNotNil(viewModel.currentPage)
+    }
+
+    func testPositionTextNamesBothEnds() {
+        let viewModel = loaded(.umrah)
+
+        XCTAssertFalse(viewModel.positionText.isEmpty)
+        XCTAssertNotEqual(viewModel.positionText, AppLocalizedKeys.ritesPagePosition.rawValue)
+        XCTAssertFalse(viewModel.previousTitle.isEmpty)
+        XCTAssertFalse(viewModel.nextTitle.isEmpty)
+    }
+
+    func testAnEmptyStoreProducesNoPages() {
+        let empty = GuideContentStore(bundle: Bundle(for: GuideStageReaderViewModelTests.self))
+        let viewModel = GuideStageReaderViewModel(key: .umrah, coordinator: nil, store: empty)
+
+        viewModel.onAppear()
+
+        XCTAssertTrue(viewModel.pages.isEmpty)
+        XCTAssertFalse(viewModel.hasContent)
+        XCTAssertNil(viewModel.currentPage)
+        XCTAssertEqual(viewModel.progress, 0)
     }
 
     func testTabBarIsHiddenOnThisScreen() {
@@ -437,12 +816,17 @@ final class ContentHubViewModelTests: XCTestCase {
 
         enum Call: Equatable {
             case guide(GuideKey)
+            case reader(GuideKey, Int)
             case back
         }
 
         private(set) var calls: [Call] = []
 
         func coordinateToGuide(_ key: GuideKey) { calls.append(.guide(key)) }
+
+        func coordinateToReader(key: GuideKey, pageIndex: Int) {
+            calls.append(.reader(key, pageIndex))
+        }
 
         func coordinateBack() { calls.append(.back) }
     }
@@ -487,15 +871,25 @@ final class ContentHubViewModelTests: XCTestCase {
             XCTAssertFalse(entry.title.isEmpty)
             XCTAssertFalse(entry.subtitle.isEmpty)
             XCTAssertFalse(entry.icon.isEmpty)
-            XCTAssertFalse(entry.topicsText.isEmpty)
+            XCTAssertEqual(entry.metrics.count, 2)
+            XCTAssertTrue(entry.metrics.allSatisfy { !$0.label.isEmpty && !$0.value.isEmpty })
         }
     }
 
-    func testTopicCountReflectsTheBundledPack() throws {
+    func testTheTwoJourneysAreVisuallyDistinct() {
+        viewModel.onAppear()
+
+        XCTAssertEqual(viewModel.entries.map(\.icon).count, Set(viewModel.entries.map(\.icon)).count)
+        XCTAssertNotEqual(viewModel.entries.first?.accent.color,
+                          viewModel.entries.last?.accent.color)
+    }
+
+    func testMetricsReflectTheBundledPack() throws {
         viewModel.onAppear()
         let umrah = try XCTUnwrap(viewModel.entries.first { $0.key == .umrah })
 
-        XCTAssertTrue(umrah.topicsText.contains("73"))
+        XCTAssertEqual(umrah.metrics[0].value, GuideReaderPlan.numeral(4))
+        XCTAssertEqual(umrah.metrics[1].value, GuideReaderPlan.numeral(73))
     }
 
     func testEntryTapRoutesToThatGuide() {
@@ -532,10 +926,24 @@ final class ContentHubViewModelTests: XCTestCase {
     }
 
     func testLabelsAreLocalizedNotRawKeys() {
-        XCTAssertNotEqual(viewModel.screenTitle, AppLocalizedKeys.contentTitle.rawValue)
-        XCTAssertNotEqual(viewModel.screenSubtitle, AppLocalizedKeys.contentSubtitle.rawValue)
-        XCTAssertNotEqual(viewModel.emptyMessage, AppLocalizedKeys.contentEmptyMessage.rawValue)
+        XCTAssertNotEqual(viewModel.screenTitle, AppLocalizedKeys.ritesTitle.rawValue)
+        XCTAssertNotEqual(viewModel.screenSubtitle, AppLocalizedKeys.ritesSubtitle.rawValue)
+        XCTAssertNotEqual(viewModel.screenIntro, AppLocalizedKeys.ritesIntro.rawValue)
+        XCTAssertNotEqual(viewModel.emptyMessage, AppLocalizedKeys.ritesEmptyMessage.rawValue)
         XCTAssertFalse(viewModel.backAccessibilityLabel.isEmpty)
+    }
+
+    func testNoUserFacingLabelMentionsTheInternalContentName() {
+        viewModel.onAppear()
+
+        var labels = [viewModel.screenTitle, viewModel.screenSubtitle,
+                      viewModel.screenIntro, viewModel.emptyMessage]
+        labels += viewModel.entries.flatMap { [$0.title, $0.subtitle] + $0.metrics.flatMap { [$0.label, $0.value] } }
+
+        for label in labels {
+            XCTAssertFalse(label.lowercased().contains("content"), label)
+            XCTAssertFalse(label.contains("المحتوى"), label)
+        }
     }
 
     func testTabBarIsHiddenOnThisScreen() {

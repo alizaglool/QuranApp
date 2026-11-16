@@ -12,116 +12,163 @@ struct ContentHubView: View {
 
     @StateObject private var viewModel: ContentHubViewModel
 
-    init(coordinator: any ContentCoordinating) {
+    init(coordinator: ContentCoordinating?) {
         _viewModel = StateObject(wrappedValue: ContentHubViewModel(coordinator: coordinator))
     }
 
     var body: some View {
         MainView(viewModel: viewModel) {
-            mainContent
-        }
-    }
-}
+            VStack(spacing: 0) {
+                navigationBar
 
-// MARK: - Layout
+                NoIndicatorsScrollView {
+                    VStack(alignment: .leading, spacing: .xBig) {
+                        header
 
-private extension ContentHubView {
-
-    var mainContent: some View {
-        VStack(spacing: 0) {
-            navBar
-
-            NoIndicatorsScrollView {
-                VStack(alignment: .leading, spacing: .sm) {
-                    if viewModel.hasEntries {
-                        ForEach(viewModel.entries) { entry in
-                            entryCard(entry)
+                        if viewModel.hasEntries {
+                            journeys
+                        } else {
+                            emptyState
                         }
-                    } else {
-                        emptyCard
                     }
+                    .padding(.horizontal, .md)
+                    .padding(.top, .xSm)
+                    .padding(.bottom, .xxxBig)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
-                .padding(.horizontal, .big)
-                .padding(.top, .sm)
-                .padding(.bottom, .xxxBig)
             }
+            .customBackground(.background)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .customBackground(.background)
     }
 
-    var navBar: some View {
-        HStack(spacing: 10) {
+    // MARK: - Navigation Bar
+
+    private var navigationBar: some View {
+        HStack(spacing: .no) {
             Button(action: viewModel.onBackTapped) {
                 Image(systemName: "chevron.backward")
-                    .font(.system(size: 15, weight: .semibold))
-                    .customForeground(.primary)
-                    .frame(width: 32, height: 32)
+                    .font(.system(size: 17, weight: .semibold))
+                    .customForeground(.onSurface)
+                    .frame(width: 34, height: 34)
             }
+            .buttonStyle(.plain)
             .accessibilityLabel(viewModel.backAccessibilityLabel)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(viewModel.screenTitle)
-                    .customStyle(.heading3, .onSurface)
-                Text(viewModel.screenSubtitle)
-                    .customStyle(.caption1, .subtitle)
-            }
-
-            Spacer(minLength: 0)
+            Spacer(minLength: .no)
         }
-        .padding(.horizontal, .big)
-        .padding(.vertical, .sm)
+        .padding(.horizontal, .sm)
+    }
+
+    // MARK: - Header
+
+    private var header: some View {
+        VStack(alignment: .leading, spacing: .xSm) {
+            Text(viewModel.screenTitle)
+                .customStyle(.largeTitle, .onSurface)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(viewModel.screenSubtitle)
+                .customStyle(.subheadline, .primary)
+
+            Text(viewModel.screenIntro)
+                .customStyle(.bodySmall, .onSurfaceVariant)
+                .lineSpacing(6)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // MARK: - Journeys
+
+    private var journeys: some View {
+        VStack(spacing: .sm) {
+            ForEach(viewModel.entries) { entry in
+                JourneyEntryCard(entry: entry) {
+                    viewModel.onEntryTapped(entry)
+                }
+            }
+        }
+    }
+
+    // MARK: - Empty
+
+    private var emptyState: some View {
+        Text(viewModel.emptyMessage)
+            .customStyle(.subheadline, .onSurfaceVariant)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, .xBig)
     }
 }
 
-// MARK: - Entries
+// MARK: - JourneyEntryCard
 
-private extension ContentHubView {
+private struct JourneyEntryCard: View {
 
-    func entryCard(_ entry: ContentHubEntry) -> some View {
-        Button {
-            viewModel.onEntryTapped(entry)
-        } label: {
+    let entry: ContentHubEntry
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
             HStack(alignment: .top, spacing: .sm) {
-                AccentIconTile(icon: entry.icon, accent: entry.accent)
+                ZStack {
+                    RoundedRectangle(cornerRadius: .cornerMd, style: .continuous)
+                        .fill(entry.wash.color)
+                        .frame(width: 48, height: 48)
+                    Image(systemName: entry.icon)
+                        .font(.system(size: 22))
+                        .customForeground(entry.accent)
+                }
 
-                VStack(alignment: .leading, spacing: .xxSm) {
+                VStack(alignment: .leading, spacing: .xSm) {
                     Text(entry.title)
-                        .customStyle(.headline, .onSurface)
-                        .multilineTextAlignment(.leading)
-
-                    Text(entry.subtitle)
-                        .customStyle(.bodySmall, .subtitle)
+                        .customStyle(.heading3, .onSurface)
                         .multilineTextAlignment(.leading)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Text(entry.topicsText)
-                        .customStyle(.caption2, .outline)
-                }
+                    Text(entry.subtitle)
+                        .customStyle(.bodySmall, .onSurfaceVariant)
+                        .lineSpacing(5)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
 
-                Spacer(minLength: 0)
+                    HStack(spacing: .xSm) {
+                        ForEach(entry.metrics, id: \.self) { metric in
+                            MetricChip(metric: metric)
+                        }
+                    }
+                    .padding(.top, .xxSm)
+                }
 
                 Image(systemName: "chevron.forward")
                     .font(.system(size: 13, weight: .semibold))
                     .customForeground(.outline)
-                    .padding(.top, .xxSm)
+                    .padding(.top, .md)
             }
             .padding(.md)
-            .contentShape(Rectangle())
+            .contentCardChrome()
         }
         .buttonStyle(.plain)
-        .contentCardChrome()
-        .accessibilityElement(children: .combine)
-        .accessibilityAddTraits(.isButton)
     }
+}
 
-    var emptyCard: some View {
-        Text(viewModel.emptyMessage)
-            .customStyle(.bodySmall, .subtitle)
-            .multilineTextAlignment(.leading)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.md)
-            .contentCardChrome()
+// MARK: - MetricChip
+
+struct MetricChip: View {
+
+    let metric: GuideMetric
+
+    var body: some View {
+        HStack(spacing: .xxSm) {
+            Text(metric.label)
+                .customStyle(.caption2, .onSurfaceVariant)
+
+            Text(metric.value)
+                .customStyle(.caption1, .onSurface)
+        }
+        .padding(.horizontal, .xSm)
+        .padding(.vertical, 5)
+        .background(Color.surfaceRaised)
+        .clipShape(Capsule())
     }
 }
 
@@ -132,15 +179,10 @@ struct ContentCardChrome: ViewModifier {
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: .cornerXxl)
-                    .fill(Color.cardSurface)
-            )
+            .background(RoundedRectangle(cornerRadius: .cornerXxl).fill(Color.cardSurface))
             .clipShape(RoundedRectangle(cornerRadius: .cornerXxl, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: .cornerXxl)
-                    .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
-            )
+            .overlay(RoundedRectangle(cornerRadius: .cornerXxl)
+                .stroke(ColorStyle.cardBorder.color, lineWidth: 1))
     }
 }
 

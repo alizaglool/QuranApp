@@ -16,7 +16,8 @@ struct ContentHubEntry: Identifiable {
     let subtitle: String
     let icon: String
     let accent: ColorStyle
-    let topicsText: String
+    let wash: ColorStyle
+    let metrics: [GuideMetric]
 
     var id: String { key.rawValue }
 }
@@ -43,13 +44,15 @@ final class ContentHubViewModel: MainViewModel {
 
     // MARK: - Strings
 
-    var screenTitle: String { AppLocalizedKeys.contentTitle.value }
+    var screenTitle: String { AppLocalizedKeys.ritesTitle.value }
 
-    var screenSubtitle: String { AppLocalizedKeys.contentSubtitle.value }
+    var screenSubtitle: String { AppLocalizedKeys.ritesSubtitle.value }
+
+    var screenIntro: String { AppLocalizedKeys.ritesIntro.value }
 
     var backAccessibilityLabel: String { AppLocalizedKeys.back.value }
 
-    var emptyMessage: String { AppLocalizedKeys.contentEmptyMessage.value }
+    var emptyMessage: String { AppLocalizedKeys.ritesEmptyMessage.value }
 
     var hasEntries: Bool { !entries.isEmpty }
 
@@ -79,22 +82,23 @@ final class ContentHubViewModel: MainViewModel {
                                    title: title(for: key),
                                    subtitle: subtitle(for: key),
                                    icon: icon(for: key),
-                                   accent: .quickAccentContent,
-                                   topicsText: topicsText(count: content.items.count))
+                                   accent: accent(for: key),
+                                   wash: wash(for: key),
+                                   metrics: metrics(for: content))
         }
     }
 
     private func title(for key: GuideKey) -> String {
         switch key {
-        case .umrah: return AppLocalizedKeys.contentUmrahTitle.value
-        case .hajj:  return AppLocalizedKeys.contentHajjTitle.value
+        case .umrah: return AppLocalizedKeys.ritesUmrahTitle.value
+        case .hajj:  return AppLocalizedKeys.ritesHajjTitle.value
         }
     }
 
     private func subtitle(for key: GuideKey) -> String {
         switch key {
-        case .umrah: return AppLocalizedKeys.contentUmrahSubtitle.value
-        case .hajj:  return AppLocalizedKeys.contentHajjSubtitle.value
+        case .umrah: return AppLocalizedKeys.ritesUmrahSubtitle.value
+        case .hajj:  return AppLocalizedKeys.ritesHajjSubtitle.value
         }
     }
 
@@ -105,7 +109,27 @@ final class ContentHubViewModel: MainViewModel {
         }
     }
 
-    private func topicsText(count: Int) -> String {
-        String(format: AppLocalizedKeys.contentTopicsCount.value, count)
+    private func accent(for key: GuideKey) -> ColorStyle {
+        switch key {
+        case .umrah: return .primary
+        case .hajj:  return .secondary
+        }
+    }
+
+    private func wash(for key: GuideKey) -> ColorStyle {
+        switch key {
+        case .umrah: return .washPrimary
+        case .hajj:  return .washSecondaryCard
+        }
+    }
+
+    private func metrics(for content: GuideContent) -> [GuideMetric] {
+        let stages = content.stages(in: .journey).count
+        return [metric(label: AppLocalizedKeys.ritesStagesLabel.value, count: stages),
+                metric(label: AppLocalizedKeys.ritesTopicsLabel.value, count: content.items.count)]
+    }
+
+    private func metric(label: String, count: Int) -> GuideMetric {
+        GuideMetric(label: label, value: GuideReaderPlan.numeral(count))
     }
 }

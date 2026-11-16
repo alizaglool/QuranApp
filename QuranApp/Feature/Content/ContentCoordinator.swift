@@ -13,6 +13,7 @@ import SwiftUI
 
 protocol ContentCoordinating: AnyObject {
     func coordinateToGuide(_ key: GuideKey)
+    func coordinateToReader(key: GuideKey, pageIndex: Int)
     func coordinateBack()
 }
 
@@ -34,6 +35,10 @@ class ContentCoordinator: MainCoordinator, ContentCoordinating {
 
     func coordinateToGuide(_ key: GuideKey) {
         push(GuideDetailView(key: key, coordinator: self))
+    }
+
+    func coordinateToReader(key: GuideKey, pageIndex: Int) {
+        push(GuideStageReaderView(key: key, pageIndex: pageIndex, coordinator: self))
     }
 
     func coordinateBack() {
