@@ -55,23 +55,30 @@ private extension PrayerTimesView {
     }
 
     var navBar: some View {
-        HStack(spacing: 10) {
-            Button(action: viewModel.onBackTapped) {
-                Image(systemName: "chevron.backward")
-                    .font(.system(size: 15, weight: .semibold))
-                    .customForeground(.primary)
-                    .frame(width: 32, height: 32)
-                    .contentShape(Rectangle())
+        VStack(spacing: .xSm) {
+            HStack(spacing: 10) {
+                Button(action: viewModel.onBackTapped) {
+                    Image(systemName: "chevron.backward")
+                        .font(.system(size: 15, weight: .semibold))
+                        .customForeground(.primary)
+                        .frame(width: 32, height: 32)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(viewModel.screenTitle)
+
+                locationTitleButton
+
+                Spacer(minLength: 0)
+
+                adhanControlButton
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(viewModel.screenTitle)
 
-            locationTitleButton
-
-            Spacer(minLength: 0)
+            adhanUnavailableNotice
         }
         .padding(.horizontal, .big)
         .padding(.vertical, .sm)
+        .animation(.easeOut(duration: 0.2), value: viewModel.isAdhanUnavailableNoticeVisible)
     }
 
     var locationTitleButton: some View {
@@ -97,6 +104,66 @@ private extension PrayerTimesView {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(viewModel.changeLocationTitle)
+    }
+}
+
+// MARK: - Adhan Control
+
+private extension PrayerTimesView {
+
+    var adhanControlButton: some View {
+        Button(action: viewModel.onAdhanControlTapped) {
+            Image(systemName: viewModel.adhanControlIconName)
+                .font(.system(size: 15, weight: .semibold))
+                .foregroundColor(adhanControlTint)
+                .frame(width: 36, height: 36)
+                .background(adhanControlBackground)
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+        .animation(.easeOut(duration: 0.2), value: viewModel.isAdhanControlActive)
+        .accessibilityLabel(viewModel.adhanControlAccessibilityLabel)
+        .accessibilityAddTraits(viewModel.isAdhanControlActive ? .isSelected : [])
+    }
+
+    var adhanControlBackground: some View {
+        Circle()
+            .fill(Color.qiblaAccent.opacity(0.14))
+            .overlay(
+                Circle()
+                    .stroke(Color.qiblaAccent.opacity(0.35), lineWidth: 1)
+            )
+            .opacity(viewModel.isAdhanControlActive ? 1 : 0)
+    }
+
+    var adhanControlTint: Color {
+        guard viewModel.isInAppAdhanAvailable else {
+            return ColorStyle.onSurfaceVariant.color.opacity(0.5)
+        }
+        return viewModel.isAdhanControlActive ? Color.qiblaAccent : ColorStyle.onSurfaceVariant.color
+    }
+
+    @ViewBuilder
+    var adhanUnavailableNotice: some View {
+        if viewModel.isAdhanUnavailableNoticeVisible {
+            HStack(spacing: .xSm) {
+                Image(systemName: "speaker.slash")
+                    .font(.system(size: 13, weight: .semibold))
+                    .customForeground(.onSurfaceVariant)
+
+                Text(viewModel.adhanUnavailableMessage)
+                    .customStyle(.caption1, .onSurfaceVariant)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Spacer(minLength: 0)
+            }
+            .padding(.horizontal, .sm)
+            .padding(.vertical, .xSm)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(ColorStyle.surfaceContainerLow.color)
+            .customCornerRadius(.cornerMd)
+            .transition(.opacity)
+        }
     }
 }
 

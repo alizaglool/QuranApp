@@ -53,11 +53,12 @@ final class QiblaCompassViewModel: ObservableObject {
     @Published private(set) var elevationMeters: Double?
     @Published private(set) var readinessState: QiblaReadinessState = .ready
     @Published private(set) var headingAccuracy: DeviceHeadingAccuracy = .invalid
+    @Published private(set) var hasHeadingAccuracyReading: Bool = false
 
     private let headingService: DeviceHeadingProviding
     private let locationStore: SelectedLocationStore
     private let locationAuthorization: DeviceLocationAuthorizing
-    private let alignmentFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    private let alignmentFeedback: QiblaAlignmentFeedbackProviding
 
     private var cancellables = Set<AnyCancellable>()
     private var hasReceivedHeading = false
@@ -65,18 +66,22 @@ final class QiblaCompassViewModel: ObservableObject {
 
     private static let headingSmoothingFactor: Double = 0.25
     private static let facingToleranceDegrees: Double = 5
+    private static let facingReleaseToleranceDegrees: Double = 9
 
     init(headingService: DeviceHeadingProviding? = nil,
          locationStore: SelectedLocationStore? = nil,
-         locationAuthorization: DeviceLocationAuthorizing? = nil) {
+         locationAuthorization: DeviceLocationAuthorizing? = nil,
+         alignmentFeedback: QiblaAlignmentFeedbackProviding? = nil) {
         self.headingService = headingService ?? DeviceHeadingService.shared
         self.locationStore = locationStore ?? SelectedLocationStore.shared
         self.locationAuthorization = locationAuthorization ?? DeviceLocationService.shared
+        self.alignmentFeedback = alignmentFeedback ?? QiblaAlignmentHapticFeedback()
 
         isCompassAvailable = self.headingService.isHeadingAvailable
         recomputeBearing(for: self.locationStore.selectedLocation)
         bindSelectedLocation()
         bindDeviceHeading()
+        bindHeadingAccuracy()
         bindLocationAuthorization()
         refreshReadinessState()
     }
@@ -95,6 +100,7 @@ extension QiblaCompassViewModel {
         guard !isObservingHeading else { return }
         isObservingHeading = true
         headingService.attachHeadingObserver()
+        alignmentFeedback.prepareAlignmentFeedback()
         refreshReadinessState()
     }
 
@@ -254,6 +260,14 @@ private extension QiblaCompassViewModel {
             .store(in: &cancellables)
     }
 
+    func bindHeadingAccuracy() {
+        headingService.headingAccuracyUpdates
+            .sink { [weak self] accuracy in
+                self?.applyHeadingAccuracy(accuracy)
+            }
+            .store(in: &cancellables)
+    }
+
     func bindLocationAuthorization() {
         locationAuthorization.authorizationStatusChanges
             .sink { [weak self] _ in
@@ -295,7 +309,7 @@ private extension QiblaCompassViewModel {
 
         if locationStore.isUsingFallbackLocation { return .fallbackLocation }
         if locationAuthorization.isPreciseAccuracyReduced { return .approximateLocation }
-        if headingAccuracy == .poor { return .lowHeadingAccuracy }
+        if hasHeadingAccuracyReading, !headingAccuracy.isReliable { return .lowHeadingAccuracy }
         return .ready
     }
 
@@ -310,8 +324,16 @@ private extension QiblaCompassViewModel {
 private extension QiblaCompassViewModel {
 
     func applyHeadingReading(_ reading: DeviceHeadingReading) {
-        headingAccuracy = reading.accuracy
+        applyHeadingAccuracy(reading.accuracy)
         applyHeading(reading.degreesFromNorth)
+        refreshReadinessState()
+    }
+
+    func applyHeadingAccuracy(_ accuracy: DeviceHeadingAccuracy) {
+        let isFirstAccuracyReading = !hasHeadingAccuracyReading
+        hasHeadingAccuracyReading = true
+        guard isFirstAccuracyReading || accuracy != headingAccuracy else { return }
+        headingAccuracy = accuracy
         refreshReadinessState()
     }
 
@@ -335,11 +357,43 @@ private extension QiblaCompassViewModel {
         let isFacing = isCompassAvailable
             && readinessState.isBearingTrustworthy
             && headingAccuracy.isReliable
-            && offset <= QiblaCompassViewModel.facingToleranceDegrees
+            && offset <= currentFacingToleranceDegrees
         guard isFacing != isFacingQibla else { return }
 
         isFacingQibla = isFacing
-        guard isFacing else { return }
-        alignmentFeedbackGenerator.impactOccurred()
+
+        guard isFacing else {
+            alignmentFeedback.prepareAlignmentFeedback()
+            return
+        }
+        alignmentFeedback.playAlignmentFeedback()
+    }
+
+    var currentFacingToleranceDegrees: Double {
+        isFacingQibla
+            ? QiblaCompassViewModel.facingReleaseToleranceDegrees
+            : QiblaCompassViewModel.facingToleranceDegrees
+    }
+}
+
+// MARK: - Alignment Feedback
+
+@MainActor
+protocol QiblaAlignmentFeedbackProviding {
+    func prepareAlignmentFeedback()
+    func playAlignmentFeedback()
+}
+
+@MainActor
+final class QiblaAlignmentHapticFeedback: QiblaAlignmentFeedbackProviding {
+
+    private let generator = UIImpactFeedbackGenerator(style: .light)
+
+    func prepareAlignmentFeedback() {
+        generator.prepare()
+    }
+
+    func playAlignmentFeedback() {
+        generator.impactOccurred()
     }
 }

@@ -12,8 +12,17 @@ struct QiblaCompassRing: View {
 
     @ObservedObject var viewModel: QiblaCompassViewModel
 
+    @Environment(\.accessibilityReduceMotion) private var isReduceMotionEnabled
+
     private static let ringDiameter: CGFloat = 248
     private static let ringLineWidth: CGFloat = 10
+    private static let arcNarrowWidth: CGFloat = 3
+    private static let arcWideWidth: CGFloat = 13
+    private static let alignmentHaloSpread: CGFloat = 44
+    private static let alignmentCoreHaloSpread: CGFloat = 18
+    private static let alignmentHaloOpacity: Double = 0.34
+    private static let alignmentCoreHaloOpacity: Double = 0.5
+    private static let alignmentAnimation = Animation.easeOut(duration: 0.28)
     private static let headingDotDiameter: CGFloat = 14
     private static let kaabaBadgeDiameter: CGFloat = 46
     private static let connectorInset: CGFloat = 50
@@ -71,11 +80,11 @@ private extension QiblaCompassRing {
     }
 
     var offsetArc: some View {
-        Circle()
-            .trim(from: 0, to: abs(viewModel.qiblaOffsetDegrees) / 360)
-            .stroke(Color.qiblaAccent,
-                    style: StrokeStyle(lineWidth: QiblaCompassRing.ringLineWidth, lineCap: .round))
-            .rotationEffect(.degrees(-90 + min(viewModel.qiblaOffsetDegrees, 0)))
+        QiblaDirectionArc(offsetDegrees: viewModel.qiblaOffsetDegrees,
+                          narrowWidth: QiblaCompassRing.arcNarrowWidth,
+                          wideWidth: QiblaCompassRing.arcWideWidth,
+                          isLightTravelEnabled: !isReduceMotionEnabled,
+                          isAligned: viewModel.isFacingQibla)
             .animation(QiblaCompassRing.arcAnimation, value: viewModel.qiblaOffsetDegrees)
     }
 
@@ -107,6 +116,16 @@ private extension QiblaCompassRing {
 
     var kaabaBadge: some View {
         ZStack {
+            alignmentHalo
+            kaabaBadgeFace
+        }
+        .frame(width: QiblaCompassRing.kaabaBadgeDiameter,
+               height: QiblaCompassRing.kaabaBadgeDiameter)
+        .offset(y: -QiblaCompassRing.ringDiameter / 2)
+    }
+
+    var kaabaBadgeFace: some View {
+        ZStack {
             Circle()
                 .fill(ColorStyle.primary.color)
 
@@ -121,8 +140,36 @@ private extension QiblaCompassRing {
                 .stroke(Color.qiblaAccent, lineWidth: 3)
                 .opacity(viewModel.isFacingQibla ? 1 : 0)
         )
-        .animation(.easeOut(duration: 0.2), value: viewModel.isFacingQibla)
-        .offset(y: -QiblaCompassRing.ringDiameter / 2)
+        .shadow(color: Color.qiblaAccent.opacity(viewModel.isFacingQibla ? 0.9 : 0),
+                radius: 18)
+        .scaleEffect(alignmentBadgeScale)
+        .animation(QiblaCompassRing.alignmentAnimation, value: viewModel.isFacingQibla)
+    }
+
+    var alignmentHalo: some View {
+        ZStack {
+            haloLayer(spread: QiblaCompassRing.alignmentHaloSpread,
+                      opacity: QiblaCompassRing.alignmentHaloOpacity,
+                      blurRadius: 16)
+
+            haloLayer(spread: QiblaCompassRing.alignmentCoreHaloSpread,
+                      opacity: QiblaCompassRing.alignmentCoreHaloOpacity,
+                      blurRadius: 6)
+        }
+        .opacity(viewModel.isFacingQibla ? 1 : 0)
+        .animation(QiblaCompassRing.alignmentAnimation, value: viewModel.isFacingQibla)
+    }
+
+    func haloLayer(spread: CGFloat, opacity: Double, blurRadius: CGFloat) -> some View {
+        Circle()
+            .fill(Color.qiblaAccent.opacity(opacity))
+            .frame(width: QiblaCompassRing.kaabaBadgeDiameter + spread,
+                   height: QiblaCompassRing.kaabaBadgeDiameter + spread)
+            .blur(radius: blurRadius)
+    }
+
+    var alignmentBadgeScale: CGFloat {
+        viewModel.isFacingQibla && !isReduceMotionEnabled ? 1.06 : 1
     }
 }
 
@@ -135,6 +182,9 @@ private extension QiblaCompassRing {
             .font(.system(size: 78, weight: .regular))
             .foregroundColor(ColorStyle.primary.color.opacity(viewModel.isCompassAvailable ? 1 : 0.3))
             .shadow(color: ColorStyle.primary.color.opacity(0.18), radius: 10, y: 4)
+            .rotationEffect(.degrees(viewModel.qiblaOffsetDegrees))
+            .animation(QiblaCompassRing.arcAnimation, value: viewModel.qiblaOffsetDegrees)
+            .environment(\.layoutDirection, .leftToRight)
     }
 }
 

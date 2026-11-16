@@ -56,6 +56,7 @@ protocol DeviceHeadingProviding: AnyObject {
     var isHeadingAvailable: Bool { get }
     var latestReading: DeviceHeadingReading? { get }
     var headingReadings: AnyPublisher<DeviceHeadingReading, Never> { get }
+    var headingAccuracyUpdates: AnyPublisher<DeviceHeadingAccuracy, Never> { get }
 
     func attachHeadingObserver()
     func detachHeadingObserver()
@@ -77,10 +78,15 @@ final class DeviceHeadingService: NSObject, DeviceHeadingProviding {
         readingSubject.compactMap { $0 }.eraseToAnyPublisher()
     }
 
+    var headingAccuracyUpdates: AnyPublisher<DeviceHeadingAccuracy, Never> {
+        accuracySubject.compactMap { $0 }.eraseToAnyPublisher()
+    }
+
     var headingOrientation: CLDeviceOrientation { locationManager.headingOrientation }
 
     private let locationManager = CLLocationManager()
     private let readingSubject = CurrentValueSubject<DeviceHeadingReading?, Never>(nil)
+    private let accuracySubject = CurrentValueSubject<DeviceHeadingAccuracy?, Never>(nil)
     private var isObservingOrientationChanges = false
 
     private static let headingFilterInDegrees: CLLocationDegrees = 1
@@ -218,6 +224,7 @@ private extension DeviceHeadingService {
 
     func handleHeadingUpdate(_ newHeading: CLHeading, from manager: CLLocationManager) {
         let accuracy = DeviceHeadingAccuracy(headingAccuracyInDegrees: newHeading.headingAccuracy)
+        accuracySubject.send(accuracy)
         guard accuracy.isUsable else { return }
 
         let degrees = newHeading.trueHeading >= 0 ? newHeading.trueHeading : newHeading.magneticHeading

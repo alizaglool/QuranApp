@@ -251,6 +251,159 @@ final class QiblaCompassViewModelTests: XCTestCase {
         XCTAssertEqual(heading.activeObserverCount, 0)
     }
 
+    // MARK: - Alignment Feedback
+
+    func testReachingTheQiblaBearingPlaysTheAlignmentFeedbackExactlyOnce() {
+        let context = makeContext()
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees)
+
+        XCTAssertTrue(context.viewModel.isFacingQibla)
+        XCTAssertEqual(context.feedback.playCallCount, 1)
+    }
+
+    func testHeadingThatNeverReachesTheQiblaBearingPlaysNoAlignmentFeedback() {
+        let context = makeContext()
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees + 40)
+
+        XCTAssertFalse(context.viewModel.isFacingQibla)
+        XCTAssertEqual(context.feedback.playCallCount, 0)
+    }
+
+    func testDriftInsideTheReleaseToleranceKeepsAlignmentWithoutRepeatingTheFeedback() {
+        let context = makeContext()
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees)
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees + 7)
+
+        XCTAssertTrue(context.viewModel.isFacingQibla)
+        XCTAssertEqual(context.feedback.playCallCount, 1)
+    }
+
+    func testAlignmentFeedbackPlaysAgainOnlyAfterTheAlignedStateIsLeft() {
+        let context = makeContext()
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees)
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees + 30)
+        XCTAssertFalse(context.viewModel.isFacingQibla)
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees)
+
+        XCTAssertTrue(context.viewModel.isFacingQibla)
+        XCTAssertEqual(context.feedback.playCallCount, 2)
+    }
+
+    func testUnreliableAccuracyWithholdsTheAlignmentFeedback() {
+        let context = makeContext()
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees)
+        context.heading.emit(QiblaFixture.reading(degreesFromNorth: context.viewModel.qiblaBearingDegrees,
+                                                  accuracy: .invalid))
+
+        XCTAssertFalse(context.viewModel.isFacingQibla)
+        XCTAssertEqual(context.feedback.playCallCount, 1)
+    }
+
+    func testLeavingTheAlignedStatePrimesTheFeedbackGeneratorAgain() {
+        let context = makeContext()
+        context.viewModel.onAppear()
+        let prepareCountAfterAppear = context.feedback.prepareCallCount
+
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees)
+        settleHeading(context, onDegreesFromNorth: context.viewModel.qiblaBearingDegrees + 30)
+
+        XCTAssertFalse(context.viewModel.isFacingQibla)
+        XCTAssertGreaterThan(context.feedback.prepareCallCount, prepareCountAfterAppear)
+
+        context.viewModel.onDisappear()
+    }
+
+    // MARK: - Heading Driven Geometry
+
+    func testHeadingOffsetFromTheQiblaBearingDrivesTheArrowRotation() {
+        let context = makeContext()
+        let bearing = context.viewModel.qiblaBearingDegrees
+
+        context.heading.emit(QiblaFixture.reading(degreesFromNorth: bearing - 30))
+
+        XCTAssertEqual(context.viewModel.qiblaOffsetDegrees, 30, accuracy: 0.001)
+    }
+
+    func testTurningPastTheQiblaBearingReversesTheArrowRotationSign() {
+        let context = makeContext()
+        let bearing = context.viewModel.qiblaBearingDegrees
+
+        context.heading.emit(QiblaFixture.reading(degreesFromNorth: bearing - 40))
+        XCTAssertGreaterThan(context.viewModel.qiblaOffsetDegrees, 0)
+
+        settleHeading(context, onDegreesFromNorth: bearing + 40)
+
+        XCTAssertLessThan(context.viewModel.qiblaOffsetDegrees, 0)
+    }
+
+    func testArrowRotationHoldsAtZeroWhenTheCompassIsUnavailable() {
+        let context = makeContext(isHeadingAvailable: false)
+
+        context.heading.emit(QiblaFixture.reading(degreesFromNorth: 90))
+
+        XCTAssertEqual(context.viewModel.qiblaOffsetDegrees, 0)
+    }
+
+    // MARK: - Calibration Prompt
+
+    func testNoCalibrationPromptBeforeAnyAccuracyReadingArrives() {
+        let context = makeContext()
+
+        XCTAssertFalse(context.viewModel.hasHeadingAccuracyReading)
+        XCTAssertEqual(context.viewModel.readinessState, .ready)
+        XCTAssertNil(context.viewModel.readinessMessage)
+    }
+
+    func testReliableHeadingAccuracyShowsNoCalibrationPrompt() {
+        let context = makeContext()
+
+        context.heading.emitAccuracy(.good)
+
+        XCTAssertTrue(context.viewModel.hasHeadingAccuracyReading)
+        XCTAssertEqual(context.viewModel.readinessState, .ready)
+        XCTAssertNil(context.viewModel.readinessMessage)
+    }
+
+    func testInvalidHeadingAccuracySurfacesTheCalibrationPrompt() {
+        let context = makeContext()
+
+        context.heading.emitAccuracy(.invalid)
+
+        XCTAssertEqual(context.viewModel.readinessState, .lowHeadingAccuracy)
+        XCTAssertNotNil(context.viewModel.readinessMessage)
+        XCTAssertNil(context.viewModel.recoveryAction)
+        XCTAssertFalse(context.viewModel.isFacingQibla)
+    }
+
+    func testRecoveringFromInvalidAccuracyClearsTheCalibrationPrompt() {
+        let context = makeContext()
+
+        context.heading.emitAccuracy(.invalid)
+        XCTAssertEqual(context.viewModel.readinessState, .lowHeadingAccuracy)
+
+        context.heading.emitAccuracy(.good)
+
+        XCTAssertEqual(context.viewModel.readinessState, .ready)
+        XCTAssertNil(context.viewModel.readinessMessage)
+    }
+
+    // MARK: - Alignment Hysteresis
+
+    func testOffsetInsideTheReleaseBandDoesNotAcquireAlignment() {
+        let context = makeContext()
+        let bearing = context.viewModel.qiblaBearingDegrees
+
+        context.heading.emit(QiblaFixture.reading(degreesFromNorth: bearing - 7))
+
+        XCTAssertFalse(context.viewModel.isFacingQibla)
+        XCTAssertEqual(context.feedback.playCallCount, 0)
+    }
 }
 
 // MARK: - Context
@@ -260,6 +413,7 @@ private struct QiblaCompassTestContext {
     let heading: DeviceHeadingProviderDouble
     let authorization: DeviceLocationAuthorizationDouble
     let locationStore: SelectedLocationStore
+    let feedback: QiblaAlignmentFeedbackDouble
 }
 
 private extension QiblaCompassViewModelTests {
@@ -277,13 +431,25 @@ private extension QiblaCompassViewModelTests {
             locationStore.updateSelectedLocation(storedLocation)
         }
 
+        let feedback = QiblaAlignmentFeedbackDouble()
+
         let viewModel = QiblaCompassViewModel(headingService: heading,
                                               locationStore: locationStore,
-                                              locationAuthorization: authorization)
+                                              locationAuthorization: authorization,
+                                              alignmentFeedback: feedback)
 
         return QiblaCompassTestContext(viewModel: viewModel,
                                        heading: heading,
                                        authorization: authorization,
-                                       locationStore: locationStore)
+                                       locationStore: locationStore,
+                                       feedback: feedback)
+    }
+
+    func settleHeading(_ context: QiblaCompassTestContext,
+                       onDegreesFromNorth degreesFromNorth: Double,
+                       emitCount: Int = 20) {
+        (0..<emitCount).forEach { _ in
+            context.heading.emit(QiblaFixture.reading(degreesFromNorth: degreesFromNorth))
+        }
     }
 }

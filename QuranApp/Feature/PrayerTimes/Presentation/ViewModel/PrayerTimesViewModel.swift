@@ -44,8 +44,11 @@ final class PrayerTimesViewModel: MainViewModel {
     @Published private(set) var prayedPrayerCount: Int = 0
     @Published private(set) var hasLoadedPrayerTimes: Bool = false
     @Published private(set) var hasFailedToLoadPrayerTimes: Bool = false
+    @Published private(set) var isInAppAdhanEnabled: Bool = false
+    @Published private(set) var isAdhanUnavailableNoticeVisible: Bool = false
 
     private let prayerTimesStore = PrayerTimesStore.shared
+    private let notificationManager: PrayerNotificationManager
     private let locationStore = SelectedLocationStore.shared
     private let completionStore = PrayerCompletionStore.shared
     private let locationLabelFormatter = SelectedLocationLabelFormatter()
@@ -57,17 +60,22 @@ final class PrayerTimesViewModel: MainViewModel {
     private var lastRefreshedMinute: Int = -1
     private var isRefreshingPrayerTimes: Bool = false
     private var lastDateTextsDayKey: String = ""
+    private(set) var isInAppAdhanAvailable: Bool = false
 
     var isTabBarVisible: Bool { false }
 
-    init(coordinator: PrayerTimesCoordinating) {
+    init(coordinator: PrayerTimesCoordinating, notificationManager: PrayerNotificationManager? = nil) {
         self.coordinator = coordinator
+        self.notificationManager = notificationManager ?? PrayerNotificationManager.shared
         locationLabel = locationLabelFormatter.displayLabel(for: locationStore.selectedLocation)
         isUsingDeviceLocation = locationStore.selectedLocation.isResolvedFromDevice
+        isInAppAdhanAvailable = self.notificationManager.isFullAdhanAudioAvailable
+        isInAppAdhanEnabled = self.notificationManager.preferences.isInAppAdhanAudioEnabled
         loadDateTexts()
         bindPrayerTimes()
         bindSelectedLocation()
         bindRefreshState()
+        bindInAppAdhanPreference()
     }
 
     func onAppear() {
@@ -89,6 +97,22 @@ extension PrayerTimesViewModel {
     var retryTitle: String { AppLocalizedKeys.tryAgainAction.value }
     var scheduleSectionTitle: String { AppLocalizedKeys.prayerTimesScheduleTitle.value }
     var otherTimesTitle: String { AppLocalizedKeys.prayerTimesOtherTimes.value }
+    var adhanControlTitle: String { AppLocalizedKeys.prayerNotificationsInAppAdhanTitle.value }
+    var adhanUnavailableMessage: String { AppLocalizedKeys.prayerNotificationsInAppAdhanMissing.value }
+
+    var adhanControlIconName: String {
+        guard isInAppAdhanAvailable else { return "speaker.slash" }
+        return isInAppAdhanEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill"
+    }
+
+    var isAdhanControlActive: Bool {
+        isInAppAdhanAvailable && isInAppAdhanEnabled
+    }
+
+    var adhanControlAccessibilityLabel: String {
+        guard isInAppAdhanAvailable else { return "\(adhanControlTitle), \(adhanUnavailableMessage)" }
+        return adhanControlTitle
+    }
 
     var prayedSummary: String {
         String(format: AppLocalizedKeys.prayersCompletedFormat.value,
@@ -140,6 +164,16 @@ extension PrayerTimesViewModel {
         isOtherTimesExpanded.toggle()
     }
 
+    func onAdhanControlTapped() {
+        guard isInAppAdhanAvailable else {
+            isAdhanUnavailableNoticeVisible.toggle()
+            return
+        }
+
+        isAdhanUnavailableNoticeVisible = false
+        notificationManager.updatePreferences { $0.isInAppAdhanAudioEnabled.toggle() }
+    }
+
     func togglePrayed(for item: PrayerTimeRowItem) {
         guard let index = item.prayerCompletionIndex, let day = currentDay else { return }
         completionStore.toggle(index: index, on: day.dayKey)
@@ -180,6 +214,14 @@ private extension PrayerTimesViewModel {
                 guard let self else { return }
                 self.locationLabel = self.locationLabelFormatter.displayLabel(for: location)
                 self.isUsingDeviceLocation = location.isResolvedFromDevice
+            }
+            .store(in: &cancellables)
+    }
+
+    func bindInAppAdhanPreference() {
+        notificationManager.$preferences
+            .sink { [weak self] preferences in
+                self?.isInAppAdhanEnabled = preferences.isInAppAdhanAudioEnabled
             }
             .store(in: &cancellables)
     }

@@ -61,7 +61,12 @@ final class DeviceHeadingProviderDouble: DeviceHeadingProviding {
         readingSubject.eraseToAnyPublisher()
     }
 
+    var headingAccuracyUpdates: AnyPublisher<DeviceHeadingAccuracy, Never> {
+        accuracySubject.eraseToAnyPublisher()
+    }
+
     private let readingSubject = PassthroughSubject<DeviceHeadingReading, Never>()
+    private let accuracySubject = PassthroughSubject<DeviceHeadingAccuracy, Never>()
 
     init(isHeadingAvailable: Bool = true) {
         self.isHeadingAvailable = isHeadingAvailable
@@ -78,6 +83,27 @@ final class DeviceHeadingProviderDouble: DeviceHeadingProviding {
     func emit(_ reading: DeviceHeadingReading) {
         latestReading = reading
         readingSubject.send(reading)
+    }
+
+    func emitAccuracy(_ accuracy: DeviceHeadingAccuracy) {
+        accuracySubject.send(accuracy)
+    }
+}
+
+// MARK: - Alignment Feedback Double
+
+@MainActor
+final class QiblaAlignmentFeedbackDouble: QiblaAlignmentFeedbackProviding {
+
+    private(set) var prepareCallCount = 0
+    private(set) var playCallCount = 0
+
+    func prepareAlignmentFeedback() {
+        prepareCallCount += 1
+    }
+
+    func playAlignmentFeedback() {
+        playCallCount += 1
     }
 }
 
