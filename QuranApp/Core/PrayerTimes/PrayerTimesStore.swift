@@ -204,14 +204,14 @@ final class PrayerNotificationPreferencesStore {
 
 struct PrayerNotificationSoundCatalog {
 
-    static let shortAdhanToneResource = "adhan_short"
     static let shortAdhanToneExtension = "caf"
-    static let shortAdhanToneMaximumDuration: TimeInterval = 30
-    static let fullAdhanAudioResource = "adhan_full"
     static let fullAdhanAudioExtension = "m4a"
+    static let shortAdhanToneMaximumDuration: TimeInterval = 30
 
-    static var shortAdhanToneFileName: String {
-        "\(PrayerNotificationSoundCatalog.shortAdhanToneResource).\(PrayerNotificationSoundCatalog.shortAdhanToneExtension)"
+    @MainActor private static var cachedDurations: [String: TimeInterval] = [:]
+
+    static func isWithinSystemSoundLimit(_ duration: TimeInterval) -> Bool {
+        duration > 0 && duration < shortAdhanToneMaximumDuration
     }
 
     private let bundle: Bundle
@@ -220,47 +220,54 @@ struct PrayerNotificationSoundCatalog {
         self.bundle = bundle
     }
 
-    var shortAdhanToneURL: URL? {
-        bundle.url(forResource: PrayerNotificationSoundCatalog.shortAdhanToneResource,
+    var availableRecordings: [AdhanRecording] {
+        AdhanRecording.bundled.filter { isAvailable($0) }
+    }
+
+    func isAvailable(_ recording: AdhanRecording) -> Bool {
+        shortAdhanToneURL(for: recording) != nil && fullAdhanAudioURL(for: recording) != nil
+    }
+
+    func shortAdhanToneURL(for recording: AdhanRecording) -> URL? {
+        bundle.url(forResource: recording.notificationToneResource,
                    withExtension: PrayerNotificationSoundCatalog.shortAdhanToneExtension)
     }
 
-    var fullAdhanAudioURL: URL? {
-        bundle.url(forResource: PrayerNotificationSoundCatalog.fullAdhanAudioResource,
+    func fullAdhanAudioURL(for recording: AdhanRecording) -> URL? {
+        bundle.url(forResource: recording.fullAdhanResource,
                    withExtension: PrayerNotificationSoundCatalog.fullAdhanAudioExtension)
     }
 
-    var isShortAdhanToneAvailable: Bool { shortAdhanToneURL != nil }
+    @MainActor
+    func measuredDuration(ofFileAt url: URL) -> TimeInterval? {
+        if let cached = PrayerNotificationSoundCatalog.cachedDurations[url.path] { return cached }
+        guard let player = try? AVAudioPlayer(contentsOf: url) else { return nil }
 
-    var isFullAdhanAudioAvailable: Bool { fullAdhanAudioURL != nil }
-}
-
-// MARK: - In-App Adhan Audio
-
-@MainActor
-final class PrayerAdhanAudioPlayer {
-
-    private let soundCatalog: PrayerNotificationSoundCatalog
-    private var player: AVAudioPlayer?
-
-    init(soundCatalog: PrayerNotificationSoundCatalog) {
-        self.soundCatalog = soundCatalog
+        PrayerNotificationSoundCatalog.cachedDurations[url.path] = player.duration
+        return player.duration
     }
 
-    var isAudioAvailable: Bool { soundCatalog.isFullAdhanAudioAvailable }
+    @MainActor
+    func notificationSoundFileName(for recording: AdhanRecording) -> String? {
+        guard let url = shortAdhanToneURL(for: recording),
+              let duration = measuredDuration(ofFileAt: url),
+              PrayerNotificationSoundCatalog.isWithinSystemSoundLimit(duration)
+        else { return nil }
 
-    func playFullAdhan() {
-        guard let url = soundCatalog.fullAdhanAudioURL else { return }
-        try? AVAudioSession.sharedInstance().setCategory(.playback)
-        try? AVAudioSession.sharedInstance().setActive(true)
-        player = try? AVAudioPlayer(contentsOf: url)
-        player?.prepareToPlay()
-        player?.play()
+        return url.lastPathComponent
     }
 
-    func stopFullAdhan() {
-        player?.stop()
-        player = nil
+    func resolvedRecording(forIdentifier identifier: String) -> AdhanRecording? {
+        if let requested = AdhanRecording.recording(forIdentifier: identifier), isAvailable(requested) {
+            return requested
+        }
+
+        if let fallback = AdhanRecording.recording(forIdentifier: AdhanRecording.defaultIdentifier),
+           isAvailable(fallback) {
+            return fallback
+        }
+
+        return availableRecordings.first
     }
 }
 
@@ -322,7 +329,8 @@ final class PrayerNotificationManager: NSObject, ObservableObject {
     init(center: LocalNotificationCenter,
          preferencesStore: PrayerNotificationPreferencesStore,
          clock: LocalNotificationClock,
-         soundCatalog: PrayerNotificationSoundCatalog) {
+         soundCatalog: PrayerNotificationSoundCatalog,
+         audioFocus: AdhanAudioFocus? = nil) {
         self.scheduler = LocalNotificationScheduler(
             center: center,
             ownedIdentifierPrefix: PrayerNotificationIdentifier.ownedIdentifierPrefix
@@ -330,9 +338,12 @@ final class PrayerNotificationManager: NSObject, ObservableObject {
         self.preferencesStore = preferencesStore
         self.builder = PrayerNotificationScheduleBuilder(clock: clock)
         self.soundCatalog = soundCatalog
-        self.audioPlayer = PrayerAdhanAudioPlayer(soundCatalog: soundCatalog)
+        self.audioPlayer = PrayerAdhanAudioPlayer(soundCatalog: soundCatalog, audioFocus: audioFocus)
         self.preferences = preferencesStore.restoredPreferences()
         super.init()
+        self.audioPlayer.onPlaybackStateChange = { [weak self] in
+            self?.objectWillChange.send()
+        }
     }
 }
 
@@ -375,9 +386,35 @@ extension PrayerNotificationManager {
         }
     }
 
-    var isShortAdhanToneAvailable: Bool { soundCatalog.isShortAdhanToneAvailable }
+    var availableRecordings: [AdhanRecording] { soundCatalog.availableRecordings }
 
-    var isFullAdhanAudioAvailable: Bool { soundCatalog.isFullAdhanAudioAvailable }
+    var selectedRecording: AdhanRecording? {
+        soundCatalog.resolvedRecording(forIdentifier: preferences.adhanRecordingIdentifier)
+    }
+
+    var notificationSoundFileName: String? {
+        guard let recording = selectedRecording else { return nil }
+        return soundCatalog.notificationSoundFileName(for: recording)
+    }
+
+    var isShortAdhanToneAvailable: Bool { notificationSoundFileName != nil }
+
+    var isFullAdhanAudioAvailable: Bool {
+        guard let recording = selectedRecording else { return false }
+        return soundCatalog.fullAdhanAudioURL(for: recording) != nil
+    }
+
+    func selectRecording(_ recording: AdhanRecording) {
+        let hasTone = soundCatalog.notificationSoundFileName(for: recording) != nil
+
+        updatePreferences {
+            $0.adhanRecordingIdentifier = recording.id
+
+            if hasTone {
+                $0.alertStyle = .shortAdhanTone
+            }
+        }
+    }
 
     var effectiveAlertStyle: PrayerNotificationAlertStyle {
         guard preferences.alertStyle == .shortAdhanTone, isShortAdhanToneAvailable else { return .standardTone }
@@ -439,7 +476,8 @@ extension PrayerNotificationManager {
         }
 
         let entries = builder.entries(for: day, preferences: preferences)
-        await scheduler.replaceOwnedRequests(with: entries.map { draft(for: $0) })
+        let sound = resolvedNotificationSoundFileName
+        await scheduler.replaceOwnedRequests(with: entries.map { draft(for: $0, soundFileName: sound) })
 
         scheduledRequestCount = entries.count
         scheduledWindowInDays = Set(entries.map(\.dayKey)).count
@@ -463,15 +501,61 @@ extension PrayerNotificationManager: UNUserNotificationCenterDelegate {
         guard PrayerNotificationIdentifier.isOwned(identifier),
               PrayerNotificationIdentifier.kind(of: identifier) == .adhan,
               preferences.isInAppAdhanAudioEnabled,
-              audioPlayer.isAudioAvailable
+              let recording = selectedRecording,
+              soundCatalog.fullAdhanAudioURL(for: recording) != nil
         else { return bannerOptions }
 
-        audioPlayer.playFullAdhan()
+        audioPlayer.playFullAdhan(for: recording)
         return [.banner, .list]
     }
 
-    func stopInAppAdhan() {
-        audioPlayer.stopFullAdhan()
+    func stopAdhanAudio() {
+        audioPlayer.stop()
+    }
+}
+
+// MARK: - Adhan Preview
+
+extension PrayerNotificationManager {
+
+    func isPlayingAdhanAudio(_ recording: AdhanRecording, mode: PrayerAdhanPlaybackMode) -> Bool {
+        audioPlayer.isPlaying(recording, mode: mode)
+    }
+
+    var lastAdhanPlaybackFailure: PrayerAdhanPlaybackFailure? { audioPlayer.lastFailure }
+
+    func previewNotificationTone(for recording: AdhanRecording) {
+        audioPlayer.playNotificationTonePreview(for: recording)
+    }
+
+    func previewFullAdhan(for recording: AdhanRecording) {
+        audioPlayer.playFullAdhan(for: recording)
+    }
+}
+
+// MARK: - Test Notification
+
+enum PrayerNotificationTestOutcome: Equatable {
+    case scheduled
+    case authorizationDenied
+    case authorizationNotRequested
+}
+
+extension PrayerNotificationManager {
+
+    static let testRequestIdentifier: String = "test_prayer_notification.manual"
+    static let testNotificationDelayInSeconds: TimeInterval = 5
+
+    func sendTestNotification() async -> PrayerNotificationTestOutcome {
+        let status = await scheduler.currentAuthorizationStatus()
+        authorizationStatus = status
+
+        guard status.allowsScheduling else {
+            return status.isDenied ? .authorizationDenied : .authorizationNotRequested
+        }
+
+        await scheduler.add(testNotificationDraft())
+        return .scheduled
     }
 }
 
@@ -479,31 +563,66 @@ extension PrayerNotificationManager: UNUserNotificationCenterDelegate {
 
 private extension PrayerNotificationManager {
 
-    func draft(for entry: PrayerNotificationScheduleEntry) -> LocalNotificationRequestDraft {
+    func draft(for entry: PrayerNotificationScheduleEntry,
+               soundFileName: String?) -> LocalNotificationRequestDraft {
         let name = entry.slot.localizedName
-        let body: String
-
-        switch entry.kind {
-        case .adhan:
-            body = String(format: AppLocalizedKeys.prayerNotificationAdhanBodyFormat.value, name)
-        case .reminder:
-            body = String(format: AppLocalizedKeys.prayerNotificationReminderBodyFormat.value,
-                          name,
-                          localizedNumber(entry.leadMinutes))
-        }
 
         return LocalNotificationRequestDraft(identifier: entry.identifier,
                                              title: name,
-                                             body: body,
+                                             subtitle: subtitle(for: entry),
+                                             body: body(for: entry),
                                              soundFileName: soundFileName,
                                              dateComponents: entry.dateComponents)
     }
 
-    var soundFileName: String? {
-        effectiveAlertStyle == .shortAdhanTone ? PrayerNotificationSoundCatalog.shortAdhanToneFileName : nil
+    func subtitle(for entry: PrayerNotificationScheduleEntry) -> String {
+        switch entry.kind {
+        case .adhan:
+            return AppLocalizedKeys.prayerNotificationAdhanSubtitle.value
+        case .reminder:
+            return String(format: AppLocalizedKeys.prayerNotificationReminderSubtitleFormat.value,
+                          localizedNumber(entry.leadMinutes))
+        }
+    }
+
+    func body(for entry: PrayerNotificationScheduleEntry) -> String {
+        guard let content = PrayerNotificationContentCatalog.content(dayKey: entry.dayKey,
+                                                                    slot: entry.slot,
+                                                                    kind: entry.kind)
+        else { return fallbackBody(for: entry) }
+
+        return PrayerNotificationContentCatalog.localizedBody(for: content, isArabic: isArabic)
+    }
+
+    func fallbackBody(for entry: PrayerNotificationScheduleEntry) -> String {
+        let name = entry.slot.localizedName
+
+        switch entry.kind {
+        case .adhan:
+            return String(format: AppLocalizedKeys.prayerNotificationAdhanBodyFormat.value, name)
+        case .reminder:
+            return String(format: AppLocalizedKeys.prayerNotificationReminderBodyFormat.value,
+                          name,
+                          localizedNumber(entry.leadMinutes))
+        }
+    }
+
+    func testNotificationDraft() -> LocalNotificationRequestDraft {
+        LocalNotificationRequestDraft(identifier: PrayerNotificationManager.testRequestIdentifier,
+                                      title: AppLocalizedKeys.prayerNotificationsTestTitle.value,
+                                      body: AppLocalizedKeys.prayerNotificationsTestBody.value,
+                                      soundFileName: resolvedNotificationSoundFileName,
+                                      dateComponents: DateComponents(),
+                                      secondsFromNow: PrayerNotificationManager.testNotificationDelayInSeconds)
+    }
+
+    var resolvedNotificationSoundFileName: String? {
+        effectiveAlertStyle == .shortAdhanTone ? notificationSoundFileName : nil
     }
 
     func localizedNumber(_ value: Int) -> String {
-        LocalizationManager.shared.currentLanguage == .Arabic ? value.arabicNumerals : "\(value)"
+        isArabic ? value.arabicNumerals : "\(value)"
     }
+
+    var isArabic: Bool { LocalizationManager.shared.currentLanguage == .Arabic }
 }

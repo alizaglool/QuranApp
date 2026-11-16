@@ -238,16 +238,18 @@ struct PrayerNotificationPreferences: Codable, Equatable {
     var isPrePrayerReminderEnabled: Bool
     var prePrayerReminderLeadMinutes: Int
     var isInAppAdhanAudioEnabled: Bool
+    var adhanRecordingIdentifier: String
     var calculationMethod: PrayerCalculationMethod
     var jurisprudenceSchool: PrayerJurisprudenceSchool
 
     static let standard = PrayerNotificationPreferences(
         isPrayerNotificationEnabled: false,
         enabledSlots: PrayerSlot.defaultEnabledSlots,
-        alertStyle: .standardTone,
+        alertStyle: .shortAdhanTone,
         isPrePrayerReminderEnabled: false,
         prePrayerReminderLeadMinutes: PrayerNotificationPreferences.defaultReminderLeadMinutes,
         isInAppAdhanAudioEnabled: false,
+        adhanRecordingIdentifier: AdhanRecording.defaultIdentifier,
         calculationMethod: .default,
         jurisprudenceSchool: .default
     )
@@ -258,6 +260,7 @@ struct PrayerNotificationPreferences: Codable, Equatable {
          isPrePrayerReminderEnabled: Bool,
          prePrayerReminderLeadMinutes: Int,
          isInAppAdhanAudioEnabled: Bool,
+         adhanRecordingIdentifier: String,
          calculationMethod: PrayerCalculationMethod,
          jurisprudenceSchool: PrayerJurisprudenceSchool) {
         self.isPrayerNotificationEnabled = isPrayerNotificationEnabled
@@ -266,6 +269,7 @@ struct PrayerNotificationPreferences: Codable, Equatable {
         self.isPrePrayerReminderEnabled = isPrePrayerReminderEnabled
         self.prePrayerReminderLeadMinutes = prePrayerReminderLeadMinutes
         self.isInAppAdhanAudioEnabled = isInAppAdhanAudioEnabled
+        self.adhanRecordingIdentifier = adhanRecordingIdentifier
         self.calculationMethod = calculationMethod
         self.jurisprudenceSchool = jurisprudenceSchool
     }
@@ -285,6 +289,8 @@ struct PrayerNotificationPreferences: Codable, Equatable {
             ?? standard.prePrayerReminderLeadMinutes
         isInAppAdhanAudioEnabled = try container.decodeIfPresent(Bool.self, forKey: .isInAppAdhanAudioEnabled)
             ?? standard.isInAppAdhanAudioEnabled
+        adhanRecordingIdentifier = try container.decodeIfPresent(String.self, forKey: .adhanRecordingIdentifier)
+            ?? standard.adhanRecordingIdentifier
         calculationMethod = try container.decodeIfPresent(PrayerCalculationMethod.self, forKey: .calculationMethod)
             ?? standard.calculationMethod
         jurisprudenceSchool = try container.decodeIfPresent(PrayerJurisprudenceSchool.self,

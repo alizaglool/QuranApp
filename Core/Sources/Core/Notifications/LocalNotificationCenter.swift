@@ -38,20 +38,26 @@ public struct LocalNotificationRequestDraft: Equatable {
 
     public let identifier: String
     public let title: String
+    public let subtitle: String?
     public let body: String
     public let soundFileName: String?
     public let dateComponents: DateComponents
+    public let secondsFromNow: TimeInterval?
 
     public init(identifier: String,
                 title: String,
+                subtitle: String? = nil,
                 body: String,
                 soundFileName: String?,
-                dateComponents: DateComponents) {
+                dateComponents: DateComponents,
+                secondsFromNow: TimeInterval? = nil) {
         self.identifier = identifier
         self.title = title
+        self.subtitle = subtitle
         self.body = body
         self.soundFileName = soundFileName
         self.dateComponents = dateComponents
+        self.secondsFromNow = secondsFromNow
     }
 }
 
@@ -93,11 +99,25 @@ public final class SystemLocalNotificationCenter: LocalNotificationCenter {
         let content = UNMutableNotificationContent()
         content.title = draft.title
         content.body = draft.body
+
+        if let subtitle = draft.subtitle, !subtitle.isEmpty {
+            content.subtitle = subtitle
+        }
+
         content.sound = draft.soundFileName
             .map { UNNotificationSound(named: UNNotificationSoundName($0)) } ?? .default
 
-        let trigger = UNCalendarNotificationTrigger(dateMatching: draft.dateComponents, repeats: false)
-        let request = UNNotificationRequest(identifier: draft.identifier, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: draft.identifier,
+                                            content: content,
+                                            trigger: trigger(for: draft))
         try? await center.add(request)
+    }
+
+    private func trigger(for draft: LocalNotificationRequestDraft) -> UNNotificationTrigger {
+        guard let secondsFromNow = draft.secondsFromNow else {
+            return UNCalendarNotificationTrigger(dateMatching: draft.dateComponents, repeats: false)
+        }
+
+        return UNTimeIntervalNotificationTrigger(timeInterval: max(1, secondsFromNow), repeats: false)
     }
 }

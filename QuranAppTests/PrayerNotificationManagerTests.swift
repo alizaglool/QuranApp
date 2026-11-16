@@ -21,11 +21,14 @@ final class PrayerNotificationManagerTests: XCTestCase {
 
     private func manager(center: LocalNotificationCenterDouble,
                          defaults: UserDefaults,
-                         preferences: PrayerNotificationPreferences) -> PrayerNotificationManager {
+                         preferences: PrayerNotificationPreferences,
+                         soundCatalog: PrayerNotificationSoundCatalog = PrayerNotificationFixture
+                             .soundCatalogWithoutAudio()) -> PrayerNotificationManager {
         PrayerNotificationManagerBuilder.manager(center: center,
                                                  defaults: defaults,
                                                  preferences: preferences,
-                                                 now: now)
+                                                 now: now,
+                                                 soundCatalog: soundCatalog)
     }
 
     // MARK: - Scheduling
@@ -297,10 +300,110 @@ final class PrayerNotificationManagerTests: XCTestCase {
         XCTAssertTrue(center.addedDrafts.allSatisfy { $0.soundFileName == nil })
     }
 
-    func testShortAdhanToneFileNameTargetsABundledCafAsset() {
-        XCTAssertEqual(PrayerNotificationSoundCatalog.shortAdhanToneFileName, "adhan_short.caf")
+    func testSoundCatalogDeclaresTheSupportedAdhanAssetFormats() {
         XCTAssertEqual(PrayerNotificationSoundCatalog.shortAdhanToneExtension, "caf")
+        XCTAssertEqual(PrayerNotificationSoundCatalog.fullAdhanAudioExtension, "m4a")
         XCTAssertEqual(PrayerNotificationSoundCatalog.shortAdhanToneMaximumDuration, 30)
+    }
+
+    // MARK: - Bundled Recordings
+
+    func testBundledRecordingIdentifiersAreUniqueAndIncludeTheDefault() {
+        let identifiers = AdhanRecording.bundled.map(\.id)
+
+        XCTAssertFalse(identifiers.isEmpty)
+        XCTAssertEqual(Set(identifiers).count, identifiers.count)
+        XCTAssertNotNil(AdhanRecording.recording(forIdentifier: AdhanRecording.defaultIdentifier))
+    }
+
+    func testEveryBundledRecordingShipsBothAudioAssets() {
+        let catalog = PrayerNotificationFixture.soundCatalogWithBundledAudio()
+
+        XCTAssertEqual(catalog.availableRecordings.count, AdhanRecording.bundled.count)
+
+        for recording in AdhanRecording.bundled {
+            XCTAssertNotNil(catalog.shortAdhanToneURL(for: recording), recording.id)
+            XCTAssertNotNil(catalog.fullAdhanAudioURL(for: recording), recording.id)
+        }
+    }
+
+    func testEveryBundledNotificationToneStaysUnderTheSystemSoundLimit() throws {
+        let catalog = PrayerNotificationFixture.soundCatalogWithBundledAudio()
+
+        for recording in AdhanRecording.bundled {
+            let url = try XCTUnwrap(catalog.shortAdhanToneURL(for: recording), recording.id)
+            let measured = try XCTUnwrap(catalog.measuredDuration(ofFileAt: url), recording.id)
+
+            XCTAssertLessThan(measured,
+                              PrayerNotificationSoundCatalog.shortAdhanToneMaximumDuration,
+                              recording.id)
+            XCTAssertEqual(measured, recording.notificationToneDuration, accuracy: 1, recording.id)
+            XCTAssertEqual(catalog.notificationSoundFileName(for: recording),
+                           "\(recording.notificationToneResource).caf",
+                           recording.id)
+        }
+    }
+
+    func testEveryBundledFullAdhanRunsLongerThanItsNotificationTone() throws {
+        let catalog = PrayerNotificationFixture.soundCatalogWithBundledAudio()
+
+        for recording in AdhanRecording.bundled {
+            let url = try XCTUnwrap(catalog.fullAdhanAudioURL(for: recording), recording.id)
+            let measured = try XCTUnwrap(catalog.measuredDuration(ofFileAt: url), recording.id)
+
+            XCTAssertGreaterThan(measured,
+                                 PrayerNotificationSoundCatalog.shortAdhanToneMaximumDuration,
+                                 recording.id)
+            XCTAssertEqual(measured, recording.fullAdhanDuration, accuracy: 1, recording.id)
+        }
+    }
+
+    func testSelectingARecordingPersistsItAndDrivesTheScheduledSound() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let defaults = PrayerNotificationFixture.defaults()
+        let subject = manager(center: center,
+                              defaults: defaults,
+                              preferences: PrayerNotificationFixture.preferences(slots: [.fajr],
+                                                                                 alertStyle: .shortAdhanTone),
+                              soundCatalog: PrayerNotificationFixture.soundCatalogWithBundledAudio())
+        let recording = AdhanRecording.bundled[1]
+
+        subject.selectRecording(recording)
+        await subject.reschedule(day: PrayerNotificationFixture.day())
+
+        XCTAssertEqual(subject.preferences.adhanRecordingIdentifier, recording.id)
+        XCTAssertEqual(PrayerNotificationPreferencesStore(defaults: defaults)
+            .restoredPreferences()
+            .adhanRecordingIdentifier,
+                       recording.id)
+        XCTAssertEqual(subject.selectedRecording, recording)
+        XCTAssertTrue(subject.isShortAdhanToneAvailable)
+        XCTAssertEqual(subject.effectiveAlertStyle, .shortAdhanTone)
+        XCTAssertFalse(center.addedDrafts.isEmpty)
+        XCTAssertTrue(center.addedDrafts.allSatisfy {
+            $0.soundFileName == "\(recording.notificationToneResource).caf"
+        })
+    }
+
+    func testAnUnknownRecordingIdentifierFallsBackToTheDefaultRecording() {
+        let subject = manager(center: LocalNotificationCenterDouble(status: .authorized),
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture
+                                  .preferences(recordingIdentifier: "voice_that_is_not_bundled"),
+                              soundCatalog: PrayerNotificationFixture.soundCatalogWithBundledAudio())
+
+        XCTAssertEqual(subject.selectedRecording?.id, AdhanRecording.defaultIdentifier)
+    }
+
+    func testAMissingAudioBundleLeavesNoSelectableRecording() {
+        let subject = manager(center: LocalNotificationCenterDouble(status: .authorized),
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        XCTAssertTrue(subject.availableRecordings.isEmpty)
+        XCTAssertNil(subject.selectedRecording)
+        XCTAssertFalse(subject.isShortAdhanToneAvailable)
+        XCTAssertFalse(subject.isFullAdhanAudioAvailable)
     }
 
     // MARK: - Preferences
@@ -356,5 +459,151 @@ final class PrayerNotificationManagerTests: XCTestCase {
 
         XCTAssertEqual(subject.presentationOptions(forIdentifier: reminder), [.banner, .list, .sound])
         XCTAssertEqual(subject.presentationOptions(forIdentifier: foreignIdentifier), [.banner, .list, .sound])
+    }
+
+    // MARK: - Test Notification
+
+    func testTestNotificationIsScheduledOutsideThePrayerSchedule() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        let outcome = await subject.sendTestNotification()
+
+        XCTAssertEqual(outcome, .scheduled)
+        XCTAssertFalse(PrayerNotificationIdentifier.isOwned(PrayerNotificationManager.testRequestIdentifier))
+        XCTAssertEqual(center.foreignIdentifiers, [PrayerNotificationManager.testRequestIdentifier])
+        XCTAssertTrue(center.ownedIdentifiers.isEmpty)
+    }
+
+    func testTestNotificationFiresFromAShortDelayWhilePrayerDraftsStayOnTheCalendar() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        await subject.reschedule(day: PrayerNotificationFixture.day())
+        let prayerDrafts = center.addedDrafts
+        center.resetLog()
+        _ = await subject.sendTestNotification()
+
+        XCTAssertEqual(PrayerNotificationManager.testNotificationDelayInSeconds, 5)
+        XCTAssertEqual(center.addedDrafts.count, 1)
+        XCTAssertEqual(center.addedDrafts.first?.secondsFromNow, 5)
+        XCTAssertFalse(prayerDrafts.isEmpty)
+        XCTAssertTrue(prayerDrafts.allSatisfy { $0.secondsFromNow == nil })
+    }
+
+    func testTestNotificationLeavesTheRealScheduleUntouched() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        await subject.reschedule(day: PrayerNotificationFixture.day())
+        let scheduled = center.ownedIdentifiers.sorted()
+        let requestCount = subject.scheduledRequestCount
+        let windowInDays = subject.scheduledWindowInDays
+        center.resetLog()
+        _ = await subject.sendTestNotification()
+
+        XCTAssertEqual(center.ownedIdentifiers.sorted(), scheduled)
+        XCTAssertEqual(subject.scheduledRequestCount, requestCount)
+        XCTAssertEqual(subject.scheduledWindowInDays, windowInDays)
+        XCTAssertTrue(center.removedIdentifiers.isEmpty)
+    }
+
+    func testTestNotificationLeavesStoredPreferencesUntouched() async {
+        let defaults = PrayerNotificationFixture.defaults()
+        let subject = manager(center: LocalNotificationCenterDouble(status: .authorized),
+                              defaults: defaults,
+                              preferences: PrayerNotificationFixture.preferences(isReminderEnabled: true))
+        let store = PrayerNotificationPreferencesStore(defaults: defaults)
+        let storedBefore = store.restoredPreferences()
+        let inMemoryBefore = subject.preferences
+
+        _ = await subject.sendTestNotification()
+
+        XCTAssertEqual(store.restoredPreferences(), storedBefore)
+        XCTAssertEqual(subject.preferences, inMemoryBefore)
+    }
+
+    func testTestNotificationCarriesTheTestCopyRatherThanAPrayerName() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        _ = await subject.sendTestNotification()
+        let draft = center.addedDrafts.first
+
+        XCTAssertEqual(draft?.title, AppLocalizedKeys.prayerNotificationsTestTitle.value)
+        XCTAssertEqual(draft?.body, AppLocalizedKeys.prayerNotificationsTestBody.value)
+        XCTAssertFalse(PrayerSlot.allCases.map(\.localizedName).contains(draft?.title ?? ""))
+    }
+
+    func testTestNotificationFallsBackToTheSystemSoundWhileTheShortAdhanToneIsMissing() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences(alertStyle: .shortAdhanTone))
+
+        _ = await subject.sendTestNotification()
+
+        XCTAssertFalse(subject.isShortAdhanToneAvailable)
+        XCTAssertEqual(subject.effectiveAlertStyle, .standardTone)
+        XCTAssertNil(center.addedDrafts.first?.soundFileName)
+    }
+
+    func testDeniedAuthorizationReportsTheDenialWithoutScheduling() async {
+        let center = LocalNotificationCenterDouble(status: .denied)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        let outcome = await subject.sendTestNotification()
+
+        XCTAssertEqual(outcome, .authorizationDenied)
+        XCTAssertTrue(center.addedDrafts.isEmpty)
+        XCTAssertTrue(center.pendingIdentifiers.isEmpty)
+        XCTAssertEqual(subject.authorizationStatus, .denied)
+    }
+
+    func testNotDeterminedAuthorizationReportsTheMissingPermissionWithoutScheduling() async {
+        let center = LocalNotificationCenterDouble(status: .notDetermined)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        let outcome = await subject.sendTestNotification()
+
+        XCTAssertEqual(outcome, .authorizationNotRequested)
+        XCTAssertTrue(center.addedDrafts.isEmpty)
+        XCTAssertEqual(center.authorizationRequestCount, 0)
+        XCTAssertEqual(subject.authorizationStatus, .notDetermined)
+    }
+
+    func testRepeatedTestNotificationsNeverAccumulatePendingRequests() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences())
+
+        _ = await subject.sendTestNotification()
+        _ = await subject.sendTestNotification()
+        _ = await subject.sendTestNotification()
+
+        XCTAssertEqual(center.addedDrafts.count, 3)
+        XCTAssertEqual(center.pendingIdentifiers, [PrayerNotificationManager.testRequestIdentifier])
+    }
+
+    func testTestNotificationPresentsABannerWithItsSoundInTheForeground() {
+        let subject = manager(center: LocalNotificationCenterDouble(status: .authorized),
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences(isInAppAdhanEnabled: true))
+
+        XCTAssertEqual(subject.presentationOptions(forIdentifier: PrayerNotificationManager.testRequestIdentifier),
+                       [.banner, .list, .sound])
     }
 }

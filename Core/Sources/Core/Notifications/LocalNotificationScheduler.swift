@@ -62,6 +62,10 @@ public final class LocalNotificationScheduler {
         center.removeRequests(withIdentifiers: owned)
     }
 
+    public func add(_ draft: LocalNotificationRequestDraft) async {
+        await center.add(draft)
+    }
+
     public func replaceOwnedRequests(with drafts: [LocalNotificationRequestDraft]) async {
         await removeOwnedRequests()
 

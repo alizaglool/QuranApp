@@ -70,6 +70,7 @@ enum PrayerNotificationFixture {
                             isReminderEnabled: Bool = false,
                             leadMinutes: Int = PrayerNotificationPreferences.defaultReminderLeadMinutes,
                             isInAppAdhanEnabled: Bool = false,
+                            recordingIdentifier: String = AdhanRecording.defaultIdentifier,
                             method: PrayerCalculationMethod = .default,
                             school: PrayerJurisprudenceSchool = .default) -> PrayerNotificationPreferences {
         PrayerNotificationPreferences(isPrayerNotificationEnabled: isEnabled,
@@ -78,6 +79,7 @@ enum PrayerNotificationFixture {
                                       isPrePrayerReminderEnabled: isReminderEnabled,
                                       prePrayerReminderLeadMinutes: leadMinutes,
                                       isInAppAdhanAudioEnabled: isInAppAdhanEnabled,
+                                      adhanRecordingIdentifier: recordingIdentifier,
                                       calculationMethod: method,
                                       jurisprudenceSchool: school)
     }
@@ -88,8 +90,12 @@ enum PrayerNotificationFixture {
         return defaults
     }
 
-    static func soundCatalog() -> PrayerNotificationSoundCatalog {
+    static func soundCatalogWithoutAudio() -> PrayerNotificationSoundCatalog {
         PrayerNotificationSoundCatalog(bundle: Bundle(for: LocalNotificationCenterDouble.self))
+    }
+
+    static func soundCatalogWithBundledAudio() -> PrayerNotificationSoundCatalog {
+        PrayerNotificationSoundCatalog(bundle: .main)
     }
 }
 
@@ -195,13 +201,29 @@ enum PrayerNotificationManagerBuilder {
     static func manager(center: LocalNotificationCenterDouble,
                         defaults: UserDefaults,
                         preferences: PrayerNotificationPreferences,
-                        now: Date) -> PrayerNotificationManager {
+                        now: Date,
+                        soundCatalog: PrayerNotificationSoundCatalog = PrayerNotificationFixture
+                            .soundCatalogWithoutAudio(),
+                        audioFocus: AdhanAudioFocus? = nil) -> PrayerNotificationManager {
         let preferencesStore = PrayerNotificationPreferencesStore(defaults: defaults)
         preferencesStore.save(preferences)
         return PrayerNotificationManager(center: center,
                                          preferencesStore: preferencesStore,
                                          clock: LocalNotificationClockDouble(currentDate: now),
-                                         soundCatalog: PrayerNotificationFixture.soundCatalog())
+                                         soundCatalog: soundCatalog,
+                                         audioFocus: audioFocus ?? AdhanAudioFocusDouble())
+    }
+}
+
+// MARK: - Audio Focus
+
+@MainActor
+final class AdhanAudioFocusDouble: AdhanAudioFocus {
+
+    private(set) var pauseCallCount = 0
+
+    func pauseCompetingPlayback() {
+        pauseCallCount += 1
     }
 }
 
