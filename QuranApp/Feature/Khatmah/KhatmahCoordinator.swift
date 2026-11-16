@@ -13,6 +13,7 @@ import SwiftUI
 
 protocol KhatmahCoordinating: AnyObject {
     func coordinateToQuranPage(_ page: Int)
+    func coordinateToSchedule()
     func coordinateBack()
 }
 
@@ -45,6 +46,16 @@ class KhatmahCoordinator: MainCoordinator, KhatmahCoordinating {
 
     func coordinateToQuranPage(_ page: Int) {
         onReadPage(page)
+    }
+
+    func coordinateToSchedule() {
+        let localizationManager = LocalizationManager.shared
+        let view = KhatmahScheduleView(coordinator: self)
+            .environmentObject(localizationManager)
+            .environment(\.layoutDirection, localizationManager.currentLanguage.direction)
+        let viewController = UIHostingController(rootView: view)
+        viewController.hidesBottomBarWhenPushed = true
+        navigationController.pushViewController(viewController, animated: true)
     }
 
     func coordinateBack() {

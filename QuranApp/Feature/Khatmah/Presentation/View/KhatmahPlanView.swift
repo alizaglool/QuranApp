@@ -12,8 +12,8 @@ struct KhatmahPlanView: View {
 
     @StateObject private var viewModel: KhatmahPlanViewModel
 
-    init(coordinator: any KhatmahCoordinating) {
-        _viewModel = StateObject(wrappedValue: KhatmahPlanViewModel(coordinator: coordinator))
+    init(coordinator: any KhatmahCoordinating, viewModel: KhatmahPlanViewModel? = nil) {
+        _viewModel = StateObject(wrappedValue: viewModel ?? KhatmahPlanViewModel(coordinator: coordinator))
     }
 
     var body: some View {
@@ -31,17 +31,10 @@ private extension KhatmahPlanView {
         VStack(spacing: 0) {
             navBar
 
-            NoIndicatorsScrollView {
-                VStack(alignment: .leading, spacing: .big) {
-                    if viewModel.hasPlan {
-                        planContent
-                    } else {
-                        emptyCard
-                    }
-                }
-                .padding(.horizontal, .big)
-                .padding(.top, .sm)
-                .padding(.bottom, .xxxBig)
+            if viewModel.hasPlan {
+                planScroll
+            } else {
+                emptyScroll
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -52,12 +45,35 @@ private extension KhatmahPlanView {
                 onCreate: viewModel.onSetupFinished
             )
             .environmentObject(LocalizationManager.shared)
+            .environment(\.layoutDirection, LocalizationManager.shared.currentLanguage.direction)
         }
         .alert(viewModel.deleteConfirmationTitle, isPresented: $viewModel.isDeleteConfirmationPresented) {
             Button(viewModel.cancelActionTitle, role: .cancel) {}
             Button(viewModel.deleteActionTitle, role: .destructive, action: viewModel.onDeleteConfirmed)
         } message: {
             Text(viewModel.deleteConfirmationMessage)
+        }
+    }
+
+    var planScroll: some View {
+        NoIndicatorsScrollView {
+            VStack(alignment: .leading, spacing: .big) {
+                planContent
+            }
+            .padding(.horizontal, .big)
+            .padding(.top, .xSm)
+            .padding(.bottom, .xxxBig)
+        }
+    }
+
+    var emptyScroll: some View {
+        GeometryReader { proxy in
+            NoIndicatorsScrollView {
+                emptyContent
+                    .padding(.horizontal, .big)
+                    .padding(.vertical, .xBig)
+                    .frame(maxWidth: .infinity, minHeight: proxy.size.height, alignment: .center)
+            }
         }
     }
 
@@ -69,12 +85,18 @@ private extension KhatmahPlanView {
                     .customForeground(.primary)
                     .frame(width: 32, height: 32)
             }
+            .accessibilityLabel(viewModel.backActionTitle)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(viewModel.screenTitle)
                     .customStyle(.heading3, .onSurface)
-                Text(viewModel.completedCountText)
-                    .customStyle(.caption1, .subtitle)
+
+                if !viewModel.completedCountText.isEmpty {
+                    Text(viewModel.completedCountText)
+                        .customStyle(.caption1, .onSurfaceVariant)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.8)
+                }
             }
 
             Spacer(minLength: 0)
@@ -87,55 +109,12 @@ private extension KhatmahPlanView {
     var planContent: some View {
         if viewModel.isPlanCompleted {
             completedCard
+        } else {
+            todayCard
         }
 
-        todayCard
-        progressCard
-
-        if viewModel.isAuthorizationDenied {
-            authorizationDeniedCard
-        }
-
-        reminderCard
-        daysCard
-        deleteButton
-    }
-}
-
-// MARK: - Empty
-
-private extension KhatmahPlanView {
-
-    var emptyCard: some View {
-        VStack(alignment: .leading, spacing: .sm) {
-            AccentIconTile(icon: "book.closed.fill", accent: .quickAccentKhatmah)
-
-            Text(viewModel.emptyTitle)
-                .customStyle(.headline, .onSurface)
-
-            Text(viewModel.emptyMessage)
-                .customStyle(.bodySmall, .subtitle)
-                .fixedSize(horizontal: false, vertical: true)
-
-            accentButton(title: viewModel.newPlanActionTitle, action: viewModel.onStartPlanTapped)
-        }
-        .padding(.md)
-        .khatmahCardChrome()
-    }
-
-    var completedCard: some View {
-        VStack(alignment: .leading, spacing: .xxSm) {
-            Text(viewModel.completedTitle)
-                .customStyle(.headline, .success)
-
-            Text(viewModel.completedMessage)
-                .customStyle(.bodySmall, .subtitle)
-                .fixedSize(horizontal: false, vertical: true)
-
-            accentButton(title: viewModel.newPlanActionTitle, action: viewModel.onStartPlanTapped)
-        }
-        .padding(.md)
-        .khatmahCardChrome()
+        planRows
+        deleteRow
     }
 }
 
@@ -144,139 +123,109 @@ private extension KhatmahPlanView {
 private extension KhatmahPlanView {
 
     var todayCard: some View {
-        VStack(alignment: .leading, spacing: .sm) {
-            HStack(spacing: .xSm) {
-                Text(viewModel.todayTitle)
-                    .customStyle(.headline, .onSurface)
-
-                Spacer(minLength: 0)
-
-                Text(viewModel.dayOfTotalText)
-                    .customStyle(.caption2, .subtitle)
-            }
-
-            Text(viewModel.todayPageRange)
-                .customStyle(.heading3, .quickAccentKhatmah)
-
-            Text(viewModel.todayPageCount)
-                .customStyle(.caption1, .subtitle)
-
-            if !viewModel.todaySurahNames.isEmpty {
-                Text(viewModel.todaySurahNames)
-                    .customStyle(.caption1, .subtitle)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-
-            if viewModel.hasStarted {
-                todayActions
-            } else {
-                Text(viewModel.startsOnText)
-                    .customStyle(.caption1, .warning)
-            }
-        }
-        .padding(.md)
-        .khatmahCardChrome()
-    }
-
-    @ViewBuilder
-    var todayActions: some View {
-        HStack(spacing: .xSm) {
-            accentButton(title: viewModel.readActionTitle, action: viewModel.onReadTodayTapped)
-
-            if viewModel.isTodayCompleted {
-                Label(viewModel.todayDoneTitle, systemImage: "checkmark.circle.fill")
-                    .labelStyle(.titleAndIcon)
-                    .customStyle(.caption1, .success)
-                    .frame(maxWidth: .infinity)
-            } else {
-                outlineButton(title: viewModel.markCompleteActionTitle,
-                              action: viewModel.onMarkTodayCompleteTapped)
-            }
-        }
+        KhatmahTodayCard(
+            sectionTitle: viewModel.todayTitle,
+            captionTracking: viewModel.captionTracking,
+            statusText: viewModel.driftText,
+            isBehindSchedule: viewModel.isBehindSchedule,
+            percentText: viewModel.percentText,
+            progressFraction: viewModel.progressFraction,
+            dayOfTotalText: viewModel.dayOfTotalText,
+            portionText: viewModel.todayPortionText,
+            pageRangeText: viewModel.todayPageRangeText,
+            metrics: viewModel.metrics,
+            metricsAccessibilityLabel: viewModel.metricsAccessibilityLabel,
+            hasStarted: viewModel.hasStarted,
+            startsOnText: viewModel.startsOnText,
+            isTodayCompleted: viewModel.isTodayCompleted,
+            todayDoneTitle: viewModel.todayDoneTitle,
+            readActionTitle: viewModel.readActionTitle,
+            markCompleteActionTitle: viewModel.markCompleteActionTitle,
+            onReadTapped: viewModel.onReadTodayTapped,
+            onMarkCompleteTapped: viewModel.onMarkTodayCompleteTapped
+        )
     }
 }
 
-// MARK: - Progress
+// MARK: - Rows
 
 private extension KhatmahPlanView {
 
-    var progressCard: some View {
-        VStack(alignment: .leading, spacing: .sm) {
-            Text(viewModel.progressTitle)
-                .customStyle(.headline, .onSurface)
+    var planRows: some View {
+        VStack(spacing: .no) {
+            KhatmahSettingRow(
+                icon: "list.bullet",
+                accent: .primary,
+                title: viewModel.allDaysText,
+                detail: viewModel.todayWorkloadText,
+                action: viewModel.onAllDaysTapped
+            ) {
+                Image(systemName: "chevron.forward")
+                    .font(.system(size: 13, weight: .semibold))
+                    .customForeground(.outline)
+            }
 
-            HStack(alignment: .center, spacing: .md) {
-                KhatmahProgressRing(
-                    fraction: viewModel.progressFraction,
-                    percentText: viewModel.percentText,
-                    caption: viewModel.progressTitle
-                )
+            if !viewModel.isPlanCompleted {
+                rowDivider
 
-                VStack(alignment: .leading, spacing: .xSm) {
-                    Text(viewModel.remainingPagesText)
-                        .customStyle(.bodyMedium, .onSurface)
-                        .fixedSize(horizontal: false, vertical: true)
-
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(viewModel.expectedCompletionTitle)
-                            .customStyle(.caption2, .subtitle)
-                        Text(viewModel.expectedCompletionText)
-                            .customStyle(.bodySmall, .onSurface)
-                    }
-
-                    Text(viewModel.driftText)
-                        .customStyle(.caption2, viewModel.driftAccent)
-                        .padding(.horizontal, .xSm)
-                        .padding(.vertical, .xxSm)
-                        .background(viewModel.driftAccent.color.opacity(0.12))
-                        .customCornerRadius(.cornerXxSm)
+                KhatmahSettingRow(
+                    icon: "bell.fill",
+                    accent: .secondary,
+                    title: viewModel.reminderToggleTitle
+                ) {
+                    Toggle("", isOn: reminderEnabledSelection)
+                        .labelsHidden()
+                        .tint(ColorStyle.primary.color)
                 }
 
-                Spacer(minLength: 0)
+                if viewModel.isReminderEnabled {
+                    rowDivider
+
+                    KhatmahSettingRow(
+                        icon: "clock",
+                        accent: .secondary,
+                        title: viewModel.reminderTimeTitle
+                    ) {
+                        DatePicker("", selection: reminderTimeSelection, displayedComponents: .hourAndMinute)
+                            .labelsHidden()
+                            .environment(\.locale, viewModel.pickerLocale)
+                            .environment(\.timeZone, viewModel.pickerTimeZone)
+                    }
+                }
+
+                if viewModel.isAuthorizationDenied {
+                    rowDivider
+                    authorizationDeniedNotice
+                }
             }
         }
-        .padding(.md)
-        .khatmahCardChrome()
+        .modifier(KhatmahRowGroup())
+        .animation(.easeInOut(duration: 0.2), value: viewModel.isReminderEnabled)
     }
-}
 
-// MARK: - Reminder
-
-private extension KhatmahPlanView {
-
-    var reminderCard: some View {
-        VStack(alignment: .leading, spacing: .sm) {
-            Text(viewModel.reminderSectionTitle)
-                .customStyle(.headline, .onSurface)
-
-            Toggle(isOn: reminderEnabledSelection) {
-                Text(viewModel.reminderToggleTitle)
-                    .customStyle(.bodyMedium, .onSurface)
-            }
-            .tint(ColorStyle.quickAccentKhatmah.color)
-
-            if viewModel.isReminderEnabled {
-                DatePicker(
-                    viewModel.reminderTimeTitle,
-                    selection: reminderTimeSelection,
-                    displayedComponents: .hourAndMinute
-                )
-                .datePickerStyle(.compact)
-                .customStyle(.bodyMedium, .onSurface)
-            }
+    var deleteRow: some View {
+        KhatmahSettingRow(
+            icon: "trash",
+            accent: .error,
+            title: viewModel.deleteActionTitle,
+            action: viewModel.onDeleteTapped
+        ) {
+            EmptyView()
         }
-        .padding(.md)
-        .khatmahCardChrome()
+        .modifier(KhatmahRowGroup())
     }
 
-    var authorizationDeniedCard: some View {
+    var rowDivider: some View {
+        Rectangle()
+            .fill(ColorStyle.outlineVariant.color)
+            .frame(height: 0.5)
+            .padding(.leading, 68)
+    }
+
+    var authorizationDeniedNotice: some View {
         VStack(alignment: .leading, spacing: .xxSm) {
-            Text(viewModel.authorizationDeniedTitle)
-                .customStyle(.bodyMedium, .warning)
-
             Text(viewModel.authorizationDeniedBody)
-                .customStyle(.caption1, .subtitle)
+                .customStyle(.caption1, .warning)
                 .fixedSize(horizontal: false, vertical: true)
 
             Button(action: viewModel.onOpenSystemSettingsTapped) {
@@ -285,8 +234,10 @@ private extension KhatmahPlanView {
             }
             .buttonStyle(.plain)
         }
-        .padding(.md)
-        .khatmahCardChrome()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.leading, 68)
+        .padding(.trailing, .md)
+        .padding(.vertical, .sm)
     }
 
     var reminderEnabledSelection: Binding<Bool> {
@@ -304,42 +255,88 @@ private extension KhatmahPlanView {
     }
 }
 
-// MARK: - Days
+// MARK: - Empty
 
 private extension KhatmahPlanView {
 
-    var daysCard: some View {
-        VStack(alignment: .leading, spacing: .xSm) {
-            Text(viewModel.daysSectionTitle)
-                .customStyle(.headline, .onSurface)
-                .padding(.horizontal, .md)
-                .padding(.top, .md)
+    var emptyContent: some View {
+        VStack(spacing: .big) {
+            VStack(spacing: .xSm) {
+                Image(systemName: "book.closed")
+                    .font(.system(size: 42, weight: .light))
+                    .customForeground(.onSurfaceVariant)
 
-            LazyVStack(spacing: 0) {
-                ForEach(viewModel.dayItems) { item in
-                    KhatmahDayRow(item: item) {
-                        viewModel.onDayTapped(item)
-                    }
+                Text(viewModel.emptyTitle)
+                    .customStyle(.heading3, .onSurface)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
 
-                    if item.id != viewModel.dayItems.last?.id {
-                        Divider()
-                            .padding(.horizontal, .md)
-                    }
+                Text(viewModel.emptyMessage)
+                    .customStyle(.bodySmall, .onSurfaceVariant)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.bottom, .xxSm)
+
+            howItWorksCard
+
+            primaryButton(title: viewModel.newPlanActionTitle, action: viewModel.onStartPlanTapped)
+        }
+    }
+
+    var howItWorksCard: some View {
+        VStack(alignment: .leading, spacing: .sm) {
+            Text(viewModel.howItWorksTitle)
+                .customStyle(.caption2, .onSurfaceVariant)
+                .tracking(viewModel.captionTracking)
+
+            ForEach(Array(viewModel.howItWorksSteps.enumerated()), id: \.offset) { index, step in
+                HStack(alignment: .top, spacing: .sm) {
+                    Text(viewModel.stepNumberText(index + 1))
+                        .customStyle(.caption1, .primary)
+                        .monospacedDigit()
+                        .frame(width: 22, height: 22)
+                        .background(Circle().fill(ColorStyle.washPrimary.color))
+
+                    Text(step)
+                        .customStyle(.bodySmall, .onSurface)
+                        .fixedSize(horizontal: false, vertical: true)
+
+                    Spacer(minLength: 0)
                 }
             }
-            .padding(.bottom, .xSm)
         }
+        .padding(.big)
         .khatmahCardChrome()
     }
 
-    var deleteButton: some View {
-        Button(action: viewModel.onDeleteTapped) {
-            Text(viewModel.deleteActionTitle)
-                .customStyle(.caption1, .error)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, .sm)
+    var completedCard: some View {
+        VStack(alignment: .leading, spacing: .md) {
+            HStack(spacing: .sm) {
+                AccentIconTile(icon: "checkmark.seal.fill", accent: .primary)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(viewModel.completedTitle)
+                        .customStyle(.kitab(size: 17, bold: true), .onSurface)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
+
+                    Text(viewModel.percentText)
+                        .customStyle(.caption1, .primary)
+                        .monospacedDigit()
+                }
+
+                Spacer(minLength: 0)
+            }
+
+            Text(viewModel.completedMessage)
+                .customStyle(.bodySmall, .onSurfaceVariant)
+                .fixedSize(horizontal: false, vertical: true)
+
+            primaryButton(title: viewModel.newPlanActionTitle, action: viewModel.onStartPlanTapped)
         }
-        .buttonStyle(.plain)
+        .padding(.big)
+        .khatmahCardChrome()
     }
 }
 
@@ -347,31 +344,33 @@ private extension KhatmahPlanView {
 
 private extension KhatmahPlanView {
 
-    func accentButton(title: String, action: @escaping () -> Void) -> some View {
+    func primaryButton(title: String, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
                 .customStyle(.buttonText, .onPrimary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, .xSm)
-                .background(
-                    RoundedRectangle(cornerRadius: .cornerMd)
-                        .fill(ColorStyle.quickAccentKhatmah.color)
-                )
+                .padding(.vertical, .sm)
+                .background(Capsule().fill(ColorStyle.primary.color))
+                .contentShape(Capsule())
         }
         .buttonStyle(.plain)
     }
+}
 
-    func outlineButton(title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Text(title)
-                .customStyle(.buttonText, .quickAccentKhatmah)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, .xSm)
-                .background(
-                    RoundedRectangle(cornerRadius: .cornerMd)
-                        .stroke(ColorStyle.quickAccentKhatmah.color, lineWidth: 1)
-                )
-        }
-        .buttonStyle(.plain)
+// MARK: - Row Group
+
+private struct KhatmahRowGroup: ViewModifier {
+
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.cardSurface)
+            .customCornerRadius(.cornerXl)
+            .overlay(
+                RoundedRectangle(cornerRadius: .cornerXl, style: .continuous)
+                    .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
+            )
     }
 }

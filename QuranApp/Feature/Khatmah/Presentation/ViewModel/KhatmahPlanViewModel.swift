@@ -10,36 +10,56 @@ import Combine
 import Core
 import UIKit
 
+struct KhatmahMetric: Identifiable {
+    let id: Int
+    let value: String
+    let title: String
+}
+
 struct KhatmahDayItem: Identifiable {
     let id: Int
     let dayNumber: Int
     let title: String
     let pageRange: String
+    let verseRange: String
     let statusTitle: String
     let statusAccent: ColorStyle
     let isCompleted: Bool
+    let isToday: Bool
+    let isMissed: Bool
+
+    var accessibilityLabel: String {
+        [title, statusTitle, verseRange, pageRange]
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
+    }
 }
 
 @MainActor
 final class KhatmahPlanViewModel: MainViewModel {
 
     @Published private(set) var hasPlan: Bool = false
-    @Published private(set) var dayItems: [KhatmahDayItem] = []
     @Published private(set) var todayDayNumber: Int = 1
-    @Published private(set) var todayPageRange: String = ""
     @Published private(set) var todayPageCount: String = ""
-    @Published private(set) var todaySurahNames: String = ""
+    @Published private(set) var todayWorkloadText: String = ""
+    @Published private(set) var todayPortionText: String = ""
+    @Published private(set) var todayPageRangeText: String = ""
     @Published private(set) var isTodayCompleted: Bool = false
     @Published private(set) var hasStarted: Bool = true
     @Published private(set) var startsOnText: String = ""
     @Published private(set) var dayOfTotalText: String = ""
+    @Published private(set) var daysRemainingText: String = ""
     @Published private(set) var percentText: String = ""
     @Published private(set) var progressFraction: Double = 0
     @Published private(set) var remainingPagesText: String = ""
     @Published private(set) var expectedCompletionText: String = ""
     @Published private(set) var driftText: String = ""
-    @Published private(set) var driftAccent: ColorStyle = .success
+    @Published private(set) var driftAccent: ColorStyle = .primary
+    @Published private(set) var isBehindSchedule: Bool = false
+    @Published private(set) var metrics: [KhatmahMetric] = []
+    @Published private(set) var metricsAccessibilityLabel: String = ""
     @Published private(set) var completedCountText: String = ""
+    @Published private(set) var allDaysText: String = ""
     @Published private(set) var isPlanCompleted: Bool = false
     @Published private(set) var isReminderEnabled: Bool = false
     @Published private(set) var reminderTime: Date = Date()
@@ -52,7 +72,7 @@ final class KhatmahPlanViewModel: MainViewModel {
     private let scheduler: KhatmahReminderScheduler
     private weak var coordinator: KhatmahCoordinating?
     private var cancellables = Set<AnyCancellable>()
-    private var surahNameTask: Task<Void, Never>?
+    private var verseRangeTask: Task<Void, Never>?
 
     var isTabBarVisible: Bool { false }
 
@@ -72,8 +92,8 @@ final class KhatmahPlanViewModel: MainViewModel {
     }
 
     func onDisappear() {
-        surahNameTask?.cancel()
-        surahNameTask = nil
+        verseRangeTask?.cancel()
+        verseRangeTask = nil
     }
 }
 
@@ -83,27 +103,44 @@ extension KhatmahPlanViewModel {
 
     var screenTitle: String { AppLocalizedKeys.khatmahTitle.value }
     var todayTitle: String { AppLocalizedKeys.khatmahTodayTitle.value }
+    var captionTracking: CGFloat { KhatmahLocalizedFormatting.isArabic ? 0 : 1.5 }
     var todayDoneTitle: String { AppLocalizedKeys.khatmahTodayDoneTitle.value }
     var readActionTitle: String { AppLocalizedKeys.khatmahReadAction.value }
     var markCompleteActionTitle: String { AppLocalizedKeys.khatmahMarkCompleteAction.value }
-    var progressTitle: String { AppLocalizedKeys.khatmahProgressTitle.value }
     var expectedCompletionTitle: String { AppLocalizedKeys.khatmahExpectedCompletionTitle.value }
-    var daysSectionTitle: String { AppLocalizedKeys.khatmahDaysSectionTitle.value }
-    var reminderSectionTitle: String { AppLocalizedKeys.khatmahReminderSection.value }
+    var daysLeftTitle: String { AppLocalizedKeys.khatmahDaysLeftTitle.value }
+    var pagesLeftTitle: String { AppLocalizedKeys.khatmahPagesLeftTitle.value }
     var reminderToggleTitle: String { AppLocalizedKeys.khatmahReminderToggle.value }
     var reminderTimeTitle: String { AppLocalizedKeys.khatmahReminderTimeTitle.value }
     var deleteActionTitle: String { AppLocalizedKeys.khatmahDeleteAction.value }
     var deleteConfirmationTitle: String { AppLocalizedKeys.khatmahDeleteTitle.value }
     var deleteConfirmationMessage: String { AppLocalizedKeys.khatmahDeleteMessage.value }
     var cancelActionTitle: String { AppLocalizedKeys.cancel.value }
+    var backActionTitle: String { AppLocalizedKeys.khatmahBackAction.value }
     var emptyTitle: String { AppLocalizedKeys.khatmahEmptyTitle.value }
     var emptyMessage: String { AppLocalizedKeys.khatmahEmptyMessage.value }
     var newPlanActionTitle: String { AppLocalizedKeys.khatmahNewPlanAction.value }
     var completedTitle: String { AppLocalizedKeys.khatmahCompletedTitle.value }
     var completedMessage: String { AppLocalizedKeys.khatmahCompletedMessage.value }
-    var authorizationDeniedTitle: String { AppLocalizedKeys.prayerNotificationsAuthorizationDeniedTitle.value }
     var authorizationDeniedBody: String { AppLocalizedKeys.khatmahNotificationsDeniedBody.value }
     var openSystemSettingsTitle: String { AppLocalizedKeys.prayerNotificationsOpenSystemSettings.value }
+    var howItWorksTitle: String { AppLocalizedKeys.khatmahHowItWorksTitle.value }
+
+    func stepNumberText(_ number: Int) -> String {
+        KhatmahLocalizedFormatting.number(number)
+    }
+
+    var howItWorksSteps: [String] {
+        [
+            AppLocalizedKeys.khatmahHowItWorksPace.value,
+            AppLocalizedKeys.khatmahHowItWorksPortion.value,
+            AppLocalizedKeys.khatmahHowItWorksReminder.value
+        ]
+    }
+
+    var pickerLocale: Locale { KhatmahLocalizedFormatting.locale }
+
+    var pickerTimeZone: TimeZone { store.dayCalendar.timeZone }
 }
 
 // MARK: - Actions
@@ -133,9 +170,8 @@ extension KhatmahPlanViewModel {
         reloadPlanState()
     }
 
-    func onDayTapped(_ item: KhatmahDayItem) {
-        store.toggleDayCompletion(item.dayNumber)
-        reloadPlanState()
+    func onAllDaysTapped() {
+        coordinator?.coordinateToSchedule()
     }
 
     func onDeleteTapped() {
@@ -195,10 +231,11 @@ private extension KhatmahPlanViewModel {
     }
 
     func reloadPlanState() {
-        completedCountText = String(
-            format: AppLocalizedKeys.khatmahCompletedCountFormat.value,
-            localizedNumber(store.completedKhatmahCount)
-        )
+        let completedCount = store.completedKhatmahCount
+        completedCountText = completedCount > 0
+            ? String(format: AppLocalizedKeys.khatmahCompletedCountFormat.value,
+                     KhatmahLocalizedFormatting.khatmahCount(completedCount))
+            : ""
 
         guard let schedule = store.activeSchedule else {
             applyEmptyState()
@@ -215,42 +252,50 @@ private extension KhatmahPlanViewModel {
         isTodayCompleted = plan.isDayCompleted(today.dayNumber)
         isPlanCompleted = plan.isCompleted
         progressFraction = schedule.completionFraction
-        percentText = percentLabel(schedule.completionFraction)
-        todayPageRange = pageRangeLabel(firstPage: today.firstPage, lastPage: today.lastPage)
-        todayPageCount = String(format: AppLocalizedKeys.khatmahPagesCountFormat.value,
-                                localizedNumber(today.pageCount))
+        percentText = KhatmahLocalizedFormatting.percent(schedule.completionFraction)
+        todayPageCount = KhatmahLocalizedFormatting.pageCount(today.pageCount)
+        todayWorkloadText = KhatmahWorkload.forPagesPerDay(today.pageCount).localizedLabel
         dayOfTotalText = String(format: AppLocalizedKeys.khatmahDayOfTotalFormat.value,
-                                localizedNumber(today.dayNumber),
-                                localizedNumber(plan.totalDays))
+                                KhatmahLocalizedFormatting.number(today.dayNumber),
+                                KhatmahLocalizedFormatting.number(plan.totalDays))
+        daysRemainingText = daysRemainingLabel(schedule: schedule, on: now)
         remainingPagesText = String(format: AppLocalizedKeys.khatmahRemainingPagesFormat.value,
-                                    localizedNumber(schedule.remainingPages))
+                                    KhatmahLocalizedFormatting.pageCount(schedule.remainingPages))
         expectedCompletionText = schedule.expectedCompletionDate.map(dateLabel) ?? ""
         startsOnText = schedule.startDate.map {
             String(format: AppLocalizedKeys.khatmahStartsOnFormat.value, dateLabel($0))
         } ?? ""
+        allDaysText = String(format: AppLocalizedKeys.khatmahAllDaysFormat.value,
+                             KhatmahLocalizedFormatting.number(plan.totalDays))
         applyDrift(schedule.drift(on: now))
+        applyMetrics(schedule: schedule, on: now)
         isReminderEnabled = plan.reminder.isEnabled
         reminderTime = reminderDate(for: plan.reminder)
-        dayItems = schedule.days(on: now).map(dayItem)
-        resolveTodaySurahNames(firstPage: today.firstPage, lastPage: today.lastPage)
+        resolveTodayPortion(firstPage: today.firstPage, lastPage: today.lastPage)
     }
 
     func applyEmptyState() {
         hasPlan = false
-        dayItems = []
-        todayPageRange = ""
         todayPageCount = ""
-        todaySurahNames = ""
+        todayWorkloadText = ""
+        todayPortionText = ""
+        todayPageRangeText = ""
         isTodayCompleted = false
         isPlanCompleted = false
         hasStarted = true
         startsOnText = ""
         dayOfTotalText = ""
+        daysRemainingText = ""
         percentText = ""
         progressFraction = 0
         remainingPagesText = ""
         expectedCompletionText = ""
         driftText = ""
+        driftAccent = .primary
+        isBehindSchedule = false
+        metrics = []
+        metricsAccessibilityLabel = ""
+        allDaysText = ""
         isReminderEnabled = false
     }
 
@@ -258,90 +303,106 @@ private extension KhatmahPlanViewModel {
         switch drift {
         case .onSchedule:
             driftText = AppLocalizedKeys.khatmahOnScheduleStatus.value
-            driftAccent = .success
+            driftAccent = .primary
+            isBehindSchedule = false
         case .ahead(let pages):
             driftText = String(format: AppLocalizedKeys.khatmahPagesAheadFormat.value,
-                               localizedNumber(pages))
+                               KhatmahLocalizedFormatting.pageCount(pages))
             driftAccent = .primary
+            isBehindSchedule = false
         case .behind(let pages):
             driftText = String(format: AppLocalizedKeys.khatmahPagesBehindFormat.value,
-                               localizedNumber(pages))
+                               KhatmahLocalizedFormatting.pageCount(pages))
             driftAccent = .warning
+            isBehindSchedule = true
         }
     }
 
-    func dayItem(_ day: KhatmahDay) -> KhatmahDayItem {
-        KhatmahDayItem(
-            id: day.dayNumber,
-            dayNumber: day.dayNumber,
-            title: String(format: AppLocalizedKeys.khatmahDayLabelFormat.value,
-                          localizedNumber(day.dayNumber)),
-            pageRange: pageRangeLabel(firstPage: day.firstPage, lastPage: day.lastPage),
-            statusTitle: statusTitle(day.status),
-            statusAccent: statusAccent(day.status),
-            isCompleted: day.status == .completed
-        )
+    func applyMetrics(schedule: KhatmahPlanSchedule, on date: Date) {
+        var items: [KhatmahMetric] = [
+            KhatmahMetric(id: 0,
+                          value: KhatmahLocalizedFormatting.number(remainingDays(schedule: schedule, on: date)),
+                          title: daysLeftTitle),
+            KhatmahMetric(id: 1,
+                          value: KhatmahLocalizedFormatting.number(schedule.remainingPages),
+                          title: pagesLeftTitle)
+        ]
+
+        if let completionDate = schedule.expectedCompletionDate {
+            items.append(KhatmahMetric(id: 2,
+                                       value: shortDateLabel(completionDate),
+                                       title: expectedCompletionTitle))
+        }
+
+        metrics = items
+        metricsAccessibilityLabel = [daysRemainingText,
+                                     remainingPagesText,
+                                     expectedCompletionText.isEmpty
+                                        ? ""
+                                        : "\(expectedCompletionTitle) \(expectedCompletionText)"]
+            .filter { !$0.isEmpty }
+            .joined(separator: ", ")
     }
 
-    func statusTitle(_ status: KhatmahDayStatus) -> String {
-        switch status {
-        case .completed: return AppLocalizedKeys.khatmahDayStatusCompleted.value
-        case .today: return AppLocalizedKeys.khatmahDayStatusToday.value
-        case .missed: return AppLocalizedKeys.khatmahDayStatusMissed.value
-        case .upcoming: return AppLocalizedKeys.khatmahDayStatusUpcoming.value
+    func resolveTodayPortion(firstPage: Int, lastPage: Int) {
+        verseRangeTask?.cancel()
+        let isArabic = KhatmahLocalizedFormatting.isArabic
+        let pageRange = pageRangeLabel(firstPage: firstPage, lastPage: lastPage)
+        let pageCount = todayPageCount
+
+        todayPortionText = pageRange
+        todayPageRangeText = pageCount
+
+        verseRangeTask = Task.detached(priority: .userInitiated) { [weak self] in
+            let range = await KhatmahVerseRangeIndex.shared.range(fromPage: firstPage,
+                                                                  toPage: lastPage,
+                                                                  isArabic: isArabic)
+            guard !Task.isCancelled, let self, let range else { return }
+            await self.applyTodayPortion(range, pageRange: pageRange, pageCount: pageCount)
         }
     }
 
-    func statusAccent(_ status: KhatmahDayStatus) -> ColorStyle {
-        switch status {
-        case .completed: return .success
-        case .today: return .primary
-        case .missed: return .warning
-        case .upcoming: return .onSurfaceVariant
-        }
-    }
-
-    func resolveTodaySurahNames(firstPage: Int, lastPage: Int) {
-        surahNameTask?.cancel()
-        let isArabic = LocalizationManager.shared.currentLanguage == .Arabic
-
-        surahNameTask = Task.detached(priority: .userInitiated) { [weak self] in
-            let database = QuranDatabase.shared
-            var names: [String] = []
-
-            for page in [firstPage, lastPage] {
-                for surah in database.getSurahsForPage(page) {
-                    let name = isArabic ? surah.arabicTitle : surah.englishTitle
-                    guard !name.isEmpty, !names.contains(name) else { continue }
-                    names.append(name)
-                }
-            }
-
-            guard !Task.isCancelled, let self else { return }
-            await self.applyTodaySurahNames(names.joined(separator: " · "))
-        }
-    }
-
-    func applyTodaySurahNames(_ names: String) {
-        todaySurahNames = names
+    func applyTodayPortion(_ range: KhatmahVerseRange, pageRange: String, pageCount: String) {
+        todayPortionText = String(format: AppLocalizedKeys.khatmahVerseRangeFormat.value,
+                                  versePointLabel(range.start),
+                                  versePointLabel(range.end))
+        todayPageRangeText = "\(pageRange) \u{00B7} \(pageCount)"
     }
 
     func pageRangeLabel(firstPage: Int, lastPage: Int) -> String {
         String(format: AppLocalizedKeys.khatmahPageRangeFormat.value,
-               localizedNumber(firstPage),
-               localizedNumber(lastPage))
+               KhatmahLocalizedFormatting.number(firstPage),
+               KhatmahLocalizedFormatting.number(lastPage))
     }
 
-    func percentLabel(_ fraction: Double) -> String {
-        let percent = Int((fraction * 100).rounded())
-        return LocalizationManager.shared.currentLanguage == .Arabic
-            ? "\(percent.arabicNumerals)٪"
-            : "\(percent)%"
+    func versePointLabel(_ point: KhatmahVersePoint) -> String {
+        String(format: AppLocalizedKeys.khatmahVersePointFormat.value,
+               point.surahName,
+               KhatmahLocalizedFormatting.number(point.verseNumber))
+    }
+
+    func remainingDays(schedule: KhatmahPlanSchedule, on date: Date) -> Int {
+        let elapsed = max(schedule.elapsedDayNumber(on: date), 1)
+        return max(schedule.plan.totalDays - elapsed + 1, 0)
+    }
+
+    func daysRemainingLabel(schedule: KhatmahPlanSchedule, on date: Date) -> String {
+        let remaining = remainingDays(schedule: schedule, on: date)
+        guard remaining > 1 else { return AppLocalizedKeys.khatmahLastDayLabel.value }
+        return String(format: AppLocalizedKeys.khatmahDaysRemainingFormat.value,
+                      KhatmahLocalizedFormatting.dayCount(remaining))
     }
 
     func dateLabel(_ date: Date) -> String {
-        let isArabic = LocalizationManager.shared.currentLanguage == .Arabic
-        let locale = Locale(identifier: isArabic ? "ar" : "en")
+        formattedDate(date, format: "d MMMM yyyy")
+    }
+
+    func shortDateLabel(_ date: Date) -> String {
+        formattedDate(date, format: "d MMM")
+    }
+
+    func formattedDate(_ date: Date, format: String) -> String {
+        let locale = KhatmahLocalizedFormatting.locale
         var calendar = store.dayCalendar
         calendar.locale = locale
 
@@ -349,7 +410,7 @@ private extension KhatmahPlanViewModel {
         formatter.locale = locale
         formatter.calendar = calendar
         formatter.timeZone = calendar.timeZone
-        formatter.dateFormat = "d MMMM yyyy"
+        formatter.dateFormat = format
         return formatter.string(from: date)
     }
 
@@ -360,9 +421,5 @@ private extension KhatmahPlanViewModel {
                              minute: reminder.clampedMinute,
                              second: 0,
                              of: today) ?? today
-    }
-
-    func localizedNumber(_ value: Int) -> String {
-        LocalizationManager.shared.currentLanguage == .Arabic ? value.arabicNumerals : "\(value)"
     }
 }

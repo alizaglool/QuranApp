@@ -11,32 +11,35 @@ import Core
 struct KhatmahProgressRing: View {
 
     let fraction: Double
-    let percentText: String
-    let caption: String
+    let label: String
+
+    var diameter: CGFloat = 64
+    var lineWidth: CGFloat = 6
+    var labelSize: CGFloat = 15
+
+    private var clampedFraction: Double { min(max(fraction, 0), 1) }
 
     var body: some View {
         ZStack {
             Circle()
-                .stroke(ColorStyle.quickAccentKhatmah.color.opacity(0.16), lineWidth: 10)
+                .stroke(ColorStyle.outlineVariant.color.opacity(0.25), lineWidth: lineWidth)
 
-            Circle()
-                .trim(from: 0, to: max(min(fraction, 1), 0.001))
-                .stroke(
-                    ColorStyle.quickAccentKhatmah.color,
-                    style: StrokeStyle(lineWidth: 10, lineCap: .round)
-                )
-                .rotationEffect(.degrees(-90))
-
-            VStack(spacing: 2) {
-                Text(percentText)
-                    .customStyle(.heading2, .onSurface)
-                Text(caption)
-                    .customStyle(.caption2, .subtitle)
-                    .multilineTextAlignment(.center)
+            if clampedFraction > 0 {
+                Circle()
+                    .trim(from: 0, to: clampedFraction)
+                    .stroke(ColorStyle.primary.color,
+                            style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                    .rotationEffect(.degrees(-90))
             }
-            .padding(.xSm)
+
+            Text(label)
+                .customStyle(.kitab(size: labelSize, bold: true), .primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+                .monospacedDigit()
+                .padding(.horizontal, lineWidth)
         }
-        .frame(width: 118, height: 118)
-        .environment(\.layoutDirection, .leftToRight)
+        .frame(width: diameter, height: diameter)
+        .animation(.easeInOut(duration: 0.3), value: clampedFraction)
     }
 }

@@ -8,6 +8,8 @@
 import Foundation
 import Core
 
+// MARK: - KhatmahPaceMode
+
 enum KhatmahPaceMode: Int, CaseIterable, Identifiable {
     case duration
     case targetDate
@@ -15,9 +17,32 @@ enum KhatmahPaceMode: Int, CaseIterable, Identifiable {
     var id: Int { rawValue }
 }
 
+// MARK: - KhatmahSetupStep
+
+enum KhatmahSetupStep: Int, CaseIterable, Identifiable {
+    case pace
+    case startingPoint
+
+    var id: Int { rawValue }
+}
+
+// MARK: - KhatmahStartOption
+
+struct KhatmahStartOption: Identifiable, Equatable {
+
+    let page: Int
+    let title: String
+    let detail: String
+
+    var id: Int { page }
+}
+
+// MARK: - KhatmahSetupViewModel
+
 @MainActor
 final class KhatmahSetupViewModel: MainViewModel {
 
+    @Published private(set) var step: KhatmahSetupStep = .pace
     @Published var paceMode: KhatmahPaceMode = .duration
 
     @Published var totalDays: Int = KhatmahDurationPreset.month.dayCount {
@@ -41,13 +66,15 @@ final class KhatmahSetupViewModel: MainViewModel {
         }
     }
 
-    @Published var startPage: Int = KhatmahPageBounds.firstPage
+    @Published private(set) var startPage: Int = KhatmahPageBounds.firstPage
+    @Published private(set) var startOptions: [KhatmahStartOption] = []
+    @Published var isJuzPickerExpanded: Bool = false
+    @Published var isCustomPageExpanded: Bool = false
     @Published var isReminderEnabled: Bool = KhatmahReminder.default.isEnabled
     @Published var reminderTime: Date
-    @Published private(set) var startPageSurahName: String = ""
 
     private let store: KhatmahPlanStore
-    private var surahNameTask: Task<Void, Never>?
+    private var startOptionsTask: Task<Void, Never>?
 
     var isTabBarVisible: Bool { false }
 
@@ -70,12 +97,12 @@ final class KhatmahSetupViewModel: MainViewModel {
     }
 
     func onAppear() {
-        resolveStartPageSurahName()
+        resolveStartOptions()
     }
 
     func onDisappear() {
-        surahNameTask?.cancel()
-        surahNameTask = nil
+        startOptionsTask?.cancel()
+        startOptionsTask = nil
     }
 }
 
@@ -84,6 +111,10 @@ final class KhatmahSetupViewModel: MainViewModel {
 extension KhatmahSetupViewModel {
 
     var calendar: Calendar { store.dayCalendar }
+
+    var pickerLocale: Locale { KhatmahLocalizedFormatting.locale }
+
+    var pickerTimeZone: TimeZone { store.dayCalendar.timeZone }
 
     var earliestStartDate: Date { calendar.startOfDay(for: Date()) }
 
@@ -97,12 +128,26 @@ extension KhatmahSetupViewModel {
 
     var maximumDays: Int { pageCount }
 
-    var pagesPerDay: Int {
-        guard totalDays > 0 else { return pageCount }
-        return Int((Double(pageCount) / Double(totalDays)).rounded())
-    }
+    var pagesPerDay: Int { pagesPerDay(forDays: totalDays) }
 
     var canAdvance: Bool { totalDays >= 1 && totalDays <= maximumDays }
+
+    var isFinalStep: Bool { step == .startingPoint }
+
+    var isCustomPageSelected: Bool {
+        !startOptions.contains { $0.page == startPage }
+    }
+
+    var isJuzSelected: Bool { !isCustomPageSelected }
+
+    var selectedJuzOption: KhatmahStartOption? {
+        startOptions.last { $0.page <= startPage } ?? startOptions.first
+    }
+
+    func pagesPerDay(forDays days: Int) -> Int {
+        guard days > 0 else { return pageCount }
+        return Int((Double(pageCount) / Double(days)).rounded())
+    }
 }
 
 // MARK: - Labels
@@ -110,42 +155,78 @@ extension KhatmahSetupViewModel {
 extension KhatmahSetupViewModel {
 
     var screenTitle: String { AppLocalizedKeys.khatmahSetupTitle.value }
-    var paceTitle: String { AppLocalizedKeys.khatmahSetupPaceTitle.value }
-    var paceCaption: String { AppLocalizedKeys.khatmahSetupPaceCaption.value }
+    var paceSegmentTitle: String { AppLocalizedKeys.khatmahSetupPaceTitle.value }
     var durationSectionTitle: String { AppLocalizedKeys.khatmahSetupDurationSection.value }
     var targetDateSectionTitle: String { AppLocalizedKeys.khatmahSetupTargetDateSection.value }
-    var startTitle: String { AppLocalizedKeys.khatmahSetupStartTitle.value }
-    var startCaption: String { AppLocalizedKeys.khatmahSetupStartCaption.value }
+    var lastDayTitle: String { AppLocalizedKeys.khatmahLastDayLabel.value }
+    var captionTracking: CGFloat { KhatmahLocalizedFormatting.isArabic ? 0 : 1.5 }
     var startDateTitle: String { AppLocalizedKeys.khatmahSetupStartDate.value }
     var startPageTitle: String { AppLocalizedKeys.khatmahSetupStartPage.value }
-    var reminderSectionTitle: String { AppLocalizedKeys.khatmahReminderSection.value }
+    var customPageTitle: String { AppLocalizedKeys.khatmahStartCustomPage.value }
+    var juzPickerTitle: String { AppLocalizedKeys.juz.value }
     var reminderToggleTitle: String { AppLocalizedKeys.khatmahReminderToggle.value }
     var reminderTimeTitle: String { AppLocalizedKeys.khatmahReminderTimeTitle.value }
-    var createActionTitle: String { AppLocalizedKeys.khatmahSetupCreateAction.value }
+    var backActionTitle: String { AppLocalizedKeys.khatmahBackAction.value }
     var cancelActionTitle: String { AppLocalizedKeys.cancel.value }
 
-    var pagesPerDayText: String {
-        String(format: AppLocalizedKeys.khatmahPagesPerDayFormat.value, localizedNumber(pagesPerDay))
+    var stepText: String {
+        String(format: AppLocalizedKeys.khatmahStepFormat.value,
+               KhatmahLocalizedFormatting.number(step.rawValue + 1),
+               KhatmahLocalizedFormatting.number(KhatmahSetupStep.allCases.count))
+    }
+
+    var stepTitle: String {
+        switch step {
+        case .pace:          return AppLocalizedKeys.khatmahSetupPaceTitle.value
+        case .startingPoint: return AppLocalizedKeys.khatmahSetupStartTitle.value
+        }
+    }
+
+    var stepCaption: String {
+        switch step {
+        case .pace:          return AppLocalizedKeys.khatmahSetupPaceCaption.value
+        case .startingPoint: return AppLocalizedKeys.khatmahSetupStartCaption.value
+        }
+    }
+
+    var primaryActionTitle: String {
+        isFinalStep
+            ? AppLocalizedKeys.khatmahSetupCreateAction.value
+            : AppLocalizedKeys.khatmahNextAction.value
     }
 
     var totalDaysText: String {
-        String(format: AppLocalizedKeys.khatmahDaysFormat.value, localizedNumber(totalDays))
+        KhatmahLocalizedFormatting.dayCount(totalDays)
     }
 
-    var startPageText: String {
-        let page = String(format: AppLocalizedKeys.khatmahPageRangeFormat.value,
-                          localizedNumber(startPage),
-                          localizedNumber(KhatmahPageBounds.lastPage))
-        guard !startPageSurahName.isEmpty else { return page }
-        return "\(page) · \(startPageSurahName)"
+    var workloadText: String {
+        KhatmahWorkload.forPagesPerDay(pagesPerDay).localizedLabel
     }
+
+    var paceSummaryText: String {
+        "\(totalDaysText) \u{00B7} \(workloadText)"
+    }
+
+    var customPageDetailText: String {
+        guard isCustomPageSelected else { return "" }
+        return String(format: AppLocalizedKeys.khatmahPageNumberFormat.value,
+                      KhatmahLocalizedFormatting.number(startPage))
+    }
+
+    var juzSelectionTitle: String { selectedJuzOption?.title ?? juzPickerTitle }
+
+    var juzSelectionDetailText: String { selectedJuzOption?.detail ?? "" }
 
     func durationTitle(for preset: KhatmahDurationPreset) -> String {
-        String(format: AppLocalizedKeys.khatmahDaysFormat.value, localizedNumber(preset.dayCount))
+        KhatmahLocalizedFormatting.dayCount(preset.dayCount)
+    }
+
+    func workloadText(for preset: KhatmahDurationPreset) -> String {
+        KhatmahWorkload.forPagesPerDay(pagesPerDay(forDays: min(preset.dayCount, maximumDays))).localizedLabel
     }
 
     func pageNumberText(for page: Int) -> String {
-        localizedNumber(page)
+        KhatmahLocalizedFormatting.number(page)
     }
 }
 
@@ -162,7 +243,34 @@ extension KhatmahSetupViewModel {
         guard clamped != startPage else { return }
         startPage = clamped
         totalDays = min(totalDays, maximumDays)
-        resolveStartPageSurahName()
+    }
+
+    func toggleJuzPicker() {
+        isCustomPageExpanded = false
+
+        if isCustomPageSelected, let page = selectedJuzOption?.page {
+            selectStartPage(page)
+        }
+
+        isJuzPickerExpanded.toggle()
+    }
+
+    func toggleCustomPage() {
+        isJuzPickerExpanded = false
+        isCustomPageExpanded.toggle()
+    }
+
+    func onBackTapped() {
+        step = .pace
+    }
+
+    @discardableResult
+    func onPrimaryTapped() -> KhatmahPlan? {
+        guard isFinalStep else {
+            step = .startingPoint
+            return nil
+        }
+        return createPlan()
     }
 
     @discardableResult
@@ -198,27 +306,47 @@ private extension KhatmahSetupViewModel {
         let span = store.dayCount(from: startDate, to: targetDate)
         totalDays = min(max(span, 1), maximumDays)
     }
+}
 
-    func resolveStartPageSurahName() {
-        surahNameTask?.cancel()
-        let page = startPage
-        let isArabic = LocalizationManager.shared.currentLanguage == .Arabic
+// MARK: - Start Options
 
-        surahNameTask = Task.detached(priority: .userInitiated) { [weak self] in
-            let surahs = QuranDatabase.shared.getSurahsForPage(page)
-            let name = surahs.first.map { isArabic ? $0.arabicTitle : $0.englishTitle } ?? ""
+private extension KhatmahSetupViewModel {
 
-            guard !Task.isCancelled, let self else { return }
-            await self.applyStartPageSurahName(name, forPage: page)
+    func resolveStartOptions() {
+        if startOptions.isEmpty {
+            applyStartOptions([:])
+        }
+
+        startOptionsTask?.cancel()
+        let isArabic = KhatmahLocalizedFormatting.isArabic
+        let pages = QuranDatabase.juzStartPages
+
+        startOptionsTask = Task.detached(priority: .userInitiated) { [weak self] in
+            let points = await KhatmahVerseRangeIndex.shared.startPoints(ofPages: pages, isArabic: isArabic)
+
+            guard !Task.isCancelled, let self, !points.isEmpty else { return }
+            await self.applyStartOptions(points)
         }
     }
 
-    func applyStartPageSurahName(_ name: String, forPage page: Int) {
-        guard page == startPage else { return }
-        startPageSurahName = name
+    func applyStartOptions(_ points: [Int: KhatmahVersePoint]) {
+        startOptions = QuranDatabase.juzStartPages.enumerated().map { index, page in
+            let juzNumber = index + 1
+            let title = juzNumber == 1
+                ? AppLocalizedKeys.khatmahStartFromBeginning.value
+                : AppLocalizedKeys.juzKey(juzNumber).value
+
+            return KhatmahStartOption(page: page, title: title, detail: detailLabel(for: points[page], page: page))
+        }
     }
 
-    func localizedNumber(_ value: Int) -> String {
-        LocalizationManager.shared.currentLanguage == .Arabic ? value.arabicNumerals : "\(value)"
+    func detailLabel(for point: KhatmahVersePoint?, page: Int) -> String {
+        let pageText = String(format: AppLocalizedKeys.khatmahPageNumberFormat.value, KhatmahLocalizedFormatting.number(page))
+        guard let point, !point.surahName.isEmpty else { return pageText }
+
+        let verseText = String(format: AppLocalizedKeys.khatmahVersePointFormat.value,
+                               point.surahName,
+                               KhatmahLocalizedFormatting.number(point.verseNumber))
+        return "\(verseText) · \(pageText)"
     }
 }

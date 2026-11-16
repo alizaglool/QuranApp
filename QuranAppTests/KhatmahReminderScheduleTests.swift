@@ -268,8 +268,8 @@ final class KhatmahReminderSchedulerTests: XCTestCase {
 
         XCTAssertFalse(first.title.isEmpty)
         XCTAssertFalse(first.body.isEmpty)
-        XCTAssertFalse(first.title.contains("khatmah"))
-        XCTAssertFalse(first.body.contains("khatmah"))
+        XCTAssertNotEqual(first.title, AppLocalizedKeys.khatmahReminderTitle.rawValue)
+        XCTAssertNotEqual(first.body, AppLocalizedKeys.khatmahReminderBodyFormat.rawValue)
         XCTAssertNotNil(first.dateComponents.timeZone)
     }
 

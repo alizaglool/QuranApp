@@ -103,17 +103,13 @@ private extension KhatmahReminderScheduler {
 
     func draft(for entry: KhatmahReminderScheduleEntry) -> LocalNotificationRequestDraft {
         let body = String(format: AppLocalizedKeys.khatmahReminderBodyFormat.value,
-                          localizedNumber(entry.firstPage),
-                          localizedNumber(entry.lastPage))
+                          KhatmahLocalizedFormatting.number(entry.firstPage),
+                          KhatmahLocalizedFormatting.number(entry.lastPage))
 
         return LocalNotificationRequestDraft(identifier: entry.identifier,
                                              title: AppLocalizedKeys.khatmahReminderTitle.value,
                                              body: body,
                                              soundFileName: nil,
                                              dateComponents: entry.dateComponents)
-    }
-
-    func localizedNumber(_ value: Int) -> String {
-        LocalizationManager.shared.currentLanguage == .Arabic ? value.arabicNumerals : "\(value)"
     }
 }
