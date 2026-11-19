@@ -108,8 +108,45 @@ final class PrayerNotificationScheduleTests: XCTestCase {
         let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
 
         XCTAssertLessThanOrEqual(entries.count, PrayerNotificationScheduleBuilder.pendingRequestLimit)
-        XCTAssertEqual(entries.count, 60)
-        XCTAssertEqual(Set(entries.map(\.dayKey)).count, 5)
+        XCTAssertEqual(entries.count, 56)
+        XCTAssertEqual(Set(entries.map(\.dayKey)).count, 4)
+    }
+
+    func testSupplementalSlotsScheduleOneReminderAndNoAdhan() {
+        let preferences = PrayerNotificationFixture.preferences(slots: Set(PrayerSlot.allCases),
+                                                                isReminderEnabled: true)
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+            .filter { $0.dayKey == dayKey && $0.slot.isSupplemental }
+
+        XCTAssertEqual(entries.map(\.slot), [.lastThirdOfNight, .sunrise])
+        XCTAssertTrue(entries.allSatisfy { $0.kind == .reminder })
+        XCTAssertTrue(entries.allSatisfy { $0.leadMinutes == 0 })
+    }
+
+    func testSurahAlKahfRemindsOnFridayOnly() {
+        let preferences = PrayerNotificationFixture.preferences(slots: [.surahAlKahf])
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+        let weekdays = Set(entries.map { PrayerNotificationFixture.weekday(ofDayKey: $0.dayKey) })
+
+        XCTAssertEqual(entries.count, 1)
+        XCTAssertEqual(weekdays, [6])
+        XCTAssertEqual(entries.first?.slot, .surahAlKahf)
+        XCTAssertEqual(entries.first?.kind, .reminder)
+    }
+
+    func testMinuteOffsetsShiftTheScheduledFireTime() {
+        let day = PrayerNotificationFixture.day()
+        let shifted = day.applyingMinuteOffsets([.fajr: -10, .asr: 12])
+        let preferences = PrayerNotificationFixture.preferences(slots: [.fajr, .asr])
+
+        let baseline = builder().entries(for: day, preferences: preferences)
+            .filter { $0.dayKey == dayKey }
+        let adjusted = builder().entries(for: shifted, preferences: preferences)
+            .filter { $0.dayKey == dayKey }
+
+        XCTAssertEqual(baseline.map(\.slot), adjusted.map(\.slot))
+        XCTAssertEqual(minutes(of: baseline[0]) - 10, minutes(of: adjusted[0]))
+        XCTAssertEqual(minutes(of: baseline[1]) + 12, minutes(of: adjusted[1]))
     }
 
     func testWindowNeverExceedsThePendingLimitForAnyEnabledCombination() {
@@ -231,6 +268,91 @@ final class PrayerNotificationScheduleTests: XCTestCase {
 
         XCTAssertEqual(entries.count, 7)
         XCTAssertEqual(friday.map(\.slot), [.dhuhr])
+    }
+
+    // MARK: - Iqamah
+
+    func testIqamahLandsAtTheConfiguredDelayAfterTheAdhan() {
+        let preferences = PrayerNotificationFixture.preferences(slots: [.fajr],
+                                                                isIqamahEnabled: true,
+                                                                iqamahDelays: [.fajr: 25])
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+            .filter { $0.dayKey == dayKey }
+        let iqamah = entries.first { $0.kind == .iqamah }
+
+        XCTAssertEqual(entries.count, 2)
+        XCTAssertEqual(iqamah?.leadMinutes, 25)
+        XCTAssertEqual(iqamah.map(minutes(of:)), PrayerNotificationFixture.fajrMinutes + 25)
+        XCTAssertEqual(iqamah?.identifier,
+                       PrayerNotificationIdentifier.identifier(dayKey: dayKey, slot: .fajr, kind: .iqamah))
+    }
+
+    func testIqamahIsNotScheduledWhenTheAlertIsDisabled() {
+        let preferences = PrayerNotificationFixture.preferences(slots: Set(PrayerSlot.obligatorySlots),
+                                                                iqamahDelays: [.fajr: 25])
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+
+        XCTAssertFalse(entries.isEmpty)
+        XCTAssertTrue(entries.allSatisfy { $0.kind != .iqamah })
+    }
+
+    func testZeroDelayTurnsTheIqamahOffForThatPrayerAlone() {
+        let preferences = PrayerNotificationFixture.preferences(slots: [.fajr, .isha],
+                                                                isIqamahEnabled: true,
+                                                                iqamahDelays: [.fajr: 0, .isha: 10])
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+            .filter { $0.dayKey == dayKey && $0.kind == .iqamah }
+
+        XCTAssertEqual(entries.map(\.slot), [.isha])
+    }
+
+    func testOnlyPrayersWithACongregationCarryAnIqamah() {
+        let preferences = PrayerNotificationFixture.preferences(slots: Set(PrayerSlot.allCases),
+                                                                isIqamahEnabled: true)
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+            .filter { $0.kind == .iqamah }
+        let openingDay = entries.filter { $0.dayKey == dayKey }
+
+        XCTAssertTrue(entries.allSatisfy(\.slot.hasIqamah))
+        XCTAssertEqual(Set(openingDay.map(\.slot)), Set(PrayerSlot.obligatorySlots))
+        XCTAssertFalse(PrayerSlot.duha.hasIqamah)
+        XCTAssertFalse(PrayerSlot.sunrise.hasIqamah)
+    }
+
+    func testJumuahFollowsTheDhuhrIqamahDelay() {
+        let preferences = PrayerNotificationFixture.preferences(slots: [.jumuah],
+                                                                isIqamahEnabled: true,
+                                                                iqamahDelays: [.dhuhr: 35])
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+            .filter { $0.kind == .iqamah }
+
+        XCTAssertFalse(entries.isEmpty)
+        XCTAssertEqual(preferences.iqamahDelay(for: .jumuah), 35)
+        XCTAssertTrue(entries.allSatisfy { $0.slot == .jumuah && $0.leadMinutes == 35 })
+    }
+
+    func testIqamahDelayIsClampedToTheSupportedRange() {
+        let range = PrayerNotificationPreferences.iqamahDelayMinutesRange
+        let low = PrayerNotificationFixture.preferences(iqamahDelays: [.fajr: -5])
+        let high = PrayerNotificationFixture.preferences(iqamahDelays: [.fajr: 999])
+
+        XCTAssertEqual(low.iqamahDelay(for: .fajr), range.lowerBound)
+        XCTAssertEqual(high.iqamahDelay(for: .fajr), range.upperBound)
+        XCTAssertEqual(PrayerNotificationPreferences.standard.iqamahDelay(for: .fajr),
+                       PrayerNotificationPreferences.defaultIqamahDelayMinutes)
+    }
+
+    func testScheduledKindsMatchWhatTheBuilderEmits() {
+        let preferences = PrayerNotificationFixture.preferences(slots: Set(PrayerSlot.allCases),
+                                                                isReminderEnabled: true,
+                                                                isIqamahEnabled: true)
+        let entries = builder().entries(for: PrayerNotificationFixture.day(), preferences: preferences)
+
+        for slot in PrayerSlot.allCases {
+            let emitted = Set(entries.filter { $0.slot == slot }.map(\.kind))
+
+            XCTAssertTrue(emitted.isSubset(of: Set(slot.scheduledKinds)), slot.rawValue)
+        }
     }
 
     // MARK: - Trigger Components

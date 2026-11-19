@@ -252,7 +252,7 @@ final class PrayerNotificationManagerTests: XCTestCase {
 
     // MARK: - Drafts
 
-    func testAdhanDraftCarriesTheSlotNameAndFiresWithoutACustomSound() async {
+    func testAdhanDraftNamesThePrayerInTheTitleAndFiresWithoutACustomSound() async {
         let center = LocalNotificationCenterDouble(status: .authorized)
         let subject = manager(center: center,
                               defaults: PrayerNotificationFixture.defaults(),
@@ -260,9 +260,11 @@ final class PrayerNotificationManagerTests: XCTestCase {
 
         await subject.reschedule(day: PrayerNotificationFixture.day())
         let draft = center.addedDrafts.first { PrayerNotificationIdentifier.kind(of: $0.identifier) == .adhan }
+        let content = PrayerNotificationContentCatalog.content(dayKey: dayKey, slot: .fajr, kind: .adhan)
 
+        XCTAssertNotNil(content)
         XCTAssertEqual(draft?.title, PrayerSlot.fajr.localizedName)
-        XCTAssertFalse(draft?.title.isEmpty ?? true)
+        XCTAssertNil(draft?.subtitle)
         XCTAssertFalse(draft?.body.isEmpty ?? true)
         XCTAssertNil(draft?.soundFileName)
         XCTAssertEqual(draft?.dateComponents.hour, PrayerNotificationFixture.fajrMinutes / 60)
@@ -282,6 +284,31 @@ final class PrayerNotificationManagerTests: XCTestCase {
         XCTAssertNotNil(draft)
         XCTAssertFalse(draft?.body.isEmpty ?? true)
         XCTAssertEqual(draft?.dateComponents.minute, (PrayerNotificationFixture.fajrMinutes - 25) % 60)
+    }
+
+    func testIqamahDraftNamesThePrayerAndKeepsThePrayerCallSoundForTheAdhanAlone() async {
+        let center = LocalNotificationCenterDouble(status: .authorized)
+        let subject = manager(center: center,
+                              defaults: PrayerNotificationFixture.defaults(),
+                              preferences: PrayerNotificationFixture.preferences(slots: [.fajr],
+                                                                                 alertStyle: .shortAdhanTone,
+                                                                                 isIqamahEnabled: true,
+                                                                                 iqamahDelays: [.fajr: 20]),
+                              soundCatalog: PrayerNotificationFixture.soundCatalogWithBundledAudio())
+
+        await subject.reschedule(day: PrayerNotificationFixture.day())
+        let iqamah = center.addedDrafts.first { PrayerNotificationIdentifier.kind(of: $0.identifier) == .iqamah }
+        let adhan = center.addedDrafts.first { PrayerNotificationIdentifier.kind(of: $0.identifier) == .adhan }
+
+        XCTAssertNotNil(iqamah)
+        XCTAssertEqual(iqamah?.title,
+                       String(format: AppLocalizedKeys.prayerNotificationIqamahTitleFormat.value,
+                              PrayerSlot.fajr.localizedName))
+        XCTAssertNotEqual(iqamah?.title, adhan?.title)
+        XCTAssertFalse(iqamah?.body.isEmpty ?? true)
+        XCTAssertNil(iqamah?.soundFileName)
+        XCTAssertNotNil(adhan?.soundFileName)
+        XCTAssertEqual(iqamah?.dateComponents.minute, (PrayerNotificationFixture.fajrMinutes + 20) % 60)
     }
 
     // MARK: - Alert Style

@@ -72,7 +72,10 @@ enum PrayerNotificationFixture {
                             isInAppAdhanEnabled: Bool = false,
                             recordingIdentifier: String = AdhanRecording.defaultIdentifier,
                             method: PrayerCalculationMethod = .default,
-                            school: PrayerJurisprudenceSchool = .default) -> PrayerNotificationPreferences {
+                            school: PrayerJurisprudenceSchool = .default,
+                            minuteOffsets: [PrayerSlot: Int] = [:],
+                            isIqamahEnabled: Bool = false,
+                            iqamahDelays: [PrayerSlot: Int] = [:]) -> PrayerNotificationPreferences {
         PrayerNotificationPreferences(isPrayerNotificationEnabled: isEnabled,
                                       enabledSlots: slots,
                                       alertStyle: alertStyle,
@@ -81,7 +84,10 @@ enum PrayerNotificationFixture {
                                       isInAppAdhanAudioEnabled: isInAppAdhanEnabled,
                                       adhanRecordingIdentifier: recordingIdentifier,
                                       calculationMethod: method,
-                                      jurisprudenceSchool: school)
+                                      jurisprudenceSchool: school,
+                                      prayerMinuteOffsets: minuteOffsets,
+                                      isIqamahAlertEnabled: isIqamahEnabled,
+                                      iqamahDelayMinutes: iqamahDelays)
     }
 
     static func defaults(_ name: String = UUID().uuidString) -> UserDefaults {

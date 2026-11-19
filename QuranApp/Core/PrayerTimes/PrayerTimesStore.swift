@@ -28,6 +28,9 @@ final class PrayerTimesStore: ObservableObject {
 
     @Published private(set) var isRefreshing: Bool = false
 
+    private var uncorrectedToday: DayPrayerTimes?
+    private var minuteOffsets: [PrayerSlot: Int] = [:]
+
     private static let storageKey = "prayer_times_day_v3"
     private let service = QuranService.shared
     private let locationStore = SelectedLocationStore.shared
@@ -42,13 +45,24 @@ final class PrayerTimesStore: ObservableObject {
 
     private init() {
         let restored = restoredCacheEntry()
-        today = restored?.times
+        minuteOffsets = PrayerNotificationManager.shared.preferences.clampedPrayerMinuteOffsets
+        uncorrectedToday = restored?.times
+        today = restored?.times.applyingMinuteOffsets(minuteOffsets)
         cachedIdentifier = restored?.cacheIdentifier
+    }
+
+    func applyMinuteOffsets(_ offsets: [PrayerSlot: Int]) {
+        guard offsets != minuteOffsets else { return }
+        minuteOffsets = offsets
+        today = uncorrectedToday?.applyingMinuteOffsets(offsets)
+        publishWidgetSnapshot()
     }
 
     /// Serves the cache when it already covers today at the selected location,
     /// otherwise refreshes once. Safe to call on every `onAppear`.
     func loadTodayForSelectedLocation() {
+        publishWidgetSnapshot()
+
         let location = locationStore.selectedLocation
 
         // Measured on the anchors' own clock once we have them, so the day
@@ -102,9 +116,12 @@ final class PrayerTimesStore: ObservableObject {
                 return
             }
             let identifier = PrayerTimesStore.cacheIdentifier(for: location, preferences: preferences)
-            today = parsed
+            minuteOffsets = preferences.clampedPrayerMinuteOffsets
+            uncorrectedToday = parsed
+            today = parsed.applyingMinuteOffsets(minuteOffsets)
             cachedIdentifier = identifier
             persist(parsed, cacheIdentifier: identifier)
+            publishWidgetSnapshot()
         } catch {
             // Yesterday's cache is kept deliberately. Anchors move by a minute
             // or two a day, so a stale day is a far better gate than no gate.
@@ -117,6 +134,10 @@ final class PrayerTimesStore: ObservableObject {
         }
     }
 
+    private func publishWidgetSnapshot() {
+        PrayerWidgetSnapshotWriter.shared.refresh(day: today)
+    }
+
     private func persist(_ times: DayPrayerTimes, cacheIdentifier: String) {
         let entry = CachedPrayerTimesEntry(cacheIdentifier: cacheIdentifier, times: times)
         guard let encoded = try? JSONEncoder().encode(entry) else { return }
@@ -124,6 +145,7 @@ final class PrayerTimesStore: ObservableObject {
     }
 
     private func clearCacheEntry() {
+        uncorrectedToday = nil
         today = nil
         cachedIdentifier = nil
         defaults.removeObject(forKey: PrayerTimesStore.storageKey)
@@ -284,6 +306,9 @@ extension PrayerSlot {
         case .isha: return AppLocalizedKeys.isha.value
         case .duha: return AppLocalizedKeys.duha.value
         case .jumuah: return AppLocalizedKeys.jumuah.value
+        case .sunrise: return AppLocalizedKeys.prayerSlotSunrise.value
+        case .lastThirdOfNight: return AppLocalizedKeys.lastThirdOfNight.value
+        case .surahAlKahf: return AppLocalizedKeys.prayerSlotSurahAlKahf.value
         }
     }
 
@@ -296,6 +321,9 @@ extension PrayerSlot {
         case .isha: return "moon.stars"
         case .duha: return "sun.horizon"
         case .jumuah: return "building.columns"
+        case .sunrise: return "sunrise.fill"
+        case .lastThirdOfNight: return "moon.zzz"
+        case .surahAlKahf: return "book.closed"
         }
     }
 }
@@ -382,6 +410,7 @@ extension PrayerNotificationManager {
         if didCalculationChange {
             PrayerTimesStore.shared.reloadAfterCalculationPreferenceChange()
         } else {
+            PrayerTimesStore.shared.applyMinuteOffsets(updated.clampedPrayerMinuteOffsets)
             rescheduleFromPrayerTimesStore()
         }
     }
@@ -477,7 +506,9 @@ extension PrayerNotificationManager {
 
         let entries = builder.entries(for: day, preferences: preferences)
         let sound = resolvedNotificationSoundFileName
-        await scheduler.replaceOwnedRequests(with: entries.map { draft(for: $0, soundFileName: sound) })
+        await scheduler.replaceOwnedRequests(with: entries.map {
+            draft(for: $0, soundFileName: usesPrayerCallSound(entry: $0) ? sound : nil)
+        })
 
         scheduledRequestCount = entries.count
         scheduledWindowInDays = Set(entries.map(\.dayKey)).count
@@ -565,45 +596,59 @@ private extension PrayerNotificationManager {
 
     func draft(for entry: PrayerNotificationScheduleEntry,
                soundFileName: String?) -> LocalNotificationRequestDraft {
-        let name = entry.slot.localizedName
+        let content = PrayerNotificationContentCatalog.content(dayKey: entry.dayKey,
+                                                              slot: entry.slot,
+                                                              kind: entry.kind)
 
         return LocalNotificationRequestDraft(identifier: entry.identifier,
-                                             title: name,
-                                             subtitle: subtitle(for: entry),
-                                             body: body(for: entry),
+                                             title: title(for: entry),
+                                             body: body(for: entry, content: content),
                                              soundFileName: soundFileName,
                                              dateComponents: entry.dateComponents)
     }
 
-    func subtitle(for entry: PrayerNotificationScheduleEntry) -> String {
-        switch entry.kind {
-        case .adhan:
-            return AppLocalizedKeys.prayerNotificationAdhanSubtitle.value
-        case .reminder:
-            return String(format: AppLocalizedKeys.prayerNotificationReminderSubtitleFormat.value,
-                          localizedNumber(entry.leadMinutes))
-        }
+    func usesPrayerCallSound(entry: PrayerNotificationScheduleEntry) -> Bool {
+        !entry.slot.isSupplemental && entry.kind != .iqamah
     }
 
-    func body(for entry: PrayerNotificationScheduleEntry) -> String {
-        guard let content = PrayerNotificationContentCatalog.content(dayKey: entry.dayKey,
-                                                                    slot: entry.slot,
-                                                                    kind: entry.kind)
-        else { return fallbackBody(for: entry) }
+    func title(for entry: PrayerNotificationScheduleEntry) -> String {
+        entry.kind == .iqamah ? iqamahTitle(for: entry.slot) : entry.slot.localizedName
+    }
 
-        return PrayerNotificationContentCatalog.localizedBody(for: content, isArabic: isArabic)
+    func iqamahTitle(for slot: PrayerSlot) -> String {
+        String(format: AppLocalizedKeys.prayerNotificationIqamahTitleFormat.value, slot.localizedName)
+    }
+
+    func body(for entry: PrayerNotificationScheduleEntry,
+              content: PrayerNotificationContent?) -> String {
+        guard let content else { return fallbackBody(for: entry) }
+
+        return content.notificationBody
     }
 
     func fallbackBody(for entry: PrayerNotificationScheduleEntry) -> String {
+        if let supplemental = supplementalFallbackBody(for: entry.slot) { return supplemental }
+
         let name = entry.slot.localizedName
 
         switch entry.kind {
         case .adhan:
             return String(format: AppLocalizedKeys.prayerNotificationAdhanBodyFormat.value, name)
+        case .iqamah:
+            return String(format: AppLocalizedKeys.prayerNotificationIqamahBodyFormat.value, name)
         case .reminder:
             return String(format: AppLocalizedKeys.prayerNotificationReminderBodyFormat.value,
                           name,
                           localizedNumber(entry.leadMinutes))
+        }
+    }
+
+    func supplementalFallbackBody(for slot: PrayerSlot) -> String? {
+        switch slot {
+        case .sunrise: return AppLocalizedKeys.prayerNotificationSunriseBody.value
+        case .lastThirdOfNight: return AppLocalizedKeys.prayerNotificationLastThirdBody.value
+        case .surahAlKahf: return AppLocalizedKeys.prayerNotificationSurahAlKahfBody.value
+        default: return nil
         }
     }
 

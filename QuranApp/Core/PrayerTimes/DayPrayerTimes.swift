@@ -156,15 +156,35 @@ enum PrayerSlot: String, Codable, CaseIterable {
     case isha
     case duha
     case jumuah
+    case sunrise
+    case lastThirdOfNight
+    case surahAlKahf
 
     static let obligatorySlots: [PrayerSlot] = [.fajr, .dhuhr, .asr, .maghrib, .isha]
     static let voluntarySlots: [PrayerSlot] = [.duha, .jumuah]
+    static let supplementalSlots: [PrayerSlot] = [.sunrise, .lastThirdOfNight, .surahAlKahf]
+
+    static let adjustableSlots: [PrayerSlot] = [.fajr, .sunrise, .dhuhr, .asr, .maghrib, .isha]
 
     static let defaultEnabledSlots: Set<PrayerSlot> = Set(PrayerSlot.obligatorySlots)
 
-    var isFridayOnly: Bool { self == .jumuah }
+    var isSupplemental: Bool { PrayerSlot.supplementalSlots.contains(self) }
+
+    var isFridayOnly: Bool { self == .jumuah || self == .surahAlKahf }
 
     var replacesDhuhrOnFriday: Bool { self == .jumuah }
+
+    var hasIqamah: Bool { PrayerSlot.obligatorySlots.contains(self) || self == .jumuah }
+
+    var iqamahDelaySourceSlot: PrayerSlot { self == .jumuah ? .dhuhr : self }
+
+    var requiresDedicatedContent: Bool { isSupplemental || isFridayOnly }
+
+    var scheduledKinds: [PrayerNotificationKind] {
+        guard !isSupplemental else { return [.reminder] }
+
+        return hasIqamah ? [.adhan, .iqamah, .reminder] : [.adhan, .reminder]
+    }
 }
 
 extension DayPrayerTimes {
@@ -178,7 +198,41 @@ extension DayPrayerTimes {
         case .isha: return isha
         case .duha: return duha
         case .jumuah: return dhuhr
+        case .sunrise: return sunrise
+        case .lastThirdOfNight: return lastThird
+        case .surahAlKahf: return sunrise
         }
+    }
+}
+
+// MARK: - Minute Offsets
+
+extension DayPrayerTimes {
+
+    static let minutesPerDay = 24 * 60
+
+    func applyingMinuteOffsets(_ offsets: [PrayerSlot: Int]) -> DayPrayerTimes {
+        guard !offsets.isEmpty else { return self }
+
+        func shifted(_ minutes: Int, _ slot: PrayerSlot) -> Int {
+            let offset = PrayerNotificationPreferences.clampedMinuteOffset(offsets[slot] ?? 0)
+            guard offset != 0 else { return minutes }
+            return min(max(minutes + offset, 0), DayPrayerTimes.minutesPerDay - 1)
+        }
+
+        return DayPrayerTimes(dayKey: dayKey,
+                              fajr: shifted(fajr, .fajr),
+                              sunrise: shifted(sunrise, .sunrise),
+                              dhuhr: shifted(dhuhr, .dhuhr),
+                              asr: shifted(asr, .asr),
+                              sunset: sunset,
+                              maghrib: shifted(maghrib, .maghrib),
+                              isha: shifted(isha, .isha),
+                              midnight: midnight,
+                              lastThird: lastThird,
+                              timeZoneIdentifier: timeZoneIdentifier,
+                              calculationMethodId: calculationMethodId,
+                              calculationMethodName: calculationMethodName)
     }
 }
 
@@ -231,6 +285,11 @@ struct PrayerNotificationPreferences: Codable, Equatable {
     static let reminderLeadMinutesRange = 5...60
     static let reminderLeadMinutesStep = 5
     static let defaultReminderLeadMinutes = 15
+    static let prayerMinuteOffsetRange = -60...60
+    static let prayerMinuteOffsetStep = 1
+    static let iqamahDelayMinutesRange = 0...60
+    static let iqamahDelayMinutesStep = 1
+    static let defaultIqamahDelayMinutes = 15
 
     var isPrayerNotificationEnabled: Bool
     var enabledSlots: Set<PrayerSlot>
@@ -241,6 +300,9 @@ struct PrayerNotificationPreferences: Codable, Equatable {
     var adhanRecordingIdentifier: String
     var calculationMethod: PrayerCalculationMethod
     var jurisprudenceSchool: PrayerJurisprudenceSchool
+    var prayerMinuteOffsets: [PrayerSlot: Int]
+    var isIqamahAlertEnabled: Bool
+    var iqamahDelayMinutes: [PrayerSlot: Int]
 
     static let standard = PrayerNotificationPreferences(
         isPrayerNotificationEnabled: false,
@@ -251,7 +313,10 @@ struct PrayerNotificationPreferences: Codable, Equatable {
         isInAppAdhanAudioEnabled: false,
         adhanRecordingIdentifier: AdhanRecording.defaultIdentifier,
         calculationMethod: .default,
-        jurisprudenceSchool: .default
+        jurisprudenceSchool: .default,
+        prayerMinuteOffsets: [:],
+        isIqamahAlertEnabled: false,
+        iqamahDelayMinutes: [:]
     )
 
     init(isPrayerNotificationEnabled: Bool,
@@ -262,7 +327,10 @@ struct PrayerNotificationPreferences: Codable, Equatable {
          isInAppAdhanAudioEnabled: Bool,
          adhanRecordingIdentifier: String,
          calculationMethod: PrayerCalculationMethod,
-         jurisprudenceSchool: PrayerJurisprudenceSchool) {
+         jurisprudenceSchool: PrayerJurisprudenceSchool,
+         prayerMinuteOffsets: [PrayerSlot: Int],
+         isIqamahAlertEnabled: Bool,
+         iqamahDelayMinutes: [PrayerSlot: Int]) {
         self.isPrayerNotificationEnabled = isPrayerNotificationEnabled
         self.enabledSlots = enabledSlots
         self.alertStyle = alertStyle
@@ -272,6 +340,9 @@ struct PrayerNotificationPreferences: Codable, Equatable {
         self.adhanRecordingIdentifier = adhanRecordingIdentifier
         self.calculationMethod = calculationMethod
         self.jurisprudenceSchool = jurisprudenceSchool
+        self.prayerMinuteOffsets = prayerMinuteOffsets
+        self.isIqamahAlertEnabled = isIqamahAlertEnabled
+        self.iqamahDelayMinutes = iqamahDelayMinutes
     }
 
     init(from decoder: Decoder) throws {
@@ -296,11 +367,66 @@ struct PrayerNotificationPreferences: Codable, Equatable {
         jurisprudenceSchool = try container.decodeIfPresent(PrayerJurisprudenceSchool.self,
                                                            forKey: .jurisprudenceSchool)
             ?? standard.jurisprudenceSchool
+        prayerMinuteOffsets = try container.decodeIfPresent([PrayerSlot: Int].self,
+                                                            forKey: .prayerMinuteOffsets)
+            ?? standard.prayerMinuteOffsets
+        isIqamahAlertEnabled = try container.decodeIfPresent(Bool.self, forKey: .isIqamahAlertEnabled)
+            ?? standard.isIqamahAlertEnabled
+        iqamahDelayMinutes = try container.decodeIfPresent([PrayerSlot: Int].self,
+                                                           forKey: .iqamahDelayMinutes)
+            ?? standard.iqamahDelayMinutes
     }
 
     var clampedReminderLeadMinutes: Int {
         min(max(prePrayerReminderLeadMinutes, PrayerNotificationPreferences.reminderLeadMinutesRange.lowerBound),
             PrayerNotificationPreferences.reminderLeadMinutesRange.upperBound)
+    }
+
+    var clampedPrayerMinuteOffsets: [PrayerSlot: Int] {
+        var clamped: [PrayerSlot: Int] = [:]
+
+        for slot in PrayerSlot.adjustableSlots {
+            let offset = PrayerNotificationPreferences.clampedMinuteOffset(prayerMinuteOffsets[slot] ?? 0)
+            guard offset != 0 else { continue }
+            clamped[slot] = offset
+        }
+
+        return clamped
+    }
+
+    func minuteOffset(for slot: PrayerSlot) -> Int {
+        guard PrayerSlot.adjustableSlots.contains(slot) else { return 0 }
+        return PrayerNotificationPreferences.clampedMinuteOffset(prayerMinuteOffsets[slot] ?? 0)
+    }
+
+    static func clampedMinuteOffset(_ value: Int) -> Int {
+        min(max(value, PrayerNotificationPreferences.prayerMinuteOffsetRange.lowerBound),
+            PrayerNotificationPreferences.prayerMinuteOffsetRange.upperBound)
+    }
+
+    var clampedIqamahDelayMinutes: [PrayerSlot: Int] {
+        var clamped: [PrayerSlot: Int] = [:]
+
+        for slot in PrayerSlot.obligatorySlots {
+            clamped[slot] = iqamahDelay(for: slot)
+        }
+
+        return clamped
+    }
+
+    func iqamahDelay(for slot: PrayerSlot) -> Int {
+        guard slot.hasIqamah else { return 0 }
+
+        let source = slot.iqamahDelaySourceSlot
+        let stored = iqamahDelayMinutes[source]
+            ?? PrayerNotificationPreferences.defaultIqamahDelayMinutes
+
+        return PrayerNotificationPreferences.clampedIqamahDelay(stored)
+    }
+
+    static func clampedIqamahDelay(_ value: Int) -> Int {
+        min(max(value, PrayerNotificationPreferences.iqamahDelayMinutesRange.lowerBound),
+            PrayerNotificationPreferences.iqamahDelayMinutesRange.upperBound)
     }
 }
 
@@ -308,6 +434,7 @@ struct PrayerNotificationPreferences: Codable, Equatable {
 
 enum PrayerNotificationKind: String, Codable, CaseIterable {
     case adhan
+    case iqamah
     case reminder
 }
 
@@ -418,6 +545,18 @@ private extension PrayerNotificationScheduleBuilder {
                                                  to: dayStart)
             else { continue }
 
+            if slot.isSupplemental {
+                guard prayerDate > now else { continue }
+
+                entries.append(entry(slot: slot,
+                                     kind: .reminder,
+                                     dayKey: dayKey,
+                                     fireDate: prayerDate,
+                                     calendar: calendar,
+                                     leadMinutes: 0))
+                continue
+            }
+
             if prayerDate > now {
                 entries.append(entry(slot: slot,
                                      kind: .adhan,
@@ -425,6 +564,20 @@ private extension PrayerNotificationScheduleBuilder {
                                      fireDate: prayerDate,
                                      calendar: calendar,
                                      leadMinutes: 0))
+            }
+
+            let iqamahDelay = preferences.iqamahDelay(for: slot)
+
+            if preferences.isIqamahAlertEnabled,
+               iqamahDelay > 0,
+               let iqamahDate = calendar.date(byAdding: .minute, value: iqamahDelay, to: prayerDate),
+               iqamahDate > now {
+                entries.append(entry(slot: slot,
+                                     kind: .iqamah,
+                                     dayKey: dayKey,
+                                     fireDate: iqamahDate,
+                                     calendar: calendar,
+                                     leadMinutes: iqamahDelay))
             }
 
             guard preferences.isPrePrayerReminderEnabled,

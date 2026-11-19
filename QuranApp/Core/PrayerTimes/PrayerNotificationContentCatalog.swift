@@ -7,164 +7,472 @@
 
 import Foundation
 
-struct PrayerNotificationContent: Equatable {
-
-    let surah: Int
-    let ayah: Int
-    let arabicText: String
-    let englishText: String
-    let arabicSurahName: String
-    let englishSurahName: String
-
-    var id: String { "\(surah)_\(ayah)" }
-
-    var arabicReference: String { "\(arabicSurahName): \(ayah.arabicNumerals)" }
-
-    var englishReference: String { "\(englishSurahName) \(surah):\(ayah)" }
-}
-
-// MARK: - Catalog
-
 enum PrayerNotificationContentCatalog {
 
-    static let verses: [PrayerNotificationContent] = [
-        PrayerNotificationContent(surah: 2,
-                                  ayah: 238,
-                                  arabicText: "حَٰفِظُوا۟ عَلَى ٱلصَّلَوَٰتِ وَٱلصَّلَوٰةِ ٱلْوُسْطَىٰ وَقُومُوا۟ لِلَّهِ قَٰنِتِينَ",
-                                  englishText: "Guard the prayers, and the middle prayer, and stand before Allah devoutly obedient.",
-                                  arabicSurahName: "البقرة",
-                                  englishSurahName: "Al-Baqarah"),
-        PrayerNotificationContent(surah: 20,
-                                  ayah: 14,
-                                  arabicText: "إِنَّنِىٓ أَنَا ٱللَّهُ لَآ إِلَٰهَ إِلَّآ أَنَا۠ فَٱعْبُدْنِى وَأَقِمِ ٱلصَّلَوٰةَ لِذِكْرِىٓ",
-                                  englishText: "Indeed, I am Allah. There is no god but Me, so worship Me and establish the prayer for My remembrance.",
-                                  arabicSurahName: "طه",
-                                  englishSurahName: "Taha"),
-        PrayerNotificationContent(surah: 70,
-                                  ayah: 23,
-                                  arabicText: "ٱلَّذِينَ هُمْ عَلَىٰ صَلَاتِهِمْ دَآئِمُونَ",
-                                  englishText: "Those who are constant in their prayer.",
-                                  arabicSurahName: "المعارج",
-                                  englishSurahName: "Al-Ma'arij"),
-        PrayerNotificationContent(surah: 70,
-                                  ayah: 34,
-                                  arabicText: "وَٱلَّذِينَ هُمْ عَلَىٰ صَلَاتِهِمْ يُحَافِظُونَ",
-                                  englishText: "And those who carefully guard their prayer.",
-                                  arabicSurahName: "المعارج",
-                                  englishSurahName: "Al-Ma'arij"),
-        PrayerNotificationContent(surah: 23,
-                                  ayah: 2,
-                                  arabicText: "ٱلَّذِينَ هُمْ فِى صَلَاتِهِمْ خَٰشِعُونَ",
-                                  englishText: "Those who are humbly attentive in their prayer.",
-                                  arabicSurahName: "المؤمنون",
-                                  englishSurahName: "Al-Mu'minun"),
-        PrayerNotificationContent(surah: 87,
-                                  ayah: 15,
-                                  arabicText: "وَذَكَرَ ٱسْمَ رَبِّهِۦ فَصَلَّىٰ",
-                                  englishText: "And remembers the name of his Lord, and prays.",
-                                  arabicSurahName: "الأعلى",
-                                  englishSurahName: "Al-A'la"),
-        PrayerNotificationContent(surah: 24,
-                                  ayah: 56,
-                                  arabicText: "وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَطِيعُوا۟ ٱلرَّسُولَ لَعَلَّكُمْ تُرْحَمُونَ",
-                                  englishText: "And establish the prayer, and give the zakah, and obey the Messenger, that you may be shown mercy.",
-                                  arabicSurahName: "النور",
-                                  englishSurahName: "An-Nur"),
-        PrayerNotificationContent(surah: 2,
-                                  ayah: 153,
-                                  arabicText: "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّٰبِرِينَ",
-                                  englishText: "O you who believe, seek help through patience and prayer. Indeed, Allah is with the patient.",
-                                  arabicSurahName: "البقرة",
-                                  englishSurahName: "Al-Baqarah"),
-        PrayerNotificationContent(surah: 2,
-                                  ayah: 45,
-                                  arabicText: "وَٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ وَإِنَّهَا لَكَبِيرَةٌ إِلَّا عَلَى ٱلْخَٰشِعِينَ",
-                                  englishText: "And seek help through patience and prayer. It is indeed hard, except for the humble.",
-                                  arabicSurahName: "البقرة",
-                                  englishSurahName: "Al-Baqarah"),
-        PrayerNotificationContent(surah: 17,
-                                  ayah: 78,
-                                  arabicText: "أَقِمِ ٱلصَّلَوٰةَ لِدُلُوكِ ٱلشَّمْسِ إِلَىٰ غَسَقِ ٱلَّيْلِ وَقُرْءَانَ ٱلْفَجْرِ ۖ إِنَّ قُرْءَانَ ٱلْفَجْرِ كَانَ مَشْهُودًۭا",
-                                  englishText: "Establish the prayer from the decline of the sun until the darkness of the night, and the recitation at dawn. Indeed, the recitation at dawn is ever witnessed.",
-                                  arabicSurahName: "الإسراء",
-                                  englishSurahName: "Al-Isra"),
-        PrayerNotificationContent(surah: 17,
-                                  ayah: 79,
-                                  arabicText: "وَمِنَ ٱلَّيْلِ فَتَهَجَّدْ بِهِۦ نَافِلَةًۭ لَّكَ عَسَىٰٓ أَن يَبْعَثَكَ رَبُّكَ مَقَامًۭا مَّحْمُودًۭا",
-                                  englishText: "And rise at night for prayer, as something additional for you; perhaps your Lord will raise you to a praiseworthy station.",
-                                  arabicSurahName: "الإسراء",
-                                  englishSurahName: "Al-Isra"),
-        PrayerNotificationContent(surah: 62,
-                                  ayah: 9,
-                                  arabicText: "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا نُودِىَ لِلصَّلَوٰةِ مِن يَوْمِ ٱلْجُمُعَةِ فَٱسْعَوْا۟ إِلَىٰ ذِكْرِ ٱللَّهِ وَذَرُوا۟ ٱلْبَيْعَ ۚ ذَٰلِكُمْ خَيْرٌۭ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ",
-                                  englishText: "O you who believe, when the call to prayer is made on the day of Jumu'ah, hasten to the remembrance of Allah and leave off trade. That is better for you, if you only knew.",
-                                  arabicSurahName: "الجمعة",
-                                  englishSurahName: "Al-Jumu'ah"),
-        PrayerNotificationContent(surah: 108,
-                                  ayah: 2,
-                                  arabicText: "فَصَلِّ لِرَبِّكَ وَٱنْحَرْ",
-                                  englishText: "So pray to your Lord, and sacrifice.",
-                                  arabicSurahName: "الكوثر",
-                                  englishSurahName: "Al-Kawthar"),
-        PrayerNotificationContent(surah: 14,
-                                  ayah: 40,
-                                  arabicText: "رَبِّ ٱجْعَلْنِى مُقِيمَ ٱلصَّلَوٰةِ وَمِن ذُرِّيَّتِى ۚ رَبَّنَا وَتَقَبَّلْ دُعَآءِ",
-                                  englishText: "My Lord, make me one who keeps up the prayer, and my descendants as well. Our Lord, and accept my supplication.",
-                                  arabicSurahName: "إبراهيم",
-                                  englishSurahName: "Ibrahim"),
-        PrayerNotificationContent(surah: 6,
-                                  ayah: 162,
-                                  arabicText: "قُلْ إِنَّ صَلَاتِى وَنُسُكِى وَمَحْيَاىَ وَمَمَاتِى لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
-                                  englishText: "Say: Indeed, my prayer, my rites, my living and my dying are for Allah, Lord of all the worlds.",
-                                  arabicSurahName: "الأنعام",
-                                  englishSurahName: "Al-An'am"),
-        PrayerNotificationContent(surah: 13,
-                                  ayah: 28,
-                                  arabicText: "ٱلَّذِينَ ءَامَنُوا۟ وَتَطْمَئِنُّ قُلُوبُهُم بِذِكْرِ ٱللَّهِ ۗ أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ",
-                                  englishText: "Those who believe, and whose hearts find rest in the remembrance of Allah. Surely in the remembrance of Allah do hearts find rest.",
-                                  arabicSurahName: "الرعد",
-                                  englishSurahName: "Ar-Ra'd")
-    ]
+    static let items: [PrayerNotificationContent] = hadiths + supplications + remembrances + verses + reminders
 
     static func content(dayKey: String,
                         slot: PrayerSlot,
                         kind: PrayerNotificationKind) -> PrayerNotificationContent? {
-        guard !verses.isEmpty else { return nil }
-
-        let offset = dayOffset(forDayKey: dayKey) + rotationOffset(slot: slot, kind: kind)
-        return verses[offset % verses.count]
+        PrayerNotificationContentSelector.shared.content(dayKey: dayKey, slot: slot, kind: kind)
     }
 
-    static func localizedBody(for content: PrayerNotificationContent, isArabic: Bool) -> String {
-        guard isArabic else { return "\u{201C}\(content.englishText)\u{201D}\n\(content.englishReference)" }
-
-        return "\u{FD3E}\(content.arabicText)\u{FD3F}\n\(content.arabicReference)"
+    static func body(for content: PrayerNotificationContent) -> String {
+        content.notificationBody
     }
 }
 
-// MARK: - Deterministic Rotation
+// MARK: - Hadith
 
-private extension PrayerNotificationContentCatalog {
+extension PrayerNotificationContentCatalog {
 
-    static func dayOffset(forDayKey dayKey: String) -> Int {
-        Int(stableHash(dayKey) % UInt64(verses.count))
-    }
+    static let hadiths: [PrayerNotificationContent] = [
+        PrayerNotificationContent(id: "hadith_two_cool_prayers",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "صلاة البردين",
+                                  englishTitle: "The Two Cool Prayers",
+                                  arabicText: "مَنْ صَلَّى الْبَرْدَيْنِ دَخَلَ الْجَنَّةَ",
+                                  arabicSource: "رواه البخاري (٥٧٤)",
+                                  reference: "Sahih al-Bukhari 574",
+                                  tags: [.prayerVirtue],
+                                  prayerSlots: [.fajr, .asr],
+                                  suitableKinds: [.adhan, .iqamah, .reminder]),
 
-    static func rotationOffset(slot: PrayerSlot, kind: PrayerNotificationKind) -> Int {
-        let slotIndex = PrayerSlot.allCases.firstIndex(of: slot) ?? 0
-        let kindStride = kind == .adhan ? 0 : PrayerSlot.allCases.count
+        PrayerNotificationContent(id: "hadith_angels_gather",
+                                  type: .hadith,
+                                  authenticity: .agreedUpon,
+                                  arabicTitle: "تجتمع الملائكة",
+                                  englishTitle: "When the Angels Gather",
+                                  arabicText: "يَتَعَاقَبُ فِيكُمْ مَلَائِكَةٌ بِاللَّيْلِ وَمَلَائِكَةٌ بِالنَّهَارِ، وَيَجْتَمِعُونَ فِي صَلَاةِ الْفَجْرِ وَصَلَاةِ الْعَصْرِ",
+                                  arabicSource: "متفق عليه",
+                                  reference: "Agreed upon — al-Bukhari & Muslim",
+                                  tags: [.prayerVirtue],
+                                  prayerSlots: [.fajr, .asr],
+                                  suitableKinds: [.adhan]),
 
-        return slotIndex + kindStride
-    }
+        PrayerNotificationContent(id: "hadith_isha_fajr_congregation",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "كأنما قام الليل",
+                                  englishTitle: "As If He Prayed All Night",
+                                  arabicText: "مَنْ صَلَّى الْعِشَاءَ فِي جَمَاعَةٍ فَكَأَنَّمَا قَامَ نِصْفَ اللَّيْلِ، وَمَنْ صَلَّى الصُّبْحَ فِي جَمَاعَةٍ فَكَأَنَّمَا صَلَّى اللَّيْلَ كُلَّهُ",
+                                  arabicSource: "رواه مسلم (٦٥٦)",
+                                  reference: "Sahih Muslim 656",
+                                  tags: [.congregation, .prayerVirtue],
+                                  prayerSlots: [.fajr, .isha],
+                                  suitableKinds: [.adhan, .iqamah]),
 
-    static func stableHash(_ value: String) -> UInt64 {
-        var hash: UInt64 = 0xcbf2_9ce4_8422_2325
+        PrayerNotificationContent(id: "hadith_fajr_sunnah_rakahs",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "ركعتا الفجر",
+                                  englishTitle: "The Two Rak'ahs of Fajr",
+                                  arabicText: "رَكْعَتَا الْفَجْرِ خَيْرٌ مِنَ الدُّنْيَا وَمَا فِيهَا",
+                                  arabicSource: "رواه مسلم (٧٢٥)",
+                                  reference: "Sahih Muslim 725",
+                                  tags: [.voluntaryPrayer, .preparation],
+                                  prayerSlots: [.fajr],
+                                  suitableKinds: [.reminder]),
 
-        for byte in value.utf8 {
-            hash ^= UInt64(byte)
-            hash = hash &* 0x0000_0100_0000_01b3
-        }
+        PrayerNotificationContent(id: "hadith_two_rakahs_before_maghrib",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "ركعتان قبل المغرب",
+                                  englishTitle: "Two Rak'ahs Before Maghrib",
+                                  arabicText: "صَلُّوا قَبْلَ الْمَغْرِبِ رَكْعَتَيْنِ",
+                                  arabicSource: "رواه البخاري (١١٨٣)",
+                                  reference: "Sahih al-Bukhari 1183",
+                                  tags: [.voluntaryPrayer, .preparation],
+                                  prayerSlots: [.maghrib],
+                                  suitableKinds: [.reminder]),
 
-        return hash
-    }
+        PrayerNotificationContent(id: "hadith_five_prayers_expiation",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "كفارة لما بينهن",
+                                  englishTitle: "An Expiation for What Lies Between",
+                                  arabicText: "الصَّلَوَاتُ الْخَمْسُ، وَالْجُمُعَةُ إِلَى الْجُمُعَةِ، كَفَّارَةٌ لِمَا بَيْنَهُنَّ",
+                                  arabicSource: "رواه مسلم (٢٣٣)",
+                                  reference: "Sahih Muslim 233",
+                                  tags: [.prayerVirtue, .forgiveness],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "hadith_nearest_in_prostration",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "أقرب ما تكون",
+                                  englishTitle: "Nearest to Your Lord",
+                                  arabicText: "أَقْرَبُ مَا يَكُونُ الْعَبْدُ مِنْ رَبِّهِ وَهُوَ سَاجِدٌ، فَأَكْثِرُوا الدُّعَاءَ",
+                                  arabicSource: "رواه مسلم (٤٨٢)",
+                                  reference: "Sahih Muslim 482",
+                                  tags: [.khushu],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah]),
+
+        PrayerNotificationContent(id: "hadith_congregation_degrees",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "سبع وعشرون درجة",
+                                  englishTitle: "Twenty-Seven Degrees",
+                                  arabicText: "صَلَاةُ الْجَمَاعَةِ أَفْضَلُ مِنْ صَلَاةِ الْفَذِّ بِسَبْعٍ وَعِشْرِينَ دَرَجَةً",
+                                  arabicSource: "رواه مسلم (٦٥٠)",
+                                  reference: "Sahih Muslim 650",
+                                  tags: [.congregation, .preparation],
+                                  prayerSlots: [],
+                                  suitableKinds: [.reminder, .iqamah]),
+
+        PrayerNotificationContent(id: "hadith_walk_calmly",
+                                  type: .hadith,
+                                  authenticity: .agreedUpon,
+                                  arabicTitle: "وعليكم السكينة",
+                                  englishTitle: "Come With Tranquillity",
+                                  arabicText: "إِذَا أُقِيمَتِ الصَّلَاةُ فَلَا تَأْتُوهَا تَسْعَوْنَ، وَأْتُوهَا تَمْشُونَ وَعَلَيْكُمُ السَّكِينَةُ",
+                                  arabicSource: "متفق عليه",
+                                  reference: "Agreed upon — al-Bukhari & Muslim",
+                                  tags: [.khushu, .congregation],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah]),
+
+        PrayerNotificationContent(id: "hadith_best_day_friday",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "خير يوم",
+                                  englishTitle: "The Best of Days",
+                                  arabicText: "خَيْرُ يَوْمٍ طَلَعَتْ عَلَيْهِ الشَّمْسُ يَوْمُ الْجُمُعَةِ",
+                                  arabicSource: "رواه مسلم (٨٥٤)",
+                                  reference: "Sahih Muslim 854",
+                                  tags: [.fridayVirtue],
+                                  prayerSlots: [.jumuah],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "hadith_ten_verses_al_kahf",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "عشر آيات من الكهف",
+                                  englishTitle: "Ten Verses of Al-Kahf",
+                                  arabicText: "مَنْ حَفِظَ عَشْرَ آيَاتٍ مِنْ أَوَّلِ سُورَةِ الْكَهْفِ عُصِمَ مِنَ الدَّجَّالِ",
+                                  arabicSource: "رواه مسلم (٨٠٩)",
+                                  reference: "Sahih Muslim 809",
+                                  tags: [.quranRecitation, .fridayVirtue],
+                                  prayerSlots: [.surahAlKahf],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "hadith_descent_last_third",
+                                  type: .hadith,
+                                  authenticity: .agreedUpon,
+                                  arabicTitle: "من يدعوني",
+                                  englishTitle: "Who Will Call Upon Me",
+                                  arabicText: "يَنْزِلُ رَبُّنَا تَبَارَكَ وَتَعَالَى كُلَّ لَيْلَةٍ إِلَى السَّمَاءِ الدُّنْيَا حِينَ يَبْقَى ثُلُثُ اللَّيْلِ الْآخِرُ، فَيَقُولُ: مَنْ يَدْعُونِي فَأَسْتَجِيبَ لَهُ، مَنْ يَسْأَلُنِي فَأُعْطِيَهُ، مَنْ يَسْتَغْفِرُنِي فَأَغْفِرَ لَهُ",
+                                  arabicSource: "متفق عليه",
+                                  reference: "Agreed upon — al-Bukhari & Muslim",
+                                  tags: [.nightPrayer, .forgiveness],
+                                  prayerSlots: [.lastThirdOfNight],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "hadith_duha_rakahs",
+                                  type: .hadith,
+                                  authenticity: .sahih,
+                                  arabicTitle: "ركعتا الضحى",
+                                  englishTitle: "The Two Rak'ahs of Duha",
+                                  arabicText: "أَوْصَانِي خَلِيلِي بِثَلَاثٍ: صَوْمِ ثَلَاثَةِ أَيَّامٍ مِنْ كُلِّ شَهْرٍ، وَرَكْعَتَيِ الضُّحَى، وَأَنْ أُوتِرَ قَبْلَ أَنْ أَرْقُدَ",
+                                  arabicSource: "رواه البخاري (١١٧٨)",
+                                  reference: "Sahih al-Bukhari 1178",
+                                  tags: [.voluntaryPrayer, .morningRemembrance],
+                                  prayerSlots: [.duha, .sunrise],
+                                  suitableKinds: [.adhan, .reminder])
+    ]
+}
+
+// MARK: - Dua
+
+extension PrayerNotificationContentCatalog {
+
+    static let supplications: [PrayerNotificationContent] = [
+        PrayerNotificationContent(id: "dua_after_adhan",
+                                  type: .dua,
+                                  authenticity: .sahih,
+                                  arabicTitle: "دعاء بعد الأذان",
+                                  englishTitle: "Supplication After the Adhan",
+                                  arabicText: "اللَّهُمَّ رَبَّ هَذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
+                                  arabicSource: "رواه البخاري (٦١٤)",
+                                  reference: "Sahih al-Bukhari 614",
+                                  tags: [.adhanResponse],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan]),
+
+        PrayerNotificationContent(id: "dua_entering_mosque",
+                                  type: .dua,
+                                  authenticity: .sahih,
+                                  arabicTitle: "دعاء دخول المسجد",
+                                  englishTitle: "On Entering the Mosque",
+                                  arabicText: "اللَّهُمَّ افْتَحْ لِي أَبْوَابَ رَحْمَتِكَ",
+                                  arabicSource: "رواه مسلم (٧١٣)",
+                                  reference: "Sahih Muslim 713",
+                                  tags: [.congregation, .preparation],
+                                  prayerSlots: [],
+                                  suitableKinds: [.reminder, .iqamah]),
+
+        PrayerNotificationContent(id: "dua_ibrahim_upholding_prayer",
+                                  type: .dua,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "دعاء إبراهيم",
+                                  englishTitle: "The Supplication of Ibrahim",
+                                  arabicText: "رَبِّ ٱجْعَلْنِى مُقِيمَ ٱلصَّلَوٰةِ وَمِن ذُرِّيَّتِى ۚ رَبَّنَا وَتَقَبَّلْ دُعَآءِ",
+                                  arabicSource: "إبراهيم: ٤٠",
+                                  reference: "Ibrahim 14:40",
+                                  tags: [.prayerVirtue],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .reminder])
+    ]
+}
+
+// MARK: - Dhikr
+
+extension PrayerNotificationContentCatalog {
+
+    static let remembrances: [PrayerNotificationContent] = [
+        PrayerNotificationContent(id: "dhikr_after_prayer_tasbih",
+                                  type: .dhikr,
+                                  authenticity: .sahih,
+                                  arabicTitle: "تسبيح بعد الصلاة",
+                                  englishTitle: "Remembrance After the Prayer",
+                                  arabicText: "مَنْ سَبَّحَ اللَّهَ فِي دُبُرِ كُلِّ صَلَاةٍ ثَلَاثًا وَثَلَاثِينَ، وَحَمِدَ اللَّهَ ثَلَاثًا وَثَلَاثِينَ، وَكَبَّرَ اللَّهَ ثَلَاثًا وَثَلَاثِينَ، وَقَالَ: لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، غُفِرَتْ خَطَايَاهُ",
+                                  arabicSource: "رواه مسلم (٥٩٧)",
+                                  reference: "Sahih Muslim 597",
+                                  tags: [.forgiveness],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan]),
+
+        PrayerNotificationContent(id: "dhikr_tahlil_hundred",
+                                  type: .dhikr,
+                                  authenticity: .agreedUpon,
+                                  arabicTitle: "لا إله إلا الله",
+                                  englishTitle: "There Is No God but Allah",
+                                  arabicText: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ",
+                                  arabicSource: "متفق عليه",
+                                  reference: "Agreed upon — al-Bukhari & Muslim",
+                                  tags: [.morningRemembrance],
+                                  prayerSlots: [],
+                                  suitableKinds: [.reminder]),
+
+        PrayerNotificationContent(id: "dhikr_two_light_words",
+                                  type: .dhikr,
+                                  authenticity: .agreedUpon,
+                                  arabicTitle: "كلمتان خفيفتان",
+                                  englishTitle: "Two Light Words",
+                                  arabicText: "سُبْحَانَ اللَّهِ وَبِحَمْدِهِ، سُبْحَانَ اللَّهِ الْعَظِيمِ",
+                                  arabicSource: "متفق عليه",
+                                  reference: "Agreed upon — al-Bukhari & Muslim",
+                                  tags: [.morningRemembrance, .eveningRemembrance],
+                                  prayerSlots: [],
+                                  suitableKinds: [.reminder]),
+
+        PrayerNotificationContent(id: "dhikr_morning_remembrance",
+                                  type: .dhikr,
+                                  authenticity: .sahih,
+                                  arabicTitle: "أذكار الصباح",
+                                  englishTitle: "Morning Remembrance",
+                                  arabicText: "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+                                  arabicSource: "رواه مسلم (٢٧٢٣)",
+                                  reference: "Sahih Muslim 2723",
+                                  tags: [.morningRemembrance],
+                                  prayerSlots: [.sunrise],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "dhikr_evening_remembrance",
+                                  type: .dhikr,
+                                  authenticity: .sahih,
+                                  arabicTitle: "أذكار المساء",
+                                  englishTitle: "Evening Remembrance",
+                                  arabicText: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ",
+                                  arabicSource: "رواه مسلم (٢٧٢٣)",
+                                  reference: "Sahih Muslim 2723",
+                                  tags: [.eveningRemembrance],
+                                  prayerSlots: [.maghrib],
+                                  suitableKinds: [.adhan, .reminder])
+    ]
+}
+
+// MARK: - Quran
+
+extension PrayerNotificationContentCatalog {
+
+    static let verses: [PrayerNotificationContent] = [
+        PrayerNotificationContent(id: "quran_taha_14",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "وأقم الصلاة لذكري",
+                                  englishTitle: "Establish Prayer in My Remembrance",
+                                  arabicText: "إِنَّنِىٓ أَنَا ٱللَّهُ لَآ إِلَٰهَ إِلَّآ أَنَا۠ فَٱعْبُدْنِى وَأَقِمِ ٱلصَّلَوٰةَ لِذِكْرِىٓ",
+                                  arabicSource: "طه: ١٤",
+                                  reference: "Taha 20:14",
+                                  tags: [.prayerVirtue, .khushu],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_baqarah_153",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "استعينوا بالصبر والصلاة",
+                                  englishTitle: "Seek Help Through Patience and Prayer",
+                                  arabicText: "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ ٱسْتَعِينُوا۟ بِٱلصَّبْرِ وَٱلصَّلَوٰةِ ۚ إِنَّ ٱللَّهَ مَعَ ٱلصَّٰبِرِينَ",
+                                  arabicSource: "البقرة: ١٥٣",
+                                  reference: "Al-Baqarah 2:153",
+                                  tags: [.prayerVirtue],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah, .reminder]),
+
+        PrayerNotificationContent(id: "quran_ar_rad_28",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "تطمئن القلوب",
+                                  englishTitle: "Hearts Find Rest",
+                                  arabicText: "أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ",
+                                  arabicSource: "الرعد: ٢٨",
+                                  reference: "Ar-Ra'd 13:28",
+                                  tags: [.khushu],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_isra_78",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "قرآن الفجر",
+                                  englishTitle: "The Recitation at Dawn",
+                                  arabicText: "أَقِمِ ٱلصَّلَوٰةَ لِدُلُوكِ ٱلشَّمْسِ إِلَىٰ غَسَقِ ٱلَّيْلِ وَقُرْءَانَ ٱلْفَجْرِ ۖ إِنَّ قُرْءَانَ ٱلْفَجْرِ كَانَ مَشْهُودًۭا",
+                                  arabicSource: "الإسراء: ٧٨",
+                                  reference: "Al-Isra 17:78",
+                                  tags: [.quranRecitation],
+                                  prayerSlots: [.fajr],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_isra_79",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "ومن الليل فتهجد",
+                                  englishTitle: "Rise for Prayer in the Night",
+                                  arabicText: "وَمِنَ ٱلَّيْلِ فَتَهَجَّدْ بِهِۦ نَافِلَةًۭ لَّكَ عَسَىٰٓ أَن يَبْعَثَكَ رَبُّكَ مَقَامًۭا مَّحْمُودًۭا",
+                                  arabicSource: "الإسراء: ٧٩",
+                                  reference: "Al-Isra 17:79",
+                                  tags: [.nightPrayer],
+                                  prayerSlots: [.lastThirdOfNight],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_muminun_2",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "في صلاتهم خاشعون",
+                                  englishTitle: "Humble in Their Prayer",
+                                  arabicText: "ٱلَّذِينَ هُمْ فِى صَلَاتِهِمْ خَٰشِعُونَ",
+                                  arabicSource: "المؤمنون: ٢",
+                                  reference: "Al-Mu'minun 23:2",
+                                  tags: [.khushu],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah]),
+
+        PrayerNotificationContent(id: "quran_adh_dhariyat_18",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "وبالأسحار",
+                                  englishTitle: "In the Hours Before Dawn",
+                                  arabicText: "وَبِٱلْأَسْحَارِ هُمْ يَسْتَغْفِرُونَ",
+                                  arabicSource: "الذاريات: ١٨",
+                                  reference: "Adh-Dhariyat 51:18",
+                                  tags: [.nightPrayer, .forgiveness],
+                                  prayerSlots: [.lastThirdOfNight],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_jumuah_9",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "فاسعوا إلى ذكر الله",
+                                  englishTitle: "Hasten to the Remembrance of Allah",
+                                  arabicText: "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِذَا نُودِىَ لِلصَّلَوٰةِ مِن يَوْمِ ٱلْجُمُعَةِ فَٱسْعَوْا۟ إِلَىٰ ذِكْرِ ٱللَّهِ وَذَرُوا۟ ٱلْبَيْعَ ۚ ذَٰلِكُمْ خَيْرٌۭ لَّكُمْ إِن كُنتُمْ تَعْلَمُونَ",
+                                  arabicSource: "الجمعة: ٩",
+                                  reference: "Al-Jumu'ah 62:9",
+                                  tags: [.fridayVirtue, .congregation],
+                                  prayerSlots: [.jumuah],
+                                  suitableKinds: [.adhan, .iqamah, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_kahf_1",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "فاتحة سورة الكهف",
+                                  englishTitle: "The Opening of Al-Kahf",
+                                  arabicText: "ٱلْحَمْدُ لِلَّهِ ٱلَّذِىٓ أَنزَلَ عَلَىٰ عَبْدِهِ ٱلْكِتَٰبَ وَلَمْ يَجْعَل لَّهُۥ عِوَجَا",
+                                  arabicSource: "الكهف: ١",
+                                  reference: "Al-Kahf 18:1",
+                                  tags: [.quranRecitation, .fridayVirtue],
+                                  prayerSlots: [.surahAlKahf],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "quran_taha_130",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "قبل طلوع الشمس",
+                                  englishTitle: "Before the Rising of the Sun",
+                                  arabicText: "وَسَبِّحْ بِحَمْدِ رَبِّكَ قَبْلَ طُلُوعِ ٱلشَّمْسِ وَقَبْلَ غُرُوبِهَا",
+                                  arabicSource: "طه: ١٣٠",
+                                  reference: "Taha 20:130",
+                                  tags: [.morningRemembrance],
+                                  prayerSlots: [.sunrise],
+                                  suitableKinds: [.adhan, .reminder]),
+
+        PrayerNotificationContent(id: "quran_al_anam_162",
+                                  type: .quran,
+                                  authenticity: .quranicText,
+                                  arabicTitle: "إن صلاتي لله",
+                                  englishTitle: "My Prayer Is for Allah",
+                                  arabicText: "قُلْ إِنَّ صَلَاتِى وَنُسُكِى وَمَحْيَاىَ وَمَمَاتِى لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ",
+                                  arabicSource: "الأنعام: ١٦٢",
+                                  reference: "Al-An'am 6:162",
+                                  tags: [.khushu, .prayerVirtue],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .iqamah, .reminder])
+    ]
+}
+
+// MARK: - Reminder
+
+extension PrayerNotificationContentCatalog {
+
+    static let reminders: [PrayerNotificationContent] = [
+        PrayerNotificationContent(id: "reminder_prepare_wudu",
+                                  type: .reminder,
+                                  authenticity: .appReminder,
+                                  arabicTitle: "استعد للصلاة",
+                                  englishTitle: "Get Ready to Pray",
+                                  arabicText: "جدد وضوءك واستقبل الصلاة بقلب حاضر.",
+                                  arabicSource: "",
+                                  reference: "",
+                                  tags: [.preparation],
+                                  prayerSlots: [],
+                                  suitableKinds: [.reminder]),
+
+        PrayerNotificationContent(id: "reminder_set_aside_distractions",
+                                  type: .reminder,
+                                  authenticity: .appReminder,
+                                  arabicTitle: "اترك ما يشغلك",
+                                  englishTitle: "Set Distractions Aside",
+                                  arabicText: "اترك هاتفك وما يشغلك، ثم أقبل على صلاتك.",
+                                  arabicSource: "",
+                                  reference: "",
+                                  tags: [.khushu, .preparation],
+                                  prayerSlots: [],
+                                  suitableKinds: [.reminder, .iqamah]),
+
+        PrayerNotificationContent(id: "reminder_remind_your_family",
+                                  type: .reminder,
+                                  authenticity: .appReminder,
+                                  arabicTitle: "ذكّر من حولك",
+                                  englishTitle: "Remind Those Around You",
+                                  arabicText: "ذكّر أهلك بالصلاة، فالدال على الخير كفاعله.",
+                                  arabicSource: "",
+                                  reference: "",
+                                  tags: [.preparation, .congregation],
+                                  prayerSlots: [],
+                                  suitableKinds: [.adhan, .reminder])
+    ]
 }
