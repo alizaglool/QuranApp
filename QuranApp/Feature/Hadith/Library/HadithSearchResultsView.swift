@@ -129,8 +129,8 @@ struct HadithSearchResultsView: View {
                 Text(viewModel.snippet(for: result))
                     .customStyle(.adhkar(size: 16), .onSurface)
                     .lineSpacing(7)
-                    .multilineTextAlignment(.trailing)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .environment(\.layoutDirection, .rightToLeft)
 
                 if let translation = viewModel.translationSnippet(for: result) {

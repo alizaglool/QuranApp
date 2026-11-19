@@ -48,14 +48,19 @@ extension HadithLibraryView {
     private var mainContent: some View {
         VStack(spacing: 0) {
             navigationBar
+
+            if !viewModel.isSearching {
+                headerSection
+            }
+
+            searchBarView
+                .padding(.bottom, viewModel.isSearching ? .xSm : .xBig)
+
             if viewModel.isSearching {
-                searchBarView.padding(.bottom, .xSm)
                 HadithSearchResultsView(viewModel: viewModel)
             } else {
                 NoIndicatorsScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        headerSection
-                        searchBarView.padding(.bottom, .xBig)
                         if let position = viewModel.lastRead {
                             continueReadingCard(position)
                                 .padding(.horizontal, .big)
@@ -119,6 +124,8 @@ extension HadithLibraryView {
             TextField(AppLocalizedKeys.searchNarrations.value, text: $viewModel.searchText)
                 .customStyle(.bodyMedium, .onSurface)
                 .focused($searchFocused)
+                .submitLabel(.search)
+                .autocorrectionDisabled()
 
             if !viewModel.searchText.isEmpty {
                 Button { viewModel.searchText = "" } label: {

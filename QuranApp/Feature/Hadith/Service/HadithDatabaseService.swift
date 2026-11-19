@@ -602,7 +602,7 @@ final class HadithDatabaseService {
             isMarfu:       kind.contains("مرفوع"),
             narratorChain: markup.isnadText,
             takhrij:       col(stmt, 13),
-            commentary:    col(stmt, 5),
+            commentary:    HadithCommentaryFormatter.normalized(col(stmt, 5)),
             volume:        volume > 0 ? volume : markup.volume,
             pageNo:        pageNo > 0 ? pageNo : markup.pageNo
         )

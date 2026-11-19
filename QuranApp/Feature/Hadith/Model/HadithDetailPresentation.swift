@@ -121,7 +121,7 @@ struct HadithNoteItem: Identifiable, Hashable {
 
 struct HadithDetailPresentation: Hashable {
     let tabs: [HadithDetailTabItem]
-    let commentary: String
+    let commentaryParagraphs: [String]
     let rulings: [HadithRulingItem]
     let narrators: [HadithNarratorRow]
     let takhrij: [HadithTakhrijSectionItem]
@@ -133,7 +133,7 @@ struct HadithDetailPresentation: Hashable {
     let emptyMessage: String
 
     static let empty = HadithDetailPresentation(
-        tabs: [], commentary: "", rulings: [], narrators: [], takhrij: [],
+        tabs: [], commentaryParagraphs: [], rulings: [], narrators: [], takhrij: [],
         ghareeb: [], notes: [], subjects: [], translation: "", info: [],
         emptyMessage: ""
     )
@@ -148,6 +148,7 @@ struct HadithDetailPresentation: Hashable {
         let takhrij = Self.takhrij(detail)
         let notes = Self.notes(detail)
         let info = Self.info(entry)
+        let commentaryParagraphs = HadithCommentaryFormatter.paragraphs(entry.commentary)
 
         var tabs: [HadithDetailTabItem] = []
         func add(_ tab: HadithDetailTab, _ count: Int) {
@@ -155,7 +156,7 @@ struct HadithDetailPresentation: Hashable {
             tabs.append(HadithDetailTabItem(tab: tab, title: tab.titleKey.value, count: count))
         }
 
-        add(.commentary, entry.commentary.isEmpty ? 0 : 1)
+        add(.commentary, commentaryParagraphs.isEmpty ? 0 : 1)
         add(.rulings, rulings.count)
         add(.narrators, narrators.count)
         add(.takhrij, takhrij.reduce(0) { $0 + $1.groups.count })
@@ -167,7 +168,7 @@ struct HadithDetailPresentation: Hashable {
 
         return HadithDetailPresentation(
             tabs: tabs,
-            commentary: entry.commentary,
+            commentaryParagraphs: commentaryParagraphs,
             rulings: rulings,
             narrators: narrators,
             takhrij: takhrij,

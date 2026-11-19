@@ -16,7 +16,7 @@ struct HadithDetailPanel: View {
     var body: some View {
         card {
             switch tab {
-            case .commentary:  prose(presentation.commentary)
+            case .commentary:  commentary
             case .rulings:     rulings
             case .narrators:   narrators
             case .takhrij:     takhrij
@@ -30,6 +30,14 @@ struct HadithDetailPanel: View {
     }
 
     // MARK: Panels
+
+    private var commentary: some View {
+        VStack(alignment: .leading, spacing: .sm) {
+            ForEach(Array(presentation.commentaryParagraphs.enumerated()), id: \.offset) { paragraph in
+                prose(paragraph.element)
+            }
+        }
+    }
 
     private var rulings: some View {
         stack(presentation.rulings) { ruling in
@@ -254,6 +262,6 @@ struct HadithDetailPanel: View {
 private extension View {
     func rtlRow() -> some View {
         environment(\.layoutDirection, .rightToLeft)
-            .multilineTextAlignment(.trailing)
+            .multilineTextAlignment(.leading)
     }
 }
