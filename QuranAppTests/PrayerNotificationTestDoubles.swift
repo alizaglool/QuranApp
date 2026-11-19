@@ -210,14 +210,17 @@ enum PrayerNotificationManagerBuilder {
                         now: Date,
                         soundCatalog: PrayerNotificationSoundCatalog = PrayerNotificationFixture
                             .soundCatalogWithoutAudio(),
-                        audioFocus: AdhanAudioFocus? = nil) -> PrayerNotificationManager {
+                        audioFocus: AdhanAudioFocus? = nil,
+                        faceDownDetector: DeviceFaceDownDetector? = nil) -> PrayerNotificationManager {
         let preferencesStore = PrayerNotificationPreferencesStore(defaults: defaults)
         preferencesStore.save(preferences)
         return PrayerNotificationManager(center: center,
                                          preferencesStore: preferencesStore,
                                          clock: LocalNotificationClockDouble(currentDate: now),
                                          soundCatalog: soundCatalog,
-                                         audioFocus: audioFocus ?? AdhanAudioFocusDouble())
+                                         audioFocus: audioFocus ?? AdhanAudioFocusDouble(),
+                                         faceDownDetector: faceDownDetector
+                                             ?? DeviceFaceDownDetectorDouble())
     }
 }
 
@@ -230,6 +233,34 @@ final class AdhanAudioFocusDouble: AdhanAudioFocus {
 
     func pauseCompetingPlayback() {
         pauseCallCount += 1
+    }
+}
+
+// MARK: - Face Down Detection
+
+@MainActor
+final class DeviceFaceDownDetectorDouble: DeviceFaceDownDetector {
+
+    private(set) var startCallCount = 0
+    private(set) var stopCallCount = 0
+    private(set) var isMonitoring = false
+
+    var onFaceDown: (@MainActor () -> Void)?
+
+    func startMonitoring() {
+        isMonitoring = true
+        startCallCount += 1
+    }
+
+    func stopMonitoring() {
+        isMonitoring = false
+        stopCallCount += 1
+    }
+
+    func simulateFaceDownPlacement() {
+        guard isMonitoring else { return }
+        stopMonitoring()
+        onFaceDown?()
     }
 }
 

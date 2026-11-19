@@ -31,6 +31,7 @@ final class PrayerAdhanAudioPlayer {
 
     private let soundCatalog: PrayerNotificationSoundCatalog
     private let audioFocus: AdhanAudioFocus
+    private let faceDownDetector: DeviceFaceDownDetector
     private let notificationCenter: NotificationCenter
 
     private var player: AVAudioPlayer?
@@ -49,12 +50,15 @@ final class PrayerAdhanAudioPlayer {
 
     init(soundCatalog: PrayerNotificationSoundCatalog,
          audioFocus: AdhanAudioFocus? = nil,
+         faceDownDetector: DeviceFaceDownDetector? = nil,
          notificationCenter: NotificationCenter = .default) {
         self.soundCatalog = soundCatalog
         self.audioFocus = audioFocus ?? AppAdhanAudioFocus()
+        self.faceDownDetector = faceDownDetector ?? MotionDeviceFaceDownDetector()
         self.notificationCenter = notificationCenter
         observeInterruptions()
         observeRouteChanges()
+        observeFaceDownPlacement()
     }
 
     deinit {
@@ -130,6 +134,7 @@ private extension PrayerAdhanAudioPlayer {
         playingMode = mode
         newPlayer.prepareToPlay()
         newPlayer.play()
+        startFaceDownMonitoringIfNeeded()
         onPlaybackStateChange?()
     }
 
@@ -161,6 +166,7 @@ private extension PrayerAdhanAudioPlayer {
 
     func teardownPlayer() {
         generation += 1
+        faceDownDetector.stopMonitoring()
         player?.stop()
         player?.delegate = nil
         player = nil
@@ -225,6 +231,7 @@ private extension PrayerAdhanAudioPlayer {
         case .began:
             guard isPlaying else { return }
             player?.pause()
+            faceDownDetector.stopMonitoring()
             isResumableAfterInterruption = true
             onPlaybackStateChange?()
 
@@ -243,6 +250,7 @@ private extension PrayerAdhanAudioPlayer {
 
             try? activateSession()
             player?.play()
+            startFaceDownMonitoringIfNeeded()
             onPlaybackStateChange?()
 
         @unknown default:
@@ -258,6 +266,22 @@ private extension PrayerAdhanAudioPlayer {
         else { return }
 
         stop()
+    }
+}
+
+// MARK: - Face Down
+
+private extension PrayerAdhanAudioPlayer {
+
+    func observeFaceDownPlacement() {
+        faceDownDetector.onFaceDown = { [weak self] in
+            self?.stop()
+        }
+    }
+
+    func startFaceDownMonitoringIfNeeded() {
+        guard playingMode == .fullAdhan else { return }
+        faceDownDetector.startMonitoring()
     }
 }
 

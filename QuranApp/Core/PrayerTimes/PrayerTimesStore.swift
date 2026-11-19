@@ -358,7 +358,8 @@ final class PrayerNotificationManager: NSObject, ObservableObject {
          preferencesStore: PrayerNotificationPreferencesStore,
          clock: LocalNotificationClock,
          soundCatalog: PrayerNotificationSoundCatalog,
-         audioFocus: AdhanAudioFocus? = nil) {
+         audioFocus: AdhanAudioFocus? = nil,
+         faceDownDetector: DeviceFaceDownDetector? = nil) {
         self.scheduler = LocalNotificationScheduler(
             center: center,
             ownedIdentifierPrefix: PrayerNotificationIdentifier.ownedIdentifierPrefix
@@ -366,7 +367,9 @@ final class PrayerNotificationManager: NSObject, ObservableObject {
         self.preferencesStore = preferencesStore
         self.builder = PrayerNotificationScheduleBuilder(clock: clock)
         self.soundCatalog = soundCatalog
-        self.audioPlayer = PrayerAdhanAudioPlayer(soundCatalog: soundCatalog, audioFocus: audioFocus)
+        self.audioPlayer = PrayerAdhanAudioPlayer(soundCatalog: soundCatalog,
+                                                  audioFocus: audioFocus,
+                                                  faceDownDetector: faceDownDetector)
         self.preferences = preferencesStore.restoredPreferences()
         super.init()
         self.audioPlayer.onPlaybackStateChange = { [weak self] in

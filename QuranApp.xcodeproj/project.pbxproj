@@ -48,6 +48,7 @@
 		ADDB00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift */; };
 		ADDB00042F71800000AA0004 /* AdhanVoiceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00042F71800000AA0004 /* AdhanVoiceViewModel.swift */; };
 		ADDB00052F71800000AA0005 /* AdhanVoiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00052F71800000AA0005 /* AdhanVoiceView.swift */; };
+		ADDB00072F71800000AA0007 /* DeviceFaceDownDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00072F71800000AA0007 /* DeviceFaceDownDetector.swift */; };
 		ADDB00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift */; };
 		ADDB01012F71800000AA0101 /* VerseImageCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA01012F71800000AA0101 /* VerseImageCard.swift */; };
 		ADDB01022F71800000AA0102 /* VerseImageRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDA01022F71800000AA0102 /* VerseImageRenderer.swift */; };
@@ -517,6 +518,7 @@
 		ADDA00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerAdhanAudioPlayer.swift; sourceTree = "<group>"; };
 		ADDA00042F71800000AA0004 /* AdhanVoiceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanVoiceViewModel.swift; sourceTree = "<group>"; };
 		ADDA00052F71800000AA0005 /* AdhanVoiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdhanVoiceView.swift; sourceTree = "<group>"; };
+		ADDA00072F71800000AA0007 /* DeviceFaceDownDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceFaceDownDetector.swift; sourceTree = "<group>"; };
 		ADDA00992F71800000AA0099 /* PrayerNotificationContentCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerNotificationContentCatalog.swift; sourceTree = "<group>"; };
 		ADDA01012F71800000AA0101 /* VerseImageCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseImageCard.swift; sourceTree = "<group>"; };
 		ADDA01022F71800000AA0102 /* VerseImageRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerseImageRenderer.swift; sourceTree = "<group>"; };
@@ -2694,6 +2696,7 @@
 				ADDA02122F71800000AA0212 /* PrayerNotificationContentSelector.swift */,
 				ADDA02112F71800000AA0211 /* PrayerNotificationContent.swift */,
 				ADDA00022F71800000AA0002 /* AdhanAudioFocus.swift */,
+				ADDA00072F71800000AA0007 /* DeviceFaceDownDetector.swift */,
 				ADDA00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift */,
 				AA5101042FD5100100AA5104 /* PrayerCompletionStore.swift */,
 			);
@@ -3480,6 +3483,7 @@
 				ADDB01012F71800000AA0101 /* VerseImageCard.swift in Sources */,
 				ADDB01022F71800000AA0102 /* VerseImageRenderer.swift in Sources */,
 				ADDB00022F71800000AA0002 /* AdhanAudioFocus.swift in Sources */,
+				ADDB00072F71800000AA0007 /* DeviceFaceDownDetector.swift in Sources */,
 				ADDB00032F71800000AA0003 /* PrayerAdhanAudioPlayer.swift in Sources */,
 				FAC200A12FC7A00000C200A1 /* DeviceLocationService.swift in Sources */,
 				FAC200A22FC7A00000C200A2 /* SelectedLocation.swift in Sources */,
