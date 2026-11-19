@@ -651,8 +651,6 @@
 "prayerNotificationsWindowFooterFormat" = "تمت جدولة %1$@ تنبيهًا خلال %2$@ أيام القادمة. يسمح النظام بـ ٦٤ تنبيهًا معلَّقًا فقط، لذا افتح التطبيق من حين لآخر لتستمر التنبيهات.";
 "prayerNotificationAdhanBodyFormat" = "حان وقت %@.";
 "prayerNotificationReminderBodyFormat" = "تبقى %2$@ دقيقة على %1$@.";
-"prayerNotificationAdhanSubtitle" = "حان وقت الصلاة";
-"prayerNotificationReminderSubtitleFormat" = "بعد %@ دقيقة";
 "prayerNotificationsTestSection" = "الاختبار";
 "prayerNotificationsTestAction" = "اختبار إشعار الصلاة";
 "prayerNotificationsTestCaption" = "أداة للاختبار فقط. ترسل إشعارًا تجريبيًا واحدًا بعد نحو ٥ ثوانٍ، ولا تغيّر مواقيت الصلاة أو إعدادات الإشعارات.";
@@ -661,6 +659,31 @@
 "prayerNotificationsTestScheduled" = "تم إرسال الإشعار التجريبي. سيظهر بعد نحو ٥ ثوانٍ.";
 "prayerNotificationsTestDenied" = "الإشعارات معطّلة لهذا التطبيق. افتح الإعدادات للسماح بها ثم أعد المحاولة.";
 "prayerNotificationsTestNotRequested" = "اسمح بالإشعارات أولًا ثم أرسل الاختبار.";
+
+"prayerSlotSunrise" = "الشروق";
+"prayerSlotSurahAlKahf" = "سورة الكهف";
+"prayerNotificationsSupplementalSection" = "تذكيرات إضافية";
+"prayerNotificationsSunriseCaption" = "نهاية وقت الفجر";
+"prayerNotificationsLastThirdCaption" = "وقت التهجد";
+"prayerNotificationsSurahAlKahfCaption" = "يوم الجمعة فقط";
+"prayerNotificationSunriseBody" = "انتهى وقت صلاة الفجر.";
+"prayerNotificationLastThirdBody" = "بدأ الثلث الأخير من الليل.";
+"prayerNotificationSurahAlKahfBody" = "إنه يوم الجمعة، اقرأ سورة الكهف.";
+"prayerTimeAdjustmentsRowTitle" = "تعديل الأوقات";
+"prayerTimeAdjustmentsResetAction" = "إعادة تعيين كل التعديلات";
+"prayerTimeAdjustmentMinutesFormat" = "%@ د";
+"prayerTimeAdjustmentsFooter" = "اضبط الوقت ليطابق مسجدك. تُطبَّق التعديلات على الأوقات المعروضة في التطبيق وعلى تنبيهات الصلاة.";
+"prayerNotificationsIqamahSection" = "الإقامة";
+"prayerNotificationsIqamahToggle" = "نبّهني عند الإقامة";
+"prayerNotificationsIqamahFooter" = "اضبط المدة بين الأذان والإقامة في مسجدك لكل صلاة. اختر صفر لإيقاف تنبيه الإقامة لتلك الصلاة. تتبع الجمعة مدة الظهر.";
+"prayerNotificationIqamahMinutesFormat" = "بعد %@ د";
+"prayerNotificationIqamahOffValue" = "معطّل";
+"prayerNotificationIqamahTitleFormat" = "إقامة %@";
+"prayerNotificationIqamahBodyFormat" = "أُقيمت صلاة %@.";
+"prayerStepperDecreaseAction" = "تقليل";
+"prayerStepperIncreaseAction" = "زيادة";
+"verseActionShareAsImage" = "مشاركة كصورة";
+"verseImageShareFailed" = "تعذّر إنشاء الصورة.";
 
 // MARK: - Adhan Voice
 
@@ -792,3 +815,78 @@
 "ritesPagePosition" = "%1$@ من %2$@";
 "ritesPrevious" = "السابق";
 "ritesNext" = "التالي";
+
+// MARK: - Global Search
+"globalSearchTitle" = "البحث";
+"globalSearchPlaceholder" = "ابحث في القرآن والأحاديث والأذكار";
+"globalSearchPrompt" = "ابحث عن سورة أو آية أو حديث أو ذكر";
+"globalSearchScopeAll" = "الكل";
+"globalSearchScopeSurahs" = "السور";
+"globalSearchScopeVerses" = "الآيات";
+"globalSearchScopeNarrations" = "الأحاديث";
+"globalSearchScopeAdhkar" = "الأذكار";
+"globalSearchShowAll" = "عرض الكل";
+"globalSearchMatchCount" = "%d نتيجة";
+"globalSearchVerseLocation" = "%1$@ • آية %2$@";
+"globalSearchSurahDetail" = "%1$@ • %2$@ آية";
+"globalSearchNarrationNumber" = "حديث %@";
+
+// MARK: - Hijri Calendar
+"hijriCalendarTitle" = "التقويم الهجري";
+"hijriCalendarMonthFormat" = "MMMM yyyy";
+"hijriCalendarGregorianDayFormat" = "EEEE، d MMMM yyyy";
+"hijriCalendarOccasionsTitle" = "المناسبات";
+"hijriCalendarNoOccasionMessage" = "لا توجد مناسبة في هذا اليوم";
+"hijriCalendarPreviousMonth" = "الشهر السابق";
+"hijriCalendarNextMonth" = "الشهر التالي";
+"hijriCalendarOpenAccessibility" = "افتح التقويم الهجري";
+"hijriOccasionNewYear" = "رأس السنة الهجرية";
+"hijriOccasionTasua" = "يوم تاسوعاء";
+"hijriOccasionAshura" = "يوم عاشوراء";
+"hijriOccasionRamadanStart" = "أول رمضان";
+"hijriOccasionLastTenNights" = "العشر الأواخر من رمضان";
+"hijriOccasionEidAlFitr" = "عيد الفطر";
+"hijriOccasionFirstTenDhulHijjah" = "العشر الأوائل من ذي الحجة";
+"hijriOccasionDayOfArafah" = "يوم عرفة";
+"hijriOccasionEidAlAdha" = "عيد الأضحى";
+"hijriOccasionDaysOfTashriq" = "أيام التشريق";
+"hijriOccasionWhiteDays" = "الأيام البيض";
+"hijriOccasionVoluntaryFastDay" = "صيام الاثنين والخميس";
+"hijriOccasionFridaySurahAlKahf" = "الجمعة · سورة الكهف";
+
+// MARK: - Insights
+"insightsTitle" = "الإحصائيات";
+"insightsRangeWeek" = "٧ أيام";
+"insightsRangeMonth" = "٣٠ يومًا";
+"insightsRangeQuarter" = "٩٠ يومًا";
+"insightsOverviewTitle" = "نظرة عامة";
+"insightsActiveDaysTitle" = "أيام النشاط";
+"insightsPagesReadTitle" = "صفحات مقروءة";
+"insightsPrayersLoggedTitle" = "صلوات مسجَّلة";
+"insightsOutOfDaysFormat" = "من %@";
+"insightsOnDaysFormat" = "في %@";
+"insightsDailyAverageFormat" = "%@ صفحة يوميًا";
+"insightsReadingTrendTitle" = "القراءة اليومية";
+"insightsWorshipTrendTitle" = "انتظام العبادات";
+"insightsPrayerConsistencyTitle" = "انتظام الصلوات";
+"insightsTrackedDaysFormat" = "%@ مسجَّلة";
+"insightsStrongestPrayerTitle" = "الأكثر انتظامًا";
+"insightsWeakestPrayerTitle" = "الأقل انتظامًا";
+"insightsKhatmahTitle" = "الختمة الحالية";
+"insightsKhatmahNoPlanMessage" = "لا توجد خطة ختمة نشطة";
+"insightsPagesOfTotalFormat" = "%@ من %@";
+"insightsDaysOfTotalFormat" = "%@ من %@";
+"insightsLibraryTitle" = "مكتبتي";
+"insightsBookmarksTitle" = "العلامات";
+"insightsCompletedKhatmahTitle" = "ختمات مكتملة";
+"insightsEmptyMessage" = "سجِّل صلواتك وقراءتك لتظهر إحصائياتك هنا";
+
+"widgetNowTitle" = "الآن";
+"widgetHourMinuteRemainingFormat" = "%@ س %@ د";
+"widgetMinuteRemainingFormat" = "%@ د";
+"widgetNextPrayerGalleryTitle" = "الصلاة القادمة";
+"widgetNextPrayerGalleryDescription" = "الصلاة القادمة مع الوقت المتبقي لها.";
+"widgetScheduleGalleryTitle" = "جدول الصلوات";
+"widgetScheduleGalleryDescription" = "مواقيت صلوات اليوم في لمحة.";
+"widgetDateGalleryTitle" = "التاريخ الهجري";
+"widgetDateGalleryDescription" = "تاريخ اليوم الهجري مع الصلاة القادمة.";

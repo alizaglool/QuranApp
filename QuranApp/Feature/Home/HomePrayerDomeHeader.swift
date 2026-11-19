@@ -126,12 +126,23 @@ private extension HomePrayerDomeHeader {
     }
 
     var dateLine: some View {
-        Text(viewModel.dateLine)
-            .customStyle(.caption2)
-            .foregroundColor(.white.opacity(0.95))
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
+        Button(action: viewModel.onDateLineTapped) {
+            HStack(spacing: .xxSm) {
+                Text(viewModel.dateLine)
+                    .customStyle(.caption2)
+                    .foregroundColor(.white.opacity(0.95))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+
+                Image(systemName: "chevron.forward")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundColor(.white.opacity(0.7))
+            }
             .padding(.horizontal, .big)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(viewModel.dateLineAccessibilityLabel)
+        .accessibilityAddTraits(.isButton)
     }
 }
 

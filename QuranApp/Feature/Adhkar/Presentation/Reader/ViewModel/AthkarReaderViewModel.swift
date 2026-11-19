@@ -43,6 +43,7 @@ final class AthkarReaderViewModel: MainViewModel {
     let settings: AthkarReaderSettings
 
     private let completion: AthkarCompletionStore
+    private let startItemID: Int?
     private let favorites = AthkarFavoritesStore.shared
     private let audio: any AthkarAudioPlaying
     private var cancellables = Set<AnyCancellable>()
@@ -60,11 +61,13 @@ final class AthkarReaderViewModel: MainViewModel {
     init(coordinator: AdhkarCoordinating,
          pack: AthkarPack,
          items: [AthkarItem],
+         startItemID: Int? = nil,
          settings: AthkarReaderSettings? = nil,
          completion: AthkarCompletionStore? = nil,
          audio: (any AthkarAudioPlaying)? = nil) {
         self.coordinator = coordinator
         self.pack = pack
+        self.startItemID = startItemID
         self.settings = settings ?? .shared
         self.completion = completion ?? .shared
         self.audio = audio ?? AthkarItemAudioPlayer()
@@ -499,6 +502,12 @@ final class AthkarReaderViewModel: MainViewModel {
 
     private func restorePosition() {
         guard !pages.isEmpty else { return }
+
+        if let startItemID, let requested = pages.firstIndex(where: { $0.item.id == startItemID }) {
+            index = requested
+            isFinished = completion.isFinished(pack)
+            return
+        }
 
         let firstPending = pages.firstIndex { page in
             !completion.isCompleted(itemID: page.item.id, inPack: pack.key)

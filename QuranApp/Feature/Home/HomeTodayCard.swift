@@ -17,9 +17,7 @@ struct HomeTodayCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: .md) {
-            Text(viewModel.todayTitle)
-                .customStyle(.caption2, .onSurfaceVariant)
-                .tracking(1.5)
+            header
 
             metricsRow
         }
@@ -32,6 +30,35 @@ struct HomeTodayCard: View {
                 .stroke(ColorStyle.cardBorder.color, lineWidth: 1)
         )
         .padding(.horizontal, .big)
+    }
+}
+
+// MARK: - Header
+
+private extension HomeTodayCard {
+
+    var header: some View {
+        HStack(spacing: .xSm) {
+            Text(viewModel.todayTitle)
+                .customStyle(.caption2, .onSurfaceVariant)
+                .tracking(1.5)
+
+            Spacer(minLength: 0)
+
+            Button(action: viewModel.onInsightsTapped) {
+                HStack(spacing: .xxSm) {
+                    Text(viewModel.insightsTitle)
+                        .customStyle(.caption2, .primary)
+
+                    Image(systemName: "chevron.forward")
+                        .font(.system(size: 9, weight: .semibold))
+                        .customForeground(.primary)
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(viewModel.insightsTitle)
+        }
     }
 }
 

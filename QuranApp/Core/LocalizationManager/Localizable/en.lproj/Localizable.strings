@@ -651,8 +651,6 @@
 "prayerNotificationsWindowFooterFormat" = "%1$@ notifications are scheduled across the next %2$@ days. iOS allows only 64 pending notifications, so open the app from time to time to keep them coming.";
 "prayerNotificationAdhanBodyFormat" = "It is time for %@.";
 "prayerNotificationReminderBodyFormat" = "%1$@ begins in %2$@ minutes.";
-"prayerNotificationAdhanSubtitle" = "It is time to pray";
-"prayerNotificationReminderSubtitleFormat" = "In %@ minutes";
 "prayerNotificationsTestSection" = "Testing";
 "prayerNotificationsTestAction" = "Test Prayer Notification";
 "prayerNotificationsTestCaption" = "A testing utility. It delivers one sample notification in about 5 seconds and never changes your prayer times or notification settings.";
@@ -661,6 +659,31 @@
 "prayerNotificationsTestScheduled" = "Test notification sent. It arrives in about 5 seconds.";
 "prayerNotificationsTestDenied" = "Notifications are turned off for this app. Open Settings to allow them, then try again.";
 "prayerNotificationsTestNotRequested" = "Allow notifications first, then send the test.";
+
+"prayerSlotSunrise" = "Sunrise";
+"prayerSlotSurahAlKahf" = "Surah Al-Kahf";
+"prayerNotificationsSupplementalSection" = "Additional reminders";
+"prayerNotificationsSunriseCaption" = "End of Fajr time";
+"prayerNotificationsLastThirdCaption" = "Time for tahajjud";
+"prayerNotificationsSurahAlKahfCaption" = "Fridays only";
+"prayerNotificationSunriseBody" = "Fajr time has ended.";
+"prayerNotificationLastThirdBody" = "The last third of the night has begun.";
+"prayerNotificationSurahAlKahfBody" = "It is Friday. Read Surah Al-Kahf.";
+"prayerTimeAdjustmentsRowTitle" = "Time adjustments";
+"prayerTimeAdjustmentsResetAction" = "Reset all adjustments";
+"prayerTimeAdjustmentMinutesFormat" = "%@ min";
+"prayerTimeAdjustmentsFooter" = "Shift a time to match your local mosque. Adjustments apply to the times shown in the app and to prayer notifications.";
+"prayerNotificationsIqamahSection" = "Iqamah";
+"prayerNotificationsIqamahToggle" = "Remind me at the iqamah";
+"prayerNotificationsIqamahFooter" = "Set how long your mosque waits between the adhan and the iqamah for each prayer. Choose zero to turn the iqamah reminder off for that prayer. Jumuah follows the Dhuhr delay.";
+"prayerNotificationIqamahMinutesFormat" = "%@ min after";
+"prayerNotificationIqamahOffValue" = "Off";
+"prayerNotificationIqamahTitleFormat" = "%@ Iqamah";
+"prayerNotificationIqamahBodyFormat" = "The %@ iqamah has been called.";
+"prayerStepperDecreaseAction" = "Decrease";
+"prayerStepperIncreaseAction" = "Increase";
+"verseActionShareAsImage" = "Share as image";
+"verseImageShareFailed" = "The image could not be created.";
 
 // MARK: - Adhan Voice
 
@@ -792,3 +815,78 @@
 "ritesPagePosition" = "%1$@ of %2$@";
 "ritesPrevious" = "Previous";
 "ritesNext" = "Next";
+
+// MARK: - Global Search
+"globalSearchTitle" = "Search";
+"globalSearchPlaceholder" = "Search the Quran, hadith and adhkar";
+"globalSearchPrompt" = "Find a surah, a verse, a narration or a dhikr";
+"globalSearchScopeAll" = "All";
+"globalSearchScopeSurahs" = "Surahs";
+"globalSearchScopeVerses" = "Verses";
+"globalSearchScopeNarrations" = "Narrations";
+"globalSearchScopeAdhkar" = "Adhkar";
+"globalSearchShowAll" = "Show all";
+"globalSearchMatchCount" = "%d results";
+"globalSearchVerseLocation" = "%1$@ • Verse %2$@";
+"globalSearchSurahDetail" = "%1$@ • %2$@ verses";
+"globalSearchNarrationNumber" = "Hadith %@";
+
+// MARK: - Hijri Calendar
+"hijriCalendarTitle" = "Hijri Calendar";
+"hijriCalendarMonthFormat" = "MMMM yyyy";
+"hijriCalendarGregorianDayFormat" = "EEEE, d MMMM yyyy";
+"hijriCalendarOccasionsTitle" = "Occasions";
+"hijriCalendarNoOccasionMessage" = "No occasion on this day";
+"hijriCalendarPreviousMonth" = "Previous month";
+"hijriCalendarNextMonth" = "Next month";
+"hijriCalendarOpenAccessibility" = "Open the Hijri calendar";
+"hijriOccasionNewYear" = "Islamic New Year";
+"hijriOccasionTasua" = "Day of Tasua";
+"hijriOccasionAshura" = "Day of Ashura";
+"hijriOccasionRamadanStart" = "First of Ramadan";
+"hijriOccasionLastTenNights" = "Last ten nights of Ramadan";
+"hijriOccasionEidAlFitr" = "Eid al-Fitr";
+"hijriOccasionFirstTenDhulHijjah" = "First ten days of Dhul-Hijjah";
+"hijriOccasionDayOfArafah" = "Day of Arafah";
+"hijriOccasionEidAlAdha" = "Eid al-Adha";
+"hijriOccasionDaysOfTashriq" = "Days of Tashriq";
+"hijriOccasionWhiteDays" = "The white days";
+"hijriOccasionVoluntaryFastDay" = "Monday and Thursday fasting";
+"hijriOccasionFridaySurahAlKahf" = "Friday · Surah Al-Kahf";
+
+// MARK: - Insights
+"insightsTitle" = "Insights";
+"insightsRangeWeek" = "7 days";
+"insightsRangeMonth" = "30 days";
+"insightsRangeQuarter" = "90 days";
+"insightsOverviewTitle" = "Overview";
+"insightsActiveDaysTitle" = "Active days";
+"insightsPagesReadTitle" = "Pages read";
+"insightsPrayersLoggedTitle" = "Prayers logged";
+"insightsOutOfDaysFormat" = "of %@";
+"insightsOnDaysFormat" = "on %@";
+"insightsDailyAverageFormat" = "%@ pages a day";
+"insightsReadingTrendTitle" = "Daily reading";
+"insightsWorshipTrendTitle" = "Worship consistency";
+"insightsPrayerConsistencyTitle" = "Prayer consistency";
+"insightsTrackedDaysFormat" = "%@ logged";
+"insightsStrongestPrayerTitle" = "Most consistent";
+"insightsWeakestPrayerTitle" = "Least consistent";
+"insightsKhatmahTitle" = "Current khatmah";
+"insightsKhatmahNoPlanMessage" = "No active khatmah plan";
+"insightsPagesOfTotalFormat" = "%@ of %@";
+"insightsDaysOfTotalFormat" = "%@ of %@";
+"insightsLibraryTitle" = "My library";
+"insightsBookmarksTitle" = "Bookmarks";
+"insightsCompletedKhatmahTitle" = "Khatmahs completed";
+"insightsEmptyMessage" = "Log your prayers and reading to see your insights here";
+
+"widgetNowTitle" = "Now";
+"widgetHourMinuteRemainingFormat" = "%@h %@m";
+"widgetMinuteRemainingFormat" = "%@m";
+"widgetNextPrayerGalleryTitle" = "Next Prayer";
+"widgetNextPrayerGalleryDescription" = "The next prayer with its countdown.";
+"widgetScheduleGalleryTitle" = "Prayer Schedule";
+"widgetScheduleGalleryDescription" = "Today's prayer timings at a glance.";
+"widgetDateGalleryTitle" = "Hijri Date";
+"widgetDateGalleryDescription" = "Today's Hijri date with the next prayer.";

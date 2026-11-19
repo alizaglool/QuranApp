@@ -193,7 +193,7 @@ final class AdhkarCoordinatorDouble: AdhkarCoordinating {
     private(set) var didCoordinateBack: Bool = false
 
     func coordinateToAdhkarReading(category: DhikrCategory) {}
-    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem]) {}
+    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem], startItemID: Int?) {}
     func coordinateToAllahNames(names: [AllahName]) {}
     func coordinateToAllahNameDetail(names: [AllahName], startIndex: Int) {}
     func coordinateToMyAdhkar() {}

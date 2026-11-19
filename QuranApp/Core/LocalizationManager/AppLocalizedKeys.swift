@@ -626,8 +626,6 @@ enum AppLocalizedKeys: String {
     case prayerNotificationsWindowFooterFormat
     case prayerNotificationAdhanBodyFormat
     case prayerNotificationReminderBodyFormat
-    case prayerNotificationAdhanSubtitle
-    case prayerNotificationReminderSubtitleFormat
     case prayerNotificationsTestSection
     case prayerNotificationsTestAction
     case prayerNotificationsTestCaption
@@ -636,6 +634,33 @@ enum AppLocalizedKeys: String {
     case prayerNotificationsTestScheduled
     case prayerNotificationsTestDenied
     case prayerNotificationsTestNotRequested
+
+    // MARK: - Prayer Supplemental Slots & Time Adjustments
+
+    case prayerSlotSunrise
+    case prayerSlotSurahAlKahf
+    case prayerNotificationsSupplementalSection
+    case prayerNotificationsSunriseCaption
+    case prayerNotificationsLastThirdCaption
+    case prayerNotificationsSurahAlKahfCaption
+    case prayerNotificationSunriseBody
+    case prayerNotificationLastThirdBody
+    case prayerNotificationSurahAlKahfBody
+    case prayerTimeAdjustmentsRowTitle
+    case prayerTimeAdjustmentsResetAction
+    case prayerTimeAdjustmentMinutesFormat
+    case prayerTimeAdjustmentsFooter
+    case prayerNotificationsIqamahSection
+    case prayerNotificationsIqamahToggle
+    case prayerNotificationsIqamahFooter
+    case prayerNotificationIqamahMinutesFormat
+    case prayerNotificationIqamahOffValue
+    case prayerNotificationIqamahTitleFormat
+    case prayerNotificationIqamahBodyFormat
+    case prayerStepperDecreaseAction
+    case prayerStepperIncreaseAction
+    case verseActionShareAsImage
+    case verseImageShareFailed
 
     // MARK: - Adhan Voice
 
@@ -769,6 +794,83 @@ enum AppLocalizedKeys: String {
     case ritesPagePosition
     case ritesPrevious
     case ritesNext
+
+    // MARK: - Global Search
+    case globalSearchTitle
+    case globalSearchPlaceholder
+    case globalSearchPrompt
+    case globalSearchScopeAll
+    case globalSearchScopeSurahs
+    case globalSearchScopeVerses
+    case globalSearchScopeNarrations
+    case globalSearchScopeAdhkar
+    case globalSearchShowAll
+    case globalSearchMatchCount
+    case globalSearchVerseLocation
+    case globalSearchSurahDetail
+    case globalSearchNarrationNumber
+
+    // MARK: - Hijri Calendar
+    case hijriCalendarTitle
+    case hijriCalendarMonthFormat
+    case hijriCalendarGregorianDayFormat
+    case hijriCalendarOccasionsTitle
+    case hijriCalendarNoOccasionMessage
+    case hijriCalendarPreviousMonth
+    case hijriCalendarNextMonth
+    case hijriCalendarOpenAccessibility
+    case hijriOccasionNewYear
+    case hijriOccasionTasua
+    case hijriOccasionAshura
+    case hijriOccasionRamadanStart
+    case hijriOccasionLastTenNights
+    case hijriOccasionEidAlFitr
+    case hijriOccasionFirstTenDhulHijjah
+    case hijriOccasionDayOfArafah
+    case hijriOccasionEidAlAdha
+    case hijriOccasionDaysOfTashriq
+    case hijriOccasionWhiteDays
+    case hijriOccasionVoluntaryFastDay
+    case hijriOccasionFridaySurahAlKahf
+
+    // MARK: - Insights
+    case insightsTitle
+    case insightsRangeWeek
+    case insightsRangeMonth
+    case insightsRangeQuarter
+    case insightsOverviewTitle
+    case insightsActiveDaysTitle
+    case insightsPagesReadTitle
+    case insightsPrayersLoggedTitle
+    case insightsOutOfDaysFormat
+    case insightsOnDaysFormat
+    case insightsDailyAverageFormat
+    case insightsReadingTrendTitle
+    case insightsWorshipTrendTitle
+    case insightsPrayerConsistencyTitle
+    case insightsTrackedDaysFormat
+    case insightsStrongestPrayerTitle
+    case insightsWeakestPrayerTitle
+    case insightsKhatmahTitle
+    case insightsKhatmahNoPlanMessage
+    case insightsPagesOfTotalFormat
+    case insightsDaysOfTotalFormat
+    case insightsLibraryTitle
+    case insightsBookmarksTitle
+    case insightsCompletedKhatmahTitle
+    case insightsEmptyMessage
+
+    // MARK: - Widget
+
+    case widgetNowTitle
+    case widgetHourMinuteRemainingFormat
+    case widgetMinuteRemainingFormat
+    case widgetNextPrayerGalleryTitle
+    case widgetNextPrayerGalleryDescription
+    case widgetScheduleGalleryTitle
+    case widgetScheduleGalleryDescription
+    case widgetDateGalleryTitle
+    case widgetDateGalleryDescription
 
     static func prayerCalculationMethodKey(forMethodId methodId: Int) -> AppLocalizedKeys? {
         let keysByMethodId: [Int: AppLocalizedKeys] = [

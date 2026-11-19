@@ -68,6 +68,7 @@ final class QuranViewModel: MainViewModel {
         }
 
         WorshipTrackerStore.shared.markCompleted(.quranReading)
+        QuranReadingLogStore.shared.recordPageVisit(page)
     }
     
     func toggleOverlay() {

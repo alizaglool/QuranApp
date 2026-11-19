@@ -533,6 +533,10 @@ extension HomeViewModel {
         AppLocalizedKeys.homeSearchAction.value
     }
 
+    var dateLineAccessibilityLabel: String {
+        AppLocalizedKeys.hijriCalendarOpenAccessibility.value
+    }
+
     var locationAccessibilityLabel: String {
         String(format: AppLocalizedKeys.homeLocationAccessibility.value, locationLabel)
     }
@@ -583,6 +587,10 @@ extension HomeViewModel {
 
     var todayTitle: String {
         AppLocalizedKeys.homeTodayTitle.value
+    }
+
+    var insightsTitle: String {
+        AppLocalizedKeys.insightsTitle.value
     }
 
     var todayPrayersLabel: String {
@@ -672,6 +680,14 @@ extension HomeViewModel {
 
     func onSearchTapped() {
         coordinator.coordinateToSearch()
+    }
+
+    func onDateLineTapped() {
+        coordinator.coordinateToHijriCalendar()
+    }
+
+    func onInsightsTapped() {
+        coordinator.coordinateToInsights()
     }
 
     func onSeeAllLessonsTapped() {

@@ -11,12 +11,19 @@ import SwiftUI
 
 protocol AdhkarCoordinating: AnyObject {
     func coordinateToAdhkarReading(category: DhikrCategory)
-    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem])
+    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem], startItemID: Int?)
     func coordinateToAllahNames(names: [AllahName])
     func coordinateToAllahNameDetail(names: [AllahName], startIndex: Int)
     func coordinateToMyAdhkar()
     func coordinateToProhibitedTimes()
     func coordinateBack()
+}
+
+extension AdhkarCoordinating {
+
+    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem]) {
+        coordinateToAthkarReader(pack: pack, items: items, startItemID: nil)
+    }
 }
 
 class AdhkarCoordinator: MainCoordinator, AdhkarCoordinating {
@@ -63,9 +70,9 @@ class AdhkarCoordinator: MainCoordinator, AdhkarCoordinating {
         navigationController.pushViewController(vc, animated: true)
     }
 
-    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem]) {
+    func coordinateToAthkarReader(pack: AthkarPack, items: [AthkarItem], startItemID: Int?) {
         let manager = LocalizationManager.shared
-        let view = AthkarReaderView(coordinator: self, pack: pack, items: items)
+        let view = AthkarReaderView(coordinator: self, pack: pack, items: items, startItemID: startItemID)
             .environmentObject(manager)
             .environment(\.layoutDirection, manager.currentLanguage.direction)
         let vc = UIHostingController(rootView: view)

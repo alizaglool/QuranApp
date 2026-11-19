@@ -14,9 +14,15 @@ struct AthkarReaderView: View {
     @EnvironmentObject private var localizationManager: LocalizationManager
     @State private var scrollPositionID: Int?
 
-    init(coordinator: AdhkarCoordinating, pack: AthkarPack, items: [AthkarItem]) {
+    init(coordinator: AdhkarCoordinating,
+         pack: AthkarPack,
+         items: [AthkarItem],
+         startItemID: Int? = nil) {
         _viewModel = StateObject(
-            wrappedValue: AthkarReaderViewModel(coordinator: coordinator, pack: pack, items: items)
+            wrappedValue: AthkarReaderViewModel(coordinator: coordinator,
+                                                pack: pack,
+                                                items: items,
+                                                startItemID: startItemID)
         )
     }
 

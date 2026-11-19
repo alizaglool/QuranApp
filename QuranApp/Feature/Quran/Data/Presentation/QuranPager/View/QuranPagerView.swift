@@ -15,12 +15,14 @@ struct QuranPagerView: View {
 
     let onBack: (() -> Void)?
     let openSearchOnAppear: Bool
+    let startVerse: QuranVerseReference?
     @State private var isTodaySheetPresenting = false
     @State private var isSurahListPresenting = false
     @State private var isPageSettingsPresenting = false
     @State private var isSearchActive = false
     @FocusState private var isSearchFieldFocused: Bool
     @State private var didApplyInitialSearch = false
+    @State private var didApplyInitialVerse = false
     @State private var overlayHideTask: Task<Void, Never>? = nil
     @State private var isMiniPlayerSheetOpen = false
 
@@ -52,10 +54,14 @@ struct QuranPagerView: View {
         max(size.height, size.width * Self.mushafPageAspect * Self.minPageHeightRatio)
     }
 
-    init(startPage: Int? = nil, openSearchOnAppear: Bool = false, onBack: (() -> Void)? = nil) {
+    init(startPage: Int? = nil,
+         openSearchOnAppear: Bool = false,
+         startVerse: QuranVerseReference? = nil,
+         onBack: (() -> Void)? = nil) {
         let vm = QuranViewModel(startPage: startPage)
         _viewModel = StateObject(wrappedValue: vm)
         self.openSearchOnAppear = openSearchOnAppear
+        self.startVerse = startVerse
         _isSearchActive = State(initialValue: openSearchOnAppear)
         self.onBack = onBack
     }
@@ -157,6 +163,7 @@ struct QuranPagerView: View {
             AudioEngine.shared.isQuranScreenActive = true
             UIApplication.shared.isIdleTimerDisabled = true
             applyInitialSearchIfNeeded()
+            applyInitialVerseIfNeeded()
         }
         .onDisappear {
             AudioEngine.shared.quranOverlayActive = false
@@ -379,6 +386,12 @@ extension QuranPagerView {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             isSearchFieldFocused = true
         }
+    }
+
+    private func applyInitialVerseIfNeeded() {
+        guard let startVerse, !didApplyInitialVerse else { return }
+        didApplyInitialVerse = true
+        viewModel.goToSearchResult(surah: startVerse.surahNumber, verse: startVerse.verseNumber)
     }
 
     // MARK: - Top Bar

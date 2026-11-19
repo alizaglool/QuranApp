@@ -403,6 +403,17 @@ struct PrayerNotificationAlertStyleItem: Identifiable {
     let isAvailable: Bool
 }
 
+struct PrayerMinuteStepperItem: Identifiable {
+
+    let id: String
+    let slot: PrayerSlot
+    let title: String
+    let value: String
+    let isValueHighlighted: Bool
+    let canDecrease: Bool
+    let canIncrease: Bool
+}
+
 enum PrayerNotificationSettingsSheet: String, Identifiable {
     case calculationMethod
     case jurisprudenceSchool
@@ -420,6 +431,11 @@ final class PrayerNotificationSettingsViewModel: MainViewModel {
     @Published private(set) var isAuthorizationPending: Bool = false
     @Published private(set) var obligatorySlots: [PrayerNotificationSlotItem] = []
     @Published private(set) var voluntarySlots: [PrayerNotificationSlotItem] = []
+    @Published private(set) var supplementalSlots: [PrayerNotificationSlotItem] = []
+    @Published private(set) var timeAdjustments: [PrayerMinuteStepperItem] = []
+    @Published private(set) var canResetTimeAdjustments: Bool = false
+    @Published private(set) var isIqamahAlertEnabled: Bool = false
+    @Published private(set) var iqamahDelays: [PrayerMinuteStepperItem] = []
     @Published private(set) var isReminderEnabled: Bool = false
     @Published private(set) var reminderLeadText: String = ""
     @Published private(set) var canIncreaseReminderLead: Bool = false
@@ -472,6 +488,15 @@ extension PrayerNotificationSettingsViewModel {
     var enableAuthorizationTitle: String { AppLocalizedKeys.prayerNotificationsEnableAction.value }
     var prayersSectionTitle: String { AppLocalizedKeys.prayerNotificationsPrayersSection.value }
     var voluntarySectionTitle: String { AppLocalizedKeys.prayerNotificationsVoluntarySection.value }
+    var supplementalSectionTitle: String { AppLocalizedKeys.prayerNotificationsSupplementalSection.value }
+    var timeAdjustmentsSectionTitle: String { AppLocalizedKeys.prayerTimeAdjustmentsRowTitle.value }
+    var timeAdjustmentsResetTitle: String { AppLocalizedKeys.prayerTimeAdjustmentsResetAction.value }
+    var timeAdjustmentsFooter: String { AppLocalizedKeys.prayerTimeAdjustmentsFooter.value }
+    var stepperDecreaseLabel: String { AppLocalizedKeys.prayerStepperDecreaseAction.value }
+    var stepperIncreaseLabel: String { AppLocalizedKeys.prayerStepperIncreaseAction.value }
+    var iqamahSectionTitle: String { AppLocalizedKeys.prayerNotificationsIqamahSection.value }
+    var iqamahToggleTitle: String { AppLocalizedKeys.prayerNotificationsIqamahToggle.value }
+    var iqamahFooter: String { AppLocalizedKeys.prayerNotificationsIqamahFooter.value }
     var reminderSectionTitle: String { AppLocalizedKeys.prayerNotificationsReminderSection.value }
     var reminderToggleTitle: String { AppLocalizedKeys.prayerNotificationsReminderToggle.value }
     var alertSectionTitle: String { AppLocalizedKeys.prayerNotificationsAlertSection.value }
@@ -516,6 +541,30 @@ extension PrayerNotificationSettingsViewModel {
                 preferences.enabledSlots.remove(slot)
             }
         }
+    }
+
+    func increaseMinuteOffset(for slot: PrayerSlot) {
+        changeMinuteOffset(for: slot, by: PrayerNotificationPreferences.prayerMinuteOffsetStep)
+    }
+
+    func decreaseMinuteOffset(for slot: PrayerSlot) {
+        changeMinuteOffset(for: slot, by: -PrayerNotificationPreferences.prayerMinuteOffsetStep)
+    }
+
+    func resetMinuteOffsets() {
+        manager.updatePreferences { $0.prayerMinuteOffsets = [:] }
+    }
+
+    func setIqamahAlertEnabled(_ isEnabled: Bool) {
+        manager.updatePreferences { $0.isIqamahAlertEnabled = isEnabled }
+    }
+
+    func increaseIqamahDelay(for slot: PrayerSlot) {
+        changeIqamahDelay(for: slot, by: PrayerNotificationPreferences.iqamahDelayMinutesStep)
+    }
+
+    func decreaseIqamahDelay(for slot: PrayerSlot) {
+        changeIqamahDelay(for: slot, by: -PrayerNotificationPreferences.iqamahDelayMinutesStep)
     }
 
     func setReminderEnabled(_ isEnabled: Bool) {
@@ -635,6 +684,11 @@ private extension PrayerNotificationSettingsViewModel {
         isAuthorizationPending = preferences.isPrayerNotificationEnabled && status == .notDetermined
         obligatorySlots = PrayerSlot.obligatorySlots.map { slotItem(for: $0, preferences: preferences) }
         voluntarySlots = PrayerSlot.voluntarySlots.map { slotItem(for: $0, preferences: preferences) }
+        supplementalSlots = PrayerSlot.supplementalSlots.map { slotItem(for: $0, preferences: preferences) }
+        timeAdjustments = makeTimeAdjustments(preferences: preferences)
+        canResetTimeAdjustments = !preferences.clampedPrayerMinuteOffsets.isEmpty
+        isIqamahAlertEnabled = preferences.isIqamahAlertEnabled
+        iqamahDelays = makeIqamahDelays(preferences: preferences)
         isReminderEnabled = preferences.isPrePrayerReminderEnabled
         reminderLeadText = makeReminderLeadText(leadMinutes)
         canIncreaseReminderLead = leadMinutes < PrayerNotificationPreferences.reminderLeadMinutesRange.upperBound
@@ -649,6 +703,51 @@ private extension PrayerNotificationSettingsViewModel {
         methodOptions = makeMethodOptions(selected: preferences.calculationMethod)
         schoolOptions = makeSchoolOptions(selected: preferences.jurisprudenceSchool)
         windowFooter = makeWindowFooter()
+    }
+
+    func changeIqamahDelay(for slot: PrayerSlot, by delta: Int) {
+        manager.updatePreferences { preferences in
+            let shifted = PrayerNotificationPreferences
+                .clampedIqamahDelay(preferences.iqamahDelay(for: slot) + delta)
+
+            preferences.iqamahDelayMinutes[slot] = shifted
+        }
+    }
+
+    func makeIqamahDelays(preferences: PrayerNotificationPreferences) -> [PrayerMinuteStepperItem] {
+        let range = PrayerNotificationPreferences.iqamahDelayMinutesRange
+
+        return PrayerSlot.obligatorySlots.map { slot in
+            let minutes = preferences.iqamahDelay(for: slot)
+
+            return PrayerMinuteStepperItem(id: slot.rawValue,
+                                           slot: slot,
+                                           title: slot.localizedName,
+                                           value: makeIqamahDelayText(minutes),
+                                           isValueHighlighted: minutes > 0,
+                                           canDecrease: minutes > range.lowerBound,
+                                           canIncrease: minutes < range.upperBound)
+        }
+    }
+
+    func makeIqamahDelayText(_ minutes: Int) -> String {
+        guard minutes > 0 else { return AppLocalizedKeys.prayerNotificationIqamahOffValue.value }
+
+        return String(format: AppLocalizedKeys.prayerNotificationIqamahMinutesFormat.value,
+                      localizedNumber(minutes))
+    }
+
+    func changeMinuteOffset(for slot: PrayerSlot, by delta: Int) {
+        manager.updatePreferences { preferences in
+            let shifted = PrayerNotificationPreferences
+                .clampedMinuteOffset(preferences.minuteOffset(for: slot) + delta)
+
+            if shifted == 0 {
+                preferences.prayerMinuteOffsets.removeValue(forKey: slot)
+            } else {
+                preferences.prayerMinuteOffsets[slot] = shifted
+            }
+        }
     }
 
     func changeReminderLead(by delta: Int) {
@@ -692,8 +791,34 @@ private extension PrayerNotificationSettingsViewModel {
         switch slot {
         case .duha: return AppLocalizedKeys.prayerNotificationsDuhaCaption.value
         case .jumuah: return AppLocalizedKeys.prayerNotificationsJumuahCaption.value
+        case .sunrise: return AppLocalizedKeys.prayerNotificationsSunriseCaption.value
+        case .lastThirdOfNight: return AppLocalizedKeys.prayerNotificationsLastThirdCaption.value
+        case .surahAlKahf: return AppLocalizedKeys.prayerNotificationsSurahAlKahfCaption.value
         default: return ""
         }
+    }
+
+    func makeTimeAdjustments(preferences: PrayerNotificationPreferences) -> [PrayerMinuteStepperItem] {
+        let range = PrayerNotificationPreferences.prayerMinuteOffsetRange
+
+        return PrayerSlot.adjustableSlots.map { slot in
+            let minutes = preferences.minuteOffset(for: slot)
+
+            return PrayerMinuteStepperItem(id: slot.rawValue,
+                                           slot: slot,
+                                           title: slot.localizedName,
+                                           value: makeMinuteOffsetText(minutes),
+                                           isValueHighlighted: minutes != 0,
+                                           canDecrease: minutes > range.lowerBound,
+                                           canIncrease: minutes < range.upperBound)
+        }
+    }
+
+    func makeMinuteOffsetText(_ minutes: Int) -> String {
+        let sign = minutes > 0 ? "+" : (minutes < 0 ? "-" : "")
+
+        return String(format: AppLocalizedKeys.prayerTimeAdjustmentMinutesFormat.value,
+                      sign + localizedNumber(abs(minutes)))
     }
 
     func makeAlertStyles() -> [PrayerNotificationAlertStyleItem] {

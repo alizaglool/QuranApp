@@ -27,6 +27,8 @@ protocol HomeCoordinating: AnyObject {
     func coordinateToEgyptianRadio()
     func coordinateToKhatmah()
     func coordinateToContent()
+    func coordinateToHijriCalendar()
+    func coordinateToInsights()
 }
 
 class HomeCoordinator: MainCoordinator, HomeCoordinating {
@@ -71,6 +73,21 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
         tabBarController: tabBarController
     )
 
+    private lazy var globalSearchCoordinator = GlobalSearchCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController,
+        onOpenQuran: { [weak self] target in
+            switch target {
+            case .page(let page):
+                self?.pushQuranPager(startPage: page, openSearchOnAppear: false)
+            case .verse(let reference):
+                self?.pushQuranPager(startPage: nil,
+                                     openSearchOnAppear: false,
+                                     startVerse: reference)
+            }
+        }
+    )
+
     private lazy var khatmahCoordinator = KhatmahCoordinator(
         navigationController: navigationController,
         tabBarController: tabBarController,
@@ -80,6 +97,16 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
     )
 
     private lazy var contentCoordinator = ContentCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var hijriCalendarCoordinator = HijriCalendarCoordinator(
+        navigationController: navigationController,
+        tabBarController: tabBarController
+    )
+
+    private lazy var insightsCoordinator = InsightsCoordinator(
         navigationController: navigationController,
         tabBarController: tabBarController
     )
@@ -99,7 +126,7 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
     }
     
     func coordinateToSearch() {
-        pushQuranPager(startPage: nil, openSearchOnAppear: true)
+        globalSearchCoordinator.start()
     }
     
     func coordinateToAdhkar() {
@@ -154,15 +181,26 @@ class HomeCoordinator: MainCoordinator, HomeCoordinating {
         contentCoordinator.start()
     }
 
+    func coordinateToHijriCalendar() {
+        hijriCalendarCoordinator.start()
+    }
+
+    func coordinateToInsights() {
+        insightsCoordinator.start()
+    }
+
     func coordinateToQuran(startPage: Int? = nil) {
         pushQuranPager(startPage: startPage, openSearchOnAppear: false)
     }
 
-    private func pushQuranPager(startPage: Int?, openSearchOnAppear: Bool) {
+    private func pushQuranPager(startPage: Int?,
+                                openSearchOnAppear: Bool,
+                                startVerse: QuranVerseReference? = nil) {
         let nav = navigationController
         let view = QuranPagerView(
             startPage: startPage,
             openSearchOnAppear: openSearchOnAppear,
+            startVerse: startVerse,
             onBack: { [weak nav] in
                 nav?.popViewController(animated: true)
             }

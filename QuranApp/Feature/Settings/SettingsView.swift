@@ -211,12 +211,16 @@ private extension PrayerNotificationSettingsView {
                     if viewModel.isNotificationEnabled {
                         prayersSection
                         voluntarySection
+                        supplementalSection
                         reminderSection
+                        iqamahSection
                         alertSection
                         inAppSection
                     }
 
                     calculationSection
+
+                    timeAdjustmentsSection
 
                     testSection
 
@@ -306,6 +310,74 @@ private extension PrayerNotificationSettingsView {
         }
     }
 
+    var supplementalSection: some View {
+        section(viewModel.supplementalSectionTitle) {
+            slotRows(viewModel.supplementalSlots)
+        }
+    }
+
+    var timeAdjustmentsSection: some View {
+        VStack(alignment: .leading, spacing: .xSm) {
+            section(viewModel.timeAdjustmentsSectionTitle) {
+                ForEach(Array(viewModel.timeAdjustments.enumerated()), id: \.element.id) { index, item in
+                    PrayerMinuteStepperRow(item: item,
+                                           decreaseTitle: viewModel.stepperDecreaseLabel,
+                                           increaseTitle: viewModel.stepperIncreaseLabel,
+                                           onDecrease: { viewModel.decreaseMinuteOffset(for: item.slot) },
+                                           onIncrease: { viewModel.increaseMinuteOffset(for: item.slot) })
+
+                    if index < viewModel.timeAdjustments.count - 1 {
+                        rowDivider
+                    }
+                }
+
+                if viewModel.canResetTimeAdjustments {
+                    rowDivider
+
+                    PrayerTimeAdjustmentResetRow(title: viewModel.timeAdjustmentsResetTitle,
+                                                 action: viewModel.resetMinuteOffsets)
+                }
+            }
+
+            Text(viewModel.timeAdjustmentsFooter)
+                .customStyle(.kitab(size: 12, bold: false), .onSurfaceVariant)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, .xSm)
+        }
+    }
+
+    var iqamahSection: some View {
+        VStack(alignment: .leading, spacing: .xSm) {
+            section(viewModel.iqamahSectionTitle) {
+                PrayerNotificationToggleRow(title: viewModel.iqamahToggleTitle,
+                                            caption: "",
+                                            iconName: "bell.badge",
+                                            isOn: viewModel.isIqamahAlertEnabled,
+                                            isEnabled: true,
+                                            onChange: viewModel.setIqamahAlertEnabled)
+
+                if viewModel.isIqamahAlertEnabled {
+                    ForEach(viewModel.iqamahDelays) { item in
+                        rowDivider
+
+                        PrayerMinuteStepperRow(item: item,
+                                               decreaseTitle: viewModel.stepperDecreaseLabel,
+                                               increaseTitle: viewModel.stepperIncreaseLabel,
+                                               onDecrease: { viewModel.decreaseIqamahDelay(for: item.slot) },
+                                               onIncrease: { viewModel.increaseIqamahDelay(for: item.slot) })
+                    }
+                }
+            }
+
+            if viewModel.isIqamahAlertEnabled {
+                Text(viewModel.iqamahFooter)
+                    .customStyle(.kitab(size: 12, bold: false), .onSurfaceVariant)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, .xSm)
+            }
+        }
+    }
+
     var reminderSection: some View {
         section(viewModel.reminderSectionTitle) {
             PrayerNotificationToggleRow(title: viewModel.reminderToggleTitle,
@@ -319,6 +391,8 @@ private extension PrayerNotificationSettingsView {
                 rowDivider
 
                 PrayerNotificationStepperRow(value: viewModel.reminderLeadText,
+                                             decreaseTitle: viewModel.stepperDecreaseLabel,
+                                             increaseTitle: viewModel.stepperIncreaseLabel,
                                              canDecrease: viewModel.canDecreaseReminderLead,
                                              canIncrease: viewModel.canIncreaseReminderLead,
                                              onDecrease: viewModel.decreaseReminderLead,
@@ -562,6 +636,8 @@ struct PrayerNotificationValueRow: View {
 struct PrayerNotificationStepperRow: View {
 
     let value: String
+    let decreaseTitle: String
+    let increaseTitle: String
     let canDecrease: Bool
     let canIncrease: Bool
     let onDecrease: () -> Void
@@ -574,16 +650,29 @@ struct PrayerNotificationStepperRow: View {
 
             Spacer(minLength: .xSm)
 
-            stepperButton(iconName: "minus", isEnabled: canDecrease, action: onDecrease)
-            stepperButton(iconName: "plus", isEnabled: canIncrease, action: onIncrease)
+            PrayerNotificationStepperButton(iconName: "minus",
+                                            accessibilityTitle: decreaseTitle,
+                                            isEnabled: canDecrease,
+                                            action: onDecrease)
+
+            PrayerNotificationStepperButton(iconName: "plus",
+                                            accessibilityTitle: increaseTitle,
+                                            isEnabled: canIncrease,
+                                            action: onIncrease)
         }
         .padding(.horizontal, .md)
         .padding(.vertical, .sm)
     }
+}
 
-    func stepperButton(iconName: String,
-                       isEnabled: Bool,
-                       action: @escaping () -> Void) -> some View {
+struct PrayerNotificationStepperButton: View {
+
+    let iconName: String
+    let accessibilityTitle: String
+    let isEnabled: Bool
+    let action: () -> Void
+
+    var body: some View {
         Button(action: action) {
             Image(systemName: iconName)
                 .font(.system(size: 13, weight: .semibold))
@@ -595,6 +684,67 @@ struct PrayerNotificationStepperRow: View {
         .buttonStyle(.plain)
         .disabled(!isEnabled)
         .opacity(isEnabled ? 1 : 0.4)
+        .accessibilityLabel(accessibilityTitle)
+    }
+}
+
+struct PrayerMinuteStepperRow: View {
+
+    let item: PrayerMinuteStepperItem
+    let decreaseTitle: String
+    let increaseTitle: String
+    let onDecrease: () -> Void
+    let onIncrease: () -> Void
+
+    var body: some View {
+        HStack(spacing: .sm) {
+            Text(item.title)
+                .customStyle(.kitab(size: 16, bold: false), .onSurface)
+
+            Spacer(minLength: .xSm)
+
+            Text(item.value)
+                .customStyle(.kitab(size: 14, bold: item.isValueHighlighted),
+                             item.isValueHighlighted ? .primary : .onSurfaceVariant)
+                .lineLimit(1)
+
+            PrayerNotificationStepperButton(iconName: "minus",
+                                            accessibilityTitle: decreaseTitle,
+                                            isEnabled: item.canDecrease,
+                                            action: onDecrease)
+
+            PrayerNotificationStepperButton(iconName: "plus",
+                                            accessibilityTitle: increaseTitle,
+                                            isEnabled: item.canIncrease,
+                                            action: onIncrease)
+        }
+        .padding(.horizontal, .md)
+        .padding(.vertical, .sm)
+    }
+}
+
+struct PrayerTimeAdjustmentResetRow: View {
+
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: .sm) {
+                Image(systemName: "arrow.counterclockwise")
+                    .font(.system(size: 13, weight: .semibold))
+                    .customForeground(.primary)
+
+                Text(title)
+                    .customStyle(.kitab(size: 15, bold: false), .primary)
+
+                Spacer(minLength: 0)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, .md)
+            .padding(.vertical, .sm)
+        }
+        .buttonStyle(SettingsRowButtonStyle())
     }
 }
 

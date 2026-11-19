@@ -28,6 +28,8 @@ final class HomeCoordinatorSpy: HomeCoordinating {
         case prayerTimes
         case liveStream(title: String)
         case content
+        case hijriCalendar
+        case insights
     }
 
     private(set) var calls: [Call] = []
@@ -72,6 +74,14 @@ final class HomeCoordinatorSpy: HomeCoordinating {
 
     func coordinateToContent() {
         calls.append(.content)
+    }
+
+    func coordinateToHijriCalendar() {
+        calls.append(.hijriCalendar)
+    }
+
+    func coordinateToInsights() {
+        calls.append(.insights)
     }
 
     func coordinateToRecitations() {
