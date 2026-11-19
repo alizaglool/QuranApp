@@ -26,6 +26,9 @@ struct VerseActionSheet: View {
     @State private var inlineTafsir: String? = nil
     @State private var isCopied = false
     @State private var isTafsirExpanded = false
+    @State private var isImageShareFailurePresenting = false
+
+    @Environment(\.colorScheme) private var colorScheme
 
     // MARK: - Computed helpers
 
@@ -121,6 +124,9 @@ struct VerseActionSheet: View {
         }
         .background(Color.background)
         .environment(\.layoutDirection, layoutDirection)
+        .alert(VerseImageRenderer.shareFailureMessage, isPresented: $isImageShareFailurePresenting) {
+            Button(VerseImageRenderer.shareFailureDismissTitle, role: .cancel) { }
+        }
         .task {
             isTafsirExpanded = false
             let book = selectedTafsirBook
@@ -353,9 +359,10 @@ struct VerseActionSheet: View {
                 shareVerse()
             }
 
-            squareIconCard(icon: "arrow.down.to.line") {
-                // Save as image — premium feature
+            squareIconCard(icon: "photo") {
+                shareVerseImage()
             }
+            .accessibilityLabel(VerseImageRenderer.shareAsImageTitle)
 
             squareIconCard(icon: isCopied ? "checkmark" : "doc.on.doc") {
                 copyVerse()
@@ -365,11 +372,55 @@ struct VerseActionSheet: View {
 
     private func shareVerse() {
         let shareText = "\(verseText)\n\n— \(surahName): \(verseNumber)"
-        let vc = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
-        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let root = scene.windows.first?.rootViewController {
-            root.present(vc, animated: true)
+        present(activityItems: [shareText])
+    }
+
+    // MARK: - Share As Image
+
+    private func shareVerseImage() {
+        guard let image = VerseImageRenderer.image(surahNumber: surahNumber,
+                                                   surahName: surahName,
+                                                   verseNumber: verseNumber,
+                                                   colorScheme: colorScheme)
+        else {
+            isImageShareFailurePresenting = true
+            return
         }
+
+        present(activityItems: [image])
+    }
+
+    // MARK: - Activity Presentation
+
+    private func present(activityItems: [Any]) {
+        guard let presenter = topmostPresenter() else { return }
+
+        let controller = UIActivityViewController(activityItems: activityItems,
+                                                  applicationActivities: nil)
+
+        controller.popoverPresentationController?.sourceView = presenter.view
+        controller.popoverPresentationController?.sourceRect = CGRect(x: presenter.view.bounds.midX,
+                                                                      y: presenter.view.bounds.maxY,
+                                                                      width: 0,
+                                                                      height: 0)
+
+        presenter.present(controller, animated: true)
+    }
+
+    private func topmostPresenter() -> UIViewController? {
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let activeScene = scenes.first { $0.activationState == .foregroundActive } ?? scenes.first
+
+        guard let window = activeScene?.windows.first(where: { $0.isKeyWindow })
+                ?? activeScene?.windows.first,
+              var presenter = window.rootViewController
+        else { return nil }
+
+        while let presented = presenter.presentedViewController, !presented.isBeingDismissed {
+            presenter = presented
+        }
+
+        return presenter
     }
 
     private func copyVerse() {
